@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PsiOS — Sistema de Evaluación Psicológica</title>
+    <meta name="description" content="PsiOS - Plataforma inteligente de psicología clínica y evaluación multidimensional." />
+    
+    <!-- Google Fonts: Inter, Plus Jakarta Sans, and multilingual script support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app" class="splash-screen">
+      <!-- Miniature User Session Pill in the Top-Right Corner (Active in Welcome Mode) -->
+      <div class="welcome-top-user-pill" id="welcome-top-user-pill" aria-hidden="true">
+        <span class="user-pill-avatar" id="welcome-avatar-icon">👨‍⚕️</span>
+        <strong class="user-pill-name" id="welcome-user-fullname">Profesional Clínico</strong>
+        <span class="user-pill-separator"></span>
+        <span class="license-activated-pill" id="welcome-license-simple">
+          <span class="license-active-dot"></span>
+          <span>Licencia activada</span>
+        </span>
+        <span class="user-pill-separator"></span>
+        <button type="button" class="user-pill-logout-btn" id="btn-logout-session" title="Cerrar sesión y reiniciar acceso">
+          Cerrar sesión
+        </button>
+      </div>
+
+      <!-- Left side: Typography greeting sequence -->
+      <section class="hero-left" id="hero-left">
+        <header class="brand-header">
+          <div class="brand-pill">
+            <span class="brand-symbol">Ψ</span>
+            <span class="brand-name">PsiOS</span>
+            <span class="brand-separator"></span>
+            <span class="brand-badge">BETA 0.0.1</span>
+          </div>
+        </header>
+
+        <!-- Dynamic Views Container (with Blur in/out Transitions) -->
+        <div class="views-wrapper" id="views-wrapper">
+          
+          <!-- VIEW 1: SPLASH (Sequential Greetings & Liquid Glass 'Ingresar' Button) -->
+          <div class="view-panel view-splash active" id="view-splash">
+            <main class="greeting-viewport">
+              <!-- Language Category Tag -->
+              <div class="lang-meta-row">
+                <span class="lang-tag" id="lang-tag">Español</span>
+                <span class="cycle-counter" id="cycle-counter">01 / 12</span>
+              </div>
+
+              <!-- Animated Greetings Headline (Character-by-character blur & disappearance) -->
+              <div class="headline-container">
+                <h1 class="greeting-headline" id="greeting-headline" aria-live="polite">
+                  <!-- Dynamically populated with .letter elements -->
+                </h1>
+              </div>
+
+              <!-- Secondary Subtext / Transliteration & Informal Variant -->
+              <div class="subtext-container">
+                <p class="greeting-subtext" id="greeting-subtext">
+                  <!-- Dynamically populated -->
+                </p>
+              </div>
+
+              <!-- Minimalist Ticker Pagination -->
+              <div class="pagination-track" id="pagination-track" aria-hidden="true">
+                <!-- 12 subtle dots representing the 12 languages -->
+              </div>
+
+              <!-- Liquid Glass 'Ingresar' Button -->
+              <div class="splash-action-row">
+                <button class="liquid-glass-btn btn-enter" id="btn-ingresar" aria-label="Ingresar a la plataforma">
+                  <span class="btn-text">Ingresar</span>
+                  <span class="btn-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </main>
+          </div>
+
+          <!-- VIEW 2: REGISTER ('¿Quién eres?' Registration & Product Key Activation View) -->
+          <div class="view-panel view-register" id="view-register">
+            <div class="register-card" id="register-card">
+              
+              <!-- PASO 1: ACTIVACIÓN OBLIGATORIA DE CLAVE DE PRODUCTO -->
+              <div class="register-step-pane active" id="register-step-license">
+                <div class="register-header">
+                  <span class="form-kicker">ACTIVACIÓN DE PRODUCTO • BETA 0.0.1</span>
+                  <h2 class="register-heading">Clave de Producto</h2>
+                  <p class="register-subprompt">Ingresa la clave de licencia asignada para activar esta estación de trabajo.</p>
+                </div>
+
+                <form class="register-form" id="form-register-license" onsubmit="return false;">
+                  <div class="form-group">
+                    <label class="form-label" for="reg-license-input">Clave de Licencia (Product Key)</label>
+                    <div class="input-composite-wrap">
+                      <span class="input-key-icon">🔑</span>
+                      <input 
+                        type="text" 
+                        id="reg-license-input" 
+                        class="glass-text-input key-format-input" 
+                        placeholder="PSIOS-XXXX-XXXX-XXXX" 
+                        maxlength="24"
+                        autocomplete="off" 
+                        spellcheck="false"
+                        required 
+                      />
+                    </div>
+                    <span class="input-error-hint" id="reg-license-error">Por favor ingresa una clave de producto válida (ej: PSIOS-PRO-2026-CLINIC)</span>
+                  </div>
+
+                  <!-- Quick demo key helper -->
+                  <div class="reg-demo-keys-row">
+                    <span class="reg-demo-label">Clave de evaluación:</span>
+                    <button type="button" class="reg-demo-chip" id="btn-reg-demo-chip" data-key="PSIOS-PRO-2026-CLINIC" title="Usar clave de demostración">
+                      <code>PSIOS-PRO-2026-CLINIC</code>
+                    </button>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="button" class="liquid-glass-btn btn-continuar" id="btn-verify-license">
+                      <span class="btn-text">Verificar y Continuar</span>
+                      <span class="btn-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- PASO 2: IDENTIFICACIÓN DEL PROFESIONAL ('¿Quién eres?') -->
+              <div class="register-step-pane" id="register-step-profile" style="display: none;">
+                <div class="register-header">
+                  <div class="step-badge-row">
+                    <span class="form-kicker">IDENTIFICACIÓN CLÍNICA</span>
+                    <span class="license-verified-tag">✓ Licencia activada</span>
+                  </div>
+                  <h2 class="register-heading" id="register-heading">¿Quién eres?</h2>
+                </div>
+
+                <form class="register-form" id="register-form" onsubmit="return false;">
+                  <!-- Name with Courtesy Treatment on the Left -->
+                  <div class="form-group">
+                    <label class="form-label" for="user-name-input">Ingresa tu nombre</label>
+                    <div class="input-composite-wrap">
+                      <!-- Courtesy Title Select on Left: Dr/Dra, Lic, Est -->
+                      <div class="courtesy-select-wrap">
+                        <select id="courtesy-title" class="courtesy-select" aria-label="Tratamiento de cortesía">
+                          <option value="Dr/Dra">Dr/Dra</option>
+                          <option value="Lic">Lic</option>
+                          <option value="Est">Est</option>
+                        </select>
+                        <span class="select-arrow-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                        </span>
+                      </div>
+
+                      <!-- Full Name Input -->
+                      <input 
+                        type="text" 
+                        id="user-name-input" 
+                        class="glass-text-input" 
+                        placeholder="Nombre y apellido" 
+                        autocomplete="name" 
+                        required 
+                      />
+                    </div>
+                    <span class="input-error-hint" id="name-error-hint">Por favor ingresa tu nombre</span>
+                  </div>
+
+                  <!-- Gender Selector (Divided in 3: Hombre, Sin sexo, Mujer) -->
+                  <div class="form-group gender-group">
+                    <label class="form-label">Género</label>
+                    <div class="gender-segmented-grid" role="radiogroup" aria-label="Selección de género">
+                      <!-- Option 1 (Left): Hombre (Figurita de hombre) -->
+                      <button type="button" class="gender-option-btn active" data-gender="male" role="radio" aria-checked="true" aria-label="Hombre">
+                        <div class="gender-icon-box male-color">
+                          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <circle cx="12" cy="4.5" r="2.8"></circle>
+                            <path d="M14.5 8.5h-5c-1 0-1.8.8-1.8 1.8v5.2h2v5.5h2.6v-5.5h.4v5.5H15v-5.5h2v-5.2c0-1-.8-1.8-1.8-1.8z"></path>
+                          </svg>
+                        </div>
+                        <span class="gender-label">Hombre</span>
+                      </button>
+
+                      <!-- Option 2 (Middle): Sin sexo (Simple circulito) -->
+                      <button type="button" class="gender-option-btn" data-gender="neutral" role="radio" aria-checked="false" aria-label="Sin sexo / Neutro">
+                        <div class="gender-icon-box neutral-color">
+                          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="7.5"></circle>
+                          </svg>
+                        </div>
+                        <span class="gender-label">Sin sexo</span>
+                      </button>
+
+                      <!-- Option 3 (Right): Mujer (Simbolito de mujer) -->
+                      <button type="button" class="gender-option-btn" data-gender="female" role="radio" aria-checked="false" aria-label="Mujer">
+                        <div class="gender-icon-box female-color">
+                          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <circle cx="12" cy="4.5" r="2.8"></circle>
+                            <path d="M15.5 8.5h-7c-.8 0-1.5.7-1.5 1.5v3.2h1.8v7.8h2.4v-5.8h1.6v5.8h2.4v-7.8H17V10c0-.8-.7-1.5-1.5-1.5z"></path>
+                          </svg>
+                        </div>
+                        <span class="gender-label">Mujer</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Action Button: 'Comenzar' with Liquid Glass -->
+                  <div class="form-actions">
+                    <button type="button" class="liquid-glass-btn btn-continuar" id="btn-continuar">
+                      <span class="btn-text">Comenzar</span>
+                      <span class="btn-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- VIEW 3: WELCOME (Personalized Greeting View with Centered Layout & Blurred 3D Center) -->
+          <div class="view-panel view-welcome" id="view-welcome">
+            <!-- Centered Welcome Salutation Box -->
+            <div class="welcome-center-box">
+              <h1 class="welcome-hero-text" id="welcome-hero-text">Bienvenido</h1>
+              <p class="welcome-secondary-prompt" id="welcome-secondary-prompt">¿Cómo comenzamos hoy?</p>
+
+              <!-- Two Primary Action Cards: Biblioteca & Clínica -->
+              <div class="welcome-portal-grid">
+                <button type="button" class="portal-card-btn" id="btn-portal-library" aria-label="Abrir Biblioteca">
+                  <div class="portal-card-icon-wrap">
+                    <span class="portal-emoji">📚</span>
+                  </div>
+                  <div class="portal-card-text">
+                    <strong class="portal-card-title">Biblioteca</strong>
+                    <span class="portal-card-desc">Libros y tratados de psicopatología y semiología clínica</span>
+                  </div>
+                  <span class="portal-card-arrow">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </button>
+
+                <button type="button" class="portal-card-btn" id="btn-portal-clinic" aria-label="Abrir Clínica">
+                  <div class="portal-card-icon-wrap">
+                    <span class="portal-emoji">🏥</span>
+                  </div>
+                  <div class="portal-card-text">
+                    <strong class="portal-card-title">Clínica</strong>
+                    <span class="portal-card-desc">Directorio de pacientes, agenda de citas y calendario</span>
+                  </div>
+                  <span class="portal-card-arrow">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 4: BIBLIOTECA (Library Module with Kinetic Title & Adjacent Search Bar) -->
+          <div class="view-panel view-library" id="view-library">
+            <header class="module-header-bar">
+              <div class="module-header-left">
+                <button type="button" class="module-home-btn" id="btn-library-home" title="Volver al menú de inicio">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  <span>Inicio</span>
+                </button>
+
+                <!-- Animated Kinetic Title: Biblioteca -->
+                <h1 class="kinetic-view-title" id="library-title" aria-label="Biblioteca">
+                  <span class="title-word">Biblioteca</span>
+                </h1>
+
+                <!-- Search Bar next to the title ("a su costado tenga una barra de búsqueda") -->
+                <div class="header-search-wrap">
+                  <span class="search-lens-icon">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                  </span>
+                  <input type="text" id="library-search-input" class="header-search-input" placeholder="Buscar libros, trastornos, semiología, orientación, evaluación..." autocomplete="off" />
+                  <button type="button" id="library-search-clear" class="search-clear-btn" title="Limpiar búsqueda" style="display:none;">✕</button>
+                </div>
+              </div>
+
+              <div class="module-header-right">
+                <!-- Pure Minimalist License Pill -->
+                <span class="header-status-pill header-license-simple" id="lib-license-status">
+                  <span class="status-pill-dot dot-active"></span>
+                  <span>Licencia activada</span>
+                </span>
+
+                <!-- Top Logout Button -->
+                <button type="button" class="header-status-pill header-logout-pill" id="btn-lib-logout" title="Cerrar sesión">
+                  <span>Cerrar sesión</span>
+                </button>
+
+                <!-- Cross-module navigation button to Clínica -->
+                <button type="button" class="cross-module-btn" id="btn-library-goto-clinic" title="Cambiar a la sección de Clínica">
+                  <span class="cross-btn-icon">🏥</span>
+                  <span class="cross-btn-text">Ir a Clínica</span>
+                  <span class="cross-btn-arrow">→</span>
+                </button>
+              </div>
+            </header>
+
+            <!-- Categories Chips Row -->
+            <div class="library-categories-track" id="library-categories-track">
+              <button type="button" class="lib-chip active" data-category="all">Todos los Recursos</button>
+              <button type="button" class="lib-chip" data-category="books">📚 Libros</button>
+              <button type="button" class="lib-chip" data-category="psicopatologia">🧬 Psicopatología</button>
+              <button type="button" class="lib-chip" data-category="semiologia">🩺 Semiología</button>
+              <button type="button" class="lib-chip" data-category="procesos">🧠 Procesos Psicológicos</button>
+              <button type="button" class="lib-chip" data-category="evaluacion">🔬 Evaluación Clínica</button>
+            </div>
+
+            <!-- Results Meta, Counter & Neutral Alphabetical Ordering -->
+            <div class="library-meta-row">
+              <div class="library-meta-left">
+                <span class="library-counter-label" id="library-counter-label">Catálogo clínico disponible</span>
+                <span class="library-count-badge" id="library-count-badge">7 recursos</span>
+              </div>
+              <div class="library-meta-actions">
+                <button type="button" class="lib-sort-btn" id="btn-library-sort" title="Ordenar catálogo alfabéticamente (A-Z / Z-A)" aria-label="Ordenar catálogo alfabéticamente">
+                  <span class="sort-btn-icon" id="library-sort-icon">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="6" x2="16" y2="6"></line>
+                      <line x1="4" y1="12" x2="12" y2="12"></line>
+                      <line x1="4" y1="18" x2="8" y2="18"></line>
+                      <polyline points="15 15 18 18 21 15"></polyline>
+                      <line x1="18" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </span>
+                  <span class="sort-btn-text" id="library-sort-label">Ordenar: A → Z</span>
+                  <span class="sort-btn-badge" id="library-sort-badge">A-Z</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="library-cards-grid" id="library-cards-grid">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- VIEW 5: CLÍNICA (Comprehensive Clinical Management with Collapsible Sidebar, Appointments & Patients) -->
+          <div class="view-panel view-clinic" id="view-clinic">
+            <div class="clinic-workspace-container" id="clinic-workspace-container">
+              
+              <!-- Collapsible Left Sidebar ("barra lateral izquierda desplegable") -->
+              <aside class="clinic-sidebar" id="clinic-sidebar" aria-label="Menú lateral de Clínica">
+                <div class="sidebar-top-bar">
+                  <span class="sidebar-top-label">Gestión Clínica</span>
+                  <button type="button" class="sidebar-close-toggle" id="btn-sidebar-collapse" title="Minimizar barra lateral">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Navigation Tabs in Sidebar: Resumen, Pacientes, Citas -->
+                <nav class="sidebar-nav-list" role="tablist">
+                  <button type="button" class="sidebar-nav-tab active" data-tab="dashboard" role="tab" aria-selected="true">
+                    <span class="nav-tab-icon">📊</span>
+                    <span class="nav-tab-label">Resumen General</span>
+                  </button>
+
+                  <button type="button" class="sidebar-nav-tab" data-tab="patients" role="tab" aria-selected="false">
+                    <span class="nav-tab-icon">👥</span>
+                    <span class="nav-tab-label">Pacientes</span>
+                    <span class="nav-tab-counter" id="sidebar-patient-counter">0</span>
+                  </button>
+
+                  <button type="button" class="sidebar-nav-tab" data-tab="appointments" role="tab" aria-selected="false">
+                    <span class="nav-tab-icon">📅</span>
+                    <span class="nav-tab-label">Citas & Agenda</span>
+                    <span class="nav-tab-counter" id="sidebar-appointment-counter">0</span>
+                  </button>
+                </nav>
+
+                <!-- Sidebar Action Buttons -->
+                <div class="sidebar-actions-wrap">
+                  <button type="button" class="sidebar-action-btn primary" id="btn-sidebar-new-patient">
+                    <span>+ Agregar Paciente</span>
+                  </button>
+                  <button type="button" class="sidebar-action-btn secondary" id="btn-sidebar-new-appointment">
+                    <span>+ Programar Cita</span>
+                  </button>
+                </div>
+              </aside>
+
+              <!-- Main Interactive Workspace for Clínica -->
+              <div class="clinic-main-stage">
+                <!-- Top Header of Clínica with Animated Title & Live Clock -->
+                <header class="module-header-bar clinic-header-bar">
+                  <div class="module-header-left">
+                    <!-- Toggle button to open/close sidebar -->
+                    <button type="button" class="sidebar-toggle-action" id="btn-toggle-sidebar" title="Mostrar/Ocultar barra lateral">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                      </svg>
+                    </button>
+
+                    <button type="button" class="module-home-btn" id="btn-clinic-home" title="Volver al menú de inicio">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                      </svg>
+                      <span>Inicio</span>
+                    </button>
+
+                    <!-- Animated Kinetic Title: Clínica -->
+                    <h1 class="kinetic-view-title" id="clinic-title" aria-label="Clínica">
+                      <span class="title-word">Clínica</span>
+                    </h1>
+
+                    <!-- Live Clock and Date marking current time -->
+                    <div class="live-clock-pill" id="live-clock-pill">
+                      <span class="clock-live-dot"></span>
+                      <span class="clock-live-time" id="clock-live-time">--:--:--</span>
+                      <span class="clock-live-separator"></span>
+                      <span class="clock-live-date" id="clock-live-date">Hoy</span>
+                    </div>
+                  </div>
+
+                  <div class="module-header-right">
+                    <!-- Pure Minimalist License Pill -->
+                    <span class="header-status-pill header-license-simple">
+                      <span class="status-pill-dot dot-active"></span>
+                      <span>Licencia activada</span>
+                    </span>
+
+                    <!-- Sync Indicator Pill (Firebase Firestore) -->
+                    <div class="clinic-sync-indicator" id="clinic-sync-indicator" title="Estado de sincronización en la nube">
+                      <span class="sync-status-dot dot-synced" id="clinic-sync-dot"></span>
+                      <span class="sync-status-text" id="clinic-sync-text">Sincronizado</span>
+                    </div>
+
+                    <!-- Cloud Session Profile Pill -->
+                    <div class="header-status-pill header-doctor-pill">
+                      <span class="doctor-pill-avatar" id="clinic-header-doc-avatar">👨‍⚕️</span>
+                      <span class="doctor-pill-name" id="clinic-header-doc-name">Profesional Clínico</span>
+                    </div>
+
+                    <!-- Top Logout Button -->
+                    <button type="button" class="header-status-pill header-logout-pill" id="btn-clinic-logout" title="Cerrar sesión">
+                      <span>Cerrar sesión</span>
+                    </button>
+
+                    <!-- Cross-module navigation button to Biblioteca -->
+                    <button type="button" class="cross-module-btn" id="btn-clinic-goto-library" title="Cambiar a la sección de Biblioteca">
+                      <span class="cross-btn-icon">📚</span>
+                      <span class="cross-btn-text">Ir a Biblioteca</span>
+                      <span class="cross-btn-arrow">→</span>
+                    </button>
+                  </div>
+                </header>
+
+                <!-- TAB 1: RESUMEN GENERAL (PANTALLA PRINCIPAL DE CLÍNICA) -->
+                <!-- "en la pantalla principal de clinica independiente de la barra que tenga un resumen de citas de hoy y una pequeña lista de pacientes recientes" -->
+                <section class="clinic-tab-view active" id="tab-clinic-dashboard">
+                  <!-- Metrics Row -->
+                  <div class="dashboard-metrics-grid">
+                    <div class="metric-glass-card">
+                      <div class="metric-header">
+                        <span class="metric-title">Citas para Hoy</span>
+                        <span class="metric-badge-icon">📅</span>
+                      </div>
+                      <strong class="metric-number" id="metric-today-count">0</strong>
+                      <span class="metric-caption" id="metric-today-caption">Consultas en agenda</span>
+                    </div>
+
+                    <div class="metric-glass-card">
+                      <div class="metric-header">
+                        <span class="metric-title">Pacientes Registrados</span>
+                        <span class="metric-badge-icon">👥</span>
+                      </div>
+                      <strong class="metric-number" id="metric-patients-count">0</strong>
+                      <span class="metric-caption">Historias clínicas activas</span>
+                    </div>
+
+                    <div class="metric-glass-card">
+                      <div class="metric-header">
+                        <span class="metric-title">Próxima Consulta</span>
+                        <span class="metric-badge-icon">⏳</span>
+                      </div>
+                      <strong class="metric-number small" id="metric-next-appt-time">Sin citas hoy</strong>
+                      <span class="metric-caption" id="metric-next-appt-patient">Horario libre</span>
+                    </div>
+                  </div>
+
+                  <!-- Two Columns: Left (Resumen de Citas de Hoy) & Right (Pacientes Recientes + Mini Calendario) -->
+                  <div class="clinic-dashboard-layout">
+                    <!-- Left: Resumen de Citas de Hoy -->
+                    <div class="clinic-surface-card">
+                      <div class="surface-header">
+                        <div class="surface-title-group">
+                          <h2 class="surface-title">Resumen de Citas de Hoy</h2>
+                          <span class="surface-badge today-highlight" id="dashboard-today-indicator">Fecha actual</span>
+                        </div>
+                        <button type="button" class="surface-action-btn" id="btn-dash-new-appointment">
+                          + Nueva Cita
+                        </button>
+                      </div>
+
+                      <div class="today-appointments-scroll" id="dash-today-appointments-list">
+                        <!-- Populated dynamically -->
+                      </div>
+                    </div>
+
+                    <!-- Right: Pequeña Lista de Pacientes Recientes & Calendario -->
+                    <div class="clinic-surface-stack">
+                      <!-- Pacientes Recientes -->
+                      <div class="clinic-surface-card compact">
+                        <div class="surface-header">
+                          <div class="surface-title-group">
+                            <h2 class="surface-title">Pacientes Recientes</h2>
+                            <span class="surface-counter-chip" id="dash-recent-patients-count">0</span>
+                          </div>
+                          <button type="button" class="surface-action-btn" id="btn-dash-new-patient">
+                            + Agregar Paciente
+                          </button>
+                        </div>
+
+                        <div class="recent-patients-scroll" id="dash-recent-patients-list">
+                          <!-- Populated dynamically -->
+                        </div>
+                      </div>
+
+                      <!-- Calendario Clínico con Fecha Actual Marcada -->
+                      <div class="clinic-surface-card compact">
+                        <div class="calendar-card-header">
+                          <h3 class="calendar-card-title">Calendario del Mes</h3>
+                          <div class="calendar-month-controls">
+                            <button type="button" class="cal-arrow-btn" id="btn-dash-cal-prev" title="Mes anterior">‹</button>
+                            <span class="cal-month-name" id="dash-cal-month-label">Mes Año</span>
+                            <button type="button" class="cal-arrow-btn" id="btn-dash-cal-next" title="Mes siguiente">›</button>
+                          </div>
+                        </div>
+
+                        <div class="mini-calendar-grid" id="dash-mini-calendar">
+                          <!-- Rendered dynamically -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- TAB 2: PESTAÑA PACIENTES (Lista completa, búsqueda y cálculo de edad) -->
+                <section class="clinic-tab-view" id="tab-clinic-patients">
+                  <div class="subview-header-row">
+                    <div class="subview-titles">
+                      <h2 class="subview-main-title">Directorio de Pacientes</h2>
+                      <p class="subview-lead">Registro de historias clínicas con medición automática de edad y gestión clínica.</p>
+                    </div>
+                    <button type="button" class="primary-gradient-btn" id="btn-open-patient-modal">
+                      <span>+ Agregar Paciente</span>
+                    </button>
+                  </div>
+
+                  <div class="data-toolbar-row">
+                    <div class="data-search-box">
+                      <span class="data-search-icon">🔍</span>
+                      <input type="text" id="patients-search-box" placeholder="Buscar paciente por nombre o apellido..." />
+                    </div>
+                    <span class="data-total-pill" id="patients-list-count">Total: 0 pacientes</span>
+                  </div>
+
+                  <div class="patients-data-surface" id="patients-data-container">
+                    <!-- Populated dynamically -->
+                  </div>
+                </section>
+
+                <!-- TAB 3: PESTAÑA CITAS (Agenda completa y Calendario Interactivo) -->
+                <section class="clinic-tab-view" id="tab-clinic-appointments">
+                  <div class="subview-header-row">
+                    <div class="subview-titles">
+                      <h2 class="subview-main-title">Agenda & Calendario de Citas</h2>
+                      <p class="subview-lead">Programación de sesiones psicológicas, evaluaciones y actividades clínicas.</p>
+                    </div>
+                    <button type="button" class="primary-gradient-btn" id="btn-open-appointment-modal">
+                      <span>+ Programar Nueva Cita</span>
+                    </button>
+                  </div>
+
+                  <div class="appointments-master-grid">
+                    <!-- Full Monthly Interactive Calendar -->
+                    <div class="calendar-expanded-surface">
+                      <div class="full-cal-top-bar">
+                        <div class="full-cal-title-wrap">
+                          <h3 class="full-cal-heading" id="full-cal-heading">Calendario</h3>
+                          <span class="full-cal-today-tag">Hoy marcado</span>
+                        </div>
+                        <div class="full-cal-nav-group">
+                          <button type="button" class="cal-nav-btn" id="btn-full-cal-prev" title="Mes anterior">‹</button>
+                          <button type="button" class="cal-nav-btn today" id="btn-full-cal-today" title="Volver a hoy">Ir a Hoy</button>
+                          <button type="button" class="cal-nav-btn" id="btn-full-cal-next" title="Mes siguiente">›</button>
+                        </div>
+                      </div>
+                      <div class="full-calendar-canvas" id="full-calendar-canvas">
+                        <!-- Populated dynamically -->
+                      </div>
+                    </div>
+
+                    <!-- Upcoming / Selected Date Appointments Feed -->
+                    <div class="agenda-feed-surface">
+                      <div class="feed-header-row">
+                        <h3 class="feed-header-title" id="agenda-feed-title">Todas las Citas</h3>
+                        <span class="feed-badge-counter" id="agenda-feed-counter">0 citas</span>
+                      </div>
+                      <div class="agenda-feed-scroll" id="agenda-feed-list">
+                        <!-- Populated dynamically -->
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <footer class="hero-footer">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span class="status-label" id="footer-status-label">Pantalla de Inicio • Módulo Activo</span>
+          </div>
+        </footer>
+      </section>
+
+      <!-- Right side: Three.js 3D Viewport with psychology_v3.glb -->
+      <section class="hero-right" id="hero-right">
+        <div class="canvas-wrapper" id="canvas-container">
+          <!-- Three.js Canvas injected dynamically or mounted here -->
+          <canvas id="three-canvas" aria-label="Visualización tridimensional del símbolo de Psicología"></canvas>
+        </div>
+      </section>
+
+      <!-- Liquid Glass Ambient Backdrop -->
+      <div class="glass-backdrop" id="glass-backdrop" aria-hidden="true"></div>
+
+      <!-- Liquid Glass Information Dock (Bottom-Right Morphing Element) -->
+      <div class="liquid-glass-dock" id="liquid-glass-dock" aria-expanded="false">
+        <!-- Collapsed Trigger Button: Rounded square with 'i' in circle -->
+        <button class="liquid-glass-trigger" id="liquid-glass-trigger" aria-label="Información sobre PsiOS" title="Información">
+          <span class="info-circle-badge">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9.5"></circle>
+              <line x1="12" y1="16" x2="12" y2="11.5"></line>
+              <circle cx="12" cy="7.8" r="0.8" fill="currentColor"></circle>
+            </svg>
+          </span>
+        </button>
+
+        <!-- Expanded Glass Tab / Panel -->
+        <div class="liquid-glass-tab" id="liquid-glass-tab" role="dialog" aria-modal="true" aria-label="Información de la plataforma PsiOS">
+          <!-- Top Bar with Close 'x' Button in Top-Right -->
+          <div class="glass-tab-header">
+            <div class="glass-tab-badge">
+              <span class="tab-badge-dot"></span>
+              <span class="tab-badge-text">PROPÓSITO & FILOSOFÍA CLÍNICA</span>
+            </div>
+            <button class="glass-tab-close" id="liquid-glass-close" aria-label="Cerrar y volver a la pantalla de inicio" title="Cerrar">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Scrollable Editorial Content Body -->
+          <div class="glass-tab-scroll">
+            <header class="tab-editorial-intro">
+              <span class="tab-kicker">PsiOS • PLATAFORMA CLÍNICA INTEGRAL</span>
+              <h2 class="tab-heading">Tiempo Clínico para lo que Realmente Importa: el Paciente</h2>
+            </header>
+
+            <div class="tab-body-text">
+              <p class="tab-lead-paragraph">
+                En la práctica psicológica actual, el tiempo es el recurso más valioso y, a menudo, el más escaso. Entre la evaluación inicial, la aplicación y calificación manual de pruebas psicométricas, el análisis profundo de los síntomas y la redacción de informes, el trabajo administrativo consume horas críticas que deberían estar dedicadas a lo más importante: el paciente.
+              </p>
+
+              <p>
+                Hemos desarrollado una plataforma clínica integral diseñada específicamente para potenciar la labor del profesional de la salud mental. No es un sustituto del criterio clínico, sino un asistente tecnológico que procesa y estructura la información para que usted pueda evaluar, diagnosticar e intervenir con mayor agilidad.
+              </p>
+
+              <div class="tab-section-divider">
+                <h3 class="tab-subheading">¿Qué le ofrece esta plataforma?</h3>
+              </div>
+
+              <div class="tab-features-stack">
+                <article class="feature-item">
+                  <div class="feature-bullet-icon">
+                    <span>📚</span>
+                  </div>
+                  <div class="feature-content">
+                    <h4 class="feature-title">Estudio de Casos y Soporte Teórico Integrado</h4>
+                    <p class="feature-desc">
+                      Actúa como su enciclopedia clínica personal. Incluye un módulo de consulta con descripciones teóricas detalladas y criterios de referencia. Podrá repasar conceptos, consultar sintomatología y fundamentar sus enfoques directamente en la aplicación, sin necesidad de buscar en libros o fuentes externas mientras analiza un caso.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="feature-item">
+                  <div class="feature-bullet-icon">
+                    <span>🗂️</span>
+                  </div>
+                  <div class="feature-content">
+                    <h4 class="feature-title">Gestión Centralizada del Paciente</h4>
+                    <p class="feature-desc">
+                      Unifica historiales clínicos, notas de sesión y resultados en perfiles ordenados. Al tener toda la información estructurada en un solo lugar, el proceso de analizar los síntomas de su paciente se vuelve mucho más rápido y claro.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="feature-item">
+                  <div class="feature-bullet-icon">
+                    <span>⚡</span>
+                  </div>
+                  <div class="feature-content">
+                    <h4 class="feature-title">Agilidad en la Respuesta y Diagnóstico</h4>
+                    <p class="feature-desc">
+                      Al combinar sus datos clínicos bien organizados con la teoría a un clic de distancia, la redacción de informes y el diseño de planes de tratamiento se simplifican drásticamente, ahorrándole horas de trabajo administrativo.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <p class="tab-closing-paragraph">
+                Al centralizar la información y tener la teoría siempre a mano, usted recupera el tiempo necesario para ejercer la psicología con la máxima lucidez y empatía.
+              </p>
+
+              <div class="tab-highlight-quote">
+                <strong>Su experiencia guía el diagnóstico; nuestra tecnología simplifica el camino.</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- ==========================================================================
+         MODALS SYSTEM: PACIENTES, CITAS, FICHA BIBLIOTECA
+         ========================================================================== -->
+    <!-- Modal: Agregar Paciente -->
+    <div class="psios-modal-backdrop" id="modal-patient-backdrop" aria-hidden="true">
+      <div class="psios-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-patient-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon">👥</span>
+            <div>
+              <h3 class="modal-title" id="modal-patient-title">Registrar Nuevo Paciente</h3>
+              <p class="modal-subtitle">Medición cronológica automática de edad e historia clínica</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-patient-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <form id="form-add-patient" class="modal-card-body" novalidate>
+          <div class="form-group-field">
+            <label for="patient-input-name" class="field-label">Nombres y Apellidos <span class="required">*</span></label>
+            <input type="text" id="patient-input-name" class="modal-text-input" placeholder="Ej. Camila Andrea Fernández" required autocomplete="off" />
+            <span class="field-error-hint" id="err-patient-name">Por favor ingresa los nombres y apellidos.</span>
+          </div>
+
+          <div class="form-row-duo">
+            <div class="form-group-field">
+              <label for="patient-input-birthdate" class="field-label">Fecha de Nacimiento <span class="required">*</span></label>
+              <input type="date" id="patient-input-birthdate" class="modal-text-input" required />
+              <span class="field-error-hint" id="err-patient-birthdate">Selecciona una fecha válida.</span>
+            </div>
+
+            <div class="form-group-field">
+              <label class="field-label">Edad Calculada Automáticamente</label>
+              <div class="age-calculated-display" id="patient-age-display">
+                <span class="age-calc-pill" id="patient-age-val">-- años</span>
+                <small class="age-calc-hint">Medición precisa según fecha</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-field">
+            <label class="field-label">Género <span class="required">*</span></label>
+            <div class="gender-segmented-picker" id="patient-gender-picker">
+              <label class="gender-chip-option">
+                <input type="radio" name="patient_gender" value="male" checked />
+                <span class="gender-chip-label">
+                  <span class="gender-emoji">👨</span>
+                  <span>Masculino</span>
+                </span>
+              </label>
+              <label class="gender-chip-option">
+                <input type="radio" name="patient_gender" value="female" />
+                <span class="gender-chip-label">
+                  <span class="gender-emoji">👩</span>
+                  <span>Femenino</span>
+                </span>
+              </label>
+              <label class="gender-chip-option">
+                <input type="radio" name="patient_gender" value="other" />
+                <span class="gender-chip-label">
+                  <span class="gender-emoji">🧑</span>
+                  <span>No especificado / Otro</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group-field">
+            <label for="patient-input-phone" class="field-label">Teléfono / Celular de Contacto</label>
+            <input type="tel" id="patient-input-phone" class="modal-text-input" placeholder="Ej. +54 9 11 4455-6677" />
+          </div>
+
+          <div class="form-group-field">
+            <label for="patient-input-notes" class="field-label">Motivo de Consulta / Observaciones Iniciales</label>
+            <textarea id="patient-input-notes" class="modal-textarea" rows="3" placeholder="Síntomas iniciales, derivación, motivo de consulta..."></textarea>
+          </div>
+
+          <div class="modal-card-footer">
+            <button type="button" class="modal-btn-cancel" id="btn-cancel-patient-modal">Cancelar</button>
+            <button type="submit" class="modal-btn-submit" id="btn-submit-patient">Guardar Paciente</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Programar Cita -->
+    <div class="psios-modal-backdrop" id="modal-appointment-backdrop" aria-hidden="true">
+      <div class="psios-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-appointment-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon">📅</span>
+            <div>
+              <h3 class="modal-title" id="modal-appointment-title">Programar Nueva Cita</h3>
+              <p class="modal-subtitle">Asignación de paciente, fecha, hora y modalidad de consulta</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-appointment-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <form id="form-add-appointment" class="modal-card-body" novalidate>
+          <div class="form-group-field">
+            <label for="appt-input-title" class="field-label">Nombre o Motivo de la Cita <span class="required">*</span></label>
+            <input type="text" id="appt-input-title" class="modal-text-input" placeholder="Ej. Evaluación Psicológica Inicial / Terapia Cognitivo-Conductual" required autocomplete="off" />
+            <span class="field-error-hint" id="err-appt-title">Por favor indica el nombre de la cita.</span>
+          </div>
+
+          <div class="form-row-duo">
+            <div class="form-group-field">
+              <label for="appt-input-date" class="field-label">Fecha de la Cita <span class="required">*</span></label>
+              <input type="date" id="appt-input-date" class="modal-text-input" required />
+              <span class="field-error-hint" id="err-appt-date">Selecciona una fecha.</span>
+            </div>
+
+            <div class="form-group-field">
+              <label for="appt-input-time" class="field-label">Hora <span class="required">*</span></label>
+              <input type="time" id="appt-input-time" class="modal-text-input" required />
+              <span class="field-error-hint" id="err-appt-time">Selecciona la hora.</span>
+            </div>
+          </div>
+
+          <div class="form-group-field">
+            <label for="appt-select-patient" class="field-label">Paciente Asignado <span class="required">*</span></label>
+            <div class="custom-select-wrap">
+              <select id="appt-select-patient" class="modal-select-input" required>
+                <option value="none">Ninguno (Reunión / Supervisión / Sin paciente asociado)</option>
+                <!-- Populated dynamically with registered patients -->
+              </select>
+            </div>
+            <small class="field-helper-text">Si no es una cita con paciente directo, selecciona "Ninguno".</small>
+          </div>
+
+          <div class="form-group-field">
+            <label for="appt-input-type" class="field-label">Modalidad / Tipo de Sesión</label>
+            <select id="appt-input-type" class="modal-select-input">
+              <option value="presencial">Consulta Presencial en Consultorio</option>
+              <option value="online">Sesión Telemática / Online</option>
+              <option value="evaluacion">Aplicación de Batería de Pruebas</option>
+              <option value="devolucion">Sesión de Devolución e Informe</option>
+              <option value="supervision">Supervisión Clínica / Ateneo</option>
+            </select>
+          </div>
+
+          <div class="form-group-field">
+            <label for="appt-input-notes" class="field-label">Notas Adicionales / Recordatorio</label>
+            <textarea id="appt-input-notes" class="modal-textarea" rows="2" placeholder="Objetivo de la sesión, instrumentos a preparar..."></textarea>
+          </div>
+
+          <div class="modal-card-footer">
+            <button type="button" class="modal-btn-cancel" id="btn-cancel-appointment-modal">Cancelar</button>
+            <button type="submit" class="modal-btn-submit" id="btn-submit-appointment">Agendar Cita</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Ficha de Recurso de Biblioteca -->
+    <div class="psios-modal-backdrop" id="modal-resource-backdrop" aria-hidden="true">
+      <div class="psios-modal-card library-preview-card" role="dialog" aria-modal="true" aria-labelledby="modal-resource-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon" id="modal-resource-icon">📖</span>
+            <div>
+              <span class="modal-tag-badge" id="modal-resource-badge">Manual Clínico</span>
+              <h3 class="modal-title" id="modal-resource-title">Título del Recurso</h3>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-resource-modal" title="Cerrar ficha">✕</button>
+        </div>
+
+        <div class="modal-card-body library-preview-body" id="modal-resource-content">
+          <!-- Dynamic clinical content -->
+        </div>
+
+        <div class="modal-card-footer" id="modal-resource-footer">
+          <button type="button" class="primary-gradient-btn" id="btn-modal-open-pdf" style="display: none; padding: 0.6rem 1.25rem; font-size: 0.84rem;">
+            📖 Leer en Lector PDF Nativo
+          </button>
+          <button type="button" class="modal-btn-cancel" id="btn-close-resource-footer">Cerrar Ficha</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Lector Nativo de PDF (PsiOS Native PDF Reader) -->
+    <div class="psios-modal-backdrop pdf-reader-backdrop" id="modal-pdf-reader-backdrop" aria-hidden="true">
+      <div class="psios-modal-card pdf-reader-modal-card" role="dialog" aria-modal="true" aria-labelledby="pdf-reader-title">
+        <div class="modal-card-header pdf-reader-header">
+          <!-- Zone 1 (Left): Document Information & Metadata -->
+          <div class="pdf-reader-meta">
+            <div class="pdf-reader-tags">
+              <span class="pdf-reader-badge">Lector Nativo PsiOS</span>
+              <span class="pdf-reader-pages-tag" id="pdf-reader-pages-tag">231 Páginas</span>
+            </div>
+            <h3 class="pdf-reader-title" id="pdf-reader-title">Psicopatología y Semiología Psiquiátrica</h3>
+            <span class="pdf-reader-author" id="pdf-reader-author">Dr. Ricardo Capponi M.</span>
+          </div>
+
+          <!-- Zone 2 (Right): Pinned Window Actions & Dedicated Close Button -->
+          <div class="pdf-reader-actions">
+            <a href="/libros/PSICOPATOLOGIA%20Y%20SEMIOLOGIA%20PSIQUIATRICA.pdf" download="PSICOPATOLOGIA Y SEMIOLOGIA PSIQUIATRICA.pdf" id="btn-pdf-download" class="pdf-reader-btn-icon" title="Descargar documento PDF">⬇</a>
+            <a href="/libros/PSICOPATOLOGIA%20Y%20SEMIOLOGIA%20PSIQUIATRICA.pdf" id="btn-pdf-external-tab" class="pdf-reader-btn-icon" title="Abrir PDF en pestaña externa" target="_blank" rel="noopener noreferrer">↗</a>
+            <button type="button" class="pdf-reader-btn-icon" id="btn-pdf-toggle-fullscreen" title="Pantalla completa">⛶</button>
+            <button type="button" class="modal-close-btn pdf-close-btn" id="btn-close-pdf-reader" title="Cerrar lector de PDF (Esc)">✕</button>
+          </div>
+        </div>
+
+        <!-- Dedicated Responsive Reading Toolbar: Índice Dropdown, Stepper & Zoom -->
+        <div class="pdf-reader-toolbar" id="pdf-reader-toolbar">
+          <!-- Chapter Selector / Índice Dropdown (Barra para índices) -->
+          <div class="pdf-toolbar-group pdf-toolbar-chapter-group">
+            <label for="pdf-chapter-select" class="pdf-toolbar-label">
+              <span class="pdf-toolbar-label-icon">📑</span>
+              <span class="pdf-toolbar-label-text">Índice:</span>
+            </label>
+            <div class="pdf-chapter-selector-wrap">
+              <select id="pdf-chapter-select" class="pdf-chapter-select" title="Saltar al capítulo o sección">
+                <option value="1">Portada (Pág. 1)</option>
+                <option value="2">Prólogo - Dra. Ivette Claudet T. (Pág. 2)</option>
+                <option value="3">Índice General (Pág. 3)</option>
+                <option value="4">I. Introducción: Definición de Objetivos (Pág. 4)</option>
+                <option value="7">Fundamentos Normalidad - Anormalidad (Pág. 7)</option>
+                <option value="27">Fenomenología Categorial y Dimensional (Pág. 27)</option>
+                <option value="40">Clasificación del Vivenciar Psicológico (Pág. 40)</option>
+                <option value="42">II. Psicología, Psicopatología y Semiología (Pág. 42)</option>
+                <option value="48">Sensación, Percepción y Representación (Pág. 48)</option>
+                <option value="64">Psicopatología del Pensamiento (Pág. 64)</option>
+                <option value="90">Psicopatología de la Afectividad (Pág. 90)</option>
+                <option value="100">Psicopatología de la Psicomotricidad (Pág. 100)</option>
+                <option value="116">Instrumentos: Conciencia (Pág. 116)</option>
+                <option value="137">Inteligencia (Pág. 137)</option>
+                <option value="145">Atención y Memoria (Pág. 145)</option>
+                <option value="153">Orientación (Pág. 153)</option>
+                <option value="154">Cualidades Fundamentales del Yo (Pág. 154)</option>
+                <option value="167">Dimensión Realidad-Irrealidad (Pág. 167)</option>
+                <option value="175">Dimensión Actividad-Pasividad (Pág. 175)</option>
+                <option value="176">Dimensión Adhesión-Evitación (Pág. 176)</option>
+                <option value="177">Dimensión Dependencia-Independencia (Pág. 177)</option>
+                <option value="181">III. Trastornos de la Personalidad (Pág. 181)</option>
+                <option value="198">IV. Diagnóstico Psicopatológico y Nosológico (Pág. 198)</option>
+                <option value="201">Síndromes Categoriales (Pág. 201)</option>
+                <option value="216">Disfunciones Yoicas (Pág. 216)</option>
+                <option value="218">V. Aportes para la Práctica Terapéutica (Pág. 218)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Page Stepper / Cambiar de Página -->
+          <div class="pdf-toolbar-group pdf-toolbar-nav-group">
+            <button type="button" class="pdf-reader-btn-icon pdf-btn-nav-prev" id="btn-pdf-prev-page" title="Página anterior (←)">◀</button>
+            <div class="pdf-page-indicator">
+              <span class="pdf-control-label">Pág.</span>
+              <input type="number" id="pdf-page-input" class="pdf-page-number-input" min="1" max="234" value="1" title="Escribe un número de página y presiona Enter" />
+              <span class="pdf-page-total" id="pdf-page-total-label">/ 231</span>
+            </div>
+            <button type="button" class="pdf-reader-btn-icon pdf-btn-nav-next" id="btn-pdf-next-page" title="Página siguiente (→)">▶</button>
+          </div>
+
+          <!-- Zoom Controls -->
+          <div class="pdf-toolbar-group pdf-toolbar-zoom-group">
+            <button type="button" class="pdf-reader-btn-icon" id="btn-pdf-zoom-out" title="Reducir zoom (−)">🔍−</button>
+            <span class="pdf-zoom-badge" id="pdf-zoom-badge" title="Nivel de Zoom actual">100%</span>
+            <button type="button" class="pdf-reader-btn-icon" id="btn-pdf-zoom-in" title="Aumentar zoom (+)">🔍+</button>
+            <button type="button" class="pdf-reader-btn-icon btn-fit-width" id="btn-pdf-fit-width" title="Ajustar al ancho de lectura">↔ Ajustar</button>
+          </div>
+        </div>
+
+        <!-- Document Viewer Viewport (High-DPI PDF.js Canvas Engine & Touch Swipe Zone) -->
+        <div class="pdf-reader-frame-container" id="pdf-reader-frame-container">
+          <div class="pdf-page-loading-spinner" id="pdf-page-loading" style="display: none;">
+            <div class="pdf-spinner-circle"></div>
+            <span id="pdf-loading-text">Cargando página...</span>
+          </div>
+
+          <!-- Touch / Click Navigation Edge Controls for Mobile & Tablet -->
+          <button type="button" class="pdf-touch-edge-btn pdf-touch-edge-prev" id="btn-touch-edge-prev" aria-label="Página anterior" title="Página anterior (o desliza hacia la derecha)">
+            <span class="touch-edge-chevron">‹</span>
+          </button>
+          <button type="button" class="pdf-touch-edge-btn pdf-touch-edge-next" id="btn-touch-edge-next" aria-label="Página siguiente" title="Página siguiente (o desliza hacia la izquierda)">
+            <span class="touch-edge-chevron">›</span>
+          </button>
+
+          <!-- Gesture Helper Hint Pill -->
+          <div class="pdf-touch-swipe-hint" id="pdf-touch-swipe-hint">
+            <span class="hint-icon">👈</span>
+            <span class="hint-text">Desliza con el dedo para cambiar de página</span>
+            <span class="hint-icon">👉</span>
+          </div>
+
+          <div class="pdf-canvas-wrapper" id="pdf-canvas-wrapper">
+            <canvas id="pdf-render-canvas" class="pdf-render-canvas"></canvas>
+          </div>
+          <iframe id="psios-native-pdf-frame" class="psios-pdf-iframe" src="" type="application/pdf" title="Lector de PDF PsiOS" style="display: none;"></iframe>
+        </div>
+
+        <div class="pdf-reader-status-bar">
+          <div class="pdf-status-left">
+            <span class="pdf-status-dot"></span>
+            <span class="pdf-status-text" id="pdf-reader-status-text">Documento Cargado: Psicopatología y Semiología Psiquiátrica (Ricardo Capponi M.)</span>
+          </div>
+          <div class="pdf-status-right">
+            <span>Navega con las flechas ◀ ▶ del teclado o el selector de capítulos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Hoja Clínica Completa del Paciente (Expanded Patient Sheet) -->
+    <div class="psios-modal-backdrop" id="modal-patient-sheet-backdrop" aria-hidden="true">
+      <div class="psios-modal-card patient-sheet-modal-card" role="dialog" aria-modal="true" aria-labelledby="sheet-name">
+        <div class="modal-card-header patient-sheet-header">
+          <div class="patient-sheet-profile-wrap">
+            <span class="patient-sheet-avatar" id="sheet-avatar">👩</span>
+            <div class="patient-sheet-info-col">
+              <div class="patient-sheet-tag-row">
+                <span class="sheet-status-badge" id="sheet-status-tag">Paciente Activo • Historia Abierta</span>
+                <span class="sheet-code-badge" id="sheet-code-tag">HC-2026-001</span>
+              </div>
+              <h2 class="patient-sheet-title" id="sheet-name">Nombre Completo del Paciente</h2>
+              <span class="patient-sheet-subtitle" id="sheet-demographics">26 años • Femenino • F. Nac: 15/06/2000</span>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-patient-sheet" title="Cerrar hoja de paciente">✕</button>
+        </div>
+
+        <div class="modal-card-body patient-sheet-body" id="patient-sheet-content">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <div class="modal-card-footer patient-sheet-footer">
+          <div class="sheet-footer-left">
+            <button type="button" class="sheet-action-secondary" id="btn-sheet-new-appt">
+              <span>📅 + Programar Cita</span>
+            </button>
+            <button type="button" class="sheet-action-secondary" id="btn-sheet-print" title="Imprimir Ficha Clínica">
+              <span>🖨️ Imprimir Ficha</span>
+            </button>
+          </div>
+          <button type="button" class="modal-btn-cancel" id="btn-close-patient-sheet-footer">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Activación y Licencia de Producto (Cloudflare Worker) -->
+    <div class="psios-modal-backdrop" id="modal-license-activation" aria-hidden="true">
+      <div class="psios-modal-card license-modal-card" role="dialog" aria-modal="true" aria-labelledby="license-modal-title">
+        <div class="modal-card-header license-header">
+          <div class="license-header-info">
+            <span class="modal-kicker">ACTIVADOR DE PRODUCTO</span>
+            <h2 class="modal-card-title" id="license-modal-title">Licenciamiento PsiOS</h2>
+            <p class="modal-card-subtitle">Validación con Cloudflare Workers & Garantía Permanente Offline</p>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-license-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <div class="modal-card-body license-modal-body">
+          <!-- Active License Status Banner -->
+          <div class="license-status-banner" id="license-status-banner">
+            <div class="status-banner-left">
+              <span class="status-shield-icon">🛡️</span>
+              <div class="status-banner-text">
+                <strong class="status-banner-title" id="license-banner-title">Licencia Activa — Edición Clínica Pro</strong>
+                <span class="status-banner-meta" id="license-banner-meta">Dispositivo autorizado de por vida • 0 consultas necesarias a la nube</span>
+              </div>
+            </div>
+            <span class="status-banner-tag" id="license-banner-tag">ACTIVA</span>
+          </div>
+
+          <!-- License Key Input Form -->
+          <div class="license-form-block">
+            <label class="form-label" for="input-license-key">Clave de Producto (Product Key)</label>
+            <div class="license-input-wrap">
+              <span class="license-input-icon">🔑</span>
+              <input 
+                type="text" 
+                id="input-license-key" 
+                class="glass-text-input license-key-input" 
+                placeholder="PSIOS-XXXX-XXXX-XXXX" 
+                maxlength="24"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button type="button" class="btn-input-action" id="btn-paste-license" title="Pegar del portapapeles">Pegar</button>
+            </div>
+            <span class="license-input-hint" id="license-feedback-hint">Introduce la clave de 16 caracteres alfanuméricos asignada a tu licencia.</span>
+          </div>
+
+          <!-- Device / Station Fingerprint -->
+          <div class="license-station-row">
+            <div class="station-meta-col">
+              <span class="station-meta-label">Identificador de Estación (Hardware UUID):</span>
+              <code class="station-id-code" id="license-station-id">DEV-WIN-B944-XXXX</code>
+            </div>
+            <button type="button" class="btn-subtle-copy" id="btn-copy-station-id" title="Copiar ID de dispositivo">Copiar ID</button>
+          </div>
+
+          <!-- Master / Demo Keys Quick Selector -->
+          <div class="license-demo-keys-box">
+            <span class="demo-keys-label">Claves Rápidas de Demostración & Evaluación:</span>
+            <div class="demo-keys-chips">
+              <button type="button" class="demo-key-chip" data-key="PSIOS-PRO-2026-CLINIC" title="Cargar clave Profesional Clínico Perpetua">
+                <span class="chip-plan">Pro Clínico:</span>
+                <code>PSIOS-PRO-2026-CLINIC</code>
+              </button>
+              <button type="button" class="demo-key-chip" data-key="PSIOS-MASTER-UNIVERSAL" title="Cargar clave Enterprise Suite">
+                <span class="chip-plan">Hospital / Suite:</span>
+                <code>PSIOS-MASTER-UNIVERSAL</code>
+              </button>
+              <button type="button" class="demo-key-chip" data-key="PSIOS-DEMO-TRIAL" title="Cargar clave Evaluación 2027">
+                <span class="chip-plan">Demostración:</span>
+                <code>PSIOS-DEMO-TRIAL</code>
+              </button>
+            </div>
+          </div>
+
+          <!-- Collapsible Cloudflare Worker Endpoint Settings -->
+          <details class="license-cf-details">
+            <summary class="license-cf-summary">
+              <span>⚙️ Configuración Avanzada del Servidor Cloudflare Worker</span>
+              <span class="cf-summary-arrow">▾</span>
+            </summary>
+            <div class="license-cf-settings-panel">
+              <p class="cf-panel-desc">
+                PsiOS puede verificar la licencia directamente contra tu Cloudflare Worker personalizado o en modo autónomo local sin internet.
+              </p>
+              <label class="form-label" for="input-cf-worker-url">URL de tu Cloudflare Worker</label>
+              <input 
+                type="url" 
+                id="input-cf-worker-url" 
+                class="glass-text-input" 
+                placeholder="https://psios-licensing-worker.tu-dominio.workers.dev" 
+                autocomplete="off"
+              />
+              <span class="input-subhint">Déjalo en blanco para utilizar el motor criptográfico local integrado.</span>
+            </div>
+          </details>
+
+          <!-- Offline Guarantee Pill -->
+          <div class="offline-guarantee-card">
+            <span class="guarantee-icon">⚡</span>
+            <div class="guarantee-text">
+              <strong>Garantía Offline Permanente para Aplicación Instalada</strong>
+              <p>El ejecutable de escritorio (PsiOS.exe) almacena la validación criptográfica de forma local. No requiere conexión a internet para continuar utilizando la biblioteca, los libros ni la gestión de pacientes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-card-footer license-modal-footer">
+          <div class="license-footer-left">
+            <button type="button" class="btn-subtle-danger" id="btn-license-deactivate" style="display: none;">Desactivar Licencia</button>
+          </div>
+          <div class="license-footer-right">
+            <button type="button" class="modal-btn-cancel" id="btn-close-license-footer">Cerrar</button>
+            <button type="button" class="primary-gradient-btn" id="btn-submit-license-activate">
+              <span>🛡️ Activar Estación</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Portal Clínico & Autenticación en la Nube (Firebase) -->
+    <div class="psios-modal-backdrop" id="modal-clinical-auth" aria-hidden="true">
+      <div class="psios-modal-card auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+        <div class="modal-card-header auth-header">
+          <div class="auth-header-info">
+            <span class="modal-kicker">CUENTA Y RESPALDO EN LA NUBE</span>
+            <h2 class="modal-card-title" id="auth-modal-title">Portal Clínico PsiOS</h2>
+            <p class="modal-card-subtitle">Sincronización en la nube con Firebase & Persistencia Offline de Historias</p>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-auth-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="auth-tabs-row" role="tablist">
+          <button type="button" class="auth-tab-btn active" id="tab-btn-auth-login" data-tab="login" role="tab" aria-selected="true">
+            <span>Iniciar Sesión</span>
+          </button>
+          <button type="button" class="auth-tab-btn" id="tab-btn-auth-register" data-tab="register" role="tab" aria-selected="false">
+            <span>Registrar Especialista</span>
+          </button>
+          <button type="button" class="auth-tab-btn" id="tab-btn-auth-config" data-tab="config" role="tab" aria-selected="false">
+            <span>Configuración Nube</span>
+          </button>
+        </div>
+
+        <div class="modal-card-body auth-modal-body">
+          <!-- Active User Profile Banner -->
+          <div class="auth-user-banner" id="auth-user-banner">
+            <span class="auth-user-avatar" id="auth-banner-avatar">👨‍⚕️</span>
+            <div class="auth-user-info">
+              <div class="auth-user-name-row">
+                <strong class="auth-user-name" id="auth-banner-name">Profesional Clínico</strong>
+                <span class="auth-mode-badge" id="auth-banner-badge">Modo Autónomo Local</span>
+              </div>
+              <span class="auth-user-email" id="auth-banner-email">clinico@psios.local</span>
+            </div>
+            <button type="button" class="btn-auth-logout-small" id="btn-auth-logout" title="Cerrar sesión actual">
+              Salir
+            </button>
+          </div>
+
+          <!-- PANE 1: LOGIN -->
+          <div class="auth-tab-pane active" id="auth-pane-login">
+            <form id="form-auth-login" onsubmit="return false;">
+              <div class="form-group">
+                <label class="form-label" for="auth-login-email">Correo Electrónico Clínico</label>
+                <input 
+                  type="email" 
+                  id="auth-login-email" 
+                  class="glass-text-input" 
+                  placeholder="ejemplo@clinica.com" 
+                  autocomplete="username" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="auth-login-password">Contraseña</label>
+                <input 
+                  type="password" 
+                  id="auth-login-password" 
+                  class="glass-text-input" 
+                  placeholder="••••••••" 
+                  autocomplete="current-password" 
+                  required 
+                />
+              </div>
+
+              <div class="auth-feedback-box" id="auth-login-feedback" style="display: none;"></div>
+
+              <div class="auth-pane-actions">
+                <button type="button" class="primary-gradient-btn full-width" id="btn-do-login">
+                  <span>☁️ Iniciar Sesión en la Nube</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- PANE 2: REGISTER -->
+          <div class="auth-tab-pane" id="auth-pane-register" style="display: none;">
+            <form id="form-auth-register" onsubmit="return false;">
+              <div class="form-group">
+                <label class="form-label" for="auth-reg-name">Nombre Completo y Tratamiento</label>
+                <input 
+                  type="text" 
+                  id="auth-reg-name" 
+                  class="glass-text-input" 
+                  placeholder="Dr. Carlos Mendoza" 
+                  autocomplete="name" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="auth-reg-specialty">Especialidad Clínica</label>
+                <input 
+                  type="text" 
+                  id="auth-reg-specialty" 
+                  class="glass-text-input" 
+                  placeholder="Psicología Clínica, Neuropsicología, Psiquiatría..." 
+                  value="Psicología Clínica & Semiología" 
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="auth-reg-email">Correo Electrónico</label>
+                <input 
+                  type="email" 
+                  id="auth-reg-email" 
+                  class="glass-text-input" 
+                  placeholder="doctor@hospital.org" 
+                  autocomplete="username" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="auth-reg-password">Contraseña (Mínimo 6 caracteres)</label>
+                <input 
+                  type="password" 
+                  id="auth-reg-password" 
+                  class="glass-text-input" 
+                  placeholder="••••••••" 
+                  autocomplete="new-password" 
+                  required 
+                />
+              </div>
+
+              <div class="auth-feedback-box" id="auth-register-feedback" style="display: none;"></div>
+
+              <div class="auth-pane-actions">
+                <button type="button" class="primary-gradient-btn full-width" id="btn-do-register">
+                  <span>✨ Crear Cuenta y Conectar Nube</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- PANE 3: FIREBASE CONFIG -->
+          <div class="auth-tab-pane" id="auth-pane-config" style="display: none;">
+            <div class="auth-config-intro">
+              <span class="config-intro-icon">⚙️</span>
+              <p>Puedes conectar tu propio proyecto de <strong>Firebase Console</strong> sin necesidad de recompilar la aplicación. Pega tus credenciales web a continuación:</p>
+            </div>
+
+            <form id="form-auth-config" onsubmit="return false;">
+              <div class="form-group">
+                <label class="form-label" for="cfg-api-key">Firebase API Key (apiKey)</label>
+                <input type="text" id="cfg-api-key" class="glass-text-input" placeholder="AIzaSy..." />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="cfg-project-id">Project ID (projectId)</label>
+                <input type="text" id="cfg-project-id" class="glass-text-input" placeholder="psios-clinica" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="cfg-storage-bucket">Storage Bucket (Opcional para libros en Web)</label>
+                <input type="text" id="cfg-storage-bucket" class="glass-text-input" placeholder="psios-clinica.firebasestorage.app" />
+              </div>
+
+              <div class="auth-feedback-box" id="auth-config-feedback" style="display: none;"></div>
+
+              <div class="auth-pane-actions config-actions">
+                <button type="button" class="btn-subtle-reset" id="btn-reset-firebase-config">Restablecer por Defecto</button>
+                <button type="button" class="primary-gradient-btn" id="btn-save-firebase-config">
+                  <span>Guardar Credenciales</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Bottom Offline Info -->
+          <div class="auth-offline-info">
+            <span class="offline-info-icon">ℹ️</span>
+            <span><strong>Modo Híbrido Seguro:</strong> Si no hay conexión o no has configurado Firebase, tus datos clínicos continúan guardándose de manera privada y local en esta computadora.</span>
+          </div>
+        </div>
+
+        <div class="modal-card-footer auth-modal-footer">
+          <button type="button" class="modal-btn-cancel" id="btn-close-auth-footer">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

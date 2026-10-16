@@ -1,0 +1,16 @@
+# PsiOS Cloudflare Worker Configuration
+name = "psios-licensing-worker"
+main = "worker.js"
+compatibility_date = "2024-10-01"
+
+# Variables de entorno opcionales
+[vars]
+ENVIRONMENT = "production"
+
+# Configuración de KV Namespace (Opcional pero recomendado para producción)
+# Para crear el KV:
+#   npx wrangler kv:namespace create PSIOS_LICENSES
+# Luego copia y pega el id resultante aquí:
+# [[kv_namespaces]]
+# binding = "PSIOS_LICENSES"
+# id = "TU_KV_NAMESPACE_ID_AQUI"
