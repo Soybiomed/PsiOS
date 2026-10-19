@@ -171,6 +171,65 @@ export class ClinicSyncService {
       return localPatients;
     }
   }
+
+  /**
+   * Respaldo directo en Cloudflare KV de todos los datos clínicos
+   */
+  async syncToCloudflare(patients = [], appointments = [], licenseKey = '') {
+    if (!navigator.onLine) return false;
+    const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
+    try {
+      this.setStatus('syncing');
+      const res = await fetch(`${workerUrl}/api/clinic/backup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
+        },
+        body: JSON.stringify({ patients, appointments, licenseKey })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        this.lastSyncTime = new Date();
+        this.setStatus('synced');
+        return true;
+      }
+      this.setStatus('local');
+      return false;
+    } catch (e) {
+      console.warn('[PsiOS Cloudflare Sync] Error de respaldo:', e);
+      this.setStatus('local');
+      return false;
+    }
+  }
+
+  /**
+   * Restauración directa desde Cloudflare KV
+   */
+  async pullFromCloudflare(licenseKey = '') {
+    if (!navigator.onLine) return null;
+    const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
+    try {
+      this.setStatus('syncing');
+      const res = await fetch(`${workerUrl}/api/clinic/restore`, {
+        headers: {
+          'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
+        }
+      });
+      const json = await res.json();
+      if (res.ok && json.success && json.data) {
+        this.lastSyncTime = new Date();
+        this.setStatus('synced');
+        return json.data;
+      }
+      this.setStatus('local');
+      return null;
+    } catch (e) {
+      console.warn('[PsiOS Cloudflare Sync] Error al restaurar:', e);
+      this.setStatus('local');
+      return null;
+    }
+  }
 }
 
 export const clinicSyncService = new ClinicSyncService();

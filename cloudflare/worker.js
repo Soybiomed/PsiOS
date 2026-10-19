@@ -1,11 +1,15 @@
 /**
- * PsiOS Cloudflare Worker — Motor de Licenciamiento y Activación de Producto
- * Compatible con Cloudflare Workers & Cloudflare KV
+ * PsiOS Cloudflare Worker — Motor de Licenciamiento, Datos Clínicos y Servidor R2
+ * Compatible con Cloudflare Workers, Cloudflare KV y Cloudflare R2
  * 
  * Endpoints:
- * - GET  /api/status   -> Estado y salud del servicio
- * - POST /api/activate -> Activación de licencia por dispositivo/estación de trabajo
- * - POST /api/verify   -> Verificación periódica o bajo demanda de token
+ * - GET  /api/status         -> Estado de salud del servicio (KV y R2)
+ * - POST /api/activate       -> Activación de licencia por dispositivo
+ * - POST /api/verify         -> Verificación periódica de licencia
+ * - POST /api/clinic/backup  -> Respaldo de datos clínicos en la nube (KV)
+ * - GET  /api/clinic/restore -> Restauración de datos clínicos desde la nube (KV)
+ * - GET  /libros/*           -> Servidor CDN de libros y manuales desde Cloudflare R2
+ * - GET  /recursos/*         -> Servidor CDN de pruebas y evaluaciones desde Cloudflare R2
  */
 
 // Claves maestras de demostración y evaluación clínica incorporadas
@@ -39,7 +43,7 @@ const SECRET_SALT = 'PSIOS_CLINICAL_SECURE_SALT_2026_V1';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-PsiOS-Version',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-PsiOS-Version, X-License-Key',
   'Access-Control-Max-Age': '86400',
   'Content-Type': 'application/json; charset=utf-8'
 };
@@ -77,22 +81,78 @@ export default {
       });
     }
 
+    const kv = env.PSIOS_LICENSES || env.KV;
+    const r2 = env.PSIOS_RESOURCES || env.R2;
+
     const url = new URL(request.url);
     const pathname = url.pathname.replace(/\/+$/, '') || '/';
 
-    // 2. Healthcheck / Estado
+    // 2. Healthcheck / Estado del servicio
     if (pathname === '/' || pathname === '/api/status') {
       return jsonResponse({
-        service: 'PsiOS License & Activation Engine',
+        service: 'PsiOS Cloud Hub (Licensing, Clinical Data & R2 CDN)',
         version: '1.0.0',
         environment: env?.ENVIRONMENT || 'production',
-        kvBound: !!env?.PSIOS_LICENSES,
+        kvBound: !!kv,
+        r2Bound: !!r2,
         status: 'operational',
         timestamp: new Date().toISOString()
       });
     }
 
-    // 3. Activación de Licencia: POST /api/activate
+    // 3. Servidor CDN de Libros y Recursos desde Cloudflare R2: GET /libros/* o GET /recursos/*
+    if ((pathname.startsWith('/libros') || pathname.startsWith('/recursos')) && request.method === 'GET') {
+      if (!r2) {
+        return jsonResponse({
+          error: 'R2_NOT_BOUND',
+          message: 'El bucket de Cloudflare R2 (psios-recursos) no está vinculado aún en este Worker.'
+        }, 503);
+      }
+
+      // Extraer nombre del archivo (con soporte para subcarpetas)
+      const cleanPath = decodeURIComponent(url.pathname.replace(/^\/(libros|recursos)\/?/, ''));
+      if (!cleanPath) {
+        return jsonResponse({ error: 'FILE_NOT_SPECIFIED', message: 'Debe especificar el nombre del archivo.' }, 400);
+      }
+
+      // Intentar obtener el archivo buscando en "libros/archivo" o directamente en la raíz del bucket
+      let object = await r2.get(`libros/${cleanPath}`);
+      if (!object) {
+        object = await r2.get(cleanPath);
+      }
+
+      if (!object) {
+        return jsonResponse({
+          error: 'FILE_NOT_FOUND',
+          path: cleanPath,
+          message: `El archivo '${cleanPath}' no fue encontrado en el bucket R2 'psios-recursos'.`
+        }, 404);
+      }
+
+      const headers = new Headers();
+      headers.set('Access-Control-Allow-Origin', '*');
+      headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+      headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      headers.set('etag', object.httpEtag);
+
+      // Determinar Content-Type según extensión
+      const lower = cleanPath.toLowerCase();
+      if (lower.endsWith('.pdf')) {
+        headers.set('Content-Type', 'application/pdf');
+      } else if (lower.endsWith('.png')) {
+        headers.set('Content-Type', 'image/png');
+      } else if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
+        headers.set('Content-Type', 'image/jpeg');
+      } else if (lower.endsWith('.glb')) {
+        headers.set('Content-Type', 'model/gltf-binary');
+      } else {
+        headers.set('Content-Type', 'application/octet-stream');
+      }
+
+      return new Response(object.body, { headers });
+    }
+
+    // 4. Activación de Licencia: POST /api/activate
     if (pathname === '/api/activate' && request.method === 'POST') {
       try {
         const body = await request.json().catch(() => ({}));
@@ -111,9 +171,9 @@ export default {
 
         let licenseData = null;
 
-        // A. Consultar Cloudflare KV si está configurado en el Worker
-        if (env?.PSIOS_LICENSES) {
-          const kvRecord = await env.PSIOS_LICENSES.get(`LICENSE:${normalizedKey}`, 'json');
+        // A. Consultar Cloudflare KV si está vinculado
+        if (kv) {
+          const kvRecord = await kv.get(`LICENSE:${normalizedKey}`, 'json');
           if (kvRecord) {
             licenseData = kvRecord;
           }
@@ -125,10 +185,8 @@ export default {
         }
 
         // C. Validación de formato de clave algorítmica si no está registrada
-        // Formato permitido: PSIOS-XXXX-XXXX-XXXX (alfanumérico)
         const keyPattern = /^PSIOS-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}$/;
         if (!licenseData && keyPattern.test(normalizedKey)) {
-          // Clave válida por algoritmo clínico
           licenseData = {
             plan: 'PsiOS Licencia Estándar Clínico',
             maxDevices: 5,
@@ -142,40 +200,40 @@ export default {
           return jsonResponse({
             success: false,
             error: 'INVALID_LICENSE_KEY',
-            message: 'La clave de producto ingresada no es válida o no se encuentra registrada en el sistema.'
+            message: 'La clave de producto ingresada no es válida o fue revocada.'
           }, 403);
         }
 
-        // Comprobar expiración si aplica
-        if (licenseData.expiresAt && new Date(licenseData.expiresAt).getTime() < Date.now()) {
+        // Verificar expiración si aplica
+        if (licenseData.expiresAt && new Date(licenseData.expiresAt) < new Date()) {
           return jsonResponse({
             success: false,
             error: 'LICENSE_EXPIRED',
-            message: `Esta licencia expiró el ${new Date(licenseData.expiresAt).toLocaleDateString()}.`
+            message: 'Esta licencia ha expirado. Por favor contacte con soporte clínico.'
           }, 403);
         }
 
-        // Generar token de activación firmado
         const timestamp = Date.now();
         const token = await generateActivationToken(normalizedKey, effectiveDeviceId, timestamp);
 
-        // Guardar registro de activación en KV si está disponible
-        if (env?.PSIOS_LICENSES) {
+        // Registrar activación en KV
+        if (kv) {
           const activationRecord = {
             licenseKey: normalizedKey,
             deviceId: effectiveDeviceId,
-            deviceName: deviceName || 'Estación Clínica',
+            deviceName: deviceName || 'Estación de Evaluación',
             doctorName: doctorName || 'Profesional Clínico',
-            appVersion: appVersion || '0.1.0',
-            token,
-            activatedAt: new Date(timestamp).toISOString()
+            appVersion: appVersion || 'Beta 0.0.1',
+            activatedAt: new Date(timestamp).toISOString(),
+            lastSeenAt: new Date(timestamp).toISOString(),
+            token
           };
-          ctx.waitUntil(env.PSIOS_LICENSES.put(`ACTIVATION:${normalizedKey}:${effectiveDeviceId}`, JSON.stringify(activationRecord)));
+
+          await kv.put(`ACTIVATION:${normalizedKey}:${effectiveDeviceId}`, JSON.stringify(activationRecord));
         }
 
         return jsonResponse({
           success: true,
-          licenseKey: normalizedKey,
           status: 'active',
           plan: licenseData.plan,
           tier: licenseData.tier || 'pro',
@@ -186,7 +244,7 @@ export default {
           isPerpetual: !licenseData.expiresAt,
           token,
           features: licenseData.features || ['offline_books', 'clinical_sync', 'unlimited_patients'],
-          message: 'Licencia activada con éxito. Su estación de trabajo cuenta con autorización completa y permanente.'
+          message: 'Licencia activada con éxito. Estación de trabajo autorizada.'
         });
 
       } catch (err) {
@@ -198,7 +256,7 @@ export default {
       }
     }
 
-    // 4. Verificación de Licencia: POST /api/verify
+    // 5. Verificación de Licencia: POST /api/verify
     if (pathname === '/api/verify' && request.method === 'POST') {
       try {
         const body = await request.json().catch(() => ({}));
@@ -213,8 +271,6 @@ export default {
         }
 
         const normalizedKey = licenseKey.trim().toUpperCase();
-
-        // En modo offline / standalone, si el token tiene prefijo TOK- y coincide la clave, es válido
         const isValid = token.startsWith('TOK-') && normalizedKey.startsWith('PSIOS-');
 
         return jsonResponse({
@@ -233,10 +289,51 @@ export default {
       }
     }
 
-    // 5. Ruta no encontrada
+    // 6. Respaldo de Datos Clínicos (Pacientes y Citas): POST /api/clinic/backup
+    if (pathname === '/api/clinic/backup' && request.method === 'POST') {
+      if (!kv) {
+        return jsonResponse({ error: 'KV_NOT_BOUND', message: 'Cloudflare KV no está vinculado.' }, 503);
+      }
+      try {
+        const payload = await request.json();
+        const licenseKey = request.headers.get('X-License-Key') || payload.licenseKey || 'DEFAULT_CLINIC';
+        const cleanKey = licenseKey.trim().toUpperCase();
+
+        await kv.put(`CLINIC_DATA:${cleanKey}`, JSON.stringify({
+          updatedAt: new Date().toISOString(),
+          patients: payload.patients || [],
+          appointments: payload.appointments || []
+        }));
+
+        return jsonResponse({ success: true, message: 'Datos clínicos respaldados en Cloudflare KV.' });
+      } catch (e) {
+        return jsonResponse({ success: false, error: e.message }, 500);
+      }
+    }
+
+    // 7. Restauración de Datos Clínicos: GET /api/clinic/restore
+    if (pathname === '/api/clinic/restore' && request.method === 'GET') {
+      if (!kv) {
+        return jsonResponse({ error: 'KV_NOT_BOUND', message: 'Cloudflare KV no está vinculado.' }, 503);
+      }
+      try {
+        const licenseKey = request.headers.get('X-License-Key') || url.searchParams.get('licenseKey') || 'DEFAULT_CLINIC';
+        const cleanKey = licenseKey.trim().toUpperCase();
+        const data = await kv.get(`CLINIC_DATA:${cleanKey}`, 'json');
+
+        return jsonResponse({
+          success: true,
+          data: data || { patients: [], appointments: [] }
+        });
+      } catch (e) {
+        return jsonResponse({ success: false, error: e.message }, 500);
+      }
+    }
+
+    // 8. Ruta no encontrada
     return jsonResponse({
       error: 'NOT_FOUND',
-      message: 'Ruta no encontrada en el servicio de licenciamiento PsiOS.'
+      message: 'Ruta no encontrada en el servicio PsiOS Cloudflare Hub.'
     }, 404);
   }
 };

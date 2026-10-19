@@ -59,13 +59,14 @@ export class LibraryAssetResolver {
   }
 
   /**
-   * Obtiene la URL del servidor secundario: Cloudflare R2
+   * Obtiene la URL del servidor en la nube: Cloudflare R2
    */
   static getCloudflareR2Url() {
+    const DEFAULT_CLOUDFLARE_R2_URL = 'https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev';
     try {
-      return localStorage.getItem(STORAGE_KEY_R2_BUCKET) || '';
+      return localStorage.getItem(STORAGE_KEY_R2_BUCKET) || DEFAULT_CLOUDFLARE_R2_URL;
     } catch {
-      return '';
+      return DEFAULT_CLOUDFLARE_R2_URL;
     }
   }
 
@@ -84,7 +85,7 @@ export class LibraryAssetResolver {
   /**
    * Resuelve la URL óptima para abrir un libro o recurso PDF.
    * En la app de escritorio, devuelve INCONDICIONALMENTE la ruta local sin peticiones web.
-   * En web, consulta Firebase Storage como principal y Cloudflare R2 como secundario.
+   * En web, consulta Cloudflare R2 y recurre a la ruta local relativa si no está disponible.
    */
   static resolvePdfUrl(item) {
     if (!item) return '';
@@ -98,13 +99,7 @@ export class LibraryAssetResolver {
 
     const fileName = localUrl.split('/').pop();
 
-    // 1. Servidor Principal: Firebase Storage
-    const fbBucket = this.getFirebaseStorageUrl();
-    if (fbBucket) {
-      return `${fbBucket}/libros/${encodeURIComponent(fileName)}`;
-    }
-
-    // 2. Servidor Secundario: Cloudflare R2
+    // 1. Servidor Cloudflare R2 (Principal para Web)
     const r2Bucket = this.getCloudflareR2Url();
     if (r2Bucket) {
       return `${r2Bucket}/libros/${encodeURIComponent(fileName)}`;

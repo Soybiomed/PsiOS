@@ -7,6 +7,7 @@
 const STORAGE_KEY_LICENSE = 'psios_license_v1';
 const STORAGE_KEY_DEVICE = 'psios_device_id_v1';
 const STORAGE_KEY_WORKER = 'psios_cf_worker_url_v1';
+const DEFAULT_CLOUDFLARE_WORKER_URL = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
 
 // Claves de demostración maestras autorizadas para activación instantánea offline
 const BUILTIN_KEYS = {
@@ -70,9 +71,9 @@ export class LicenseService {
 
   getWorkerUrl() {
     try {
-      return localStorage.getItem(STORAGE_KEY_WORKER) || '';
+      return localStorage.getItem(STORAGE_KEY_WORKER) || DEFAULT_CLOUDFLARE_WORKER_URL;
     } catch {
-      return '';
+      return DEFAULT_CLOUDFLARE_WORKER_URL;
     }
   }
 
