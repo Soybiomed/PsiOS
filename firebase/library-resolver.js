@@ -102,7 +102,7 @@ export class LibraryAssetResolver {
     // 1. Servidor Cloudflare R2 (Principal para Web)
     const r2Bucket = this.getCloudflareR2Url();
     if (r2Bucket) {
-      return `${r2Bucket}/libros/${encodeURIComponent(fileName)}`;
+      return `${r2Bucket}/${encodeURIComponent(fileName)}`;
     }
 
     // Por defecto, ruta local relativa
@@ -112,9 +112,18 @@ export class LibraryAssetResolver {
   /**
    * Resuelve la portada del libro.
    * En escritorio: siempre ruta local `/libros/...`.
+   * En web: Cloudflare R2.
    */
   static resolveCoverUrl(item) {
     if (!item) return '';
-    return item.coverUrl || '';
+    const localUrl = item.coverUrl || '';
+    if (this.isDesktopApp()) return localUrl;
+
+    const fileName = localUrl.split('/').pop();
+    const r2Bucket = this.getCloudflareR2Url();
+    if (r2Bucket) {
+      return `${r2Bucket}/${encodeURIComponent(fileName)}`;
+    }
+    return localUrl;
   }
 }
