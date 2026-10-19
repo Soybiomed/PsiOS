@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "desktop:dev": "tauri dev",
     "desktop:build": "tauri build --no-bundle",
-    "deploy:online": "node scripts/deploy-online.mjs"
+    "deploy:online": "node scripts/deploy-online.mjs",
+    "upload:books": "node scripts/upload-r2.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
