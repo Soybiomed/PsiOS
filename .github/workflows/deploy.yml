@@ -37,6 +37,8 @@ jobs:
 
       - name: Compilar aplicación web
         run: npm run build
+        env:
+          VITE_BASE: /PsiOS/
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
