@@ -2883,7 +2883,7 @@ class LibraryController {
     this.cardsGrid.innerHTML = sortedList.map(item => {
       const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
       const coverThumbHtml = resolvedCover ? `
-        <img src="${encodeURI(resolvedCover)}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" />
+        <img src="${resolvedCover}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" />
       ` : '';
 
       const pdfBtnHtml = item.pdfUrl ? `
@@ -3078,9 +3078,10 @@ class LibraryController {
         }
       } else if (item.coverImage || item.prologue || item.indexTree) {
         const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
+        const resolvedPdf = LibraryAssetResolver.resolvePdfUrl(item);
         const coverHtml = resolvedCover ? `
           <div class="lib-book-cover-showcase">
-            <img src="${encodeURI(resolvedCover)}" alt="Portada de ${item.title}" class="book-cover-img" />
+            <img src="${resolvedCover}" alt="Portada de ${item.title}" class="book-cover-img" />
             <div class="book-showcase-meta">
               <div class="modal-areas-row">
                 <span class="modal-type-pill">📚 LIBRO DE TEXTO CLÍNICO</span>
@@ -3093,7 +3094,7 @@ class LibraryController {
                 <button type="button" class="primary-gradient-btn" id="btn-showcase-read-pdf" style="padding: 0.65rem 1.4rem; font-size: 0.86rem;">
                   📖 Abrir Lector Nativo de PDF (${item.badge ? (item.badge.split('•')[1]?.trim() || item.badge) : 'Documento Completo'})
                 </button>
-                <a href="${encodeURI(item.pdfUrl)}" download="${item.title}.pdf" class="btn-row-action" style="padding: 0.6rem 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                <a href="${resolvedPdf}" download="${item.title}.pdf" class="btn-row-action" style="padding: 0.6rem 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
                   ⬇ Descargar PDF
                 </a>
               </div>
@@ -3293,7 +3294,7 @@ class LibraryController {
 
     // Resolves local path in desktop (0-cloud query) or cloud URL for web
     const resolvedUrl = LibraryAssetResolver.resolvePdfUrl(book);
-    const encodedPdf = encodeURI(resolvedUrl);
+    const encodedPdf = resolvedUrl;
     if (this.btnPdfExternalTab) {
       this.btnPdfExternalTab.href = encodedPdf;
     }
