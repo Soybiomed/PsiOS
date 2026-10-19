@@ -116,7 +116,7 @@ export class LibraryAssetResolver {
    */
   static resolveCoverUrl(item) {
     if (!item) return '';
-    const localUrl = item.coverUrl || '';
+    const localUrl = item.coverImage || item.coverUrl || '';
     if (this.isDesktopApp()) return localUrl;
 
     const fileName = localUrl.split('/').pop();

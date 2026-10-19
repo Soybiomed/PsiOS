@@ -423,15 +423,18 @@ class ThreeDViewer {
       this.triggerEntranceAnimation();
     };
 
-    // Try loading relative or public path
+    // Load 3D model with support for custom base path (GitHub Pages / Desktop)
+    const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : './';
+    const primaryGlbPath = `${baseUrl.replace(/\/+$/, '')}/psychology_v3.glb`;
+
     loader.load(
-      './psychology_v3.glb',
+      primaryGlbPath,
       (gltf) => onModelSuccess(gltf.scene),
       undefined,
       (err) => {
-        console.warn('Initial path ./psychology_v3.glb failed, trying /psychology_v3.glb', err);
+        console.warn(`Initial path ${primaryGlbPath} failed, trying fallback ./psychology_v3.glb`, err);
         loader.load(
-          '/psychology_v3.glb',
+          './psychology_v3.glb',
           (gltf) => onModelSuccess(gltf.scene),
           undefined,
           (err2) => {
@@ -2878,8 +2881,9 @@ class LibraryController {
     }
 
     this.cardsGrid.innerHTML = sortedList.map(item => {
-      const coverThumbHtml = item.coverImage ? `
-        <img src="${encodeURI(item.coverImage)}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" />
+      const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
+      const coverThumbHtml = resolvedCover ? `
+        <img src="${encodeURI(resolvedCover)}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" />
       ` : '';
 
       const pdfBtnHtml = item.pdfUrl ? `
@@ -3073,9 +3077,10 @@ class LibraryController {
           });
         }
       } else if (item.coverImage || item.prologue || item.indexTree) {
-        const coverHtml = item.coverImage ? `
+        const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
+        const coverHtml = resolvedCover ? `
           <div class="lib-book-cover-showcase">
-            <img src="${encodeURI(item.coverImage)}" alt="Portada de ${item.title}" class="book-cover-img" />
+            <img src="${encodeURI(resolvedCover)}" alt="Portada de ${item.title}" class="book-cover-img" />
             <div class="book-showcase-meta">
               <div class="modal-areas-row">
                 <span class="modal-type-pill">📚 LIBRO DE TEXTO CLÍNICO</span>
@@ -3267,7 +3272,8 @@ class LibraryController {
     if (!this.pdfjsLib) {
       this.pdfjsLib = await import('pdfjs-dist');
       if (typeof window !== 'undefined') {
-        this.pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+        const basePath = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : './';
+        this.pdfjsLib.GlobalWorkerOptions.workerSrc = `${basePath.replace(/\/+$/, '')}/pdf.worker.min.mjs`;
       }
     }
     return this.pdfjsLib;
@@ -3326,9 +3332,10 @@ class LibraryController {
     try {
       this.pdfDocUrl = url;
       const pdfjs = await this.getPdfJsLib();
+      const basePath = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : './';
       const loadingTask = pdfjs.getDocument({
         url,
-        standardFontDataUrl: '/standard_fonts/'
+        standardFontDataUrl: `${basePath.replace(/\/+$/, '')}/standard_fonts/`
       });
       this.pdfDoc = await loadingTask.promise;
       this.totalPages = this.pdfDoc.numPages || 234;
