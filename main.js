@@ -2881,9 +2881,10 @@ class LibraryController {
     }
 
     this.cardsGrid.innerHTML = sortedList.map(item => {
-      const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
+      const hasCover = Boolean(item.coverImage || item.coverUrl);
+      const resolvedCover = hasCover ? LibraryAssetResolver.resolveCoverUrl(item) : '';
       const coverThumbHtml = resolvedCover ? `
-        <img src="${resolvedCover}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" />
+        <img src="${resolvedCover}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" onerror="this.style.display='none'" />
       ` : '';
 
       const pdfBtnHtml = item.pdfUrl ? `
@@ -3077,11 +3078,11 @@ class LibraryController {
           });
         }
       } else if (item.coverImage || item.prologue || item.indexTree) {
-        const resolvedCover = LibraryAssetResolver.resolveCoverUrl(item);
+        const resolvedCover = (item.coverImage || item.coverUrl) ? LibraryAssetResolver.resolveCoverUrl(item) : '';
         const resolvedPdf = LibraryAssetResolver.resolvePdfUrl(item);
         const coverHtml = resolvedCover ? `
           <div class="lib-book-cover-showcase">
-            <img src="${resolvedCover}" alt="Portada de ${item.title}" class="book-cover-img" />
+            <img src="${resolvedCover}" alt="Portada de ${item.title}" class="book-cover-img" onerror="this.style.display='none'" />
             <div class="book-showcase-meta">
               <div class="modal-areas-row">
                 <span class="modal-type-pill">📚 LIBRO DE TEXTO CLÍNICO</span>

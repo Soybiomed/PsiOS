@@ -90,7 +90,8 @@ export class LibraryAssetResolver {
   static resolvePdfUrl(item) {
     if (!item) return '';
 
-    const localUrl = item.pdfUrl || '';
+    const localUrl = (item.pdfUrl || '').trim();
+    if (!localUrl) return '';
 
     // Si es la aplicación instalada en computadora, usar siempre la ruta local instantánea
     if (this.isDesktopApp()) {
@@ -98,6 +99,7 @@ export class LibraryAssetResolver {
     }
 
     const fileName = localUrl.split('/').pop();
+    if (!fileName) return '';
 
     // 1. Servidor Cloudflare R2 (Principal para Web)
     const r2Bucket = this.getCloudflareR2Url();
@@ -113,13 +115,18 @@ export class LibraryAssetResolver {
    * Resuelve la portada del libro.
    * En escritorio: siempre ruta local `/libros/...`.
    * En web: Cloudflare R2.
+   * Si no posee carátula definida (definiciones semiológicas, protocolos de examen, etc.), retorna '' inmediatamente.
    */
   static resolveCoverUrl(item) {
     if (!item) return '';
-    const localUrl = item.coverImage || item.coverUrl || '';
+    const localUrl = (item.coverImage || item.coverUrl || '').trim();
+    if (!localUrl) return '';
+
     if (this.isDesktopApp()) return localUrl;
 
     const fileName = localUrl.split('/').pop();
+    if (!fileName) return '';
+
     const r2Bucket = this.getCloudflareR2Url();
     if (r2Bucket) {
       return `${r2Bucket}/${encodeURIComponent(fileName)}`;
