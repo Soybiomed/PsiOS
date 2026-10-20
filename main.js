@@ -1370,6 +1370,56 @@ const LIBRARY_CATALOG = [
       'Preguntas para la Entrevista Clínica',
       'Pauta de Registro de Resultados'
     ]
+  },
+  {
+    id: 'la-conciencia',
+    title: 'La conciencia',
+    category: 'psicopatologia',
+    categoryLabel: 'Definición Semiológica',
+    isClinicalEntity: true,
+    code: 'SEM-CON-01',
+    icon: '👁️',
+    author: 'Semiología Psiquiátrica • Capponi & APIR',
+    badge: 'Nivel & Claridad de Vigilia',
+    areas: ['PSICOPATOLOGÍA', 'SEMIOLOGÍA', 'EXAMEN MENTAL', 'FUNCIONES COGNITIVAS', 'PROCESOS PSICOLÓGICOS'],
+    academicAffiliation: 'Manual de Psicopatología APIR & Semiología Psiquiátrica (Ricardo Capponi)',
+    summary: 'Conciencia: capacidad de darse cuenta de uno mismo y del entorno y responder a los estímulos.\n\nCausas principales: traumatismos, intoxicaciones, alteraciones metabólicas y enfermedades neurológicas.\n\nAlteraciones del nivel: somnolencia, obnubilación, sopor, estupor y coma.\n\nAlteración positiva: hipervigilancia.\n\nAlteraciones productivas: estados deliriosos y confusionales.\n\nEstrechamiento de conciencia: estados crepusculares y disociación hipnótica.\n\nAlteraciones circunscritas: despersonalización —extrañeza respecto de uno mismo— y desrealización —extrañeza respecto del entorno—.\n\nEvaluación: observación clínica, respuesta a estímulos, escala de Glasgow y orientación temporal, espacial y autopsíquica.\n\nUrgencias: pérdida de conciencia persistente, sospecha de ACV, convulsiones prolongadas y golpe de calor requieren atención inmediata.',
+    topics: [
+      'Definición de Conciencia y Nivel de Vigilia',
+      'Conceptos Relacionados: Vigilia, Alerta, Atención, Orientación',
+      'Causas: Traumatismos, Intoxicaciones, Metabólicas y Neurológicas',
+      'Alteraciones del Nivel: Somnolencia, Obnubilación, Sopor, Estupor y Coma',
+      'Hipervigilancia o Hiperlucidez',
+      'Alteraciones Productivas: Delirium y Confusión',
+      'Estrechamiento del Campo de Conciencia',
+      'Alteraciones Circunscritas: Despersonalización y Desrealización',
+      'Síndrome Confusional Agudo (SCA)',
+      'Cuadros Clínicos Relacionados: Síncope, Shock, Coma, ACV, Convulsión, Golpe de Calor',
+      'Signos de Alarma y Protocolo FAST'
+    ]
+  },
+  {
+    id: 'evaluacion-trastorno-conciencia',
+    title: 'Evaluación para trastorno de conciencia',
+    category: 'evaluacion',
+    categoryLabel: 'Protocolo de Examen Clínico',
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: 'EVA-CON-02',
+    icon: '📋',
+    author: 'Protocolo de Examen Clínico • Escala de Glasgow & Examen Directo',
+    badge: 'Escala de Glasgow • 3 Parámetros',
+    areas: ['EVALUACIÓN CLÍNICA', 'EXAMEN MENTAL', 'SEMIOLOGÍA', 'PSICOPATOLOGÍA'],
+    academicAffiliation: 'Exploración Psicopatológica del Estado Mental & Escala de Glasgow',
+    summary: 'Protocolo estructurado de valoración clínica de la conciencia: observación del estado mental (5 elementos), exploración progresiva de respuesta a estímulos (sensoriales, táctiles y dolorosos), Escala de Coma de Glasgow con tabla completa (apertura ocular, respuesta verbal y motora, estratificación de TCE) y exploración de las 3 dimensiones de la orientación.',
+    topics: [
+      '5.1 Observación Clínica: 5 Elementos Clave',
+      '5.2 Respuesta a Estímulos Progresivos',
+      '5.3 Escala de Coma de Glasgow (Ocular, Verbal, Motora)',
+      'Estratificación de TCE: Leve (13-15), Moderado (9-12), Grave (3-8)',
+      '5.4 Evaluación de la Orientación: Temporal, Espacial y Autopsíquica',
+      'Criterios Clínicos y Signos de Alerta'
+    ]
   }
 ];
 
@@ -2469,6 +2519,714 @@ function getOrientationEvaluationDocHtml() {
   `;
 }
 
+function getConsciousnessDocHtml() {
+  return `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">👁️ DEFINICIÓN SEMIOLÓGICA & TRASTORNO</span>
+          <span class="modal-area-pill">🧬 ÁREA: PSICOPATOLOGÍA</span>
+          <span class="modal-area-pill">🩺 ÁREA: SEMIOLOGÍA</span>
+          <span class="modal-area-pill">📋 ÁREA: EXAMEN MENTAL</span>
+          <span class="modal-area-pill">🧠 ÁREA: FUNCIONES COGNITIVAS</span>
+        </div>
+        <h2 class="orientation-main-title">La conciencia</h2>
+        <p class="orientation-authors-meta">Semiología Psiquiátrica (Ricardo Capponi) & Manual de Psicopatología APIR</p>
+      </div>
+
+      <div class="orientation-subcard" style="background: rgba(59, 130, 246, 0.05); border-left: 3px solid #3b82f6;">
+        <p class="orientation-p" style="margin: 0; font-size: 0.88rem; color: var(--text-primary); line-height: 1.6;">
+          Esta síntesis integra los contenidos de las diapositivas <strong>CONCIENCIA y CONSCIENCIA</strong> con los apartados pertinentes del <em>Manual de Psicopatología APIR</em> y <em>Psicopatología y Semiología Psiquiátrica</em>, de Ricardo Capponi. Las diapositivas se utilizan como material de clase, pero las citas corresponden únicamente a los libros.
+        </p>
+      </div>
+
+      <!-- 1. Definición de conciencia -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 1</div>
+        <h3 class="orientation-sec-title">1. Definición de conciencia</h3>
+        <p class="orientation-lead-p">
+          La conciencia es la capacidad de reconocer y responder a estímulos internos y externos, darse cuenta de uno mismo y del medio que lo rodea, y reaccionar de manera adecuada a lo percibido.
+        </p>
+        <p class="orientation-p">
+          Desde la psicopatología, se estudian las alteraciones del nivel de vigilia, la claridad de la experiencia consciente y el contenido de las vivencias. El Manual de Psicopatología APIR organiza estas alteraciones en trastornos deficitarios, productivos, del estrechamiento del campo de conciencia y alteraciones positivas, como la hipervigilancia.
+        </p>
+        <div style="margin: 0.65rem 0 1rem 0;">
+          <button type="button" class="btn-book-citation-jump" data-book-id="apir-psicopatologia" data-page="22" title="Abrir Tema 3 Psicopatología de la Conciencia en APIR">
+            📖 Consultar en APIR: Tema 3 Psicopatología de la Conciencia (Pág. 22) →
+          </button>
+        </div>
+
+        <div class="orientation-subcard">
+          <h4 class="orientation-subcard-title">Conceptos relacionados</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Vigilia:</strong> estado de estar despierto y receptivo a los estímulos.</li>
+            <li><strong>Alerta:</strong> capacidad de responder a los estímulos del entorno.</li>
+            <li><strong>Atención:</strong> capacidad de seleccionar información y dirigir los procesos mentales.</li>
+            <li><strong>Orientación:</strong> capacidad de situarse respecto al tiempo, el espacio, la propia identidad y la situación actual.</li>
+            <li><strong>Contenido de conciencia:</strong> conjunto de percepciones, pensamientos y vivencias presentes en la experiencia consciente.</li>
+          </ul>
+        </div>
+
+        <p class="orientation-p" style="margin-top: 0.85rem;">
+          Capponi señala que los trastornos de orientación pueden acompañar a los trastornos de conciencia, aunque también pueden relacionarse con alteraciones de memoria, atención o inteligencia.
+        </p>
+        <div style="margin-top: 0.5rem;">
+          <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="116" title="Abrir sección de Psicopatología de la conciencia en Capponi">
+            📖 Consultar en Capponi: Psicopatología de la Conciencia (Pág. 116) →
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Causas de las alteraciones de conciencia -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 2</div>
+        <h3 class="orientation-sec-title">2. Causas de las alteraciones de conciencia</h3>
+        <p class="orientation-p">
+          Las causas principales contempladas en el material de estudio son:
+        </p>
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">💥</span>
+              <div>
+                <h4 class="dim-name">1. Traumatismos</h4>
+                <span class="dim-badge">Causa Física</span>
+              </div>
+            </div>
+            <p class="dim-desc">Especialmente los traumatismos craneoencefálicos (TCE).</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🍷</span>
+              <div>
+                <h4 class="dim-name">2. Intoxicaciones</h4>
+                <span class="dim-badge">Causa Tóxica</span>
+              </div>
+            </div>
+            <p class="dim-desc">Consumo de alcohol, drogas ilícitas, fármacos o medicamentos psicotrópicos.</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🩸</span>
+              <div>
+                <h4 class="dim-name">3. Alteraciones metabólicas</h4>
+                <span class="dim-badge">Causa Sistémica</span>
+              </div>
+            </div>
+            <p class="dim-desc">Hipoglucemia, hiperglucemia, desequilibrios electrolíticos e insuficiencias orgánicas (hepática, renal, respiratoria).</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🧠</span>
+              <div>
+                <h4 class="dim-name">4. Alteraciones neurológicas</h4>
+                <span class="dim-badge">Causa Cerebral</span>
+              </div>
+            </div>
+            <p class="dim-desc">Epilepsia, accidentes cerebrovasculares (ACV), infecciones del sistema nervioso central (meningitis, encefalitis) y tumores.</p>
+          </div>
+        </div>
+        <div class="orientation-clinical-note" style="margin-top: 1rem;">
+          💡 Estas condiciones pueden afectar el nivel de alerta, la atención, la orientación, la percepción y la capacidad de responder al entorno.
+        </div>
+      </section>
+
+      <!-- 3. Tipos de alteraciones de la conciencia -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 3</div>
+        <h3 class="orientation-sec-title">3. Tipos de alteraciones de la conciencia</h3>
+
+        <!-- 3.1 Alteraciones del nivel de conciencia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.1</span>
+            <h4 class="alteration-title">Alteraciones del nivel de conciencia</h4>
+          </div>
+          <p class="orientation-p">
+            Se caracterizan por una disminución o modificación del estado de vigilia y de la respuesta a los estímulos.
+          </p>
+
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 24%;">Tipo</th>
+                  <th>Definición y características</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag">Alerta</strong></td>
+                  <td>La persona está despierta, reconoce su entorno y responde adecuadamente.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Somnolencia</strong></td>
+                  <td>Existe tendencia al sueño; se requieren estímulos más intensos para mantener la vigilia. Disminuyen la atención y la concentración.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Obnubilación</strong></td>
+                  <td>Disminuyen la vigilancia y la atención; pueden aparecer lentitud del pensamiento, torpeza motora y confusión.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Sopor</strong></td>
+                  <td>La respuesta es muy reducida y se necesita estimulación repetida y vigorosa para obtener cooperación. Puede haber desorientación y confusión.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Estupor</strong></td>
+                  <td>Estado de marcada reducción de la actividad espontánea y de las respuestas. Capponi advierte que no constituye un síndrome único, pues puede aparecer en diferentes condiciones clínicas.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(239, 68, 68, 0.15); color: #dc2626;">Coma</strong></td>
+                  <td>Ausencia de vigilia y de respuesta consciente al entorno. Requiere atención médica urgente.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="orientation-subcard" style="margin-top: 1rem;">
+            <h4 class="orientation-subcard-title">Secuencia orientativa de deterioro:</h4>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.6rem 0; font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">
+              <span>Alerta</span> <span>→</span>
+              <span>Somnolencia</span> <span>→</span>
+              <span>Obnubilación</span> <span>→</span>
+              <span>Estupor/sopor</span> <span>→</span>
+              <span style="color: #dc2626;">Coma</span>
+            </div>
+            <p class="orientation-small-note" style="margin: 0.35rem 0 0 0;">
+              No todos los pacientes evolucionan siguiendo esta secuencia. Además, el estupor no debe interpretarse exclusivamente como una alteración del nivel de conciencia, ya que también puede presentarse en estados de inhibición psicomotora (Capponi).
+            </p>
+          </div>
+        </div>
+
+        <!-- 3.2 Hipervigilancia o hiperlucidez -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.2</span>
+            <h4 class="alteration-title">Hipervigilancia o hiperlucidez</h4>
+          </div>
+          <p class="orientation-p">
+            Consiste en un aumento del estado de alerta y de la actividad mental. Puede acompañarse de excitación, aumento de la actividad verbal o motora y dificultad para filtrar estímulos irrelevantes.
+          </p>
+          <div class="orientation-diff-note">
+            <strong>Aclaración semiológica:</strong> El aumento de la alerta no significa necesariamente que la atención sea más eficaz: puede coexistir con distractibilidad.
+          </div>
+        </div>
+
+        <!-- 3.3 Alteraciones productivas de la conciencia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.3</span>
+            <h4 class="alteration-title">Alteraciones productivas de la conciencia</h4>
+          </div>
+          <p class="orientation-p">
+            Son modificaciones en las que aparecen experiencias perceptivas o contenidos mentales anómalos.
+          </p>
+          <ul class="orientation-bullet-list">
+            <li>
+              <strong>Estado delirioso o delirium:</strong> alteración global de la conciencia con desorganización del pensamiento, cambios perceptivos, posibles ideas delirantes, alteraciones de memoria y agitación psicomotora. El APIR describe el delirium como una desintegración importante de la conciencia.
+            </li>
+            <li>
+              <strong>Confusión:</strong> pérdida de coherencia entre procesos psíquicos, especialmente percepción, memoria y pensamiento. Capponi recoge la descripción de Bleuler y distingue estos cuadros de otros estados en los que predominan los errores sensoriales o de reconocimiento.
+            </li>
+          </ul>
+        </div>
+
+        <!-- 3.4 Alteraciones del estrechamiento del campo de conciencia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.4</span>
+            <h4 class="alteration-title">Alteraciones del estrechamiento del campo de conciencia</h4>
+          </div>
+          <p class="orientation-p">
+            Se produce una reducción del campo de experiencias conscientes, por lo que la persona puede actuar sin integrar plenamente todos los estímulos o aspectos de la situación.
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Estados crepusculares:</strong> episodios de conciencia confusa con reducción de la claridad perceptiva, limitación de las acciones voluntarias y posible amnesia posterior.</li>
+            <li><strong>Disociación hipnótica:</strong> estado en el que la atención y la experiencia consciente quedan restringidas y pueden responder a la sugestión.</li>
+            <li><strong>Trastorno de identidad disociativo:</strong> alteración relacionada con la discontinuidad de la identidad y de la experiencia de sí mismo; aparece en la clasificación del material de estudio.</li>
+          </ul>
+          <p class="orientation-small-note">
+            Capponi describe el estrechamiento de conciencia como una retracción del campo consciente que puede quedar dominado por un estado afectivo y acompañarse de actos automáticos y amnesia posterior.
+          </p>
+        </div>
+
+        <!-- 3.5 Alteraciones circunscritas: despersonalización y desrealización -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.5</span>
+            <h4 class="alteration-title">Alteraciones circunscritas: despersonalización y desrealización</h4>
+          </div>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Alteración</th>
+                  <th>Definición</th>
+                  <th style="width: 28%;">Elemento afectado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag">Despersonalización</strong></td>
+                  <td>Sensación de extrañeza o separación respecto de uno mismo, del cuerpo o de la propia experiencia mental.</td>
+                  <td><strong>El yo o la propia persona</strong></td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Desrealización</strong></td>
+                  <td>Sensación de que el entorno parece irreal, extraño o desconocido.</td>
+                  <td><strong>El mundo externo</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="orientation-clinical-alert" style="margin-top: 0.85rem;">
+            <strong>Diferencia Esencial:</strong> La despersonalización afecta la vivencia de uno mismo, mientras que la desrealización afecta la vivencia del entorno. El APIR contempla ambas entre las alteraciones circunscritas de la conciencia.
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Síndrome confusional agudo -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 4</div>
+        <h3 class="orientation-sec-title">4. Síndrome confusional agudo (SCA)</h3>
+        <p class="orientation-p">
+          El síndrome confusional agudo (SCA o delirium) es un cuadro caracterizado por una alteración aguda y generalmente fluctuante de la atención y la conciencia, acompañada de cambios en funciones cognitivas como la memoria, la orientación, el pensamiento, el lenguaje y la percepción.
+        </p>
+        <div class="orientation-subcard">
+          <h4 class="orientation-subcard-title">Características principales:</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Inicio rápido:</strong> en horas o días.</li>
+            <li><strong>Afectación central:</strong> alteración de la atención y de la claridad mental.</li>
+            <li><strong>Desorientación:</strong> y posibles alteraciones perceptivas (alucinaciones visuales, ilusiones).</li>
+            <li><strong>Fluctuaciones circadianas:</strong> a lo largo del día, con empeoramiento nocturno e intervalos de mayor lucidez.</li>
+            <li><strong>Causalidad orgánica:</strong> necesidad de investigar de inmediato una causa médica, neurológica, metabólica, farmacológica o tóxica subyacente.</li>
+          </ul>
+        </div>
+        <p class="orientation-small-note" style="margin-top: 0.65rem;">
+          Capponi describe cuadros confusionales en los que la conciencia fluctúa entre grados de mayor y menor vigilia y pueden aparecer desorientación, incoherencia del pensamiento y fragmentación de la conducta.
+        </p>
+      </section>
+
+      <!-- 6. Cuadros clínicos relacionados -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 6</div>
+        <h3 class="orientation-sec-title">6. Cuadros clínicos relacionados</h3>
+        <p class="orientation-p">
+          Las diapositivas incluyen los siguientes cuadros que pueden acompañarse de pérdida de conciencia o alteraciones de la respuesta:
+        </p>
+
+        <div class="orientation-table-wrap">
+          <table class="orientation-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Cuadro</th>
+                <th>Concepto esencial</th>
+                <th style="width: 35%;">Elementos que deben observarse</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Desmayo o lipotimia</strong></td>
+                <td>Episodio breve de malestar, con posible pérdida parcial o total del conocimiento.</td>
+                <td>Debilidad, palidez, sudoración fría y visión borrosa.</td>
+              </tr>
+              <tr>
+                <td><strong>Síncope</strong></td>
+                <td>Pérdida transitoria de conciencia por disminución global y temporal de la perfusión cerebral.</td>
+                <td>Inicio, duración, recuperación y posibles causas vasovagales, ortostáticas o cardiacas.</td>
+              </tr>
+              <tr>
+                <td><strong>Shock</strong></td>
+                <td>Insuficiencia circulatoria que provoca una perfusión inadecuada de los tejidos.</td>
+                <td>Estado circulatorio y signos de compromiso general.</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #dc2626;">Coma</strong></td>
+                <td>Ausencia prolongada de vigilia y de respuesta consciente.</td>
+                <td>Respuesta neurológica y necesidad de soporte médico urgente.</td>
+              </tr>
+              <tr>
+                <td><strong>Accidente cerebrovascular (ACV)</strong></td>
+                <td>Evento neurológico agudo que puede afectar la fuerza, el habla, la simetría facial y, en algunos casos, la conciencia.</td>
+                <td>Asimetría facial, debilidad de una extremidad y alteración del habla.</td>
+              </tr>
+              <tr>
+                <td><strong>Convulsión</strong></td>
+                <td>Contracciones musculares involuntarias que pueden acompañarse de pérdida de conciencia.</td>
+                <td>Movimientos, duración, respiración y estado posterior; puede existir amnesia del episodio.</td>
+              </tr>
+              <tr>
+                <td><strong>Agotamiento o golpe de calor</strong></td>
+                <td>Alteración relacionada con la exposición al calor; el golpe de calor puede ser mortal.</td>
+                <td>Temperatura, estado mental, piel y signos de deterioro.</td>
+              </tr>
+              <tr>
+                <td><strong>Intoxicación por alcohol o drogas</strong></td>
+                <td>Alteración mental o compromiso de conciencia por exposición a sustancias.</td>
+                <td>Conducta, respiración, respuesta a estímulos y posibles indicios de exposición.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Signos de alarma & FAST -->
+        <div class="orientation-clinical-alert" style="margin-top: 1rem; background: rgba(239, 68, 68, 0.08); border-left-color: #ef4444;">
+          <h4 style="margin: 0 0 0.4rem 0; color: #dc2626; font-size: 0.92rem; font-weight: 800;">🚨 Signos de Alarma y Atención Urgente</h4>
+          <p style="margin: 0 0 0.5rem 0; font-size: 0.86rem; line-height: 1.55; color: var(--text-primary);">
+            Una persona que no recupera la conciencia, presenta dificultad respiratoria, convulsiones prolongadas, signos de ACV o sospecha de golpe de calor necesita atención urgente.
+          </p>
+          <div style="background: rgba(255, 255, 255, 0.85); border-radius: 10px; padding: 0.65rem 0.85rem; border: 1px solid rgba(239, 68, 68, 0.2);">
+            <strong style="color: #b91c1c; font-size: 0.84rem;">Protocolo FAST ante sospecha de ACV:</strong>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 0.4rem; font-size: 0.82rem;">
+              <div><strong>F (Face / Cara):</strong> revisar simetría facial</div>
+              <div><strong>A (Arms / Brazos):</strong> debilidad o caída de un brazo</div>
+              <div><strong>S (Speech / Habla):</strong> dificultad al pronunciar o comprender</div>
+              <div><strong>T (Time / Tiempo):</strong> activar emergencias sin demora</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Botón inferior para evaluación -->
+      <div class="orientation-bottom-cta">
+        <button type="button" class="btn-orientation-cta" id="btn-goto-conciencia-eval">
+          <span class="cta-icon">📋</span>
+          <div class="cta-texts">
+            <strong class="cta-title">Evaluación para trastorno de conciencia</strong>
+            <span class="cta-sub">Abrir protocolo estructurado, Escala de Glasgow (Ocular, Verbal, Motora) y exploración semiológica</span>
+          </div>
+          <span class="cta-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function getConsciousnessEvaluationDocHtml() {
+  return `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">📋 PROTOCOLO DE EXAMEN CLÍNICO</span>
+          <span class="modal-area-pill">🔬 ÁREA: EVALUACIÓN CLÍNICA</span>
+          <span class="modal-area-pill">🩺 ÁREA: EXAMEN MENTAL</span>
+          <span class="modal-area-pill">🧬 ÁREA: SEMIOLOGÍA</span>
+          <span class="modal-area-pill">🧠 ÁREA: PSICOPATOLOGÍA</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem;">
+          <div>
+            <h2 class="orientation-main-title">Evaluación para trastorno de conciencia</h2>
+            <p class="orientation-authors-meta">Exploración Clínica Directa del Estado Mental • Escala de Coma de Glasgow</p>
+          </div>
+          <button type="button" class="btn-back-to-def" id="btn-back-conciencia-def">
+            ← Ver Definición y Psicopatología
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Forma de evaluar la conciencia -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 5</div>
+        <h3 class="orientation-sec-title">5. Forma de evaluar la conciencia</h3>
+        <p class="orientation-lead-p">
+          La evaluación debe combinar observación clínica, exploración de la respuesta a estímulos y valoración de la orientación. Ningún signo aislado permite establecer por sí solo la causa del trastorno.
+        </p>
+
+        <!-- 5.1 Observación clínica -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">5.1</span>
+            <h4 class="alteration-title">Observación clínica</h4>
+          </div>
+          <p class="orientation-p">
+            Durante la valoración inicial se examinan cinco elementos:
+          </p>
+          <div class="orientation-subcard">
+            <ul class="orientation-bullet-list">
+              <li><strong>1. Capacidad de atención:</strong> si la persona mantiene la atención, comprende preguntas y responde de forma coherente.</li>
+              <li><strong>2. Conducta motora:</strong> movimientos espontáneos, lentitud, agitación o ausencia de respuesta.</li>
+              <li><strong>3. Humor y reactividad física:</strong> expresión afectiva y respuestas observables.</li>
+              <li><strong>4. Cambios de hábitos personales:</strong> modificaciones recientes del comportamiento habitual.</li>
+              <li><strong>5. Elementos alucinatorios o delirantes:</strong> experiencias perceptivas anómalas, ideas delirantes o conducta relacionada con ellas.</li>
+            </ul>
+          </div>
+          <p class="orientation-small-note" style="margin-top: 0.65rem;">
+            También se observa el lenguaje, la orientación, la coherencia del pensamiento y si los síntomas fluctúan con el tiempo.
+          </p>
+        </div>
+
+        <!-- 5.2 Evaluación de la respuesta a estímulos -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">5.2</span>
+            <h4 class="alteration-title">Evaluación de la respuesta a estímulos</h4>
+          </div>
+          <p class="orientation-p">
+            Se observa si la persona responde espontáneamente o si necesita estímulos progresivamente más intensos.
+          </p>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Nivel orientativo</th>
+                  <th>Respuesta observada</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag">Alerta</strong></td>
+                  <td>Responde espontáneamente y de forma adecuada.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Somnolencia</strong></td>
+                  <td>Responde a la voz, pero tiende a volver al sueño.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Obnubilación</strong></td>
+                  <td>Responde con lentitud y puede mostrar confusión.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Sopor o estupor</strong></td>
+                  <td>Puede requerir estímulos repetidos e intensos para obtener una respuesta.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(239, 68, 68, 0.15); color: #dc2626;">Coma</strong></td>
+                  <td>No presenta una respuesta consciente al entorno.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="orientation-clinical-note" style="margin-top: 0.85rem;">
+            💡 Las diapositivas distinguen respuestas a estímulos sensoriales, táctiles y dolorosos de distinta intensidad. La exploración de estímulos dolorosos debe realizarse únicamente por personal capacitado y con criterios clínicos adecuados.
+          </div>
+        </div>
+
+        <!-- 5.3 Escala de Coma de Glasgow -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">5.3</span>
+            <h4 class="alteration-title">Escala de Coma de Glasgow</h4>
+          </div>
+          <p class="orientation-p">
+            La escala de Glasgow permite valorar el nivel de respuesta neurológica mediante tres componentes:
+          </p>
+
+          <div class="orientation-subcard" style="margin-bottom: 1.25rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; text-align: center;">
+              <div style="padding: 0.5rem; background: rgba(184, 241, 250, 0.4); border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);">
+                <strong style="display: block; font-size: 0.82rem; color: #0e7490;">Apertura ocular</strong>
+                <span style="font-size: 1.15rem; font-weight: 800; color: #0891b2;">1 – 4 pts</span>
+              </div>
+              <div style="padding: 0.5rem; background: rgba(216, 250, 118, 0.35); border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);">
+                <strong style="display: block; font-size: 0.82rem; color: #4d7c0f;">Respuesta verbal</strong>
+                <span style="font-size: 1.15rem; font-weight: 800; color: #65a30d;">1 – 5 pts</span>
+              </div>
+              <div style="padding: 0.5rem; background: rgba(210, 215, 253, 0.4); border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);">
+                <strong style="display: block; font-size: 0.82rem; color: #4338ca;">Respuesta motora</strong>
+                <span style="font-size: 1.15rem; font-weight: 800; color: #4f46e5;">1 – 6 pts</span>
+              </div>
+              <div style="padding: 0.5rem; background: rgba(0, 0, 0, 0.04); border-radius: 10px; border: 1px solid rgba(0,0,0,0.08);">
+                <strong style="display: block; font-size: 0.82rem; color: var(--text-primary);">Puntuación total</strong>
+                <span style="font-size: 1.15rem; font-weight: 900; color: var(--text-primary);">3 – 15 pts</span>
+              </div>
+            </div>
+            <div style="margin-top: 0.75rem; font-size: 0.84rem; line-height: 1.5; color: var(--text-secondary);">
+              <strong>Interpretación orientativa empleada en la valoración del traumatismo craneoencefálico:</strong><br />
+              • <strong>13–15 puntos:</strong> TCE leve.<br />
+              • <strong>9–12 puntos:</strong> TCE moderado.<br />
+              • <strong>8 puntos o menos:</strong> TCE grave.
+            </div>
+          </div>
+
+          <!-- RECREACIÓN EXACTA DE LA TABLA DE GLASGOW DE LA IMAGEN -->
+          <div class="glasgow-table-container">
+            <div class="glasgow-header-bar">
+              ESCALA DE COMA DE GLASGOW
+            </div>
+            <div class="glasgow-table-responsive">
+              <table class="glasgow-table">
+                <thead>
+                  <tr>
+                    <th style="width: 28%;">Parámetros</th>
+                    <th style="width: 54%;">Respuesta observada</th>
+                    <th style="width: 18%;">Puntuación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- ABERTURA OCULAR (CYAN) -->
+                  <tr class="glasgow-row-ocular">
+                    <td rowspan="4" class="glasgow-param-cell glasgow-cell-ocular">
+                      Abertura ocular
+                    </td>
+                    <td>Espontánea</td>
+                    <td class="glasgow-score">4</td>
+                  </tr>
+                  <tr class="glasgow-row-ocular">
+                    <td>Al estímulo verbal</td>
+                    <td class="glasgow-score">3</td>
+                  </tr>
+                  <tr class="glasgow-row-ocular">
+                    <td>Al estímulo doloroso</td>
+                    <td class="glasgow-score">2</td>
+                  </tr>
+                  <tr class="glasgow-row-ocular">
+                    <td>Ninguna</td>
+                    <td class="glasgow-score">1</td>
+                  </tr>
+
+                  <!-- RESPUESTA VERBAL (LIME GREEN) -->
+                  <tr class="glasgow-row-verbal">
+                    <td rowspan="5" class="glasgow-param-cell glasgow-cell-verbal">
+                      Respuesta verbal
+                    </td>
+                    <td>Orientada</td>
+                    <td class="glasgow-score">5</td>
+                  </tr>
+                  <tr class="glasgow-row-verbal">
+                    <td>Confusa</td>
+                    <td class="glasgow-score">4</td>
+                  </tr>
+                  <tr class="glasgow-row-verbal">
+                    <td>Palabras inadecuadas</td>
+                    <td class="glasgow-score">3</td>
+                  </tr>
+                  <tr class="glasgow-row-verbal">
+                    <td>Sonidos incomprensibles</td>
+                    <td class="glasgow-score">2</td>
+                  </tr>
+                  <tr class="glasgow-row-verbal">
+                    <td>Ninguna</td>
+                    <td class="glasgow-score">1</td>
+                  </tr>
+
+                  <!-- RESPUESTA MOTORA (LILAC / LAVENDER) -->
+                  <tr class="glasgow-row-motora">
+                    <td rowspan="6" class="glasgow-param-cell glasgow-cell-motora">
+                      Respuesta motora
+                    </td>
+                    <td>Obedece órdenes</td>
+                    <td class="glasgow-score">6</td>
+                  </tr>
+                  <tr class="glasgow-row-motora">
+                    <td>Localiza el dolor</td>
+                    <td class="glasgow-score">5</td>
+                  </tr>
+                  <tr class="glasgow-row-motora">
+                    <td>Movimiento de retirada</td>
+                    <td class="glasgow-score">4</td>
+                  </tr>
+                  <tr class="glasgow-row-motora">
+                    <td>Flexión hipertónica (decorticación)</td>
+                    <td class="glasgow-score">3</td>
+                  </tr>
+                  <tr class="glasgow-row-motora">
+                    <td>Extensión hipertónica (descerebración)</td>
+                    <td class="glasgow-score">2</td>
+                  </tr>
+                  <tr class="glasgow-row-motora">
+                    <td>Ninguna</td>
+                    <td class="glasgow-score">1</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- FOOTER SEVERITY CLASSIFICATION (PINK ROW) -->
+            <div class="glasgow-footer-grid">
+              <div class="glasgow-footer-col">
+                <div class="glasgow-footer-title">Trauma leve</div>
+                <div class="glasgow-footer-val">13 - 15</div>
+              </div>
+              <div class="glasgow-footer-col">
+                <div class="glasgow-footer-title">Trauma moderado</div>
+                <div class="glasgow-footer-val">9 - 12</div>
+              </div>
+              <div class="glasgow-footer-col">
+                <div class="glasgow-footer-title">Trauma grave</div>
+                <div class="glasgow-footer-val">3 - 8</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="orientation-small-note" style="margin-top: 0.85rem;">
+            La escala permite cuantificar la respuesta, pero no sustituye la evaluación médica ni determina por sí sola la causa del compromiso de conciencia.
+          </p>
+        </div>
+
+        <!-- 5.4 Evaluación de la orientación -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">5.4</span>
+            <h4 class="alteration-title">Evaluación de la orientación</h4>
+          </div>
+          <p class="orientation-p">
+            Capponi distingue tres dimensiones fundamentales de la orientación:
+          </p>
+          <div style="margin-bottom: 0.9rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="153" title="Abrir sección de Psicopatología de la orientación en Capponi">
+              📖 Consultar en Capponi: Dimensiones de la Orientación (Pág. 153) →
+            </button>
+          </div>
+
+          <div class="orientation-dimensions-grid">
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">📅</span>
+                <div>
+                  <h4 class="dim-name">Orientación temporal</h4>
+                  <span class="dim-badge">Alopsíquica</span>
+                </div>
+              </div>
+              <p class="dim-desc">Fecha, día, año y momento aproximado del día.</p>
+            </div>
+
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">📍</span>
+                <div>
+                  <h4 class="dim-name">Orientación espacial</h4>
+                  <span class="dim-badge">Alopsíquica</span>
+                </div>
+              </div>
+              <p class="dim-desc">Lugar donde se encuentra la persona (institución, ciudad, país).</p>
+            </div>
+
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">👤</span>
+                <div>
+                  <h4 class="dim-name">Orientación autopsíquica</h4>
+                  <span class="dim-badge">Autopsíquica</span>
+                </div>
+              </div>
+              <p class="dim-desc">Reconocimiento de la propia identidad, edad y datos biográficos.</p>
+            </div>
+          </div>
+
+          <div class="orientation-clinical-note" style="margin-top: 1rem;">
+            📋 También es útil comprobar si comprende la situación actual. La desorientación puede indicar una alteración de conciencia, aunque debe interpretarse junto con la atención, la memoria y las demás funciones cognitivas.
+          </div>
+        </div>
+      </section>
+
+      <!-- Botón inferior para regresar a definición -->
+      <div class="orientation-bottom-cta">
+        <button type="button" class="btn-orientation-cta secondary" id="btn-bottom-back-conciencia-def">
+          <span class="cta-icon">👁️</span>
+          <div class="cta-texts">
+            <strong class="cta-title">Volver a La conciencia (Definición & Semiología)</strong>
+            <span class="cta-sub">Consultar conceptos de vigilia, causas orgánicas, síndrome confusional y cuadros clínicos</span>
+          </div>
+          <span class="cta-arrow">←</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 class LibraryController {
   constructor() {
     this.searchInput = document.getElementById('library-search-input');
@@ -3077,6 +3835,52 @@ class LibraryController {
             this.openResourceModal('la-orientacion');
           });
         }
+      } else if (item.id === 'la-conciencia') {
+        this.modalContent.innerHTML = getConsciousnessDocHtml();
+        const btnGotoEval = this.modalContent.querySelector('#btn-goto-conciencia-eval');
+        if (btnGotoEval) {
+          btnGotoEval.addEventListener('click', () => {
+            this.openResourceModal('evaluacion-trastorno-conciencia');
+          });
+        }
+        // Jump buttons to books
+        this.modalContent.querySelectorAll('[data-book-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const bookId = btn.getAttribute('data-book-id');
+            const page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+            const book = LIBRARY_CATALOG.find(x => x.id === bookId);
+            if (book) {
+              this.closeModal();
+              this.openPdfReader(book, page);
+            }
+          });
+        });
+      } else if (item.id === 'evaluacion-trastorno-conciencia') {
+        this.modalContent.innerHTML = getConsciousnessEvaluationDocHtml();
+        const btnBackDef = this.modalContent.querySelector('#btn-back-conciencia-def');
+        if (btnBackDef) {
+          btnBackDef.addEventListener('click', () => {
+            this.openResourceModal('la-conciencia');
+          });
+        }
+        const btnBottomBackDef = this.modalContent.querySelector('#btn-bottom-back-conciencia-def');
+        if (btnBottomBackDef) {
+          btnBottomBackDef.addEventListener('click', () => {
+            this.openResourceModal('la-conciencia');
+          });
+        }
+        // Jump buttons to books
+        this.modalContent.querySelectorAll('[data-book-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const bookId = btn.getAttribute('data-book-id');
+            const page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+            const book = LIBRARY_CATALOG.find(x => x.id === bookId);
+            if (book) {
+              this.closeModal();
+              this.openPdfReader(book, page);
+            }
+          });
+        });
       } else if (item.coverImage || item.prologue || item.indexTree) {
         const resolvedCover = (item.coverImage || item.coverUrl) ? LibraryAssetResolver.resolveCoverUrl(item) : '';
         const resolvedPdf = LibraryAssetResolver.resolvePdfUrl(item);

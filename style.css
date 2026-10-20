@@ -6210,6 +6210,148 @@ html, body {
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   GLASGOW COMA SCALE TABLE RECREATION
+   ========================================================================== */
+.glasgow-table-container {
+  width: 100%;
+  margin: 1.25rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: var(--font-main, system-ui, -apple-system, sans-serif);
+}
+
+.glasgow-header-bar {
+  background: #000000;
+  color: #ffffff;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.glasgow-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.glasgow-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.glasgow-table th {
+  background: #cbd5e1;
+  color: #0f172a;
+  font-weight: 800;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 2px solid #000;
+  border-right: 1.5px solid #000;
+  text-align: center;
+  font-size: 0.88rem;
+}
+.glasgow-table th:last-child {
+  border-right: none;
+}
+
+.glasgow-table td {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1.5px solid #000;
+  border-right: 1.5px solid #000;
+  color: #000000;
+  font-weight: 600;
+}
+.glasgow-table td:last-child {
+  border-right: none;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* Section Colors */
+.glasgow-param-cell {
+  font-weight: 900 !important;
+  font-size: 0.96rem;
+  vertical-align: middle;
+  text-align: center;
+  padding: 1.1rem 0.75rem !important;
+}
+
+/* Ocular (Cyan) */
+.glasgow-row-ocular {
+  background-color: #bbf2fa;
+}
+.glasgow-cell-ocular {
+  background-color: #bbf2fa;
+}
+
+/* Verbal (Lime) */
+.glasgow-row-verbal {
+  background-color: #d9fa75;
+}
+.glasgow-cell-verbal {
+  background-color: #d9fa75;
+}
+
+/* Motora (Lilac/Periwinkle) */
+.glasgow-row-motora {
+  background-color: #d2d7fd;
+}
+.glasgow-cell-motora {
+  background-color: #d2d7fd;
+}
+
+/* Score cell */
+.glasgow-score {
+  font-weight: 900 !important;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+/* Footer Severity Classification */
+.glasgow-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  border-top: 2px solid #000;
+}
+
+.glasgow-footer-col {
+  display: flex;
+  flex-direction: column;
+  border-right: 1.5px solid #000;
+}
+.glasgow-footer-col:last-child {
+  border-right: none;
+}
+
+.glasgow-footer-title {
+  background: #000000;
+  color: #ffffff;
+  text-align: center;
+  padding: 0.65rem 0.5rem;
+  font-weight: 800;
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+}
+
+.glasgow-footer-val {
+  background: #fecdd6;
+  color: #000000;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  font-weight: 900;
+  font-size: 1.08rem;
+  letter-spacing: 0.05em;
+}
+
+
 
 
 
