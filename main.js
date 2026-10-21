@@ -6664,18 +6664,11 @@ class AppNavigationController {
       });
     }
 
-    // 1.1 Step 1 Product Key input formatting (uppercase + auto dashes)
+    // 1.1 Step 1 Product Key input formatting (uppercase + preserve dashes, no destructive chunking)
     if (this.regLicenseInput) {
       this.regLicenseInput.addEventListener('input', (e) => {
-        let val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-        if (val.startsWith('PSIOS')) {
-          val = val.substring(5);
-        }
-        let parts = ['PSIOS'];
-        for (let i = 0; i < val.length && i < 20; i += 5) {
-          parts.push(val.substring(i, i + 5));
-        }
-        e.target.value = parts.join('-');
+        let val = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+        e.target.value = val;
         if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
       });
 
@@ -6683,28 +6676,6 @@ class AppNavigationController {
         if (e.key === 'Enter') {
           e.preventDefault();
           this.handleVerifyLicenseStep();
-        }
-      });
-    }
-
-    // 1.2 Quick demo chip click
-    if (this.btnRegDemoChip) {
-      this.btnRegDemoChip.addEventListener('click', () => {
-        const key = this.btnRegDemoChip.getAttribute('data-key') || 'PSIOS-PRO-2026-CLINIC';
-        if (this.regLicenseInput) {
-          this.regLicenseInput.value = key;
-          if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
-        }
-      });
-    }
-
-    // 1.2b Quick Master Admin Key Chip click
-    if (this.btnRegAdminChip) {
-      this.btnRegAdminChip.addEventListener('click', () => {
-        const key = this.btnRegAdminChip.getAttribute('data-key') || 'PSIOS-ADMIN-MASTER-2026';
-        if (this.regLicenseInput) {
-          this.regLicenseInput.value = key;
-          if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
         }
       });
     }
@@ -6962,11 +6933,11 @@ class AppNavigationController {
     if (this.btnContinuar) {
       this.btnContinuar.disabled = true;
       const textSpan = this.btnContinuar.querySelector('.btn-text');
-      if (textSpan) textSpan.textContent = 'Verificando en Cloudflare...';
+      if (textSpan) textSpan.textContent = 'Activando estación...';
     }
 
     try {
-      // 1. Activar licencia en Cloudflare KV (Aplica regla de usuario único + contraseña)
+      // 1. Activar licencia (Cloudflare KV + Modo Autónomo Local)
       await licenseService.activate(key, doctorFullName, rawPassword);
 
       const userData = {
@@ -6998,19 +6969,18 @@ class AppNavigationController {
         lastLogin: new Date().toISOString()
       });
 
-      // 4. Sincronizar historias clínicas con Cloudflare KV
+      // 4. Sincronizar historias clínicas si el módulo está disponible
       if (this.clinic && this.clinic.syncCloudData) {
         this.clinic.syncCloudData(false);
       }
 
       this.showWelcomeView(userData);
     } catch (err) {
-      console.warn('Error en registro con Cloudflare:', err);
+      console.warn('Error en registro:', err);
       if (this.passwordError) {
-        this.passwordError.textContent = err.message || 'Error validando con Cloudflare.';
+        this.passwordError.textContent = err.message || 'Error validando la clave de producto.';
         this.passwordError.classList.add('visible');
       }
-      alert(`Error de activación: ${err.message || 'No se pudo activar la clave.'}`);
     } finally {
       if (this.btnContinuar) {
         this.btnContinuar.disabled = false;
@@ -7111,23 +7081,24 @@ class AppNavigationController {
 
   async loadAdminKeys() {
     if (!this.adminKeysTbody) return;
-    this.adminKeysTbody.innerHTML = '<tr><td colspan="6" class="loading-td">Cargando licencias desde Cloudflare KV...</td></tr>';
+    this.adminKeysTbody.innerHTML = '<tr><td colspan="6" class="loading-td">Cargando licencias...</td></tr>';
     
     try {
-      const keys = await licenseService.adminGetKeys(this.adminMasterKey);
-      this.adminLoadedKeys = Array.isArray(keys) ? keys : [];
-      this.renderAdminMetrics(this.adminLoadedKeys);
+      const res = await licenseService.adminGetKeys(this.adminMasterKey);
+      const keys = Array.isArray(res) ? res : (res.keys || []);
+      this.adminLoadedKeys = keys;
+      this.renderAdminMetrics(this.adminLoadedKeys, res && res.isCloudConnected);
       this.renderAdminKeysTable(this.adminLoadedKeys);
     } catch (err) {
-      this.adminKeysTbody.innerHTML = `<tr><td colspan="6" class="error-td">Error conectando con Cloudflare: ${err.message || 'No se pudieron cargar las claves'}</td></tr>`;
-      if (this.adminCfStatus) {
-        this.adminCfStatus.textContent = 'Desconectado';
-        this.adminCfStatus.className = 'kpi-value status-offline';
-      }
+      console.warn('Error en loadAdminKeys:', err);
+      const localKeys = licenseService.getLocalAdminKeys();
+      this.adminLoadedKeys = localKeys;
+      this.renderAdminMetrics(this.adminLoadedKeys, false);
+      this.renderAdminKeysTable(this.adminLoadedKeys);
     }
   }
 
-  renderAdminMetrics(keys) {
+  renderAdminMetrics(keys, isCloudConnected = false) {
     const total = keys.length;
     const active = keys.filter(k => k.status === 'active' || k.linkedUser).length;
     const available = total - active;
@@ -7136,8 +7107,13 @@ class AppNavigationController {
     if (this.adminActiveKeys) this.adminActiveKeys.textContent = active;
     if (this.adminAvailableKeys) this.adminAvailableKeys.textContent = available;
     if (this.adminCfStatus) {
-      this.adminCfStatus.textContent = 'Conectado';
-      this.adminCfStatus.className = 'kpi-value status-online';
+      if (isCloudConnected) {
+        this.adminCfStatus.textContent = 'Conectado a Cloudflare KV';
+        this.adminCfStatus.className = 'kpi-value status-online';
+      } else {
+        this.adminCfStatus.textContent = 'Modo Local (Autónomo)';
+        this.adminCfStatus.className = 'kpi-value status-local';
+      }
     }
   }
 
@@ -7432,6 +7408,25 @@ class AppNavigationController {
    9. APPLICATION BOOTSTRAP
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
+  // Cierre de sesión y purga global para Beta 0.0.3 en app y web
+  const APP_VERSION = '0.0.3';
+  try {
+    const previousVersion = localStorage.getItem('psios_app_version');
+    if (previousVersion !== APP_VERSION) {
+      localStorage.removeItem('psios_user_profile');
+      localStorage.removeItem('psios_clinical_user_v1');
+      localStorage.removeItem('psios_user_pwd_hash');
+      localStorage.removeItem('psios_license_v2');
+      localStorage.removeItem('psios_license_v1');
+      localStorage.removeItem('psios_saved_credentials_v2');
+      localStorage.removeItem('psios_saved_credentials');
+      sessionStorage.clear();
+      localStorage.setItem('psios_app_version', APP_VERSION);
+    }
+  } catch (e) {
+    console.warn('Error al verificar versión de aplicación:', e);
+  }
+
   const kinetic = new KineticTypographyController();
   window.psios3D = new ThreeDViewer();
   window.psiosModal = new LiquidGlassModalController();

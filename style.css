@@ -6581,6 +6581,11 @@ html, body {
   color: #dc2626;
 }
 
+.admin-kpi-card .kpi-value.status-local {
+  color: #2563eb;
+  font-size: 1.35rem;
+}
+
 .admin-main-grid {
   display: grid;
   grid-template-columns: 360px 1fr;

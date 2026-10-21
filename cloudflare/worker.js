@@ -1,6 +1,6 @@
 /**
  * PsiOS Cloudflare Worker — Motor de Licenciamiento, Panel de Administración, Datos Clínicos y Servidor R2
- * Versión: Beta 0.0.2
+ * Versión: Beta 0.0.3
  * 
  * Endpoints:
  * - GET  /api/status               -> Estado de salud del servicio (KV y R2)
@@ -69,6 +69,19 @@ const corsHeaders = {
   'Access-Control-Max-Age': '86400',
   'Content-Type': 'application/json; charset=utf-8'
 };
+
+function getMasterKeyFromRequest(request, body = {}, url = null) {
+  const authHeader = request.headers.get('Authorization') || '';
+  const bearerKey = authHeader.replace(/^Bearer\s+/i, '').trim();
+  return (
+    request.headers.get('X-Master-Key') ||
+    request.headers.get('X-License-Key') ||
+    bearerKey ||
+    (url ? url.searchParams.get('masterKey') : null) ||
+    body?.masterKey ||
+    ''
+  ).trim().toUpperCase();
+}
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -155,7 +168,7 @@ export default {
     if (pathname === '/' || pathname === '/api/status') {
       return jsonResponse({
         service: 'PsiOS Cloud Hub (Licensing, Admin Panel, Clinical Sync & R2 CDN)',
-        version: 'Beta 0.0.2',
+        version: 'Beta 0.0.3',
         environment: env?.ENVIRONMENT || 'production',
         kvBound: !!kv,
         r2Bound: !!r2,
@@ -426,8 +439,8 @@ export default {
 
     // 6.B. Listar todas las claves y usuarios enlazados: GET /api/admin/keys
     if (pathname === '/api/admin/keys' && (request.method === 'GET' || request.method === 'POST')) {
-      const masterKey = request.headers.get('X-Master-Key') || url.searchParams.get('masterKey');
-      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+      const masterKey = getMasterKeyFromRequest(request, {}, url);
+      if (!masterKey || !MASTER_KEYS.has(masterKey)) {
         return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
       }
 
@@ -475,9 +488,9 @@ export default {
     // 6.C. Generador de Claves de Activación: POST /api/admin/keys/generate
     if (pathname === '/api/admin/keys/generate' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+      const masterKey = getMasterKeyFromRequest(request, body, url);
 
-      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+      if (!masterKey || !MASTER_KEYS.has(masterKey)) {
         return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
       }
 
@@ -522,9 +535,9 @@ export default {
     // 6.D. Desvincular Usuario de una Clave: POST /api/admin/keys/unlink
     if (pathname === '/api/admin/keys/unlink' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+      const masterKey = getMasterKeyFromRequest(request, body, url);
 
-      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+      if (!masterKey || !MASTER_KEYS.has(masterKey)) {
         return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
       }
 
@@ -555,9 +568,9 @@ export default {
     // 6.E. Eliminar Clave: POST /api/admin/keys/delete
     if (pathname === '/api/admin/keys/delete' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+      const masterKey = getMasterKeyFromRequest(request, body, url);
 
-      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+      if (!masterKey || !MASTER_KEYS.has(masterKey)) {
         return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
       }
 
