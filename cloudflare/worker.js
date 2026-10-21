@@ -1,49 +1,71 @@
 /**
- * PsiOS Cloudflare Worker — Motor de Licenciamiento, Datos Clínicos y Servidor R2
- * Compatible con Cloudflare Workers, Cloudflare KV y Cloudflare R2
+ * PsiOS Cloudflare Worker — Motor de Licenciamiento, Panel de Administración, Datos Clínicos y Servidor R2
+ * Versión: Beta 0.0.2
  * 
  * Endpoints:
- * - GET  /api/status         -> Estado de salud del servicio (KV y R2)
- * - POST /api/activate       -> Activación de licencia por dispositivo
- * - POST /api/verify         -> Verificación periódica de licencia
- * - POST /api/clinic/backup  -> Respaldo de datos clínicos en la nube (KV)
- * - GET  /api/clinic/restore -> Restauración de datos clínicos desde la nube (KV)
- * - GET  /libros/*           -> Servidor CDN de libros y manuales desde Cloudflare R2
- * - GET  /recursos/*         -> Servidor CDN de pruebas y evaluaciones desde Cloudflare R2
+ * - GET  /api/status               -> Estado de salud del servicio (KV y R2)
+ * - POST /api/activate             -> Activación y enlace único de usuario por clave
+ * - POST /api/verify               -> Verificación periódica de licencia
+ * - POST /api/admin/login          -> Autenticación de Administrador con Master Key
+ * - GET  /api/admin/keys           -> Listado completo de claves y usuarios enlazados
+ * - POST /api/admin/keys/generate  -> Generador de nuevas claves de producto
+ * - POST /api/admin/keys/unlink    -> Desvincular usuario de una clave
+ * - POST /api/admin/keys/delete    -> Eliminar clave de producto
+ * - POST /api/clinic/backup        -> Respaldo sincronizado de pacientes y citas (KV)
+ * - POST /api/clinic/restore       -> Restauración de pacientes y citas desde la nube (KV)
+ * - GET  /libros/*                 -> Servidor CDN de libros y manuales desde Cloudflare R2
+ * - GET  /recursos/*               -> Servidor CDN de pruebas y evaluaciones desde Cloudflare R2
  */
 
-// Claves maestras de demostración y evaluación clínica incorporadas
+// Claves maestras autorizadas para acceso al Panel de Administración
+const MASTER_KEYS = new Set([
+  'PSIOS-ADMIN-MASTER-2026',
+  'PSIOS-MASTER-ADMIN-2026',
+  'PSIOS-MASTER-UNIVERSAL',
+  'PSIOS-MASTER-SOYBIOMED'
+]);
+
+// Claves de demostración predeterminadas
 const BUILTIN_LICENSES = {
   'PSIOS-PRO-2026-CLINIC': {
+    key: 'PSIOS-PRO-2026-CLINIC',
     plan: 'PsiOS Profesional Clínico (Perpetua)',
     maxDevices: 10,
     expiresAt: null,
     tier: 'pro',
+    status: 'available',
+    linkedUser: null,
     features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup']
   },
   'PSIOS-MASTER-UNIVERSAL': {
-    plan: 'PsiOS Enterprise & Hospital Suite',
+    key: 'PSIOS-MASTER-UNIVERSAL',
+    plan: 'PsiOS Enterprise & Hospital Suite (Maestra)',
     maxDevices: 100,
     expiresAt: null,
     tier: 'enterprise',
-    features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup', 'multi_doctor']
+    status: 'active',
+    linkedUser: 'Administrador Maestro',
+    features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup', 'multi_doctor', 'admin_panel']
   },
   'PSIOS-DEMO-TRIAL': {
+    key: 'PSIOS-DEMO-TRIAL',
     plan: 'PsiOS Demostración Clínica (Evaluación)',
     maxDevices: 3,
     expiresAt: '2027-12-31T23:59:59Z',
     tier: 'trial',
+    status: 'available',
+    linkedUser: null,
     features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology']
   }
 };
 
-const SECRET_SALT = 'PSIOS_CLINICAL_SECURE_SALT_2026_V1';
+const SECRET_SALT = 'PSIOS_CLINICAL_SECURE_SALT_2026_V2';
 
 // Headers CORS para integración transparente con la app de escritorio y web
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-PsiOS-Version, X-License-Key',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-PsiOS-Version, X-License-Key, X-Master-Key',
   'Access-Control-Max-Age': '86400',
   'Content-Type': 'application/json; charset=utf-8'
 };
@@ -55,7 +77,16 @@ function jsonResponse(data, status = 200) {
   });
 }
 
-// Generador de firmas criptográficas HMAC / SHA-256 en Web Crypto
+// Generador de hashes SHA-256 para contraseñas de privacidad
+async function hashPassword(password) {
+  if (!password) return '';
+  const enc = new TextEncoder();
+  const raw = `${password}::${SECRET_SALT}`;
+  const digest = await crypto.subtle.digest('SHA-256', enc.encode(raw));
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Generador de firmas criptográficas HMAC / SHA-256 para tokens de activación
 async function generateActivationToken(key, deviceId, timestamp) {
   const enc = new TextEncoder();
   const raw = `${key}::${deviceId}::${timestamp}::${SECRET_SALT}`;
@@ -69,6 +100,39 @@ async function generateActivationToken(key, deviceId, timestamp) {
   const signature = await crypto.subtle.sign('HMAC', keyMaterial, enc.encode(raw));
   const hex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
   return `TOK-${hex.substring(0, 32).toUpperCase()}`;
+}
+
+// Generador de claves algorítmicas formateadas
+function generateProductKey(prefix = 'PRO') {
+  const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const getChunk = (len = 4) => {
+    let s = '';
+    const bytes = new Uint8Array(len);
+    crypto.getRandomValues(bytes);
+    for (let i = 0; i < len; i++) {
+      s += chars[bytes[i] % chars.length];
+    }
+    return s;
+  };
+  return `PSIOS-${prefix}-${getChunk(4)}-${getChunk(4)}`;
+}
+
+// Obtener o inicializar el índice de claves en KV
+async function getKeyIndex(kv) {
+  if (!kv) return Object.keys(BUILTIN_LICENSES);
+  const raw = await kv.get('PSIOS_KEY_INDEX', 'json');
+  if (Array.isArray(raw) && raw.length > 0) {
+    return raw;
+  }
+  const defaultKeys = Object.keys(BUILTIN_LICENSES);
+  await kv.put('PSIOS_KEY_INDEX', JSON.stringify(defaultKeys));
+  return defaultKeys;
+}
+
+async function saveKeyIndex(kv, index) {
+  if (!kv) return;
+  const unique = Array.from(new Set(index));
+  await kv.put('PSIOS_KEY_INDEX', JSON.stringify(unique));
 }
 
 export default {
@@ -90,8 +154,8 @@ export default {
     // 2. Healthcheck / Estado del servicio
     if (pathname === '/' || pathname === '/api/status') {
       return jsonResponse({
-        service: 'PsiOS Cloud Hub (Licensing, Clinical Data & R2 CDN)',
-        version: '1.0.0',
+        service: 'PsiOS Cloud Hub (Licensing, Admin Panel, Clinical Sync & R2 CDN)',
+        version: 'Beta 0.0.2',
         environment: env?.ENVIRONMENT || 'production',
         kvBound: !!kv,
         r2Bound: !!r2,
@@ -105,27 +169,23 @@ export default {
       if (!r2) {
         return jsonResponse({
           error: 'R2_NOT_BOUND',
-          message: 'El bucket de Cloudflare R2 (psios-recursos) no está vinculado aún en este Worker.'
+          message: 'El bucket de Cloudflare R2 no está vinculado en este Worker.'
         }, 503);
       }
 
-      // Extraer nombre del archivo (con soporte para subcarpetas)
       const cleanPath = decodeURIComponent(url.pathname.replace(/^\/(libros|recursos)\/?/, ''));
       if (!cleanPath) {
         return jsonResponse({ error: 'FILE_NOT_SPECIFIED', message: 'Debe especificar el nombre del archivo.' }, 400);
       }
 
-      // Intentar obtener el archivo buscando en "libros/archivo" o directamente en la raíz del bucket
       let object = await r2.get(`libros/${cleanPath}`);
-      if (!object) {
-        object = await r2.get(cleanPath);
-      }
+      if (!object) object = await r2.get(cleanPath);
 
       if (!object) {
         return jsonResponse({
           error: 'FILE_NOT_FOUND',
           path: cleanPath,
-          message: `El archivo '${cleanPath}' no fue encontrado en el bucket R2 'psios-recursos'.`
+          message: `El archivo '${cleanPath}' no fue encontrado en el bucket R2.`
         }, 404);
       }
 
@@ -135,7 +195,6 @@ export default {
       headers.set('Cache-Control', 'public, max-age=31536000, immutable');
       headers.set('etag', object.httpEtag);
 
-      // Determinar Content-Type según extensión
       const lower = cleanPath.toLowerCase();
       if (lower.endsWith('.pdf')) {
         headers.set('Content-Type', 'application/pdf');
@@ -152,47 +211,64 @@ export default {
       return new Response(object.body, { headers });
     }
 
-    // 4. Activación de Licencia: POST /api/activate
+    // 4. Activación de Licencia y Enlace Único de Usuario: POST /api/activate
     if (pathname === '/api/activate' && request.method === 'POST') {
       try {
         const body = await request.json().catch(() => ({}));
-        const { licenseKey, deviceId, deviceName, doctorName, appVersion } = body;
+        const { licenseKey, deviceId, deviceName, doctorName, password, appVersion } = body;
 
         if (!licenseKey || typeof licenseKey !== 'string') {
           return jsonResponse({
             success: false,
             error: 'MISSING_LICENSE_KEY',
-            message: 'Debe ingresar una clave de producto válida (ej: PSIOS-XXXX-XXXX-XXXX).'
+            message: 'Debe ingresar una clave de producto válida.'
           }, 400);
         }
 
         const normalizedKey = licenseKey.trim().toUpperCase();
         const effectiveDeviceId = (deviceId && typeof deviceId === 'string') ? deviceId.trim() : 'DEV-DEFAULT-STATION';
 
+        // 4.A. VERIFICAR SI ES LA KEY MAESTRA DEL ADMINISTRADOR
+        if (MASTER_KEYS.has(normalizedKey)) {
+          return jsonResponse({
+            success: true,
+            isAdmin: true,
+            plan: 'PsiOS Administrador Maestro',
+            tier: 'master',
+            deviceId: effectiveDeviceId,
+            doctorName: 'Administrador Maestro',
+            activatedAt: new Date().toISOString(),
+            isPerpetual: true,
+            features: ['admin_panel', 'license_generator', 'user_management', 'offline_books', 'clinical_sync', 'unlimited_patients'],
+            message: 'Acceso Maestro Concedido. Bienvenido al Panel de Administración.'
+          });
+        }
+
         let licenseData = null;
 
-        // A. Consultar Cloudflare KV si está vinculado
+        // Consultar Cloudflare KV
         if (kv) {
-          const kvRecord = await kv.get(`LICENSE:${normalizedKey}`, 'json');
-          if (kvRecord) {
-            licenseData = kvRecord;
-          }
+          licenseData = await kv.get(`LICENSE:${normalizedKey}`, 'json');
         }
 
-        // B. Si no está en KV, verificar claves maestras pre-aprobadas
+        // Si no está en KV, consultar las claves builtin
         if (!licenseData && BUILTIN_LICENSES[normalizedKey]) {
-          licenseData = BUILTIN_LICENSES[normalizedKey];
+          licenseData = { ...BUILTIN_LICENSES[normalizedKey] };
         }
 
-        // C. Validación de formato de clave algorítmica si no está registrada
-        const keyPattern = /^PSIOS-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}$/;
+        // Si no está en KV pero cumple con el formato algorítmico
+        const keyPattern = /^PSIOS-[A-Z0-9]{3,5}-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}$/;
         if (!licenseData && keyPattern.test(normalizedKey)) {
           licenseData = {
-            plan: 'PsiOS Licencia Estándar Clínico',
+            key: normalizedKey,
+            plan: 'PsiOS Profesional Clínico',
             maxDevices: 5,
             expiresAt: null,
-            tier: 'standard',
-            features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology']
+            tier: 'pro',
+            status: 'available',
+            linkedUser: null,
+            createdAt: new Date().toISOString(),
+            features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup']
           };
         }
 
@@ -209,27 +285,64 @@ export default {
           return jsonResponse({
             success: false,
             error: 'LICENSE_EXPIRED',
-            message: 'Esta licencia ha expirado. Por favor contacte con soporte clínico.'
+            message: 'Esta licencia ha expirado. Contacte al administrador.'
           }, 403);
+        }
+
+        // 4.B. REGLA DE ORO DE ENLACE ÚNICO: Cada clave SOLO puede estar enlazada con UN usuario
+        const candidateUser = (doctorName || '').trim();
+        if (licenseData.linkedUser && candidateUser) {
+          const cleanExisting = licenseData.linkedUser.trim().toLowerCase();
+          const cleanCandidate = candidateUser.toLowerCase();
+
+          if (cleanExisting !== cleanCandidate) {
+            return jsonResponse({
+              success: false,
+              error: 'KEY_ALREADY_LINKED',
+              message: `Esta clave de producto ya está enlazada al usuario "${licenseData.linkedUser}". Cada clave es personal e intransferible para un único usuario.`
+            }, 403);
+          }
+        }
+
+        // 4.C. VERIFICACIÓN DE CONTRASEÑA DE PRIVACIDAD
+        const providedPassword = (password || '').trim();
+        if (licenseData.passwordHash && providedPassword) {
+          const incomingHash = await hashPassword(providedPassword);
+          if (incomingHash !== licenseData.passwordHash) {
+            return jsonResponse({
+              success: false,
+              error: 'INVALID_PASSWORD',
+              message: 'La contraseña de privacidad ingresada es incorrecta para esta cuenta.'
+            }, 401);
+          }
+        } else if (!licenseData.passwordHash && providedPassword) {
+          // Registrar contraseña por primera vez
+          licenseData.passwordHash = await hashPassword(providedPassword);
+        }
+
+        // Enlazar usuario si aún no estaba enlazado
+        if (candidateUser) {
+          licenseData.linkedUser = candidateUser;
+          licenseData.status = 'active';
         }
 
         const timestamp = Date.now();
         const token = await generateActivationToken(normalizedKey, effectiveDeviceId, timestamp);
 
-        // Registrar activación en KV
-        if (kv) {
-          const activationRecord = {
-            licenseKey: normalizedKey,
-            deviceId: effectiveDeviceId,
-            deviceName: deviceName || 'Estación de Evaluación',
-            doctorName: doctorName || 'Profesional Clínico',
-            appVersion: appVersion || 'Beta 0.0.1',
-            activatedAt: new Date(timestamp).toISOString(),
-            lastSeenAt: new Date(timestamp).toISOString(),
-            token
-          };
+        licenseData.lastSeenAt = new Date(timestamp).toISOString();
+        licenseData.deviceId = effectiveDeviceId;
+        if (!licenseData.activatedAt && candidateUser) {
+          licenseData.activatedAt = new Date(timestamp).toISOString();
+        }
 
-          await kv.put(`ACTIVATION:${normalizedKey}:${effectiveDeviceId}`, JSON.stringify(activationRecord));
+        // Guardar actualización en KV
+        if (kv) {
+          await kv.put(`LICENSE:${normalizedKey}`, JSON.stringify(licenseData));
+          const index = await getKeyIndex(kv);
+          if (!index.includes(normalizedKey)) {
+            index.push(normalizedKey);
+            await saveKeyIndex(kv, index);
+          }
         }
 
         return jsonResponse({
@@ -238,92 +351,323 @@ export default {
           plan: licenseData.plan,
           tier: licenseData.tier || 'pro',
           deviceId: effectiveDeviceId,
-          doctorName: doctorName || 'Profesional Clínico',
-          activatedAt: new Date(timestamp).toISOString(),
+          doctorName: licenseData.linkedUser || candidateUser || 'Profesional Clínico',
+          activatedAt: licenseData.activatedAt || new Date(timestamp).toISOString(),
           expiresAt: licenseData.expiresAt,
           isPerpetual: !licenseData.expiresAt,
           token,
+          hasPassword: !!licenseData.passwordHash,
           features: licenseData.features || ['offline_books', 'clinical_sync', 'unlimited_patients'],
-          message: 'Licencia activada con éxito. Estación de trabajo autorizada.'
+          message: 'Licencia verificada y enlazada correctamente.'
         });
 
       } catch (err) {
         return jsonResponse({
           success: false,
           error: 'SERVER_ERROR',
-          message: `Error al procesar la activación: ${err.message}`
+          message: `Error al procesar activación: ${err.message}`
         }, 500);
       }
     }
 
-    // 5. Verificación de Licencia: POST /api/verify
+    // 5. Verificación Periódica: POST /api/verify
     if (pathname === '/api/verify' && request.method === 'POST') {
       try {
         const body = await request.json().catch(() => ({}));
-        const { licenseKey, token, deviceId } = body;
+        const { licenseKey, token } = body;
+        const normalizedKey = (licenseKey || '').trim().toUpperCase();
 
-        if (!licenseKey || !token) {
-          return jsonResponse({
-            success: false,
-            error: 'MISSING_PARAMETERS',
-            message: 'Parámetros de verificación incompletos.'
-          }, 400);
+        if (MASTER_KEYS.has(normalizedKey)) {
+          return jsonResponse({ success: true, status: 'active', isAdmin: true });
         }
 
-        const normalizedKey = licenseKey.trim().toUpperCase();
-        const isValid = token.startsWith('TOK-') && normalizedKey.startsWith('PSIOS-');
-
+        const isValid = token && token.startsWith('TOK-') && normalizedKey.startsWith('PSIOS-');
         return jsonResponse({
           success: isValid,
           status: isValid ? 'active' : 'invalid',
-          verifiedAt: new Date().toISOString(),
-          deviceId: deviceId || 'DEV-STATION',
-          message: isValid ? 'Licencia activa y validada correctamente.' : 'La licencia no pudo ser validada.'
+          verifiedAt: new Date().toISOString()
         });
-      } catch (err) {
-        return jsonResponse({
-          success: false,
-          error: 'SERVER_ERROR',
-          message: err.message
-        }, 500);
+      } catch (e) {
+        return jsonResponse({ success: false, error: e.message }, 500);
       }
     }
 
-    // 6. Respaldo de Datos Clínicos (Pacientes y Citas): POST /api/clinic/backup
+    // =========================================================================
+    // 6. ENDPOINTS DEL PANEL DE ADMINISTRACIÓN (MASTER KEY CONTROL)
+    // =========================================================================
+
+    // 6.A. Login de Administrador: POST /api/admin/login
+    if (pathname === '/api/admin/login' && request.method === 'POST') {
+      try {
+        const body = await request.json().catch(() => ({}));
+        const masterKey = (body.masterKey || '').trim().toUpperCase();
+
+        if (!MASTER_KEYS.has(masterKey)) {
+          return jsonResponse({
+            success: false,
+            error: 'INVALID_MASTER_KEY',
+            message: 'La Clave Maestra ingresada no tiene privilegios de Administrador.'
+          }, 403);
+        }
+
+        return jsonResponse({
+          success: true,
+          message: 'Autenticación Maestra Exitosa.',
+          adminSession: {
+            role: 'superadmin',
+            masterKey,
+            authenticatedAt: new Date().toISOString()
+          }
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // 6.B. Listar todas las claves y usuarios enlazados: GET /api/admin/keys
+    if (pathname === '/api/admin/keys' && (request.method === 'GET' || request.method === 'POST')) {
+      const masterKey = request.headers.get('X-Master-Key') || url.searchParams.get('masterKey');
+      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+        return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
+      }
+
+      try {
+        const index = await getKeyIndex(kv);
+        const keysList = [];
+
+        for (const k of index) {
+          let record = null;
+          if (kv) {
+            record = await kv.get(`LICENSE:${k}`, 'json');
+          }
+          if (!record && BUILTIN_LICENSES[k]) {
+            record = { ...BUILTIN_LICENSES[k] };
+          }
+          if (record) {
+            keysList.push({
+              key: k,
+              plan: record.plan || 'PsiOS Profesional Clínico',
+              tier: record.tier || 'pro',
+              status: record.linkedUser ? 'active' : (record.status || 'available'),
+              linkedUser: record.linkedUser || null,
+              hasPassword: !!record.passwordHash,
+              deviceId: record.deviceId || '—',
+              createdAt: record.createdAt || record.activatedAt || '2026-10-01T00:00:00Z',
+              activatedAt: record.activatedAt || null,
+              lastSeenAt: record.lastSeenAt || null,
+              expiresAt: record.expiresAt || null
+            });
+          }
+        }
+
+        return jsonResponse({
+          success: true,
+          total: keysList.length,
+          active: keysList.filter(x => x.linkedUser).length,
+          available: keysList.filter(x => !x.linkedUser).length,
+          keys: keysList
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // 6.C. Generador de Claves de Activación: POST /api/admin/keys/generate
+    if (pathname === '/api/admin/keys/generate' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+
+      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+        return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
+      }
+
+      try {
+        const planType = body.plan || 'PsiOS Profesional Clínico';
+        const prefix = body.prefix || 'CLIN';
+        const newKey = generateProductKey(prefix);
+
+        const newLicenseRecord = {
+          key: newKey,
+          plan: planType,
+          tier: body.tier || 'pro',
+          maxDevices: body.maxDevices || 5,
+          expiresAt: body.expiresAt || null,
+          status: 'available',
+          linkedUser: null,
+          passwordHash: null,
+          createdAt: new Date().toISOString(),
+          features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup']
+        };
+
+        if (kv) {
+          await kv.put(`LICENSE:${newKey}`, JSON.stringify(newLicenseRecord));
+          const index = await getKeyIndex(kv);
+          if (!index.includes(newKey)) {
+            index.unshift(newKey); // Poner la más reciente al principio
+            await saveKeyIndex(kv, index);
+          }
+        }
+
+        return jsonResponse({
+          success: true,
+          message: 'Nueva clave de producto generada y guardada en Cloudflare KV.',
+          key: newKey,
+          license: newLicenseRecord
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // 6.D. Desvincular Usuario de una Clave: POST /api/admin/keys/unlink
+    if (pathname === '/api/admin/keys/unlink' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+
+      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+        return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
+      }
+
+      const targetKey = (body.key || '').trim().toUpperCase();
+      if (!targetKey) {
+        return jsonResponse({ error: 'MISSING_KEY', message: 'Debe especificar la clave a desvincular.' }, 400);
+      }
+
+      try {
+        if (kv) {
+          const record = await kv.get(`LICENSE:${targetKey}`, 'json') || { key: targetKey };
+          record.linkedUser = null;
+          record.passwordHash = null;
+          record.status = 'available';
+          record.unlinkedAt = new Date().toISOString();
+          await kv.put(`LICENSE:${targetKey}`, JSON.stringify(record));
+        }
+
+        return jsonResponse({
+          success: true,
+          message: `La clave ${targetKey} ha sido desvinculada y ahora está disponible para un nuevo usuario.`
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // 6.E. Eliminar Clave: POST /api/admin/keys/delete
+    if (pathname === '/api/admin/keys/delete' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const masterKey = request.headers.get('X-Master-Key') || body.masterKey;
+
+      if (!masterKey || !MASTER_KEYS.has(masterKey.trim().toUpperCase())) {
+        return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
+      }
+
+      const targetKey = (body.key || '').trim().toUpperCase();
+      try {
+        if (kv) {
+          await kv.delete(`LICENSE:${targetKey}`);
+          const index = await getKeyIndex(kv);
+          const updatedIndex = index.filter(k => k !== targetKey);
+          await saveKeyIndex(kv, updatedIndex);
+        }
+
+        return jsonResponse({
+          success: true,
+          message: `La clave ${targetKey} ha sido eliminada permanentemente del sistema.`
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // =========================================================================
+    // 7. SINCRONIZACIÓN DE DATOS CLÍNICOS (ESCRITORIO & WEB VIA CLOUDFLARE KV)
+    // =========================================================================
+
+    // 7.A. Respaldo de Pacientes y Citas: POST /api/clinic/backup
     if (pathname === '/api/clinic/backup' && request.method === 'POST') {
       if (!kv) {
         return jsonResponse({ error: 'KV_NOT_BOUND', message: 'Cloudflare KV no está vinculado.' }, 503);
       }
       try {
         const payload = await request.json();
-        const licenseKey = request.headers.get('X-License-Key') || payload.licenseKey || 'DEFAULT_CLINIC';
-        const cleanKey = licenseKey.trim().toUpperCase();
+        const licenseKey = (request.headers.get('X-License-Key') || payload.licenseKey || '').trim().toUpperCase();
+        const password = (payload.password || '').trim();
 
-        await kv.put(`CLINIC_DATA:${cleanKey}`, JSON.stringify({
+        if (!licenseKey) {
+          return jsonResponse({ error: 'MISSING_LICENSE_KEY', message: 'Clave requerida para sincronización.' }, 400);
+        }
+
+        // Si no es la Master Key, verificar contraseña de privacidad si la clave la tiene configurada
+        if (!MASTER_KEYS.has(licenseKey)) {
+          const lic = await kv.get(`LICENSE:${licenseKey}`, 'json');
+          if (lic && lic.passwordHash && password) {
+            const h = await hashPassword(password);
+            if (h !== lic.passwordHash) {
+              return jsonResponse({ error: 'UNAUTHORIZED', message: 'Contraseña de privacidad clínica no válida.' }, 401);
+            }
+          }
+        }
+
+        const patients = Array.isArray(payload.patients) ? payload.patients : [];
+        const appointments = Array.isArray(payload.appointments) ? payload.appointments : [];
+
+        const clinicRecord = {
           updatedAt: new Date().toISOString(),
-          patients: payload.patients || [],
-          appointments: payload.appointments || []
-        }));
+          username: payload.username || 'Profesional Clínico',
+          licenseKey,
+          patients,
+          appointments
+        };
 
-        return jsonResponse({ success: true, message: 'Datos clínicos respaldados en Cloudflare KV.' });
+        await kv.put(`CLINIC_DATA:${licenseKey}`, JSON.stringify(clinicRecord));
+
+        return jsonResponse({
+          success: true,
+          updatedAt: clinicRecord.updatedAt,
+          patientsCount: patients.length,
+          appointmentsCount: appointments.length,
+          message: 'Datos clínicos sincronizados exitosamente en Cloudflare KV.'
+        });
       } catch (e) {
         return jsonResponse({ success: false, error: e.message }, 500);
       }
     }
 
-    // 7. Restauración de Datos Clínicos: GET /api/clinic/restore
-    if (pathname === '/api/clinic/restore' && request.method === 'GET') {
+    // 7.B. Restauración de Pacientes y Citas: POST o GET /api/clinic/restore
+    if (pathname === '/api/clinic/restore' && (request.method === 'GET' || request.method === 'POST')) {
       if (!kv) {
         return jsonResponse({ error: 'KV_NOT_BOUND', message: 'Cloudflare KV no está vinculado.' }, 503);
       }
       try {
-        const licenseKey = request.headers.get('X-License-Key') || url.searchParams.get('licenseKey') || 'DEFAULT_CLINIC';
-        const cleanKey = licenseKey.trim().toUpperCase();
-        const data = await kv.get(`CLINIC_DATA:${cleanKey}`, 'json');
+        let licenseKey = (request.headers.get('X-License-Key') || url.searchParams.get('licenseKey') || '').trim().toUpperCase();
+        let password = '';
+
+        if (request.method === 'POST') {
+          const body = await request.json().catch(() => ({}));
+          licenseKey = (body.licenseKey || licenseKey).trim().toUpperCase();
+          password = (body.password || '').trim();
+        }
+
+        if (!licenseKey) {
+          return jsonResponse({ error: 'MISSING_LICENSE_KEY', message: 'Clave requerida para restaurar datos.' }, 400);
+        }
+
+        // Si la clave tiene contraseña en KV, verificarla
+        if (!MASTER_KEYS.has(licenseKey) && password) {
+          const lic = await kv.get(`LICENSE:${licenseKey}`, 'json');
+          if (lic && lic.passwordHash) {
+            const h = await hashPassword(password);
+            if (h !== lic.passwordHash) {
+              return jsonResponse({ error: 'UNAUTHORIZED', message: 'Contraseña de privacidad incorrecta.' }, 401);
+            }
+          }
+        }
+
+        const data = await kv.get(`CLINIC_DATA:${licenseKey}`, 'json');
 
         return jsonResponse({
           success: true,
-          data: data || { patients: [], appointments: [] }
+          data: data || { patients: [], appointments: [], updatedAt: null }
         });
       } catch (e) {
         return jsonResponse({ success: false, error: e.message }, 500);
@@ -333,7 +677,7 @@ export default {
     // 8. Ruta no encontrada
     return jsonResponse({
       error: 'NOT_FOUND',
-      message: 'Ruta no encontrada en el servicio PsiOS Cloudflare Hub.'
+      message: 'Ruta no encontrada en el servicio PsiOS Cloud Hub.'
     }, 404);
   }
 };

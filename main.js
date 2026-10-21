@@ -4645,6 +4645,8 @@ class ClinicController {
     } else if (Array.isArray(list) && list.length > 0) {
       clinicSyncService.syncPatient(list[0]);
     }
+    // Sincronización automática con Cloudflare KV (Escritorio <-> Web)
+    this.pushToCloudflare();
   }
 
   loadAppointments() {
@@ -4720,6 +4722,26 @@ class ClinicController {
     } else if (Array.isArray(list) && list.length > 0) {
       clinicSyncService.syncAppointment(list[0]);
     }
+    // Sincronización automática con Cloudflare KV (Escritorio <-> Web)
+    this.pushToCloudflare();
+  }
+
+  async pushToCloudflare() {
+    try {
+      const creds = licenseService.getSavedCredentials() || {};
+      const licenseKey = creds.licenseKey || licenseService.getLicenseInfo()?.licenseKey || '';
+      let pwd = '';
+      try {
+        const b64 = localStorage.getItem('psios_user_pwd_hash');
+        if (b64) pwd = atob(b64);
+      } catch {}
+      const username = creds.username || 'Profesional';
+      if (licenseKey) {
+        await clinicSyncService.syncToCloudflare(this.patients, this.appointments, licenseKey, username, pwd);
+      }
+    } catch (e) {
+      console.warn('Error enviando datos a Cloudflare KV:', e);
+    }
   }
 
   initSyncIndicator() {
@@ -4730,7 +4752,7 @@ class ClinicController {
     clinicSyncService.onStatusChange((status) => {
       dot.className = `sync-status-dot dot-${status}`;
       if (status === 'synced') {
-        text.textContent = 'Sincronizado';
+        text.textContent = 'Cloudflare Sync';
       } else if (status === 'syncing') {
         text.textContent = 'Sincronizando...';
       } else if (status === 'offline') {
@@ -4741,18 +4763,94 @@ class ClinicController {
     });
   }
 
-  async syncCloudData() {
+  async syncCloudData(isManual = false) {
+    const syncBtn = document.getElementById('btn-clinic-manual-sync');
+    if (syncBtn && isManual) {
+      syncBtn.classList.add('syncing');
+      const span = syncBtn.querySelector('span:last-child');
+      if (span) span.textContent = 'Sincronizando...';
+    }
+
     try {
-      const merged = await clinicSyncService.pullPatientsFromCloud(this.patients);
-      if (merged && merged.length > 0) {
-        this.patients = merged;
-        try {
-          localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
-        } catch (e) {}
-        this.renderAll();
+      const creds = licenseService.getSavedCredentials() || {};
+      const licenseKey = creds.licenseKey || licenseService.getLicenseInfo()?.licenseKey || '';
+      let pwd = '';
+      try {
+        const b64 = localStorage.getItem('psios_user_pwd_hash');
+        if (b64) pwd = atob(b64);
+      } catch {}
+      const username = creds.username || 'Profesional';
+
+      // 1. Restaurar datos desde Cloudflare KV (Escritorio <-> Web)
+      if (licenseKey) {
+        const remote = await clinicSyncService.pullFromCloudflare(licenseKey, pwd);
+        if (remote && (Array.isArray(remote.patients) || Array.isArray(remote.appointments))) {
+          let hasChanges = false;
+          if (Array.isArray(remote.patients) && remote.patients.length > 0) {
+            const mergedPatients = new Map();
+            this.patients.forEach(p => mergedPatients.set(p.id, p));
+            remote.patients.forEach(rp => {
+              const local = mergedPatients.get(rp.id);
+              if (!local || (rp.updatedAt && (!local.updatedAt || rp.updatedAt >= local.updatedAt))) {
+                mergedPatients.set(rp.id, rp);
+              }
+            });
+            this.patients = Array.from(mergedPatients.values());
+            try {
+              localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
+            } catch {}
+            hasChanges = true;
+          }
+
+          if (Array.isArray(remote.appointments) && remote.appointments.length > 0) {
+            const mergedAppts = new Map();
+            this.appointments.forEach(a => mergedAppts.set(a.id, a));
+            remote.appointments.forEach(ra => {
+              mergedAppts.set(ra.id, ra);
+            });
+            this.appointments = Array.from(mergedAppts.values());
+            try {
+              localStorage.setItem('psios_appointments_v1', JSON.stringify(this.appointments));
+            } catch {}
+            hasChanges = true;
+          }
+
+          if (hasChanges) {
+            this.renderAll();
+          }
+        }
+
+        // 2. Respaldo seguro del estado consolidado actual en Cloudflare
+        await clinicSyncService.syncToCloudflare(this.patients, this.appointments, licenseKey, username, pwd);
+      }
+
+      // 3. Respaldo complementario en Firestore si está configurado
+      try {
+        const merged = await clinicSyncService.pullPatientsFromCloud(this.patients);
+        if (merged && merged.length > 0) {
+          this.patients = merged;
+          try {
+            localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
+          } catch {}
+          this.renderAll();
+        }
+      } catch {}
+
+      if (isManual) {
+        const text = document.getElementById('clinic-sync-text');
+        if (text) text.textContent = '¡Sincronizado!';
+        setTimeout(() => {
+          if (text) text.textContent = 'Cloudflare Sync';
+        }, 3000);
       }
     } catch (err) {
-      console.warn('Error al sincronizar datos clínicos desde la nube:', err);
+      console.warn('Error al sincronizar datos clínicos con Cloudflare:', err);
+    } finally {
+      if (syncBtn && isManual) {
+        syncBtn.classList.remove('syncing');
+        const span = syncBtn.querySelector('span:last-child');
+        if (span) span.textContent = 'Sincronizar';
+      }
     }
   }
 
@@ -5002,6 +5100,14 @@ class ClinicController {
       });
     }
 
+    // Manual Cloudflare Sync Button
+    const btnManualSync = document.getElementById('btn-clinic-manual-sync');
+    if (btnManualSync) {
+      btnManualSync.addEventListener('click', () => {
+        this.syncCloudData(true);
+      });
+    }
+
     // Global Escape Key to close open modals
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -5020,6 +5126,7 @@ class ClinicController {
     triggerKineticTitleAnimation(this.titleEl);
     this.syncDoctorProfile();
     this.renderAll();
+    this.syncCloudData(false);
   }
 
   syncDoctorProfile() {
@@ -6465,6 +6572,11 @@ class AppNavigationController {
     this.genderButtons = document.querySelectorAll('.gender-option-btn');
     this.selectedGender = 'male';
 
+    // Password & Privacy elements (Beta 0.0.2)
+    this.userPasswordInput = document.getElementById('user-password-input');
+    this.passwordError = document.getElementById('password-error-hint');
+    this.btnToggleRegisterPwd = document.getElementById('btn-toggle-register-pwd');
+
     // Welcome elements
     this.welcomeHeroText = document.getElementById('welcome-hero-text');
     this.welcomeSecondaryPrompt = document.getElementById('welcome-secondary-prompt');
@@ -6472,13 +6584,35 @@ class AppNavigationController {
     this.welcomeAvatar = document.getElementById('welcome-avatar-icon');
     this.welcomeTopUserPill = document.getElementById('welcome-top-user-pill');
 
-    // Registration 2-Step Elements (Beta 0.0.1)
+    // Registration 2-Step Elements (Beta 0.0.2)
     this.regStepLicense = document.getElementById('register-step-license');
     this.regStepProfile = document.getElementById('register-step-profile');
     this.regLicenseInput = document.getElementById('reg-license-input');
     this.regLicenseError = document.getElementById('reg-license-error');
     this.btnRegDemoChip = document.getElementById('btn-reg-demo-chip');
+    this.btnRegAdminChip = document.getElementById('btn-reg-admin-chip');
     this.btnVerifyLicense = document.getElementById('btn-verify-license');
+
+    // Admin Panel Elements (Beta 0.0.2 - Acceso Maestro)
+    this.viewAdmin = document.getElementById('view-admin');
+    this.btnAdminRefresh = document.getElementById('btn-admin-refresh-keys');
+    this.btnAdminLogout = document.getElementById('btn-admin-logout');
+    this.btnAdminGenerateKey = document.getElementById('btn-admin-generate-key');
+    this.adminKeyPlanSelect = document.getElementById('admin-key-plan-select');
+    this.adminKeyCustomNote = document.getElementById('admin-key-custom-note');
+    this.adminGenBox = document.getElementById('admin-generated-key-box');
+    this.adminGenOutput = document.getElementById('admin-generated-key-output');
+    this.btnCopyGenKey = document.getElementById('btn-copy-gen-key');
+    this.adminKeysTbody = document.getElementById('admin-keys-tbody');
+    this.adminKeysSearch = document.getElementById('admin-keys-search');
+    this.adminTotalKeys = document.getElementById('admin-total-keys');
+    this.adminActiveKeys = document.getElementById('admin-active-keys');
+    this.adminAvailableKeys = document.getElementById('admin-available-keys');
+    this.adminCfStatus = document.getElementById('admin-cf-status');
+
+    this.adminMasterKey = null;
+    this.adminLoadedKeys = [];
+    this.pendingLicenseKey = null;
 
     // Logout session buttons
     this.btnLogoutSession = document.getElementById('btn-logout-session');
@@ -6487,6 +6621,33 @@ class AppNavigationController {
 
     this.bindEvents();
     this.updateCourtesySelectLabel(this.selectedGender);
+
+    // Recordado automático de clave y usuario al abrir la app
+    this.restoreSavedInputs();
+  }
+
+  restoreSavedInputs() {
+    const creds = licenseService.getSavedCredentials();
+    if (creds && creds.licenseKey && this.regLicenseInput) {
+      this.regLicenseInput.value = creds.licenseKey;
+      this.pendingLicenseKey = creds.licenseKey;
+    }
+    const user = this.getSavedUser();
+    if (user && this.nameInput) {
+      this.nameInput.value = user.rawName || '';
+      if (user.title && this.courtesySelect) {
+        this.courtesySelect.value = user.title;
+      }
+      if (user.gender) {
+        this.selectedGender = user.gender;
+        this.genderButtons.forEach(b => {
+          const match = b.dataset.gender === user.gender;
+          b.classList.toggle('active', match);
+          b.setAttribute('aria-checked', match ? 'true' : 'false');
+        });
+        this.updateCourtesySelectLabel(user.gender);
+      }
+    }
   }
 
   bindEvents() {
@@ -6511,7 +6672,7 @@ class AppNavigationController {
           val = val.substring(5);
         }
         let parts = ['PSIOS'];
-        for (let i = 0; i < val.length && i < 15; i += 5) {
+        for (let i = 0; i < val.length && i < 20; i += 5) {
           parts.push(val.substring(i, i + 5));
         }
         e.target.value = parts.join('-');
@@ -6526,10 +6687,21 @@ class AppNavigationController {
       });
     }
 
-    // 1.2 Step 1 Demo Key Chip click
+    // 1.2 Quick demo chip click
     if (this.btnRegDemoChip) {
       this.btnRegDemoChip.addEventListener('click', () => {
         const key = this.btnRegDemoChip.getAttribute('data-key') || 'PSIOS-PRO-2026-CLINIC';
+        if (this.regLicenseInput) {
+          this.regLicenseInput.value = key;
+          if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
+        }
+      });
+    }
+
+    // 1.2b Quick Master Admin Key Chip click
+    if (this.btnRegAdminChip) {
+      this.btnRegAdminChip.addEventListener('click', () => {
+        const key = this.btnRegAdminChip.getAttribute('data-key') || 'PSIOS-ADMIN-MASTER-2026';
         if (this.regLicenseInput) {
           this.regLicenseInput.value = key;
           if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
@@ -6577,12 +6749,38 @@ class AppNavigationController {
       this.nameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
+          if (this.userPasswordInput) {
+            this.userPasswordInput.focus();
+          } else {
+            this.handleRegisterSubmit();
+          }
+        }
+      });
+    }
+
+    // 3.1 Password privacy toggle button
+    if (this.btnToggleRegisterPwd && this.userPasswordInput) {
+      this.btnToggleRegisterPwd.addEventListener('click', () => {
+        const isPassword = this.userPasswordInput.type === 'password';
+        this.userPasswordInput.type = isPassword ? 'text' : 'password';
+        this.btnToggleRegisterPwd.textContent = isPassword ? '🙈' : '👁️';
+      });
+    }
+
+    if (this.userPasswordInput) {
+      this.userPasswordInput.addEventListener('input', () => {
+        if (this.passwordError) this.passwordError.classList.remove('visible');
+      });
+
+      this.userPasswordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
           this.handleRegisterSubmit();
         }
       });
     }
 
-    // 4. 'Continuar' Button Click
+    // 4. 'Comenzar' Button Click
     if (this.btnContinuar) {
       this.btnContinuar.addEventListener('click', () => {
         this.handleRegisterSubmit();
@@ -6644,6 +6842,44 @@ class AppNavigationController {
         this.switchView('view-library');
       });
     }
+
+    // 9. Admin Panel Listeners
+    if (this.btnAdminRefresh) {
+      this.btnAdminRefresh.addEventListener('click', () => {
+        this.loadAdminKeys();
+      });
+    }
+
+    if (this.btnAdminLogout) {
+      this.btnAdminLogout.addEventListener('click', () => {
+        this.handleLogout();
+      });
+    }
+
+    if (this.btnAdminGenerateKey) {
+      this.btnAdminGenerateKey.addEventListener('click', () => {
+        this.handleAdminGenerateKey();
+      });
+    }
+
+    if (this.btnCopyGenKey && this.adminGenOutput) {
+      this.btnCopyGenKey.addEventListener('click', () => {
+        const text = this.adminGenOutput.textContent.trim();
+        if (text) {
+          navigator.clipboard.writeText(text);
+          this.btnCopyGenKey.textContent = '✓ ¡Copiado!';
+          setTimeout(() => {
+            this.btnCopyGenKey.textContent = '📋 Copiar';
+          }, 2500);
+        }
+      });
+    }
+
+    if (this.adminKeysSearch) {
+      this.adminKeysSearch.addEventListener('input', (e) => {
+        this.filterAdminKeys(e.target.value);
+      });
+    }
   }
 
   getSavedUser() {
@@ -6693,7 +6929,7 @@ class AppNavigationController {
     }
   }
 
-  handleRegisterSubmit() {
+  async handleRegisterSubmit() {
     const rawName = (this.nameInput?.value || '').trim();
     if (!rawName) {
       if (this.nameError) this.nameError.classList.add('visible');
@@ -6701,33 +6937,87 @@ class AppNavigationController {
       return;
     }
 
+    const rawPassword = (this.userPasswordInput?.value || '').trim();
+    if (!rawPassword || rawPassword.length < 4) {
+      if (this.passwordError) {
+        this.passwordError.textContent = 'Por favor ingresa una contraseña de al menos 4 caracteres.';
+        this.passwordError.classList.add('visible');
+      }
+      if (this.userPasswordInput) this.userPasswordInput.focus();
+      return;
+    }
+
+    const key = this.pendingLicenseKey || (this.regLicenseInput?.value || '').trim().toUpperCase();
+    if (!key) {
+      this.showRegistrationView();
+      return;
+    }
+
     const cleanNameParts = rawName.replace(/^(dr|dra|lic|est)\.?\s+/i, '').split(/\s+/);
     const firstName = cleanNameParts[0] || rawName;
     const rawTitle = this.courtesySelect ? this.courtesySelect.value : 'Dr/Dra';
     const resolvedTitle = this.resolveTitle(rawTitle, this.selectedGender);
+    const doctorFullName = `${resolvedTitle} ${rawName}`.trim();
 
-    const userData = {
-      title: rawTitle,
-      displayTitle: resolvedTitle,
-      rawName,
-      firstName,
-      gender: this.selectedGender,
-      registeredAt: Date.now()
-    };
+    if (this.btnContinuar) {
+      this.btnContinuar.disabled = true;
+      const textSpan = this.btnContinuar.querySelector('.btn-text');
+      if (textSpan) textSpan.textContent = 'Verificando en Cloudflare...';
+    }
 
-    this.saveUser(userData);
+    try {
+      // 1. Activar licencia en Cloudflare KV (Aplica regla de usuario único + contraseña)
+      await licenseService.activate(key, doctorFullName, rawPassword);
 
-    // Also update authService profile
-    authService.saveLocalUser({
-      uid: `user-${Date.now().toString(36)}`,
-      email: `${firstName.toLowerCase().replace(/[^a-z0-9]/g, '')}@psios.local`,
-      displayName: `${resolvedTitle} ${rawName}`.trim(),
-      specialty: 'Psicología Clínica & Semiología',
-      isCloudUser: false,
-      lastLogin: new Date().toISOString()
-    });
+      const userData = {
+        title: rawTitle,
+        displayTitle: resolvedTitle,
+        rawName,
+        firstName,
+        gender: this.selectedGender,
+        doctorFullName,
+        hasPassword: true,
+        registeredAt: Date.now()
+      };
 
-    this.showWelcomeView(userData);
+      this.saveUser(userData);
+
+      // 2. Guardar credenciales para recordado automático permanente
+      licenseService.saveCredentials(key, doctorFullName, rawPassword);
+      try {
+        localStorage.setItem('psios_user_pwd_hash', btoa(rawPassword));
+      } catch {}
+
+      // 3. Actualizar perfil local de autenticación
+      authService.saveLocalUser({
+        uid: `user-${Date.now().toString(36)}`,
+        email: `${firstName.toLowerCase().replace(/[^a-z0-9]/g, '')}@psios.local`,
+        displayName: doctorFullName,
+        specialty: 'Psicología Clínica & Semiología',
+        isCloudUser: false,
+        lastLogin: new Date().toISOString()
+      });
+
+      // 4. Sincronizar historias clínicas con Cloudflare KV
+      if (this.clinic && this.clinic.syncCloudData) {
+        this.clinic.syncCloudData(false);
+      }
+
+      this.showWelcomeView(userData);
+    } catch (err) {
+      console.warn('Error en registro con Cloudflare:', err);
+      if (this.passwordError) {
+        this.passwordError.textContent = err.message || 'Error validando con Cloudflare.';
+        this.passwordError.classList.add('visible');
+      }
+      alert(`Error de activación: ${err.message || 'No se pudo activar la clave.'}`);
+    } finally {
+      if (this.btnContinuar) {
+        this.btnContinuar.disabled = false;
+        const textSpan = this.btnContinuar.querySelector('.btn-text');
+        if (textSpan) textSpan.textContent = 'Comenzar';
+      }
+    }
   }
 
   showRegistrationView() {
@@ -6741,7 +7031,7 @@ class AppNavigationController {
         if (this.regLicenseInput) this.regLicenseInput.focus();
       }, 420);
     } else {
-      // Step 2: Show name & gender entry
+      // Step 2: Show name & password entry
       if (this.regStepLicense) this.regStepLicense.style.display = 'none';
       if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
       this.switchView('view-register');
@@ -6762,53 +7052,243 @@ class AppNavigationController {
       return;
     }
 
-    if (this.btnVerifyLicense) {
-      this.btnVerifyLicense.disabled = true;
-      const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
-      if (textSpan) textSpan.textContent = 'Verificando...';
+    // 1. LLAVE MAESTRA / MASTER KEY: Acceso directo al Panel de Administración Cloudflare
+    if (licenseService.isMasterKey(key)) {
+      if (this.btnVerifyLicense) {
+        this.btnVerifyLicense.disabled = true;
+        const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
+        if (textSpan) textSpan.textContent = 'Accediendo a Panel Maestro...';
+      }
+      try {
+        await licenseService.activate(key, 'Administrador Maestro');
+        this.openAdminPanel(key);
+        return;
+      } catch (err) {
+        if (this.regLicenseError) {
+          this.regLicenseError.textContent = err.message || 'Error validando Master Key.';
+          this.regLicenseError.classList.add('visible');
+        }
+      } finally {
+        if (this.btnVerifyLicense) {
+          this.btnVerifyLicense.disabled = false;
+          const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
+          if (textSpan) textSpan.textContent = 'Verificar y Continuar';
+        }
+      }
+      return;
     }
 
-    try {
-      await licenseService.activate(key, 'Profesional Clínico');
-      if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
-
-      // Transition to Step 2 ('¿Quién eres?')
-      if (this.regStepLicense) this.regStepLicense.style.display = 'none';
-      if (this.regStepProfile) {
-        this.regStepProfile.style.display = 'flex';
-      }
-      setTimeout(() => {
-        if (this.nameInput) this.nameInput.focus();
-      }, 200);
-    } catch (err) {
+    // 2. Validación de formato de clave estándar
+    if (!key.startsWith('PSIOS-') || key.length < 8) {
       if (this.regLicenseError) {
-        this.regLicenseError.textContent = err.message || 'Clave no válida. Usa PSIOS-PRO-2026-CLINIC.';
+        this.regLicenseError.textContent = 'Formato de clave no válido. Debe comenzar con PSIOS- (ej: PSIOS-PRO-2026-CLINIC).';
         this.regLicenseError.classList.add('visible');
       }
-    } finally {
-      if (this.btnVerifyLicense) {
-        this.btnVerifyLicense.disabled = false;
-        const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
-        if (textSpan) textSpan.textContent = 'Verificar y Continuar';
+      if (this.regLicenseInput) this.regLicenseInput.focus();
+      return;
+    }
+
+    this.pendingLicenseKey = key;
+    if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
+
+    // Transición a Paso 2 ('¿Quién eres?' + Contraseña de Privacidad)
+    if (this.regStepLicense) this.regStepLicense.style.display = 'none';
+    if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
+    setTimeout(() => {
+      if (this.nameInput) this.nameInput.focus();
+    }, 200);
+  }
+
+  // ==========================================
+  // PANEL DE ADMINISTRACIÓN MAESTRO (Cloudflare KV)
+  // ==========================================
+
+  openAdminPanel(masterKey) {
+    this.adminMasterKey = masterKey;
+    this.switchView('view-admin');
+    this.loadAdminKeys();
+  }
+
+  async loadAdminKeys() {
+    if (!this.adminKeysTbody) return;
+    this.adminKeysTbody.innerHTML = '<tr><td colspan="6" class="loading-td">Cargando licencias desde Cloudflare KV...</td></tr>';
+    
+    try {
+      const keys = await licenseService.adminGetKeys(this.adminMasterKey);
+      this.adminLoadedKeys = Array.isArray(keys) ? keys : [];
+      this.renderAdminMetrics(this.adminLoadedKeys);
+      this.renderAdminKeysTable(this.adminLoadedKeys);
+    } catch (err) {
+      this.adminKeysTbody.innerHTML = `<tr><td colspan="6" class="error-td">Error conectando con Cloudflare: ${err.message || 'No se pudieron cargar las claves'}</td></tr>`;
+      if (this.adminCfStatus) {
+        this.adminCfStatus.textContent = 'Desconectado';
+        this.adminCfStatus.className = 'kpi-value status-offline';
       }
     }
   }
 
+  renderAdminMetrics(keys) {
+    const total = keys.length;
+    const active = keys.filter(k => k.status === 'active' || k.linkedUser).length;
+    const available = total - active;
+
+    if (this.adminTotalKeys) this.adminTotalKeys.textContent = total;
+    if (this.adminActiveKeys) this.adminActiveKeys.textContent = active;
+    if (this.adminAvailableKeys) this.adminAvailableKeys.textContent = available;
+    if (this.adminCfStatus) {
+      this.adminCfStatus.textContent = 'Conectado';
+      this.adminCfStatus.className = 'kpi-value status-online';
+    }
+  }
+
+  renderAdminKeysTable(keys) {
+    if (!this.adminKeysTbody) return;
+
+    if (!keys || keys.length === 0) {
+      this.adminKeysTbody.innerHTML = '<tr><td colspan="6" class="empty-td">No hay claves registradas en Cloudflare. Genera una nueva arriba.</td></tr>';
+      return;
+    }
+
+    this.adminKeysTbody.innerHTML = keys.map(k => {
+      const isLinked = !!(k.linkedUser || k.doctorName);
+      const userDisplay = isLinked ? `👤 <strong>${k.linkedUser || k.doctorName}</strong>` : '<span class="text-muted">— Disponible (Sin vincular) —</span>';
+      const statusBadge = isLinked 
+        ? '<span class="table-badge badge-active">Vinculada</span>' 
+        : '<span class="table-badge badge-available">Disponible</span>';
+      const planName = k.plan || 'PsiOS Profesional';
+      const dateStr = k.createdAt ? new Date(k.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+      return `
+        <tr data-key="${k.key}">
+          <td><code class="table-key-code">${k.key}</code></td>
+          <td>${statusBadge}</td>
+          <td>${userDisplay}</td>
+          <td><span class="plan-tag">${planName}</span></td>
+          <td><span class="date-tag">${dateStr}</span></td>
+          <td>
+            <div class="table-action-btns">
+              <button type="button" class="btn-table-action btn-table-copy" data-action="copy" data-key="${k.key}" title="Copiar clave">
+                📋
+              </button>
+              ${isLinked ? `
+                <button type="button" class="btn-table-action btn-table-unlink" data-action="unlink" data-key="${k.key}" title="Desvincular usuario (liberar clave)">
+                  🔓 Desvincular
+                </button>
+              ` : ''}
+              <button type="button" class="btn-table-action btn-table-delete" data-action="delete" data-key="${k.key}" title="Eliminar clave permanentemente">
+                🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Attach row event listeners
+    this.adminKeysTbody.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        const key = btn.getAttribute('data-key');
+        if (action === 'copy') {
+          navigator.clipboard.writeText(key);
+          btn.textContent = '✓';
+          setTimeout(() => { btn.textContent = '📋'; }, 2000);
+        } else if (action === 'unlink') {
+          this.handleAdminUnlinkKey(key);
+        } else if (action === 'delete') {
+          this.handleAdminDeleteKey(key);
+        }
+      });
+    });
+  }
+
+  filterAdminKeys(query) {
+    const q = (query || '').trim().toLowerCase();
+    if (!q) {
+      this.renderAdminKeysTable(this.adminLoadedKeys);
+      return;
+    }
+    const filtered = this.adminLoadedKeys.filter(k => 
+      (k.key && k.key.toLowerCase().includes(q)) ||
+      (k.linkedUser && k.linkedUser.toLowerCase().includes(q)) ||
+      (k.doctorName && k.doctorName.toLowerCase().includes(q)) ||
+      (k.plan && k.plan.toLowerCase().includes(q))
+    );
+    this.renderAdminKeysTable(filtered);
+  }
+
+  async handleAdminGenerateKey() {
+    if (this.btnAdminGenerateKey) {
+      this.btnAdminGenerateKey.disabled = true;
+      const span = this.btnAdminGenerateKey.querySelector('.btn-text');
+      if (span) span.textContent = 'Generando en Cloudflare...';
+    }
+
+    try {
+      const plan = this.adminKeyPlanSelect ? this.adminKeyPlanSelect.value : 'PRO';
+      const note = this.adminKeyCustomNote ? this.adminKeyCustomNote.value.trim() : '';
+
+      const res = await licenseService.adminGenerateKey(this.adminMasterKey, plan, note);
+      if (res && res.key) {
+        if (this.adminGenBox) this.adminGenBox.style.display = 'block';
+        if (this.adminGenOutput) this.adminGenOutput.textContent = res.key;
+        if (this.adminKeyCustomNote) this.adminKeyCustomNote.value = '';
+        await this.loadAdminKeys();
+      }
+    } catch (err) {
+      alert(`Error al generar clave: ${err.message || 'No se pudo crear en Cloudflare'}`);
+    } finally {
+      if (this.btnAdminGenerateKey) {
+        this.btnAdminGenerateKey.disabled = false;
+        const span = this.btnAdminGenerateKey.querySelector('.btn-text');
+        if (span) span.textContent = 'Generar Nueva Clave';
+      }
+    }
+  }
+
+  async handleAdminUnlinkKey(key) {
+    if (!confirm(`¿Estás seguro de desvincular al usuario de la clave ${key}? La clave volverá a estar disponible para vincular a otro usuario.`)) {
+      return;
+    }
+    try {
+      await licenseService.adminUnlinkKey(this.adminMasterKey, key);
+      await this.loadAdminKeys();
+    } catch (err) {
+      alert(`Error al desvincular clave: ${err.message || 'Fallo de Cloudflare'}`);
+    }
+  }
+
+  async handleAdminDeleteKey(key) {
+    if (!confirm(`¿Eliminar definitivamente la clave ${key} de Cloudflare KV? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    try {
+      await licenseService.adminDeleteKey(this.adminMasterKey, key);
+      await this.loadAdminKeys();
+    } catch (err) {
+      alert(`Error al eliminar clave: ${err.message || 'Fallo de Cloudflare'}`);
+    }
+  }
+
   handleLogout() {
-    // Clear user and license persistence
+    // Clear user, credentials, and license persistence
     try {
       localStorage.removeItem('psios_user_profile');
       localStorage.removeItem('psios_clinical_user_v1');
+      localStorage.removeItem('psios_user_pwd_hash');
     } catch {}
 
     licenseService.deactivate();
+    licenseService.clearSavedCredentials();
     authService.logout();
 
     // Reset form inputs
     if (this.regLicenseInput) this.regLicenseInput.value = '';
     if (this.nameInput) this.nameInput.value = '';
+    if (this.userPasswordInput) this.userPasswordInput.value = '';
     if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
     if (this.nameError) this.nameError.classList.remove('visible');
+    if (this.passwordError) this.passwordError.classList.remove('visible');
 
     // Reset registration step panes
     if (this.regStepLicense) this.regStepLicense.style.display = 'flex';
@@ -6911,7 +7391,7 @@ class AppNavigationController {
         if (targetViewId === 'view-welcome') {
           appContainer.classList.add('welcome-mode-active');
           appContainer.classList.remove('workspace-mode-active');
-        } else if (targetViewId === 'view-library' || targetViewId === 'view-clinic') {
+        } else if (targetViewId === 'view-library' || targetViewId === 'view-clinic' || targetViewId === 'view-admin') {
           appContainer.classList.add('workspace-mode-active');
           appContainer.classList.remove('welcome-mode-active');
         } else {

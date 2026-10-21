@@ -173,9 +173,9 @@ export class ClinicSyncService {
   }
 
   /**
-   * Respaldo directo en Cloudflare KV de todos los datos clínicos
+   * Respaldo directo en Cloudflare KV de todos los datos clínicos (Pacientes y Citas)
    */
-  async syncToCloudflare(patients = [], appointments = [], licenseKey = '') {
+  async syncToCloudflare(patients = [], appointments = [], licenseKey = '', username = '', password = '') {
     if (!navigator.onLine) return false;
     const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
     try {
@@ -186,7 +186,7 @@ export class ClinicSyncService {
           'Content-Type': 'application/json',
           'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
         },
-        body: JSON.stringify({ patients, appointments, licenseKey })
+        body: JSON.stringify({ patients, appointments, licenseKey, username, password })
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -204,17 +204,20 @@ export class ClinicSyncService {
   }
 
   /**
-   * Restauración directa desde Cloudflare KV
+   * Restauración directa desde Cloudflare KV (Sincronización Escritorio & Web)
    */
-  async pullFromCloudflare(licenseKey = '') {
+  async pullFromCloudflare(licenseKey = '', password = '') {
     if (!navigator.onLine) return null;
     const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
     try {
       this.setStatus('syncing');
       const res = await fetch(`${workerUrl}/api/clinic/restore`, {
+        method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
-        }
+        },
+        body: JSON.stringify({ licenseKey, password })
       });
       const json = await res.json();
       if (res.ok && json.success && json.data) {

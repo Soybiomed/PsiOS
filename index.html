@@ -36,7 +36,7 @@
             <span class="brand-symbol">Ψ</span>
             <span class="brand-name">PsiOS</span>
             <span class="brand-separator"></span>
-            <span class="brand-badge">BETA 0.0.1</span>
+            <span class="brand-badge">BETA 0.0.2</span>
           </div>
         </header>
 
@@ -93,7 +93,7 @@
               <!-- PASO 1: ACTIVACIÓN OBLIGATORIA DE CLAVE DE PRODUCTO -->
               <div class="register-step-pane active" id="register-step-license">
                 <div class="register-header">
-                  <span class="form-kicker">ACTIVACIÓN DE PRODUCTO • BETA 0.0.1</span>
+                  <span class="form-kicker">ACTIVACIÓN DE PRODUCTO • BETA 0.0.2</span>
                   <h2 class="register-heading">Clave de Producto</h2>
                   <p class="register-subprompt">Ingresa la clave de licencia asignada para activar esta estación de trabajo.</p>
                 </div>
@@ -108,7 +108,7 @@
                         id="reg-license-input" 
                         class="glass-text-input key-format-input" 
                         placeholder="PSIOS-XXXX-XXXX-XXXX" 
-                        maxlength="24"
+                        maxlength="30"
                         autocomplete="off" 
                         spellcheck="false"
                         required 
@@ -117,11 +117,14 @@
                     <span class="input-error-hint" id="reg-license-error">Por favor ingresa una clave de producto válida (ej: PSIOS-PRO-2026-CLINIC)</span>
                   </div>
 
-                  <!-- Quick demo key helper -->
+                  <!-- Quick demo key & Master Key helper -->
                   <div class="reg-demo-keys-row">
-                    <span class="reg-demo-label">Clave de evaluación:</span>
-                    <button type="button" class="reg-demo-chip" id="btn-reg-demo-chip" data-key="PSIOS-PRO-2026-CLINIC" title="Usar clave de demostración">
+                    <span class="reg-demo-label">Acceso Rápido:</span>
+                    <button type="button" class="reg-demo-chip" id="btn-reg-demo-chip" data-key="PSIOS-PRO-2026-CLINIC" title="Usar clave de evaluación">
                       <code>PSIOS-PRO-2026-CLINIC</code>
+                    </button>
+                    <button type="button" class="reg-demo-chip admin-chip" id="btn-reg-admin-chip" data-key="PSIOS-ADMIN-MASTER-2026" title="Acceso al Panel de Administración Cloudflare con Llave Maestra">
+                      <code>👑 Master Key (Admin)</code>
                     </button>
                   </div>
 
@@ -217,6 +220,31 @@
                         <span class="gender-label">Mujer</span>
                       </button>
                     </div>
+                  </div>
+
+                  <!-- Contraseña de Privacidad y Sincronización en la Nube -->
+                  <div class="form-group password-group">
+                    <div class="form-label-row">
+                      <label class="form-label" for="user-password-input">Contraseña de Privacidad</label>
+                      <span class="form-label-badge">Protección Clínica y Sync</span>
+                    </div>
+                    <div class="input-composite-wrap">
+                      <span class="input-key-icon">🔒</span>
+                      <input 
+                        type="password" 
+                        id="user-password-input" 
+                        class="glass-text-input" 
+                        placeholder="Crea una contraseña segura (mín. 4 caracteres)" 
+                        autocomplete="new-password" 
+                        minlength="4"
+                        required 
+                      />
+                      <button type="button" class="btn-toggle-pwd" id="btn-toggle-register-pwd" title="Mostrar u ocultar contraseña" tabindex="-1">
+                        👁️
+                      </button>
+                    </div>
+                    <span class="input-error-hint" id="password-error-hint">Por favor ingresa una contraseña de al menos 4 caracteres</span>
+                    <p class="form-help-subtext">Tu contraseña protege los datos clínicos de tus pacientes y permite sincronizarlos automáticamente entre la app web y de escritorio.</p>
                   </div>
 
                   <!-- Action Button: 'Comenzar' with Liquid Glass -->
@@ -458,11 +486,17 @@
                       <span>Licencia activada</span>
                     </span>
 
-                    <!-- Sync Indicator Pill (Firebase Firestore) -->
+                    <!-- Sync Indicator Pill (Cloudflare KV) -->
                     <div class="clinic-sync-indicator" id="clinic-sync-indicator" title="Estado de sincronización en la nube">
                       <span class="sync-status-dot dot-synced" id="clinic-sync-dot"></span>
-                      <span class="sync-status-text" id="clinic-sync-text">Sincronizado</span>
+                      <span class="sync-status-text" id="clinic-sync-text">Cloudflare Sync</span>
                     </div>
+
+                    <!-- Cloudflare Manual Sync Button -->
+                    <button type="button" class="header-status-pill clinic-sync-btn" id="btn-clinic-manual-sync" title="Sincronizar pacientes y citas con Cloudflare ahora">
+                      <span class="sync-btn-icon">🔄</span>
+                      <span>Sincronizar</span>
+                    </button>
 
                     <!-- Cloud Session Profile Pill -->
                     <div class="header-status-pill header-doctor-pill">
@@ -642,6 +676,149 @@
                     </div>
                   </div>
                 </section>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 6: PANEL DE ADMINISTRACIÓN CLOUDFLARE (ACCESO EXCLUSIVO CON MASTER KEY) -->
+          <div class="view-panel view-admin" id="view-admin">
+            <div class="admin-dashboard-container">
+              
+              <!-- Admin Top Bar -->
+              <header class="admin-header-bar">
+                <div class="admin-brand-group">
+                  <div class="admin-shield-icon">🛡️</div>
+                  <div>
+                    <div class="admin-badge-row">
+                      <span class="admin-badge-kicker">PANEL DE CONTROL MAESTRO</span>
+                      <span class="admin-version-pill">BETA 0.0.2</span>
+                    </div>
+                    <h1 class="admin-title">Administración de Licencias y Usuarios</h1>
+                    <p class="admin-subtitle">Conectado a Cloudflare KV • Gestión en tiempo real de claves únicas por usuario</p>
+                  </div>
+                </div>
+
+                <div class="admin-header-actions">
+                  <button type="button" class="admin-action-btn secondary" id="btn-admin-refresh-keys" title="Recargar lista de licencias de Cloudflare">
+                    <span class="btn-icon">🔄</span>
+                    <span>Actualizar</span>
+                  </button>
+                  <button type="button" class="admin-action-btn danger" id="btn-admin-logout" title="Cerrar sesión de administrador">
+                    <span class="btn-icon">🚪</span>
+                    <span>Salir</span>
+                  </button>
+                </div>
+              </header>
+
+              <!-- Metrics Summary Grid -->
+              <div class="admin-metrics-grid">
+                <div class="admin-kpi-card">
+                  <span class="kpi-icon">🔑</span>
+                  <div class="kpi-info">
+                    <span class="kpi-label">Total de Claves</span>
+                    <strong class="kpi-value" id="admin-total-keys">0</strong>
+                  </div>
+                </div>
+                <div class="admin-kpi-card active-card">
+                  <span class="kpi-icon">👤</span>
+                  <div class="kpi-info">
+                    <span class="kpi-label">Claves Vinculadas</span>
+                    <strong class="kpi-value" id="admin-active-keys">0</strong>
+                  </div>
+                </div>
+                <div class="admin-kpi-card available-card">
+                  <span class="kpi-icon">✨</span>
+                  <div class="kpi-info">
+                    <span class="kpi-label">Disponibles</span>
+                    <strong class="kpi-value" id="admin-available-keys">0</strong>
+                  </div>
+                </div>
+                <div class="admin-kpi-card cloud-card">
+                  <span class="kpi-icon">☁️</span>
+                  <div class="kpi-info">
+                    <span class="kpi-label">Estado Cloudflare</span>
+                    <strong class="kpi-value status-online" id="admin-cf-status">Conectado</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Admin Grid: Generator on Left / List on Right -->
+              <div class="admin-main-grid">
+                
+                <!-- Generator Box -->
+                <div class="admin-generator-card">
+                  <div class="card-title-row">
+                    <span class="card-emoji">⚡</span>
+                    <h2 class="card-title">Generador de Claves de Producto</h2>
+                  </div>
+                  <p class="card-description">Crea una nueva clave única e inscríbela en Cloudflare KV. Cada clave solo puede estar vinculada a un único usuario.</p>
+                  
+                  <div class="generator-controls">
+                    <label class="form-label" for="admin-key-plan-select">Tipo de Plan / Licencia</label>
+                    <select id="admin-key-plan-select" class="glass-select">
+                      <option value="PRO">PsiOS Profesional Clínico</option>
+                      <option value="INSTITUTIONAL">PsiOS Institucional / Hospital</option>
+                      <option value="ACADEMIC">PsiOS Académico / Estudiantes</option>
+                    </select>
+
+                    <label class="form-label" for="admin-key-custom-note">Nota o Destinatario (Opcional)</label>
+                    <input type="text" id="admin-key-custom-note" class="glass-text-input" placeholder="Ej: Dr. Morales - Hospital Central" />
+
+                    <button type="button" class="liquid-glass-btn btn-generate-key" id="btn-admin-generate-key">
+                      <span class="btn-text">Generar Nueva Clave</span>
+                      <span class="btn-icon-wrap">✨</span>
+                    </button>
+                  </div>
+
+                  <!-- Last Generated Key Display Box -->
+                  <div class="generated-key-box" id="admin-generated-key-box" style="display: none;">
+                    <div class="key-box-header">
+                      <span class="key-box-tag">¡CLAVE GENERADA CON ÉXITO!</span>
+                      <span class="key-box-hint">Inscrita en Cloudflare KV</span>
+                    </div>
+                    <div class="key-display-row">
+                      <code class="key-code-output" id="admin-generated-key-output">PSIOS-XXXX-XXXX-XXXX</code>
+                      <button type="button" class="btn-copy-key" id="btn-copy-gen-key" title="Copiar al portapapeles">
+                        📋 Copiar
+                      </button>
+                    </div>
+                    <p class="key-box-reminder">Entrega esta clave al usuario. Al activarla con su nombre y contraseña quedará vinculada permanentemente a él.</p>
+                  </div>
+                </div>
+
+                <!-- Keys Management Table Section -->
+                <div class="admin-table-section">
+                  <div class="table-section-header">
+                    <div>
+                      <h2 class="section-title">Registro de Claves y Usuarios Vinculados</h2>
+                      <span class="section-subtitle">Regla activa: 1 clave = 1 usuario único</span>
+                    </div>
+                    <div class="table-search-box">
+                      <input type="text" id="admin-keys-search" class="glass-search-input" placeholder="Filtrar por clave o usuario..." />
+                    </div>
+                  </div>
+
+                  <div class="admin-table-wrapper">
+                    <table class="admin-keys-table">
+                      <thead>
+                        <tr>
+                          <th>Clave de Producto</th>
+                          <th>Estado</th>
+                          <th>Usuario Vinculado</th>
+                          <th>Plan</th>
+                          <th>Fecha Creación</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody id="admin-keys-tbody">
+                        <tr>
+                          <td colspan="6" class="loading-td">Cargando registros de Cloudflare KV...</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
               </div>
             </div>
