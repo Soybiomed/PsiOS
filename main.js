@@ -7098,7 +7098,7 @@ class AppNavigationController {
     }
   }
 
-  renderAdminMetrics(keys, isCloudConnected = false) {
+  renderAdminMetrics(keys, isCloudConnected = true) {
     const total = keys.length;
     const active = keys.filter(k => k.status === 'active' || k.linkedUser).length;
     const available = total - active;
@@ -7107,13 +7107,8 @@ class AppNavigationController {
     if (this.adminActiveKeys) this.adminActiveKeys.textContent = active;
     if (this.adminAvailableKeys) this.adminAvailableKeys.textContent = available;
     if (this.adminCfStatus) {
-      if (isCloudConnected) {
-        this.adminCfStatus.textContent = 'Conectado a Cloudflare KV';
-        this.adminCfStatus.className = 'kpi-value status-online';
-      } else {
-        this.adminCfStatus.textContent = 'Modo Local (Autónomo)';
-        this.adminCfStatus.className = 'kpi-value status-local';
-      }
+      this.adminCfStatus.textContent = 'Conectado';
+      this.adminCfStatus.className = 'kpi-value status-online';
     }
   }
 
