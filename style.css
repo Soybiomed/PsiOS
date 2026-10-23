@@ -3050,21 +3050,22 @@ html, body {
   transition: opacity 0.3s var(--ease-smooth), visibility 0.3s ease;
 }
 
-.psios-modal-backdrop.active {
+.psios-modal-backdrop.active,
+.psios-modal-backdrop.visible {
   display: flex !important;
   opacity: 1 !important;
   pointer-events: auto !important;
   visibility: visible !important;
 }
 
-.psios-modal-backdrop:not(.active) {
+.psios-modal-backdrop:not(.active):not(.visible) {
   display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
 }
 
-.psios-modal-backdrop:not(.active) * {
+.psios-modal-backdrop:not(.active):not(.visible) * {
   pointer-events: none !important;
 }
 
@@ -3084,7 +3085,8 @@ html, body {
   flex-direction: column;
 }
 
-.psios-modal-backdrop.active .psios-modal-card {
+.psios-modal-backdrop.active .psios-modal-card,
+.psios-modal-backdrop.visible .psios-modal-card {
   transform: translateY(0) scale(1);
 }
 

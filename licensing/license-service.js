@@ -413,23 +413,27 @@ export class LicenseService {
     // Enviar al Worker si hay conexión
     const workerUrl = this.getWorkerUrl();
     if (workerUrl && navigator.onLine) {
-      fetch(`${workerUrl}/api/admin/keys/update`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${cleanMasterKey}`,
-          'X-License-Key': cleanMasterKey
-        },
-        body: JSON.stringify({
-          masterKey: cleanMasterKey,
-          key: cleanKey,
-          expiresAt: target.expiresAt,
-          status: target.status,
-          maxDevices: target.maxDevices,
-          resetDevices: !!updates.resetDevices,
-          autoResume: true
-        })
-      }).catch(() => {});
+      try {
+        await fetch(`${workerUrl}/api/admin/keys/update`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${cleanMasterKey}`,
+            'X-License-Key': cleanMasterKey
+          },
+          body: JSON.stringify({
+            masterKey: cleanMasterKey,
+            key: cleanKey,
+            expiresAt: target.expiresAt,
+            status: target.status,
+            maxDevices: target.maxDevices,
+            resetDevices: !!updates.resetDevices,
+            autoResume: true
+          })
+        });
+      } catch (e) {
+        console.warn('Error sincronizando /api/admin/keys/update:', e);
+      }
     }
 
     return { success: true, key: cleanKey, target };
@@ -544,16 +548,14 @@ export class LicenseService {
       throw new Error(`Esta clave de producto ha expirado (venció el ${expiredStr}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.`);
     }
 
-    // 5. Verificar si ya está enlazada a otro profesional
-    if (existingRecord.status === 'active' && existingRecord.linkedUser) {
-      throw new Error(`Esta clave ya está vinculada al usuario "${existingRecord.linkedUser}". Cada clave es exclusiva para un único usuario.`);
-    }
-
-    // 6. Verificar límite de equipos permitidos para este usuario
+    // 5. Verificar límite de equipos permitidos para este usuario
     const maxDevs = typeof existingRecord.maxDevices === 'number' ? Math.max(1, existingRecord.maxDevices) : 1;
     const devList = Array.isArray(existingRecord.devices) ? existingRecord.devices : (existingRecord.deviceId ? [existingRecord.deviceId] : []);
-    if (!devList.includes(this.deviceId) && devList.length >= maxDevs) {
-      throw new Error(`Límite de equipos alcanzado (${devList.length} de ${maxDevs} equipos permitidos). Esta clave ya está activa en otra computadora. Solicita al Administrador Maestro ampliar el límite de equipos o restablecer los dispositivos vinculados.`);
+    const isThisDeviceRegistered = devList.includes(this.deviceId);
+
+    if (!isThisDeviceRegistered && devList.length >= maxDevs) {
+      const userMsg = existingRecord.linkedUser ? ` para el usuario "${existingRecord.linkedUser}"` : '';
+      throw new Error(`Límite de equipos alcanzado (${devList.length} de ${maxDevs} equipos autorizados). Esta clave ya está activa en el número máximo de computadoras permitido${userMsg}. Solicita al Administrador Maestro ampliar el límite de equipos o restablecer los dispositivos vinculados.`);
     }
 
     return {
@@ -563,7 +565,11 @@ export class LicenseService {
       plan: existingRecord.plan || 'PsiOS Profesional Clínico',
       tier: existingRecord.tier || 'pro',
       expiresAt: existingRecord.expiresAt || null,
-      maxDevices: maxDevs
+      maxDevices: maxDevs,
+      linkedUser: existingRecord.linkedUser || null,
+      currentDeviceCount: devList.length,
+      devices: devList,
+      isThisDeviceRegistered
     };
   }
 
@@ -633,8 +639,9 @@ export class LicenseService {
       throw new Error(`Esta clave de producto ha expirado (venció el ${expStr}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.`);
     }
 
-    if (existingCloudRecord.status === 'active' && existingCloudRecord.linkedUser && existingCloudRecord.linkedUser !== doctorName) {
-      throw new Error(`Esta clave ya está vinculada en Cloudflare a otro usuario (${existingCloudRecord.linkedUser}). Solo se permite 1 usuario por clave.`);
+    if (existingCloudRecord.status === 'active' && existingCloudRecord.linkedUser &&
+        existingCloudRecord.linkedUser.trim().toLowerCase() !== (doctorName || '').trim().toLowerCase()) {
+      throw new Error(`Esta clave ya está vinculada en Cloudflare al usuario "${existingCloudRecord.linkedUser}". Cada clave es exclusiva para un único usuario.`);
     }
 
     // 2.1 Verificar y registrar dispositivo en la lista de equipos permitidos
@@ -671,15 +678,21 @@ export class LicenseService {
           })
         });
 
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.success) {
-            token = data.token || token;
-            plan = data.plan || plan;
-            if (data.features) features = data.features;
-          }
+        const data = await res.json().catch(() => null);
+        if (!res.ok || (data && !data.success)) {
+          const errMsg = data?.message || (res.status === 401 ? 'La contraseña de privacidad ingresada es incorrecta para esta cuenta.' : 'Error al validar la licencia en Cloudflare.');
+          throw new Error(errMsg);
+        }
+
+        if (data && data.success) {
+          token = data.token || token;
+          plan = data.plan || plan;
+          if (data.features) features = data.features;
         }
       } catch (err) {
+        if (err.message && (err.message.includes('contraseña') || err.message.includes('Límite') || err.message.includes('vinculada') || err.message.includes('expirado') || err.message.includes('pausada'))) {
+          throw err;
+        }
         console.warn('Aviso: endpoint activate directo:', err);
       }
     }

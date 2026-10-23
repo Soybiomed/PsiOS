@@ -6648,6 +6648,7 @@ class AppNavigationController {
     this.adminMasterKey = null;
     this.adminLoadedKeys = [];
     this.pendingLicenseKey = null;
+    this.pendingLinkedUser = null;
     this.currentConfiguringKey = null;
     this.pendingConfigUpdates = {};
 
@@ -7026,6 +7027,14 @@ class AppNavigationController {
         this.handleSaveAdminKeyConfig();
       });
     }
+
+    if (this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig.addEventListener('click', (e) => {
+        if (e.target === this.modalAdminKeyConfig) {
+          this.closeAdminKeyConfigModal();
+        }
+      });
+    }
   }
 
   getSavedUser() {
@@ -7103,7 +7112,7 @@ class AppNavigationController {
     const firstName = cleanNameParts[0] || rawName;
     const rawTitle = this.courtesySelect ? this.courtesySelect.value : 'Dr/Dra';
     const resolvedTitle = this.resolveTitle(rawTitle, this.selectedGender);
-    const doctorFullName = `${resolvedTitle} ${rawName}`.trim();
+    const doctorFullName = this.pendingLinkedUser ? this.pendingLinkedUser.trim() : `${resolvedTitle} ${cleanNameParts.join(' ')}`.trim();
 
     if (this.btnContinuar) {
       this.btnContinuar.disabled = true;
@@ -7324,15 +7333,64 @@ class AppNavigationController {
       const validated = await licenseService.validateKeyForActivation(key);
       this.pendingLicenseKey = key;
       this.pendingLicensePlan = validated.plan;
+      this.pendingLinkedUser = validated.linkedUser || null;
       if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
 
       // Transición a Paso 2 ('¿Quién eres?' + Contraseña de Privacidad)
       if (this.regStepLicense) this.regStepLicense.style.display = 'none';
       if (this.regStepLogin) this.regStepLogin.style.display = 'none';
       if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
-      setTimeout(() => {
-        if (this.nameInput) this.nameInput.focus();
-      }, 200);
+
+      // Si la clave ya está vinculada al profesional (activando equipo adicional permitido):
+      if (this.pendingLinkedUser) {
+        const cleanName = this.pendingLinkedUser.replace(/^(dr|dra|lic|est)\.?\s+/i, '').trim();
+        if (this.nameInput) {
+          this.nameInput.value = cleanName || this.pendingLinkedUser;
+          this.nameInput.readOnly = true;
+          this.nameInput.title = `Clave exclusiva vinculada al usuario "${this.pendingLinkedUser}".`;
+        }
+        if (this.courtesySelect) {
+          if (/^dra\.?/i.test(this.pendingLinkedUser)) {
+            this.courtesySelect.value = 'Dr/Dra';
+            this.selectGender('female');
+          } else if (/^dr\.?/i.test(this.pendingLinkedUser)) {
+            this.courtesySelect.value = 'Dr/Dra';
+            this.selectGender('male');
+          } else if (/^lic\.?/i.test(this.pendingLinkedUser)) {
+            this.courtesySelect.value = 'Lic';
+          } else if (/^est\.?/i.test(this.pendingLinkedUser)) {
+            this.courtesySelect.value = 'Est';
+          }
+        }
+
+        const devNum = (validated.currentDeviceCount || 0) + (validated.isThisDeviceRegistered ? 0 : 1);
+        const subprompt = document.querySelector('#view-register .register-subprompt');
+        if (subprompt) {
+          subprompt.innerHTML = `💻 Vinculando estación <strong>(${devNum} de ${validated.maxDevices})</strong> para <strong>${this.pendingLinkedUser}</strong>.<br><span style="font-size: 0.85em; opacity: 0.85;">Ingresa la contraseña de privacidad creada en tu primer equipo para autorizar esta estación.</span>`;
+        }
+        setTimeout(() => {
+          if (this.userPasswordInput) {
+            this.userPasswordInput.placeholder = 'Ingresa tu contraseña de privacidad';
+            this.userPasswordInput.focus();
+          }
+        }, 220);
+      } else {
+        if (this.nameInput) {
+          this.nameInput.readOnly = false;
+          this.nameInput.title = '';
+          this.nameInput.value = '';
+        }
+        const subprompt = document.querySelector('#view-register .register-subprompt');
+        if (subprompt) {
+          subprompt.textContent = 'Configura tu nombre profesional y contraseña para continuar';
+        }
+        if (this.userPasswordInput) {
+          this.userPasswordInput.placeholder = 'Crea una contraseña segura (mín. 4 caracteres)';
+        }
+        setTimeout(() => {
+          if (this.nameInput) this.nameInput.focus();
+        }, 220);
+      }
     } catch (err) {
       if (this.regLicenseError) {
         this.regLicenseError.textContent = err.message || 'Esta clave no existe o no ha sido generada por el Administrador Maestro.';
@@ -7585,7 +7643,7 @@ class AppNavigationController {
 
     this.updateModalConfigView();
 
-    this.modalAdminKeyConfig.classList.add('visible');
+    this.modalAdminKeyConfig.classList.add('active', 'visible');
     this.modalAdminKeyConfig.setAttribute('aria-hidden', 'false');
   }
 
@@ -7694,7 +7752,7 @@ class AppNavigationController {
 
   closeAdminKeyConfigModal() {
     if (this.modalAdminKeyConfig) {
-      this.modalAdminKeyConfig.classList.remove('visible');
+      this.modalAdminKeyConfig.classList.remove('active', 'visible');
       this.modalAdminKeyConfig.setAttribute('aria-hidden', 'true');
     }
     this.currentConfiguringKey = null;
@@ -7800,10 +7858,15 @@ class AppNavigationController {
     authService.logout();
 
     if (this.regLicenseInput) this.regLicenseInput.value = '';
-    if (this.nameInput) this.nameInput.value = '';
+    if (this.nameInput) {
+      this.nameInput.value = '';
+      this.nameInput.readOnly = false;
+      this.nameInput.title = '';
+    }
     if (this.userPasswordInput) this.userPasswordInput.value = '';
     if (this.loginPasswordInput) this.loginPasswordInput.value = '';
     this.pendingLicenseKey = null;
+    this.pendingLinkedUser = null;
 
     if (this.welcomeTopUserPill) {
       this.welcomeTopUserPill.setAttribute('aria-hidden', 'true');
