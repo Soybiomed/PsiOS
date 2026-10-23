@@ -123,6 +123,36 @@ export class ClinicSyncService {
   }
 
   /**
+   * Eliminar un paciente en Firestore.
+   */
+  async deletePatientFromCloud(patientId) {
+    if (!patientId || !this.db || !firebaseCtx.isFirebaseConnected || !navigator.onLine) return;
+    const user = authService.getCurrentUser();
+    if (!user || !user.uid) return;
+    try {
+      const patientRef = doc(this.db, 'clinicians', user.uid, 'patients', patientId);
+      await deleteDoc(patientRef);
+    } catch (err) {
+      console.warn('[PsiOS Sync] Error al eliminar paciente en Firestore:', err);
+    }
+  }
+
+  /**
+   * Eliminar una cita en Firestore.
+   */
+  async deleteAppointmentFromCloud(apptId) {
+    if (!apptId || !this.db || !firebaseCtx.isFirebaseConnected || !navigator.onLine) return;
+    const user = authService.getCurrentUser();
+    if (!user || !user.uid) return;
+    try {
+      const apptRef = doc(this.db, 'clinicians', user.uid, 'appointments', apptId);
+      await deleteDoc(apptRef);
+    } catch (err) {
+      console.warn('[PsiOS Sync] Error al eliminar cita en Firestore:', err);
+    }
+  }
+
+  /**
    * Descargar pacientes de Firestore y fusionar con la base local.
    */
   async pullPatientsFromCloud(localPatients = []) {
@@ -175,7 +205,7 @@ export class ClinicSyncService {
   /**
    * Respaldo directo en Cloudflare KV de todos los datos clínicos (Pacientes y Citas)
    */
-  async syncToCloudflare(patients = [], appointments = [], licenseKey = '', username = '', password = '') {
+  async syncToCloudflare(patients = [], appointments = [], licenseKey = '', username = '', password = '', updatedAt = null) {
     if (!navigator.onLine) return false;
     const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
     try {
@@ -186,9 +216,16 @@ export class ClinicSyncService {
           'Content-Type': 'application/json',
           'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
         },
-        body: JSON.stringify({ patients, appointments, licenseKey, username, password })
+        body: JSON.stringify({ 
+          patients, 
+          appointments, 
+          licenseKey, 
+          username, 
+          password,
+          updatedAt: updatedAt || new Date().toISOString()
+        })
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
         this.lastSyncTime = new Date();
         this.setStatus('synced');

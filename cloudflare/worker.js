@@ -353,6 +353,9 @@ export default {
             licenseData.status = 'active';
           }
         }
+        if (body.userProfile) {
+          licenseData.userProfile = body.userProfile;
+        }
 
         const timestamp = Date.now();
         const token = await generateActivationToken(normalizedKey, effectiveDeviceId, timestamp);
@@ -387,6 +390,7 @@ export default {
           isPerpetual: !licenseData.expiresAt,
           token,
           hasPassword: !!licenseData.passwordHash,
+          userProfile: licenseData.userProfile || null,
           features: licenseData.features || ['offline_books', 'clinical_sync', 'unlimited_patients'],
           message: 'Licencia verificada y enlazada correctamente.'
         });
@@ -487,6 +491,7 @@ export default {
               tier: record.tier || 'pro',
               status,
               linkedUser: record.linkedUser || null,
+              userProfile: record.userProfile || null,
               hasPassword: !!record.passwordHash,
               deviceId: record.deviceId || '—',
               devices: Array.isArray(record.devices) ? record.devices : (record.deviceId ? [record.deviceId] : []),
@@ -724,7 +729,7 @@ export default {
         const appointments = Array.isArray(payload.appointments) ? payload.appointments : [];
 
         const clinicRecord = {
-          updatedAt: new Date().toISOString(),
+          updatedAt: payload.updatedAt || new Date().toISOString(),
           username: payload.username || 'Profesional Clínico',
           licenseKey,
           patients,

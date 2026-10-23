@@ -6997,6 +6997,22 @@ html, body {
 /* ==========================================================================
    Admin Key Configuration Modal (#modal-admin-key-config)
    ========================================================================== */
+#modal-admin-key-config.active,
+#modal-admin-key-config.visible {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 100000 !important;
+}
+
+#modal-admin-key-config:not(.active):not(.visible) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 .admin-key-modal-card {
   max-width: 580px;
   width: 95%;

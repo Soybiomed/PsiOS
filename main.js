@@ -4548,7 +4548,17 @@ class ClinicController {
     this.initSyncIndicator();
     this.bindEvents();
     this.renderAll();
-    this.syncCloudData();
+    this.syncCloudData(false);
+
+    // Sincronización automática periódica y al enfocar ventana para reflejar cambios en todos los equipos
+    window.addEventListener('focus', () => {
+      this.syncCloudData(false);
+    });
+    setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        this.syncCloudData(false);
+      }
+    }, 15000);
   }
 
   // --- PERSISTENCE ---
@@ -4566,7 +4576,12 @@ class ClinicController {
       console.warn('Error loading patients from localStorage:', e);
     }
 
-    // Default seeded psychological patients
+    // Si la estación ya está licenciada o activándose, no sembrar pacientes de prueba para no ensuciar la nube
+    if (licenseService.isActivated()) {
+      return [];
+    }
+
+    // Default seeded psychological patients for brand new users
     const initial = [
       {
         id: 'pat-1',
@@ -4629,14 +4644,16 @@ class ClinicController {
         createdAt: Date.now() - 86400000 * 1
       }
     ];
-    this.savePatients(initial);
+    // Retornar pacientes de demostración sin persistir en disco para permitir sincronización limpia desde la nube
     return initial;
   }
 
   savePatients(list, syncItem = null) {
     this.patients = list;
+    this.lastLocalUpdate = Date.now();
     try {
       localStorage.setItem('psios_patients_v1', JSON.stringify(list));
+      localStorage.setItem('psios_clinic_local_updated_at', this.lastLocalUpdate.toString());
     } catch (e) {
       console.warn('Error saving patients:', e);
     }
@@ -4657,6 +4674,11 @@ class ClinicController {
       }
     } catch (e) {
       console.warn('Error loading appointments from localStorage:', e);
+    }
+
+    // Si la estación ya está licenciada o activándose, no sembrar citas de prueba para no ensuciar la nube
+    if (licenseService.isActivated()) {
+      return [];
     }
 
     const todayStr = this.getTodayDateString();
@@ -4706,14 +4728,16 @@ class ClinicController {
         notes: 'Apertura de historia clínica y anamnesis general.'
       }
     ];
-    this.saveAppointments(initial);
+    // Retornar citas de demostración sin persistir en disco para permitir sincronización limpia desde la nube
     return initial;
   }
 
   saveAppointments(list, syncItem = null) {
     this.appointments = list;
+    this.lastLocalUpdate = Date.now();
     try {
       localStorage.setItem('psios_appointments_v1', JSON.stringify(list));
+      localStorage.setItem('psios_clinic_local_updated_at', this.lastLocalUpdate.toString());
     } catch (e) {
       console.warn('Error saving appointments:', e);
     }
@@ -4736,8 +4760,14 @@ class ClinicController {
         if (b64) pwd = atob(b64);
       } catch {}
       const username = creds.username || 'Profesional';
+      const nowTime = this.lastLocalUpdate || Date.now();
+      const isoTime = new Date(nowTime).toISOString();
+
       if (licenseKey) {
-        await clinicSyncService.syncToCloudflare(this.patients, this.appointments, licenseKey, username, pwd);
+        const ok = await clinicSyncService.syncToCloudflare(this.patients, this.appointments, licenseKey, username, pwd, isoTime);
+        if (ok) {
+          localStorage.setItem('psios_clinic_remote_synced_at', nowTime.toString());
+        }
       }
     } catch (e) {
       console.warn('Error enviando datos a Cloudflare KV:', e);
@@ -4763,7 +4793,7 @@ class ClinicController {
     });
   }
 
-  async syncCloudData(isManual = false) {
+  async syncCloudData(isManual = false, forceRemote = false) {
     const syncBtn = document.getElementById('btn-clinic-manual-sync');
     if (syncBtn && isManual) {
       syncBtn.classList.add('syncing');
@@ -4781,50 +4811,51 @@ class ClinicController {
       } catch {}
       const username = creds.username || 'Profesional';
 
-      // 1. Restaurar datos desde Cloudflare KV (Escritorio <-> Web)
+      // 1. Restaurar y sincronizar datos desde Cloudflare KV (Multidispositivo)
       if (licenseKey) {
         const remote = await clinicSyncService.pullFromCloudflare(licenseKey, pwd);
-        if (remote && (Array.isArray(remote.patients) || Array.isArray(remote.appointments))) {
-          let hasChanges = false;
-          if (Array.isArray(remote.patients) && remote.patients.length > 0) {
-            const mergedPatients = new Map();
-            this.patients.forEach(p => mergedPatients.set(p.id, p));
-            remote.patients.forEach(rp => {
-              const local = mergedPatients.get(rp.id);
-              if (!local || (rp.updatedAt && (!local.updatedAt || rp.updatedAt >= local.updatedAt))) {
-                mergedPatients.set(rp.id, rp);
-              }
-            });
-            this.patients = Array.from(mergedPatients.values());
-            try {
-              localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
-            } catch {}
-            hasChanges = true;
-          }
+        if (remote) {
+          const remoteUpdatedAtStr = remote.updatedAt;
+          const remoteTime = remoteUpdatedAtStr ? new Date(remoteUpdatedAtStr).getTime() : 0;
+          const lastLocalTime = parseInt(localStorage.getItem('psios_clinic_local_updated_at') || '0', 10);
+          const hasLocalData = localStorage.getItem('psios_patients_v1') !== null;
 
-          if (Array.isArray(remote.appointments) && remote.appointments.length > 0) {
-            const mergedAppts = new Map();
-            this.appointments.forEach(a => mergedAppts.set(a.id, a));
-            remote.appointments.forEach(ra => {
-              mergedAppts.set(ra.id, ra);
-            });
-            this.appointments = Array.from(mergedAppts.values());
-            try {
-              localStorage.setItem('psios_appointments_v1', JSON.stringify(this.appointments));
-            } catch {}
-            hasChanges = true;
-          }
+          const isRemoteNewer = remoteTime > lastLocalTime;
+          const isFirstSync = !hasLocalData || lastLocalTime === 0;
 
-          if (hasChanges) {
+          if (isRemoteNewer || isFirstSync || forceRemote) {
+            // Adoptar exactamente la lista remota de pacientes y citas (incluyendo adiciones y eliminaciones)
+            if (Array.isArray(remote.patients)) {
+              this.patients = remote.patients.map(p => ({
+                ...p,
+                evolutionNotes: Array.isArray(p.evolutionNotes) ? p.evolutionNotes : []
+              }));
+              try {
+                localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
+              } catch {}
+            }
+
+            if (Array.isArray(remote.appointments)) {
+              this.appointments = remote.appointments;
+              try {
+                localStorage.setItem('psios_appointments_v1', JSON.stringify(this.appointments));
+              } catch {}
+            }
+
+            // Registrar exactamente la marca de tiempo remota para coherencia distributiva entre computadoras
+            const markTime = remoteTime > 0 ? remoteTime : Date.now();
+            this.lastLocalUpdate = markTime;
+            localStorage.setItem('psios_clinic_local_updated_at', markTime.toString());
+            localStorage.setItem('psios_clinic_remote_synced_at', markTime.toString());
             this.renderAll();
+          } else if (lastLocalTime > remoteTime) {
+            // Este equipo tiene cambios locales más recientes que la nube: sincronizar hacia Cloudflare
+            await this.pushToCloudflare();
           }
         }
-
-        // 2. Respaldo seguro del estado consolidado actual en Cloudflare
-        await clinicSyncService.syncToCloudflare(this.patients, this.appointments, licenseKey, username, pwd);
       }
 
-      // 3. Respaldo complementario en Firestore si está configurado
+      // 2. Respaldo complementario en Firestore si está configurado
       try {
         const merged = await clinicSyncService.pullPatientsFromCloud(this.patients);
         if (merged && merged.length > 0) {
@@ -5847,6 +5878,7 @@ class ClinicController {
         if (pat && confirm(`¿Deseas eliminar a ${pat.name} del directorio clínico?`)) {
           const updated = this.patients.filter(x => x.id !== patId);
           this.savePatients(updated);
+          clinicSyncService.deletePatientFromCloud(patId);
           this.renderAll();
         }
       });
@@ -6024,6 +6056,7 @@ class ClinicController {
         if (confirm('¿Deseas cancelar y eliminar esta cita de la agenda?')) {
           const updated = this.appointments.filter(x => x.id !== apptId);
           this.saveAppointments(updated);
+          clinicSyncService.deleteAppointmentFromCloud(apptId);
           this.renderAll();
         }
       });
@@ -7121,9 +7154,6 @@ class AppNavigationController {
     }
 
     try {
-      // 1. Activar licencia (Cloudflare KV + Modo Autónomo Local)
-      await licenseService.activate(key, doctorFullName, rawPassword);
-
       const userData = {
         title: rawTitle,
         displayTitle: resolvedTitle,
@@ -7134,6 +7164,9 @@ class AppNavigationController {
         hasPassword: true,
         registeredAt: Date.now()
       };
+
+      // 1. Activar licencia (Cloudflare KV + Modo Autónomo Local) y respaldar perfil en la nube
+      await licenseService.activate(key, doctorFullName, rawPassword, userData);
 
       this.saveUser(userData);
 
@@ -7336,61 +7369,80 @@ class AppNavigationController {
       this.pendingLinkedUser = validated.linkedUser || null;
       if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
 
+      // CASO A: CLAVE YA VINCULADA AL PROFESIONAL (SEGUNDO O POSTERIOR EQUIPO)
+      // "si es la misma key en otro dispositivo solo te pida la key y automáticamente se cargue el nombre/datos de usuario"
+      if (this.pendingLinkedUser) {
+        if (this.btnVerifyLicense) {
+          this.btnVerifyLicense.disabled = true;
+          const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
+          if (textSpan) textSpan.textContent = `Cargando perfil de ${this.pendingLinkedUser}...`;
+        }
+
+        // 1. Activar directamente este equipo en Cloudflare KV con la clave y usuario vinculados
+        const activated = await licenseService.activate(key, this.pendingLinkedUser);
+
+        // 2. Reconstruir/cargar perfil del usuario
+        const cleanNameParts = this.pendingLinkedUser.replace(/^(dr|dra|lic|est)\.?\s+/i, '').split(/\s+/);
+        const firstName = cleanNameParts[0] || this.pendingLinkedUser;
+        const gender = /^dra\.?/i.test(this.pendingLinkedUser) ? 'female' : 'male';
+        const userData = validated.userProfile || activated?.userProfile || {
+          title: 'Dr/Dra',
+          displayTitle: gender === 'female' ? 'Dra.' : 'Dr.',
+          rawName: cleanNameParts.join(' '),
+          firstName,
+          gender,
+          doctorFullName: this.pendingLinkedUser,
+          hasPassword: !!validated.hasPassword,
+          registeredAt: Date.now()
+        };
+
+        // 3. Guardar datos de usuario localmente
+        this.saveUser(userData);
+        if (userData.pwdHash) {
+          try {
+            localStorage.setItem('psios_user_pwd_hash', userData.pwdHash);
+          } catch {}
+        }
+        licenseService.saveCredentials(key, this.pendingLinkedUser);
+        authService.saveLocalUser({
+          uid: `user-${Date.now().toString(36)}`,
+          email: `${firstName.toLowerCase().replace(/[^a-z0-9]/g, '')}@psios.local`,
+          displayName: this.pendingLinkedUser,
+          specialty: 'Psicología Clínica & Semiología',
+          isCloudUser: false,
+          lastLogin: new Date().toISOString()
+        });
+
+        // 4. Descargar y sincronizar automáticamente todas las historias clínicas del usuario desde Cloudflare KV
+        if (this.clinic) {
+          await this.clinic.syncCloudData(false, true);
+        }
+
+        // 5. Entrar directamente al espacio de trabajo del usuario
+        this.showWelcomeView(userData);
+        return;
+      }
+
+      // CASO B: PRIMER EQUIPO DONDE SE INGRESA LA CLAVE (Aún sin usuario asignado)
       // Transición a Paso 2 ('¿Quién eres?' + Contraseña de Privacidad)
       if (this.regStepLicense) this.regStepLicense.style.display = 'none';
       if (this.regStepLogin) this.regStepLogin.style.display = 'none';
       if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
-
-      // Si la clave ya está vinculada al profesional (activando equipo adicional permitido):
-      if (this.pendingLinkedUser) {
-        const cleanName = this.pendingLinkedUser.replace(/^(dr|dra|lic|est)\.?\s+/i, '').trim();
-        if (this.nameInput) {
-          this.nameInput.value = cleanName || this.pendingLinkedUser;
-          this.nameInput.readOnly = true;
-          this.nameInput.title = `Clave exclusiva vinculada al usuario "${this.pendingLinkedUser}".`;
-        }
-        if (this.courtesySelect) {
-          if (/^dra\.?/i.test(this.pendingLinkedUser)) {
-            this.courtesySelect.value = 'Dr/Dra';
-            this.selectGender('female');
-          } else if (/^dr\.?/i.test(this.pendingLinkedUser)) {
-            this.courtesySelect.value = 'Dr/Dra';
-            this.selectGender('male');
-          } else if (/^lic\.?/i.test(this.pendingLinkedUser)) {
-            this.courtesySelect.value = 'Lic';
-          } else if (/^est\.?/i.test(this.pendingLinkedUser)) {
-            this.courtesySelect.value = 'Est';
-          }
-        }
-
-        const devNum = (validated.currentDeviceCount || 0) + (validated.isThisDeviceRegistered ? 0 : 1);
-        const subprompt = document.querySelector('#view-register .register-subprompt');
-        if (subprompt) {
-          subprompt.innerHTML = `💻 Vinculando estación <strong>(${devNum} de ${validated.maxDevices})</strong> para <strong>${this.pendingLinkedUser}</strong>.<br><span style="font-size: 0.85em; opacity: 0.85;">Ingresa la contraseña de privacidad creada en tu primer equipo para autorizar esta estación.</span>`;
-        }
-        setTimeout(() => {
-          if (this.userPasswordInput) {
-            this.userPasswordInput.placeholder = 'Ingresa tu contraseña de privacidad';
-            this.userPasswordInput.focus();
-          }
-        }, 220);
-      } else {
-        if (this.nameInput) {
-          this.nameInput.readOnly = false;
-          this.nameInput.title = '';
-          this.nameInput.value = '';
-        }
-        const subprompt = document.querySelector('#view-register .register-subprompt');
-        if (subprompt) {
-          subprompt.textContent = 'Configura tu nombre profesional y contraseña para continuar';
-        }
-        if (this.userPasswordInput) {
-          this.userPasswordInput.placeholder = 'Crea una contraseña segura (mín. 4 caracteres)';
-        }
-        setTimeout(() => {
-          if (this.nameInput) this.nameInput.focus();
-        }, 220);
+      if (this.nameInput) {
+        this.nameInput.readOnly = false;
+        this.nameInput.title = '';
+        this.nameInput.value = '';
       }
+      const subprompt = document.querySelector('#view-register .register-subprompt');
+      if (subprompt) {
+        subprompt.textContent = 'Configura tu nombre profesional y contraseña para continuar';
+      }
+      if (this.userPasswordInput) {
+        this.userPasswordInput.placeholder = 'Crea una contraseña segura (mín. 4 caracteres)';
+      }
+      setTimeout(() => {
+        if (this.nameInput) this.nameInput.focus();
+      }, 220);
     } catch (err) {
       if (this.regLicenseError) {
         this.regLicenseError.textContent = err.message || 'Esta clave no existe o no ha sido generada por el Administrador Maestro.';
@@ -7624,8 +7676,19 @@ class AppNavigationController {
   // ==========================================
 
   openAdminKeyConfigModal(key) {
-    const record = this.adminLoadedKeys.find(k => k.key === key);
-    if (!record || !this.modalAdminKeyConfig) return;
+    if (!this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig = document.getElementById('modal-admin-key-config');
+    }
+    const cleanKey = (key || '').trim().toUpperCase();
+    const record = this.adminLoadedKeys.find(k => (k.key || '').trim().toUpperCase() === cleanKey);
+    if (!record) {
+      console.warn('Registro no encontrado para la clave:', key);
+      return;
+    }
+    if (!this.modalAdminKeyConfig) {
+      console.error('Elemento #modal-admin-key-config no existe en el DOM.');
+      return;
+    }
 
     this.currentConfiguringKey = record;
     this.pendingConfigUpdates = {
@@ -7641,8 +7704,13 @@ class AppNavigationController {
       this.adminModalUserVal.textContent = record.linkedUser || '— Sin vincular (Disponible) —';
     }
 
-    this.updateModalConfigView();
+    try {
+      this.updateModalConfigView();
+    } catch (e) {
+      console.warn('Error al actualizar vista del modal:', e);
+    }
 
+    this.modalAdminKeyConfig.style.display = 'flex';
     this.modalAdminKeyConfig.classList.add('active', 'visible');
     this.modalAdminKeyConfig.setAttribute('aria-hidden', 'false');
   }
@@ -7751,7 +7819,11 @@ class AppNavigationController {
   }
 
   closeAdminKeyConfigModal() {
+    if (!this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig = document.getElementById('modal-admin-key-config');
+    }
     if (this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig.style.display = 'none';
       this.modalAdminKeyConfig.classList.remove('active', 'visible');
       this.modalAdminKeyConfig.setAttribute('aria-hidden', 'true');
     }

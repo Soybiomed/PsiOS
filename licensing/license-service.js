@@ -567,6 +567,8 @@ export class LicenseService {
       expiresAt: existingRecord.expiresAt || null,
       maxDevices: maxDevs,
       linkedUser: existingRecord.linkedUser || null,
+      userProfile: existingRecord.userProfile || null,
+      hasPassword: !!existingRecord.hasPassword || !!existingRecord.passwordHash,
       currentDeviceCount: devList.length,
       devices: devList,
       isThisDeviceRegistered
@@ -595,7 +597,7 @@ export class LicenseService {
     return false;
   }
 
-  async activate(key, doctorName = 'Profesional Clínico', password = '') {
+  async activate(key, doctorName = 'Profesional Clínico', password = '', userProfile = null) {
     if (!key || typeof key !== 'string') {
       throw new Error('Debe proporcionar una clave de producto válida.');
     }
@@ -660,6 +662,7 @@ export class LicenseService {
     let token = `TOK-CF-${normalizedKey.substring(0, 8)}-${Date.now().toString(16).toUpperCase()}`;
     let plan = existingCloudRecord.plan || 'PsiOS Profesional Clínico';
     let features = ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup'];
+    let remoteUserProfile = userProfile || existingCloudRecord.userProfile || null;
 
     if (workerUrl && navigator.onLine) {
       try {
@@ -674,6 +677,7 @@ export class LicenseService {
             deviceId: this.deviceId,
             doctorName,
             password,
+            userProfile,
             appVersion: 'Beta 0.0.3'
           })
         });
@@ -688,6 +692,7 @@ export class LicenseService {
           token = data.token || token;
           plan = data.plan || plan;
           if (data.features) features = data.features;
+          if (data.userProfile) remoteUserProfile = data.userProfile;
         }
       } catch (err) {
         if (err.message && (err.message.includes('contraseña') || err.message.includes('Límite') || err.message.includes('vinculada') || err.message.includes('expirado') || err.message.includes('pausada'))) {
@@ -701,6 +706,7 @@ export class LicenseService {
     existingCloudRecord.status = 'active';
     existingCloudRecord.linkedUser = doctorName;
     existingCloudRecord.doctorName = doctorName;
+    if (remoteUserProfile) existingCloudRecord.userProfile = remoteUserProfile;
     existingCloudRecord.activatedAt = new Date().toISOString();
     existingCloudRecord.deviceId = this.deviceId;
     
@@ -716,6 +722,7 @@ export class LicenseService {
       devices: registeredDevs,
       maxDevices: maxDevs,
       doctorName,
+      userProfile: remoteUserProfile,
       activatedAt: new Date().toISOString(),
       expiresAt: existingCloudRecord.expiresAt || null,
       isPerpetual: !existingCloudRecord.expiresAt,
