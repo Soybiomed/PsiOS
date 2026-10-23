@@ -6713,6 +6713,9 @@ class AppNavigationController {
 
     // Recordado automático de clave y usuario al abrir la app
     this.restoreSavedInputs();
+
+    // Monitoreo en tiempo real de revocación, pausa y restablecimiento de equipos autorizados
+    this.startLicenseHeartbeatWatcher();
   }
 
   restoreSavedInputs() {
@@ -6742,7 +6745,7 @@ class AppNavigationController {
   bindEvents() {
     // 1. 'Ingresar' Button Click
     if (this.btnIngresar) {
-      this.btnIngresar.addEventListener('click', () => {
+      this.btnIngresar.addEventListener('click', async () => {
         if (licenseService.isAdminSession()) {
           const lic = licenseService.getLicenseInfo();
           this.adminMasterKey = lic?.licenseKey || 'PSIOS-ADMIN-MASTER-2026';
@@ -6753,9 +6756,17 @@ class AppNavigationController {
         const savedUser = this.getSavedUser();
         const isLicensed = licenseService.isActivated();
         if (savedUser && isLicensed) {
-          // Verificar si la licencia del profesional está pausada o vencida
-          const validity = licenseService.checkCurrentLicenseValidity();
+          // Verificar en tiempo real si la licencia fue pausada, expirada o desvinculada por el Administrador Maestro
+          if (this.footerStatus) this.footerStatus.textContent = 'Verificando estado de licencia en la nube...';
+          const validity = await licenseService.validateLiveLicenseStatus();
+          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v0.0.3 • Modo Clínico Activo';
+
           if (!validity.valid) {
+            if (validity.reason === 'device_removed') {
+              alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+              this.handleFullReset();
+              return;
+            }
             alert(validity.message || 'Tu licencia de PsiOS ha expirado o se encuentra pausada. Contacta al Administrador Maestro para renovarla.');
             return;
           }
@@ -7038,8 +7049,8 @@ class AppNavigationController {
             this.pendingConfigUpdates.expiresAt = new Date(baseTime + addDays * 86400000).toISOString();
           }
 
-          // Al extender tiempo, si estaba pausada o expirada, reactivar automáticamente
-          if (this.pendingConfigUpdates.status === 'paused' || this.pendingConfigUpdates.status === 'expired') {
+          // Al extender tiempo, si estaba expirada, reactivar automáticamente (no afecta pausas explícitas)
+          if (this.pendingConfigUpdates.status === 'expired') {
             this.pendingConfigUpdates.status = this.currentConfiguringKey?.linkedUser ? 'active' : 'available';
           }
 
@@ -7052,7 +7063,7 @@ class AppNavigationController {
       this.adminModalCustomDate.addEventListener('change', (e) => {
         if (e.target.value) {
           this.pendingConfigUpdates.expiresAt = new Date(e.target.value + 'T23:59:59Z').toISOString();
-          if (new Date(this.pendingConfigUpdates.expiresAt) > new Date() && this.pendingConfigUpdates.status === 'paused') {
+          if (this.pendingConfigUpdates.status === 'expired' && new Date(this.pendingConfigUpdates.expiresAt) > new Date()) {
             this.pendingConfigUpdates.status = this.currentConfiguringKey?.linkedUser ? 'active' : 'available';
           }
         } else {
@@ -7281,6 +7292,24 @@ class AppNavigationController {
     }
 
     try {
+      // 1. Verificación autoritativa en vivo antes de autenticar al usuario
+      const validity = await licenseService.validateLiveLicenseStatus();
+      if (!validity.valid) {
+        if (validity.reason === 'device_removed') {
+          alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+          this.handleFullReset();
+          return;
+        }
+        if (this.loginPasswordError) {
+          this.loginPasswordError.textContent = validity.message || 'Tu licencia de PsiOS no es válida o está pausada.';
+          this.loginPasswordError.classList.add('visible');
+        } else {
+          alert(validity.message || 'Tu licencia de PsiOS no es válida o está pausada.');
+        }
+        return;
+      }
+
+      // 2. Verificar contraseña
       const isValid = await licenseService.verifySavedPassword(rawPassword);
       if (!isValid) {
         if (this.loginPasswordError) {
@@ -7974,6 +8003,61 @@ class AppNavigationController {
     }
 
     this.showRegistrationView(true);
+  }
+
+  /**
+   * Monitor en segundo plano (Heartbeat):
+   * Verifica periódicamente con Cloudflare KV si el Administrador Maestro pausó la licencia,
+   * restableció los equipos autorizados o revirtió el acceso del usuario, cerrando la sesión
+   * de inmediato en caso de revocación.
+   */
+  startLicenseHeartbeatWatcher() {
+    if (this._heartbeatInterval) return;
+
+    const checkLiveStatus = async () => {
+      // Solo monitorear si hay una licencia activa de usuario (no sesión administrativa del Administrador Maestro)
+      if (!licenseService.isActivated() || licenseService.isAdminSession()) return;
+
+      // Solo si el usuario está en una pantalla activa (welcome, biblioteca, clínica, etc.)
+      if (this.currentViewId === 'view-splash' || this.currentViewId === 'view-register') return;
+
+      try {
+        const validity = await licenseService.validateLiveLicenseStatus();
+        if (!validity.valid) {
+          console.warn('[Heartbeat] Estado de licencia inválido detectado:', validity);
+
+          // Cerrar cualquier modal que esté abierto para evitar pantallas superpuestas
+          document.querySelectorAll('.modal, .modal-backdrop, .modal-overlay').forEach(m => {
+            m.classList.remove('active', 'visible');
+            if (m.style) m.style.display = 'none';
+            m.setAttribute('aria-hidden', 'true');
+          });
+
+          if (validity.reason === 'device_removed') {
+            alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+            this.handleFullReset();
+          } else if (validity.reason === 'paused') {
+            alert(validity.message || 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.');
+            this.handleLogout();
+          } else if (validity.reason === 'expired') {
+            alert(validity.message || 'Tu licencia de PsiOS ha expirado. Solicita al Administrador Maestro renovar la vigencia.');
+            this.handleLogout();
+          } else if (validity.reason === 'revoked') {
+            alert(validity.message || 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.');
+            this.handleFullReset();
+          }
+        }
+      } catch (err) {
+        console.warn('[Heartbeat] Error en verificación de licencia:', err);
+      }
+    };
+
+    // Chequeo periódico cada 15 segundos
+    this._heartbeatInterval = setInterval(checkLiveStatus, 15000);
+
+    // Chequeo inmediato al reenfocar la ventana o recuperar la conexión a internet
+    window.addEventListener('focus', () => { checkLiveStatus(); });
+    window.addEventListener('online', () => { checkLiveStatus(); });
   }
 
   showWelcomeView(user) {

@@ -387,9 +387,9 @@ export class LicenseService {
       target.status = updates.status;
     }
 
-    // Si se le agregó más tiempo en el futuro, reactivar automáticamente ("que siga funcionando")
-    if (target.expiresAt && new Date(target.expiresAt) > new Date()) {
-      if (target.status === 'paused' || target.status === 'expired') {
+    // Solo si el usuario explícitamente extendió la fecha de expiración y NO solicitó pausar, reactivar si estaba expirada
+    if (updates.expiresAt && new Date(updates.expiresAt) > new Date() && updates.status !== 'paused' && target.status !== 'paused') {
+      if (target.status === 'expired') {
         target.status = target.linkedUser ? 'active' : 'available';
       }
     }
@@ -406,6 +406,18 @@ export class LicenseService {
     }
 
     target.updatedAt = new Date().toISOString();
+
+    // Si la clave actualizada coincide con la clave activa en esta máquina, reflejar el cambio de inmediato
+    if (this.currentLicense && (this.currentLicense.licenseKey || '').trim().toUpperCase() === cleanKey) {
+      if (!this.currentLicense.isAdmin) {
+        if (updates.resetDevices) {
+          this.deactivate();
+        } else if (target.status === 'paused') {
+          this.currentLicense.status = 'paused';
+          this.saveLicense(this.currentLicense);
+        }
+      }
+    }
 
     // Guardar en Cloudflare KV
     await this.pushCloudKeys(currentKeys);
@@ -427,8 +439,7 @@ export class LicenseService {
             expiresAt: target.expiresAt,
             status: target.status,
             maxDevices: target.maxDevices,
-            resetDevices: !!updates.resetDevices,
-            autoResume: true
+            resetDevices: !!updates.resetDevices
           })
         });
       } catch (e) {
@@ -754,6 +765,117 @@ export class LicenseService {
         message: `Tu licencia de PsiOS ha expirado (venció el ${exp}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.` 
       };
     }
+    return { valid: true };
+  }
+
+  /**
+   * Consulta en tiempo real a Cloudflare KV para verificar si la licencia fue pausada,
+   * expirada o si el Administrador Maestro restableció los equipos autorizados.
+   */
+  async validateLiveLicenseStatus() {
+    if (!this.currentLicense) return { valid: false, reason: 'no_license' };
+    if (this.currentLicense.isAdmin) return { valid: true };
+
+    const licenseKey = (this.currentLicense.licenseKey || '').trim().toUpperCase();
+    if (!licenseKey) return { valid: false, reason: 'no_license' };
+
+    // 1. Verificación local rápida preliminar
+    const localVal = this.checkCurrentLicenseValidity();
+    if (!localVal.valid) return localVal;
+
+    // 2. Consulta autoritativa en vivo a Cloudflare KV
+    if (typeof navigator !== 'undefined' && navigator.onLine) {
+      const workerUrl = this.getWorkerUrl();
+      if (workerUrl) {
+        try {
+          const liveRes = await fetch(`${workerUrl}/api/license/live-status?licenseKey=${encodeURIComponent(licenseKey)}&deviceId=${encodeURIComponent(this.deviceId)}`);
+          if (liveRes.ok) {
+            const data = await liveRes.json();
+            if (data.valid === false) {
+              if (data.reason === 'paused') {
+                this.currentLicense.status = 'paused';
+                this.saveLicense(this.currentLicense);
+              } else if (data.reason === 'expired') {
+                this.currentLicense.status = 'expired';
+                this.saveLicense(this.currentLicense);
+              }
+              return data;
+            }
+            if (data.valid === true) {
+              if (this.currentLicense.status !== data.status) {
+                this.currentLicense.status = data.status || 'active';
+                this.currentLicense.maxDevices = data.maxDevices || 1;
+                this.saveLicense(this.currentLicense);
+              }
+              return { valid: true };
+            }
+          }
+        } catch (e) {
+          console.warn('Aviso: endpoint /api/license/live-status no respondió, recurriendo a lista global de Cloudflare:', e);
+        }
+      }
+
+      try {
+        const cloudKeys = await this.fetchCloudKeys();
+        const record = cloudKeys.find(k => (k.key || '').trim().toUpperCase() === licenseKey);
+
+        if (!record) {
+          return {
+            valid: false,
+            reason: 'revoked',
+            message: 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.'
+          };
+        }
+
+        // A) Verificación de estado de pausa por el Administrador Maestro
+        if (record.status === 'paused') {
+          this.currentLicense.status = 'paused';
+          this.saveLicense(this.currentLicense);
+          return {
+            valid: false,
+            reason: 'paused',
+            message: 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.'
+          };
+        }
+
+        // B) Verificación de vigencia / fecha de expiración
+        if (record.expiresAt && new Date(record.expiresAt) < new Date()) {
+          this.currentLicense.status = 'expired';
+          this.currentLicense.expiresAt = record.expiresAt;
+          this.saveLicense(this.currentLicense);
+          const expDate = new Date(record.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          return {
+            valid: false,
+            reason: 'expired',
+            message: `Tu licencia de PsiOS ha expirado (venció el ${expDate}). Solicita al Administrador Maestro renovar la vigencia.`
+          };
+        }
+
+        // C) Verificación de equipos registrados (Reestablecer equipos)
+        // Si el Administrador Maestro borró los equipos registrados:
+        const devList = Array.isArray(record.devices) ? record.devices : (record.deviceId ? [record.deviceId] : []);
+        const isThisDeviceAuthorized = devList.includes(this.deviceId);
+
+        if (!isThisDeviceAuthorized) {
+          return {
+            valid: false,
+            reason: 'device_removed',
+            message: 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.'
+          };
+        }
+
+        // D) Si todo es válido y estaba previamente marcada como pausada/expirada, actualizar estado local
+        if (this.currentLicense.status !== record.status || this.currentLicense.expiresAt !== record.expiresAt) {
+          this.currentLicense.status = record.status || 'active';
+          this.currentLicense.expiresAt = record.expiresAt || null;
+          this.currentLicense.maxDevices = record.maxDevices || 1;
+          this.saveLicense(this.currentLicense);
+        }
+      } catch (e) {
+        console.warn('Aviso: no se pudo verificar estado de licencia en vivo:', e);
+      }
+    }
+
     return { valid: true };
   }
 

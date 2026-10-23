@@ -426,6 +426,49 @@ export default {
       }
     }
 
+    // 5.B. Consulta de Estado en Vivo de Licencia: GET /api/license/live-status
+    if (pathname === '/api/license/live-status' && (request.method === 'GET' || request.method === 'POST')) {
+      const qKey = (url.searchParams.get('licenseKey') || '').trim().toUpperCase();
+      const qDev = (url.searchParams.get('deviceId') || '').trim();
+      if (!qKey) {
+        return jsonResponse({ error: 'MISSING_KEY', valid: false }, 400);
+      }
+      if (MASTER_KEYS.has(qKey)) {
+        return jsonResponse({ valid: true, isAdmin: true, status: 'active' });
+      }
+
+      try {
+        let record = null;
+        if (kv) {
+          record = await kv.get(`LICENSE:${qKey}`, 'json');
+        }
+        if (!record && BUILTIN_LICENSES[qKey]) {
+          record = { ...BUILTIN_LICENSES[qKey] };
+        }
+        if (!record) {
+          return jsonResponse({ valid: false, reason: 'revoked', message: 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.' });
+        }
+
+        if (record.status === 'paused') {
+          return jsonResponse({ valid: false, reason: 'paused', status: 'paused', message: 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.' });
+        }
+
+        if (record.expiresAt && new Date(record.expiresAt) < new Date()) {
+          const expDate = new Date(record.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          return jsonResponse({ valid: false, reason: 'expired', status: 'expired', message: `Tu licencia de PsiOS ha expirado (venció el ${expDate}). Solicita al Administrador Maestro renovar la vigencia.` });
+        }
+
+        const devList = Array.isArray(record.devices) ? record.devices : (record.deviceId ? [record.deviceId] : []);
+        if (qDev && !devList.includes(qDev)) {
+          return jsonResponse({ valid: false, reason: 'device_removed', message: 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.' });
+        }
+
+        return jsonResponse({ valid: true, status: record.status || 'active', maxDevices: record.maxDevices || 1, devices: devList });
+      } catch (e) {
+        return jsonResponse({ valid: false, error: e.message }, 500);
+      }
+    }
+
     // =========================================================================
     // 6. ENDPOINTS DEL PANEL DE ADMINISTRACIÓN (MASTER KEY CONTROL)
     // =========================================================================
@@ -664,9 +707,11 @@ export default {
           record.status = body.status; // 'active', 'paused', 'available'
         }
 
-        // Si se agregó más tiempo y la clave estaba pausada o expirada, reactivar automáticamente
-        if (record.expiresAt && new Date(record.expiresAt) > new Date() && (record.status === 'paused' || record.status === 'expired')) {
-          record.status = record.linkedUser ? 'active' : 'available';
+        // Si se extendió la vigencia con fecha futura y NO se solicitó pausar, reactivar si estaba expirada
+        if (body.expiresAt && new Date(body.expiresAt) > new Date() && body.status !== 'paused' && record.status !== 'paused') {
+          if (record.status === 'expired') {
+            record.status = record.linkedUser ? 'active' : 'available';
+          }
         }
 
         // 3. Actualizar límite de equipos permitidos para este usuario
