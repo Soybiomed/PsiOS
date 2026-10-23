@@ -277,12 +277,22 @@ export default {
           }, 403);
         }
 
-        // Verificar expiración si aplica
+        // 4.A.1 Verificar estado pausado
+        if (licenseData.status === 'paused') {
+          return jsonResponse({
+            success: false,
+            error: 'LICENSE_PAUSED',
+            message: 'Esta licencia ha sido pausada temporalmente por el Administrador Maestro en Cloudflare. Contacte a soporte para reactivarla.'
+          }, 403);
+        }
+
+        // 4.A.2 Verificar expiración si aplica
         if (licenseData.expiresAt && new Date(licenseData.expiresAt) < new Date()) {
+          const expiredDate = new Date(licenseData.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
           return jsonResponse({
             success: false,
             error: 'LICENSE_EXPIRED',
-            message: 'Esta licencia ha expirado. Contacte al administrador.'
+            message: `Esta licencia ha expirado (venció el ${expiredDate}). Solicite al Administrador Maestro la ampliación o renovación de vigencia.`
           }, 403);
         }
 
@@ -301,7 +311,26 @@ export default {
           }
         }
 
-        // 4.C. VERIFICACIÓN DE CONTRASEÑA DE PRIVACIDAD
+        // 4.C. CONTROL DE LÍMITE DE EQUIPOS POR USUARIO
+        const maxDevs = typeof licenseData.maxDevices === 'number' ? Math.max(1, licenseData.maxDevices) : 1;
+        let registeredDevices = Array.isArray(licenseData.devices) 
+          ? [...licenseData.devices] 
+          : (licenseData.deviceId ? [licenseData.deviceId] : []);
+
+        if (!registeredDevices.includes(effectiveDeviceId)) {
+          if (registeredDevices.length >= maxDevs) {
+            return jsonResponse({
+              success: false,
+              error: 'MAX_DEVICES_EXCEEDED',
+              message: `Se ha alcanzado el límite de equipos permitidos (${registeredDevices.length} de ${maxDevs} equipos). Esta clave ya está activa en otro equipo para el usuario "${licenseData.linkedUser || candidateUser}". Contacte al Administrador Maestro para ampliar el límite de equipos o restablecer los dispositivos vinculados.`
+            }, 403);
+          }
+          registeredDevices.push(effectiveDeviceId);
+        }
+        licenseData.devices = registeredDevices;
+        licenseData.maxDevices = maxDevs;
+
+        // 4.D. VERIFICACIÓN DE CONTRASEÑA DE PRIVACIDAD
         const providedPassword = (password || '').trim();
         if (licenseData.passwordHash && providedPassword) {
           const incomingHash = await hashPassword(providedPassword);
@@ -320,7 +349,9 @@ export default {
         // Enlazar usuario si aún no estaba enlazado
         if (candidateUser) {
           licenseData.linkedUser = candidateUser;
-          licenseData.status = 'active';
+          if (licenseData.status !== 'paused') {
+            licenseData.status = 'active';
+          }
         }
 
         const timestamp = Date.now();
@@ -344,10 +375,12 @@ export default {
 
         return jsonResponse({
           success: true,
-          status: 'active',
+          status: licenseData.status || 'active',
           plan: licenseData.plan,
           tier: licenseData.tier || 'pro',
           deviceId: effectiveDeviceId,
+          devices: registeredDevices,
+          maxDevices: maxDevs,
           doctorName: licenseData.linkedUser || candidateUser || 'Profesional Clínico',
           activatedAt: licenseData.activatedAt || new Date(timestamp).toISOString(),
           expiresAt: licenseData.expiresAt,
@@ -441,14 +474,23 @@ export default {
             record = { ...BUILTIN_LICENSES[k] };
           }
           if (record) {
+            let status = record.status || (record.linkedUser ? 'active' : 'available');
+            if (record.status === 'paused') {
+              status = 'paused';
+            } else if (record.expiresAt && new Date(record.expiresAt) < new Date()) {
+              status = 'expired';
+            }
+
             keysList.push({
               key: k,
               plan: record.plan || 'PsiOS Profesional Clínico',
               tier: record.tier || 'pro',
-              status: record.linkedUser ? 'active' : (record.status || 'available'),
+              status,
               linkedUser: record.linkedUser || null,
               hasPassword: !!record.passwordHash,
               deviceId: record.deviceId || '—',
+              devices: Array.isArray(record.devices) ? record.devices : (record.deviceId ? [record.deviceId] : []),
+              maxDevices: typeof record.maxDevices === 'number' ? Math.max(1, record.maxDevices) : 1,
               createdAt: record.createdAt || record.activatedAt || '2026-10-01T00:00:00Z',
               activatedAt: record.activatedAt || null,
               lastSeenAt: record.lastSeenAt || null,
@@ -460,8 +502,9 @@ export default {
         return jsonResponse({
           success: true,
           total: keysList.length,
-          active: keysList.filter(x => x.linkedUser).length,
+          active: keysList.filter(x => x.linkedUser && x.status !== 'paused' && x.status !== 'expired').length,
           available: keysList.filter(x => !x.linkedUser).length,
+          paused: keysList.filter(x => x.status === 'paused' || x.status === 'expired').length,
           keys: keysList
         });
       } catch (err) {
@@ -487,11 +530,13 @@ export default {
           key: newKey,
           plan: planType,
           tier: body.tier || 'pro',
-          maxDevices: body.maxDevices || 5,
+          maxDevices: typeof body.maxDevices === 'number' ? Math.max(1, body.maxDevices) : (parseInt(body.maxDevices, 10) || 1),
           expiresAt: body.expiresAt || null,
           status: 'available',
           linkedUser: null,
           passwordHash: null,
+          devices: [],
+          note: body.note || '',
           createdAt: new Date().toISOString(),
           features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup']
         };
@@ -536,6 +581,8 @@ export default {
           record.linkedUser = null;
           record.passwordHash = null;
           record.status = 'available';
+          record.devices = [];
+          record.deviceId = null;
           record.unlinkedAt = new Date().toISOString();
           await kv.put(`LICENSE:${targetKey}`, JSON.stringify(record));
         }
@@ -570,6 +617,74 @@ export default {
         return jsonResponse({
           success: true,
           message: `La clave ${targetKey} ha sido eliminada permanentemente del sistema.`
+        });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // 6.F. Actualizar Configuración de Clave (Duración, Pausa, Equipos): POST /api/admin/keys/update
+    if (pathname === '/api/admin/keys/update' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const masterKey = getMasterKeyFromRequest(request, body, url);
+
+      if (!masterKey || !MASTER_KEYS.has(masterKey)) {
+        return jsonResponse({ error: 'UNAUTHORIZED', message: 'Se requiere Clave Maestra de Administrador.' }, 401);
+      }
+
+      const targetKey = (body.key || '').trim().toUpperCase();
+      if (!targetKey) {
+        return jsonResponse({ error: 'MISSING_KEY', message: 'Debe especificar la clave a actualizar.' }, 400);
+      }
+
+      try {
+        let record = null;
+        if (kv) {
+          record = await kv.get(`LICENSE:${targetKey}`, 'json');
+        }
+        if (!record && BUILTIN_LICENSES[targetKey]) {
+          record = { ...BUILTIN_LICENSES[targetKey] };
+        }
+        if (!record) {
+          return jsonResponse({ error: 'KEY_NOT_FOUND', message: 'Clave no encontrada en Cloudflare KV.' }, 404);
+        }
+
+        // 1. Actualizar fecha de vencimiento / vigencia
+        if ('expiresAt' in body) {
+          record.expiresAt = body.expiresAt; // ISO string o null para perpetua
+        }
+
+        // 2. Actualizar estado (pausar o reanudar)
+        if (body.status) {
+          record.status = body.status; // 'active', 'paused', 'available'
+        }
+
+        // Si se agregó más tiempo y la clave estaba pausada o expirada, reactivar automáticamente
+        if (record.expiresAt && new Date(record.expiresAt) > new Date() && (record.status === 'paused' || record.status === 'expired')) {
+          record.status = record.linkedUser ? 'active' : 'available';
+        }
+
+        // 3. Actualizar límite de equipos permitidos para este usuario
+        if (body.maxDevices !== undefined) {
+          record.maxDevices = Math.max(1, parseInt(body.maxDevices, 10) || 1);
+        }
+
+        // 4. Restablecer dispositivos si se solicita
+        if (body.resetDevices) {
+          record.devices = [];
+          record.deviceId = null;
+        }
+
+        record.updatedAt = new Date().toISOString();
+
+        if (kv) {
+          await kv.put(`LICENSE:${targetKey}`, JSON.stringify(record));
+        }
+
+        return jsonResponse({
+          success: true,
+          message: `Configuración de clave ${targetKey} actualizada correctamente en Cloudflare KV.`,
+          license: record
         });
       } catch (err) {
         return jsonResponse({ success: false, error: err.message }, 500);

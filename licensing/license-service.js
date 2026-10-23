@@ -294,15 +294,20 @@ export class LicenseService {
       throw new Error('Se requiere Clave Maestra de Administrador.');
     }
 
-    const planName = typeof planOrOptions === 'object' 
-      ? (planOrOptions.plan || 'PsiOS Profesional Clínico') 
-      : (planOrOptions === 'ENTERPRISE' ? 'PsiOS Enterprise & Hospital Suite' : (planOrOptions === 'TRIAL' ? 'PsiOS Demostración Clínica' : 'PsiOS Profesional Clínico'));
+    const opts = typeof planOrOptions === 'object' ? planOrOptions : { plan: planOrOptions };
+    const planName = opts.plan || 'PsiOS Profesional Clínico';
+    const tier = opts.tier || 'pro';
+    const prefix = opts.prefix || 'CLIN';
+    const maxDevices = typeof opts.maxDevices === 'number' ? Math.max(1, opts.maxDevices) : (parseInt(opts.maxDevices, 10) || 1);
     
-    const tier = typeof planOrOptions === 'object'
-      ? (planOrOptions.tier || 'pro')
-      : (planOrOptions.toLowerCase ? planOrOptions.toLowerCase() : 'pro');
+    // Calcular fecha de expiración si se especificó duración o fecha exacta
+    let expiresAt = null;
+    if (opts.expiresAt) {
+      expiresAt = new Date(opts.expiresAt).toISOString();
+    } else if (opts.durationDays && !isNaN(opts.durationDays) && Number(opts.durationDays) > 0) {
+      expiresAt = new Date(Date.now() + Number(opts.durationDays) * 86400000).toISOString();
+    }
 
-    const prefix = typeof planOrOptions === 'object' && planOrOptions.prefix ? planOrOptions.prefix : 'CLIN';
     const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
     const stamp = Date.now().toString(36).substring(2, 6).toUpperCase();
     const generatedKey = `PSIOS-${prefix}-${rand}-${stamp}`;
@@ -313,8 +318,12 @@ export class LicenseService {
       tier,
       status: 'available',
       linkedUser: null,
+      maxDevices,
+      devices: [],
+      expiresAt,
+      durationDays: opts.durationDays || null,
       createdAt: new Date().toISOString(),
-      note: note || ''
+      note: note || opts.note || ''
     };
 
     // 1. Obtener claves actuales de Cloudflare KV
@@ -334,7 +343,14 @@ export class LicenseService {
           'Authorization': `Bearer ${cleanMasterKey}`,
           'X-License-Key': cleanMasterKey
         },
-        body: JSON.stringify({ masterKey: cleanMasterKey, plan: planName, key: generatedKey, note })
+        body: JSON.stringify({ 
+          masterKey: cleanMasterKey, 
+          plan: planName, 
+          key: generatedKey, 
+          maxDevices, 
+          expiresAt, 
+          note: newKeyRecord.note 
+        })
       }).catch(() => {});
     }
 
@@ -342,8 +358,96 @@ export class LicenseService {
       success: true,
       key: generatedKey,
       plan: planName,
+      maxDevices,
+      expiresAt,
       createdAt: newKeyRecord.createdAt
     };
+  }
+
+  async adminUpdateKeyConfig(masterKey, keyToUpdate, updates = {}) {
+    const cleanMasterKey = (masterKey || '').trim().toUpperCase();
+    if (!this.isMasterKey(cleanMasterKey)) {
+      throw new Error('Se requiere Clave Maestra de Administrador.');
+    }
+
+    const cleanKey = (keyToUpdate || '').trim().toUpperCase();
+    const currentKeys = await this.fetchCloudKeys();
+    const target = currentKeys.find(k => k.key === cleanKey);
+    if (!target) {
+      throw new Error(`Clave ${cleanKey} no encontrada en Cloudflare KV.`);
+    }
+
+    // 1. Actualizar fecha de vencimiento
+    if ('expiresAt' in updates) {
+      target.expiresAt = updates.expiresAt; // ISO string o null
+    }
+
+    // 2. Actualizar estado (pausar / reactivar)
+    if (updates.status) {
+      target.status = updates.status;
+    }
+
+    // Si se le agregó más tiempo en el futuro, reactivar automáticamente ("que siga funcionando")
+    if (target.expiresAt && new Date(target.expiresAt) > new Date()) {
+      if (target.status === 'paused' || target.status === 'expired') {
+        target.status = target.linkedUser ? 'active' : 'available';
+      }
+    }
+
+    // 3. Actualizar límite de equipos
+    if (updates.maxDevices !== undefined) {
+      target.maxDevices = Math.max(1, parseInt(updates.maxDevices, 10) || 1);
+    }
+
+    // 4. Restablecer lista de dispositivos si se solicita
+    if (updates.resetDevices) {
+      target.devices = [];
+      target.deviceId = null;
+    }
+
+    target.updatedAt = new Date().toISOString();
+
+    // Guardar en Cloudflare KV
+    await this.pushCloudKeys(currentKeys);
+
+    // Enviar al Worker si hay conexión
+    const workerUrl = this.getWorkerUrl();
+    if (workerUrl && navigator.onLine) {
+      fetch(`${workerUrl}/api/admin/keys/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${cleanMasterKey}`,
+          'X-License-Key': cleanMasterKey
+        },
+        body: JSON.stringify({
+          masterKey: cleanMasterKey,
+          key: cleanKey,
+          expiresAt: target.expiresAt,
+          status: target.status,
+          maxDevices: target.maxDevices,
+          resetDevices: !!updates.resetDevices,
+          autoResume: true
+        })
+      }).catch(() => {});
+    }
+
+    return { success: true, key: cleanKey, target };
+  }
+
+  async adminTogglePauseKey(masterKey, keyToToggle) {
+    const currentKeys = await this.fetchCloudKeys();
+    const target = currentKeys.find(k => k.key === (keyToToggle || '').trim().toUpperCase());
+    if (!target) throw new Error('Clave no encontrada.');
+
+    const isCurrentlyPaused = target.status === 'paused';
+    const newStatus = isCurrentlyPaused ? (target.linkedUser ? 'active' : 'available') : 'paused';
+
+    return await this.adminUpdateKeyConfig(masterKey, keyToToggle, { status: newStatus });
+  }
+
+  async adminResetKeyDevices(masterKey, keyToReset) {
+    return await this.adminUpdateKeyConfig(masterKey, keyToReset, { resetDevices: true });
   }
 
   async adminUnlinkKey(masterKey, keyToUnlink) {
@@ -359,6 +463,8 @@ export class LicenseService {
       target.status = 'available';
       target.linkedUser = null;
       target.doctorName = null;
+      target.devices = [];
+      target.deviceId = null;
       target.unlinkedAt = new Date().toISOString();
       await this.pushCloudKeys(currentKeys);
     }
@@ -403,8 +509,8 @@ export class LicenseService {
   // =========================================================================
 
   /**
-   * Valida en Cloudflare KV que la clave haya sido GENERADA POR EL MAESTRO
-   * y que se encuentre disponible antes de permitir pasar al paso "¿Quién eres?".
+   * Valida en Cloudflare KV que la clave haya sido GENERADA POR EL MAESTRO,
+   * que no esté pausada ni expirada, y que no supere el cupo de equipos.
    */
   async validateKeyForActivation(key) {
     if (!key || typeof key !== 'string') {
@@ -427,9 +533,27 @@ export class LicenseService {
       throw new Error('Esta clave de producto no existe o no ha sido generada por el Administrador Maestro en Cloudflare.');
     }
 
-    // 3. Verificar si ya está enlazada a otro profesional
+    // 3. Verificar si está pausada
+    if (existingRecord.status === 'paused') {
+      throw new Error('Esta clave de producto se encuentra pausada temporalmente por el Administrador Maestro.');
+    }
+
+    // 4. Verificar si ha expirado
+    if (existingRecord.expiresAt && new Date(existingRecord.expiresAt) < new Date()) {
+      const expiredStr = new Date(existingRecord.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      throw new Error(`Esta clave de producto ha expirado (venció el ${expiredStr}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.`);
+    }
+
+    // 5. Verificar si ya está enlazada a otro profesional
     if (existingRecord.status === 'active' && existingRecord.linkedUser) {
       throw new Error(`Esta clave ya está vinculada al usuario "${existingRecord.linkedUser}". Cada clave es exclusiva para un único usuario.`);
+    }
+
+    // 6. Verificar límite de equipos permitidos para este usuario
+    const maxDevs = typeof existingRecord.maxDevices === 'number' ? Math.max(1, existingRecord.maxDevices) : 1;
+    const devList = Array.isArray(existingRecord.devices) ? existingRecord.devices : (existingRecord.deviceId ? [existingRecord.deviceId] : []);
+    if (!devList.includes(this.deviceId) && devList.length >= maxDevs) {
+      throw new Error(`Límite de equipos alcanzado (${devList.length} de ${maxDevs} equipos permitidos). Esta clave ya está activa en otra computadora. Solicita al Administrador Maestro ampliar el límite de equipos o restablecer los dispositivos vinculados.`);
     }
 
     return {
@@ -437,7 +561,9 @@ export class LicenseService {
       isAdmin: false,
       key: cleanKey,
       plan: existingRecord.plan || 'PsiOS Profesional Clínico',
-      tier: existingRecord.tier || 'pro'
+      tier: existingRecord.tier || 'pro',
+      expiresAt: existingRecord.expiresAt || null,
+      maxDevices: maxDevs
     };
   }
 
@@ -498,9 +624,30 @@ export class LicenseService {
       throw new Error('Clave rechazada: Esta clave no existe o no ha sido generada por el Administrador Maestro en Cloudflare.');
     }
 
+    if (existingCloudRecord.status === 'paused') {
+      throw new Error('Esta clave de producto se encuentra pausada temporalmente por el Administrador Maestro.');
+    }
+
+    if (existingCloudRecord.expiresAt && new Date(existingCloudRecord.expiresAt) < new Date()) {
+      const expStr = new Date(existingCloudRecord.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      throw new Error(`Esta clave de producto ha expirado (venció el ${expStr}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.`);
+    }
+
     if (existingCloudRecord.status === 'active' && existingCloudRecord.linkedUser && existingCloudRecord.linkedUser !== doctorName) {
       throw new Error(`Esta clave ya está vinculada en Cloudflare a otro usuario (${existingCloudRecord.linkedUser}). Solo se permite 1 usuario por clave.`);
     }
+
+    // 2.1 Verificar y registrar dispositivo en la lista de equipos permitidos
+    const maxDevs = typeof existingCloudRecord.maxDevices === 'number' ? Math.max(1, existingCloudRecord.maxDevices) : 1;
+    let registeredDevs = Array.isArray(existingCloudRecord.devices) ? [...existingCloudRecord.devices] : (existingCloudRecord.deviceId ? [existingCloudRecord.deviceId] : []);
+    if (!registeredDevs.includes(this.deviceId)) {
+      if (registeredDevs.length >= maxDevs) {
+        throw new Error(`Límite de equipos alcanzado (${registeredDevs.length} de ${maxDevs} permitidos). Esta clave ya está activa en otra computadora. Solicita al Administrador Maestro ampliar el límite de equipos o restablecer los dispositivos vinculados.`);
+      }
+      registeredDevs.push(this.deviceId);
+    }
+    existingCloudRecord.devices = registeredDevs;
+    existingCloudRecord.maxDevices = maxDevs;
 
     // 3. Activación directa contra el endpoint /api/activate de Cloudflare
     let token = `TOK-CF-${normalizedKey.substring(0, 8)}-${Date.now().toString(16).toUpperCase()}`;
@@ -542,6 +689,7 @@ export class LicenseService {
     existingCloudRecord.linkedUser = doctorName;
     existingCloudRecord.doctorName = doctorName;
     existingCloudRecord.activatedAt = new Date().toISOString();
+    existingCloudRecord.deviceId = this.deviceId;
     
     await this.pushCloudKeys(cloudKeys);
 
@@ -552,10 +700,12 @@ export class LicenseService {
       plan,
       tier: 'pro',
       deviceId: this.deviceId,
+      devices: registeredDevs,
+      maxDevices: maxDevs,
       doctorName,
       activatedAt: new Date().toISOString(),
-      expiresAt: null,
-      isPerpetual: true,
+      expiresAt: existingCloudRecord.expiresAt || null,
+      isPerpetual: !existingCloudRecord.expiresAt,
       token,
       isCloudValidated: true,
       features
@@ -564,6 +714,27 @@ export class LicenseService {
     this.saveLicense(licenseRecord);
     this.saveCredentials(normalizedKey, doctorName, password);
     return licenseRecord;
+  }
+
+  checkCurrentLicenseValidity() {
+    if (!this.currentLicense) return { valid: false, reason: 'no_license' };
+    if (this.currentLicense.isAdmin) return { valid: true };
+    if (this.currentLicense.status === 'paused') {
+      return { 
+        valid: false, 
+        reason: 'paused', 
+        message: 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro.' 
+      };
+    }
+    if (this.currentLicense.expiresAt && new Date(this.currentLicense.expiresAt) < new Date()) {
+      const exp = new Date(this.currentLicense.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      return { 
+        valid: false, 
+        reason: 'expired', 
+        message: `Tu licencia de PsiOS ha expirado (venció el ${exp}). Solicita al Administrador Maestro la ampliación o renovación de vigencia.` 
+      };
+    }
+    return { valid: true };
   }
 
   saveLicense(license) {

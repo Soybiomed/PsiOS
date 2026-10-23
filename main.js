@@ -6603,13 +6603,17 @@ class AppNavigationController {
     this.btnSubmitLogin = document.getElementById('btn-submit-login');
     this.btnSwitchAccount = document.getElementById('btn-switch-account');
 
-    // Admin Panel Elements (Beta 0.0.2 - Acceso Maestro)
+    // Admin Panel Elements (Beta 0.0.3 - Acceso Maestro)
     this.viewAdmin = document.getElementById('view-admin');
     this.btnAdminRefresh = document.getElementById('btn-admin-refresh-keys');
     this.btnAdminLogout = document.getElementById('btn-admin-logout');
     this.btnAdminGenerateKey = document.getElementById('btn-admin-generate-key');
     this.adminKeyPlanSelect = document.getElementById('admin-key-plan-select');
     this.adminKeyCustomNote = document.getElementById('admin-key-custom-note');
+    this.adminKeyDurationSelect = document.getElementById('admin-key-duration-select');
+    this.adminKeyMaxDevices = document.getElementById('admin-key-max-devices');
+    this.adminKeyCustomDateWrap = document.getElementById('admin-key-custom-date-wrap');
+    this.adminKeyCustomDate = document.getElementById('admin-key-custom-date');
     this.adminGenBox = document.getElementById('admin-generated-key-box');
     this.adminGenOutput = document.getElementById('admin-generated-key-output');
     this.btnCopyGenKey = document.getElementById('btn-copy-gen-key');
@@ -6620,9 +6624,32 @@ class AppNavigationController {
     this.adminAvailableKeys = document.getElementById('admin-available-keys');
     this.adminCfStatus = document.getElementById('admin-cf-status');
 
+    // Admin Modal Key Configuration Elements
+    this.modalAdminKeyConfig = document.getElementById('modal-admin-key-config');
+    this.adminModalKeyTitle = document.getElementById('admin-modal-key-title');
+    this.adminModalKeyTag = document.getElementById('admin-modal-key-tag');
+    this.adminModalUserVal = document.getElementById('admin-modal-user-val');
+    this.adminModalStatusBadge = document.getElementById('admin-modal-status-badge');
+    this.btnAdminModalTogglePause = document.getElementById('btn-admin-modal-toggle-pause');
+    this.adminModalToggleIcon = document.getElementById('admin-modal-toggle-icon');
+    this.adminModalToggleText = document.getElementById('admin-modal-toggle-text');
+    this.adminModalPauseHint = document.getElementById('admin-modal-pause-hint');
+    this.adminModalExpiryText = document.getElementById('admin-modal-expiry-text');
+    this.adminModalCountdownPill = document.getElementById('admin-modal-countdown-pill');
+    this.adminModalCustomDate = document.getElementById('admin-modal-custom-date');
+    this.adminModalMaxDevices = document.getElementById('admin-modal-max-devices');
+    this.adminModalDevicesCount = document.getElementById('admin-modal-devices-count');
+    this.adminModalDevicesList = document.getElementById('admin-modal-devices-list');
+    this.btnAdminModalResetDevices = document.getElementById('btn-admin-modal-reset-devices');
+    this.btnCloseAdminKeyModal = document.getElementById('btn-close-admin-key-modal');
+    this.btnCloseAdminKeyFooter = document.getElementById('btn-close-admin-key-footer');
+    this.btnSaveAdminKeyConfig = document.getElementById('btn-save-admin-key-config');
+
     this.adminMasterKey = null;
     this.adminLoadedKeys = [];
     this.pendingLicenseKey = null;
+    this.currentConfiguringKey = null;
+    this.pendingConfigUpdates = {};
 
     // Logout session buttons
     this.btnLogoutSession = document.getElementById('btn-logout-session');
@@ -6674,6 +6701,12 @@ class AppNavigationController {
         const savedUser = this.getSavedUser();
         const isLicensed = licenseService.isActivated();
         if (savedUser && isLicensed) {
+          // Verificar si la licencia del profesional está pausada o vencida
+          const validity = licenseService.checkCurrentLicenseValidity();
+          if (!validity.valid) {
+            alert(validity.message || 'Tu licencia de PsiOS ha expirado o se encuentra pausada. Contacta al Administrador Maestro para renovarla.');
+            return;
+          }
           // Si el usuario ya está registrado: saltar clave y "¿Quién eres?", solo pedir contraseña
           this.showLoginView(savedUser);
         } else {
@@ -6876,7 +6909,15 @@ class AppNavigationController {
 
     if (this.btnAdminLogout) {
       this.btnAdminLogout.addEventListener('click', () => {
-        this.handleLogout();
+        this.handleAdminLogout();
+      });
+    }
+
+    if (this.adminKeyDurationSelect) {
+      this.adminKeyDurationSelect.addEventListener('change', (e) => {
+        if (this.adminKeyCustomDateWrap) {
+          this.adminKeyCustomDateWrap.style.display = e.target.value === 'custom' ? 'block' : 'none';
+        }
       });
     }
 
@@ -6902,6 +6943,87 @@ class AppNavigationController {
     if (this.adminKeysSearch) {
       this.adminKeysSearch.addEventListener('input', (e) => {
         this.filterAdminKeys(e.target.value);
+      });
+    }
+
+    // Modal de Configuración de Clave (Duración, Pausa, Equipos)
+    if (this.btnCloseAdminKeyModal) {
+      this.btnCloseAdminKeyModal.addEventListener('click', () => this.closeAdminKeyConfigModal());
+    }
+    if (this.btnCloseAdminKeyFooter) {
+      this.btnCloseAdminKeyFooter.addEventListener('click', () => this.closeAdminKeyConfigModal());
+    }
+
+    if (this.btnAdminModalTogglePause) {
+      this.btnAdminModalTogglePause.addEventListener('click', () => {
+        if (!this.pendingConfigUpdates) return;
+        const current = this.pendingConfigUpdates.status || (this.currentConfiguringKey?.linkedUser ? 'active' : 'available');
+        this.pendingConfigUpdates.status = current === 'paused' 
+          ? (this.currentConfiguringKey?.linkedUser ? 'active' : 'available') 
+          : 'paused';
+        this.updateModalConfigView();
+      });
+    }
+
+    // Chips para extender duración rápidamente
+    if (this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig.querySelectorAll('.extend-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const days = chip.getAttribute('data-days');
+          if (days === 'perpetual') {
+            this.pendingConfigUpdates.expiresAt = null;
+          } else {
+            const addDays = parseInt(days, 10) || 30;
+            // Si ya tenía fecha futura, extender sobre ella; sino sobre hoy
+            const currentExp = this.pendingConfigUpdates.expiresAt ? new Date(this.pendingConfigUpdates.expiresAt) : new Date();
+            const baseTime = currentExp > new Date() ? currentExp.getTime() : Date.now();
+            this.pendingConfigUpdates.expiresAt = new Date(baseTime + addDays * 86400000).toISOString();
+          }
+
+          // Al extender tiempo, si estaba pausada o expirada, reactivar automáticamente
+          if (this.pendingConfigUpdates.status === 'paused' || this.pendingConfigUpdates.status === 'expired') {
+            this.pendingConfigUpdates.status = this.currentConfiguringKey?.linkedUser ? 'active' : 'available';
+          }
+
+          this.updateModalConfigView();
+        });
+      });
+    }
+
+    if (this.adminModalCustomDate) {
+      this.adminModalCustomDate.addEventListener('change', (e) => {
+        if (e.target.value) {
+          this.pendingConfigUpdates.expiresAt = new Date(e.target.value + 'T23:59:59Z').toISOString();
+          if (new Date(this.pendingConfigUpdates.expiresAt) > new Date() && this.pendingConfigUpdates.status === 'paused') {
+            this.pendingConfigUpdates.status = this.currentConfiguringKey?.linkedUser ? 'active' : 'available';
+          }
+        } else {
+          this.pendingConfigUpdates.expiresAt = null;
+        }
+        this.updateModalConfigView();
+      });
+    }
+
+    if (this.adminModalMaxDevices) {
+      this.adminModalMaxDevices.addEventListener('input', (e) => {
+        const val = Math.max(1, parseInt(e.target.value, 10) || 1);
+        this.pendingConfigUpdates.maxDevices = val;
+        this.updateModalConfigView();
+      });
+    }
+
+    if (this.btnAdminModalResetDevices) {
+      this.btnAdminModalResetDevices.addEventListener('click', () => {
+        if (confirm('¿Restablecer los equipos autorizados para esta clave? Se liberarán todos los cupos para que el usuario pueda vincular sus nuevos dispositivos.')) {
+          this.pendingConfigUpdates.resetDevices = true;
+          this.updateModalConfigView();
+        }
+      });
+    }
+
+    if (this.btnSaveAdminKeyConfig) {
+      this.btnSaveAdminKeyConfig.addEventListener('click', () => {
+        this.handleSaveAdminKeyConfig();
       });
     }
   }
@@ -7273,30 +7395,67 @@ class AppNavigationController {
     if (!this.adminKeysTbody) return;
 
     if (!keys || keys.length === 0) {
-      this.adminKeysTbody.innerHTML = '<tr><td colspan="6" class="empty-td">No hay claves registradas en Cloudflare. Genera una nueva arriba.</td></tr>';
+      this.adminKeysTbody.innerHTML = '<tr><td colspan="7" class="empty-td">No hay claves registradas en Cloudflare. Genera una nueva arriba.</td></tr>';
       return;
     }
 
     this.adminKeysTbody.innerHTML = keys.map(k => {
       const isLinked = !!(k.linkedUser || k.doctorName);
-      const userDisplay = isLinked ? `👤 <strong>${k.linkedUser || k.doctorName}</strong>` : '<span class="text-muted">— Disponible (Sin vincular) —</span>';
-      const statusBadge = isLinked 
-        ? '<span class="table-badge badge-active">Vinculada</span>' 
-        : '<span class="table-badge badge-available">Disponible</span>';
+      const userDisplay = isLinked 
+        ? `👤 <strong>${k.linkedUser || k.doctorName}</strong>` 
+        : '<span class="text-muted">— Disponible (Sin vincular) —</span>';
+      
+      const isPaused = k.status === 'paused';
+      const isExpired = k.expiresAt && new Date(k.expiresAt) < new Date();
+
+      let statusBadge = '';
+      if (isPaused) {
+        statusBadge = '<span class="table-badge badge-paused">⏸️ Pausada</span>';
+      } else if (isExpired) {
+        statusBadge = '<span class="table-badge badge-expired">⛔ Expirada</span>';
+      } else if (isLinked) {
+        statusBadge = '<span class="table-badge badge-active">✓ Vinculada</span>';
+      } else {
+        statusBadge = '<span class="table-badge badge-available">Disponible</span>';
+      }
+
+      // Vigencia / Vencimiento
+      let vigenciaHtml = '';
+      if (k.expiresAt) {
+        const diffMs = new Date(k.expiresAt) - new Date();
+        const diffDays = Math.ceil(diffMs / 86400000);
+        const expDateFormatted = new Date(k.expiresAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+        if (diffDays <= 0) {
+          vigenciaHtml = `<span class="date-tag tag-expired" title="Venció el ${expDateFormatted}">⛔ Venció (${expDateFormatted})</span>`;
+        } else {
+          vigenciaHtml = `<span class="date-tag tag-valid" title="Vence el ${expDateFormatted}">⏱️ ${diffDays}d rest. (${expDateFormatted})</span>`;
+        }
+      } else {
+        vigenciaHtml = '<span class="date-tag tag-perpetual">♾️ Perpetua</span>';
+      }
+
+      // Equipos autorizados
+      const devCount = Array.isArray(k.devices) ? k.devices.length : (k.deviceId ? 1 : 0);
+      const maxDevs = typeof k.maxDevices === 'number' ? k.maxDevices : 1;
+      const equiposHtml = `<span class="devices-tag" title="${devCount} equipos autorizados de ${maxDevs} permitidos">💻 ${devCount} / ${maxDevs} PC(s)</span>`;
+
       const planName = k.plan || 'PsiOS Profesional';
-      const dateStr = k.createdAt ? new Date(k.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
       return `
         <tr data-key="${k.key}">
           <td><code class="table-key-code">${k.key}</code></td>
           <td>${statusBadge}</td>
           <td>${userDisplay}</td>
+          <td>${vigenciaHtml}</td>
+          <td>${equiposHtml}</td>
           <td><span class="plan-tag">${planName}</span></td>
-          <td><span class="date-tag">${dateStr}</span></td>
           <td>
             <div class="table-action-btns">
               <button type="button" class="btn-table-action btn-table-copy" data-action="copy" data-key="${k.key}" title="Copiar clave">
                 📋
+              </button>
+              <button type="button" class="btn-table-action btn-table-config" data-action="config" data-key="${k.key}" title="Configurar vigencia, pausa y equipos">
+                ⚙️ Configurar
               </button>
               ${isLinked ? `
                 <button type="button" class="btn-table-action btn-table-unlink" data-action="unlink" data-key="${k.key}" title="Desvincular usuario (liberar clave)">
@@ -7321,6 +7480,8 @@ class AppNavigationController {
           navigator.clipboard.writeText(key);
           btn.textContent = '✓';
           setTimeout(() => { btn.textContent = '📋'; }, 2000);
+        } else if (action === 'config') {
+          this.openAdminKeyConfigModal(key);
         } else if (action === 'unlink') {
           this.handleAdminUnlinkKey(key);
         } else if (action === 'delete') {
@@ -7355,8 +7516,34 @@ class AppNavigationController {
     try {
       const plan = this.adminKeyPlanSelect ? this.adminKeyPlanSelect.value : 'PRO';
       const note = this.adminKeyCustomNote ? this.adminKeyCustomNote.value.trim() : '';
+      const durType = this.adminKeyDurationSelect ? this.adminKeyDurationSelect.value : '365';
+      const maxDevices = this.adminKeyMaxDevices ? (parseInt(this.adminKeyMaxDevices.value, 10) || 1) : 1;
 
-      const res = await licenseService.adminGenerateKey(this.adminMasterKey, plan, note);
+      let durationDays = null;
+      let expiresAt = null;
+
+      if (durType === 'perpetual') {
+        expiresAt = null;
+      } else if (durType === 'custom') {
+        const customDateVal = this.adminKeyCustomDate ? this.adminKeyCustomDate.value : '';
+        if (customDateVal) {
+          expiresAt = new Date(customDateVal + 'T23:59:59Z').toISOString();
+        } else {
+          durationDays = 365;
+        }
+      } else {
+        durationDays = parseInt(durType, 10) || 365;
+      }
+
+      const res = await licenseService.adminGenerateKey(this.adminMasterKey, {
+        plan: plan === 'INSTITUTIONAL' ? 'PsiOS Institucional / Hospital' : (plan === 'ACADEMIC' ? 'PsiOS Académico / Estudiantes' : 'PsiOS Profesional Clínico'),
+        tier: plan.toLowerCase(),
+        durationDays,
+        expiresAt,
+        maxDevices,
+        note
+      });
+
       if (res && res.key) {
         if (this.adminGenBox) this.adminGenBox.style.display = 'block';
         if (this.adminGenOutput) this.adminGenOutput.textContent = res.key;
@@ -7370,6 +7557,169 @@ class AppNavigationController {
         this.btnAdminGenerateKey.disabled = false;
         const span = this.btnAdminGenerateKey.querySelector('.btn-text');
         if (span) span.textContent = 'Generar Nueva Clave';
+      }
+    }
+  }
+
+  // ==========================================
+  // MODAL DE CONFIGURACIÓN DE CLAVE (Vigencia, Pausa, Equipos)
+  // ==========================================
+
+  openAdminKeyConfigModal(key) {
+    const record = this.adminLoadedKeys.find(k => k.key === key);
+    if (!record || !this.modalAdminKeyConfig) return;
+
+    this.currentConfiguringKey = record;
+    this.pendingConfigUpdates = {
+      expiresAt: record.expiresAt || null,
+      status: record.status || (record.linkedUser ? 'active' : 'available'),
+      maxDevices: typeof record.maxDevices === 'number' ? record.maxDevices : 1,
+      resetDevices: false
+    };
+
+    if (this.adminModalKeyTitle) this.adminModalKeyTitle.textContent = record.key;
+    if (this.adminModalKeyTag) this.adminModalKeyTag.textContent = record.plan || 'PsiOS Profesional Clínico';
+    if (this.adminModalUserVal) {
+      this.adminModalUserVal.textContent = record.linkedUser || '— Sin vincular (Disponible) —';
+    }
+
+    this.updateModalConfigView();
+
+    this.modalAdminKeyConfig.classList.add('visible');
+    this.modalAdminKeyConfig.setAttribute('aria-hidden', 'false');
+  }
+
+  updateModalConfigView() {
+    const record = this.currentConfiguringKey;
+    const updates = this.pendingConfigUpdates;
+    if (!record || !updates) return;
+
+    const currentStatus = updates.status || record.status || 'available';
+    const isPaused = currentStatus === 'paused';
+    const isExpired = updates.expiresAt && new Date(updates.expiresAt) < new Date();
+
+    // Badge de estado
+    if (this.adminModalStatusBadge) {
+      if (isPaused) {
+        this.adminModalStatusBadge.className = 'table-badge badge-paused';
+        this.adminModalStatusBadge.textContent = '⏸️ Pausada';
+      } else if (isExpired) {
+        this.adminModalStatusBadge.className = 'table-badge badge-expired';
+        this.adminModalStatusBadge.textContent = '⛔ Expirada / Pausada';
+      } else if (record.linkedUser) {
+        this.adminModalStatusBadge.className = 'table-badge badge-active';
+        this.adminModalStatusBadge.textContent = '✓ Activa';
+      } else {
+        this.adminModalStatusBadge.className = 'table-badge badge-available';
+        this.adminModalStatusBadge.textContent = 'Disponible';
+      }
+    }
+
+    // Botón de Pausar / Reactivar
+    if (this.btnAdminModalTogglePause) {
+      this.btnAdminModalTogglePause.classList.toggle('is-paused', isPaused);
+      if (this.adminModalToggleIcon) {
+        this.adminModalToggleIcon.textContent = isPaused ? '▶️' : '⏸️';
+      }
+      if (this.adminModalToggleText) {
+        this.adminModalToggleText.textContent = isPaused ? 'Reactivar Licencia' : 'Pausar Licencia';
+      }
+      if (this.adminModalPauseHint) {
+        this.adminModalPauseHint.textContent = isPaused 
+          ? 'La licencia está pausada: el usuario no podrá acceder hasta reactivarla o agregar tiempo.' 
+          : 'La clave está operativa para el usuario.';
+      }
+    }
+
+    // Expiry y countdown
+    if (updates.expiresAt) {
+      const expDate = new Date(updates.expiresAt);
+      const diffDays = Math.ceil((expDate - new Date()) / 86400000);
+      const formatted = expDate.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+
+      if (this.adminModalExpiryText) this.adminModalExpiryText.textContent = formatted;
+      if (this.adminModalCountdownPill) {
+        if (diffDays <= 0) {
+          this.adminModalCountdownPill.className = 'expiry-countdown-pill pill-expired';
+          this.adminModalCountdownPill.textContent = `Venció hace ${Math.abs(diffDays)} días`;
+        } else {
+          this.adminModalCountdownPill.className = 'expiry-countdown-pill';
+          this.adminModalCountdownPill.textContent = `Quedan ${diffDays} días`;
+        }
+      }
+      if (this.adminModalCustomDate) {
+        try {
+          this.adminModalCustomDate.value = new Date(updates.expiresAt).toISOString().substring(0, 10);
+        } catch {}
+      }
+    } else {
+      if (this.adminModalExpiryText) this.adminModalExpiryText.textContent = '♾️ Perpetua (Sin fecha de vencimiento)';
+      if (this.adminModalCountdownPill) {
+        this.adminModalCountdownPill.className = 'expiry-countdown-pill pill-perpetual';
+        this.adminModalCountdownPill.textContent = 'Acceso Permanente';
+      }
+      if (this.adminModalCustomDate) {
+        this.adminModalCustomDate.value = '';
+      }
+    }
+
+    // Max Devices
+    if (this.adminModalMaxDevices) {
+      this.adminModalMaxDevices.value = updates.maxDevices || 1;
+    }
+
+    // Lista y conteo de equipos
+    const devList = updates.resetDevices ? [] : (Array.isArray(record.devices) ? record.devices : (record.deviceId ? [record.deviceId] : []));
+    if (this.adminModalDevicesCount) {
+      this.adminModalDevicesCount.textContent = `${devList.length} de ${updates.maxDevices || 1} equipo(s) autorizados`;
+    }
+
+    if (this.adminModalDevicesList) {
+      if (devList.length === 0) {
+        this.adminModalDevicesList.innerHTML = '<li class="registered-device-item"><span class="text-muted">Ningún equipo registrado actualmente (cupos libres).</span></li>';
+      } else {
+        this.adminModalDevicesList.innerHTML = devList.map(dev => {
+          const isThisMachine = dev === licenseService.deviceId;
+          return `
+            <li class="registered-device-item ${isThisMachine ? 'current-device' : ''}">
+              <span>💻</span>
+              <span>${dev}</span>
+              ${isThisMachine ? '<small style="margin-left:auto; font-weight:800;">(Esta máquina)</small>' : ''}
+            </li>
+          `;
+        }).join('');
+      }
+    }
+  }
+
+  closeAdminKeyConfigModal() {
+    if (this.modalAdminKeyConfig) {
+      this.modalAdminKeyConfig.classList.remove('visible');
+      this.modalAdminKeyConfig.setAttribute('aria-hidden', 'true');
+    }
+    this.currentConfiguringKey = null;
+    this.pendingConfigUpdates = {};
+  }
+
+  async handleSaveAdminKeyConfig() {
+    if (!this.currentConfiguringKey || !this.pendingConfigUpdates) return;
+    const key = this.currentConfiguringKey.key;
+
+    if (this.btnSaveAdminKeyConfig) {
+      this.btnSaveAdminKeyConfig.disabled = true;
+      this.btnSaveAdminKeyConfig.textContent = 'Guardando en Cloudflare...';
+    }
+
+    try {
+      await licenseService.adminUpdateKeyConfig(this.adminMasterKey, key, this.pendingConfigUpdates);
+      this.closeAdminKeyConfigModal();
+      await this.loadAdminKeys();
+    } catch (err) {
+      alert(`Error al guardar configuración: ${err.message || 'Fallo de Cloudflare KV'}`);
+    } finally {
+      if (this.btnSaveAdminKeyConfig) {
+        this.btnSaveAdminKeyConfig.disabled = false;
+        this.btnSaveAdminKeyConfig.innerHTML = '<span>💾 Guardar Cambios en Cloudflare</span>';
       }
     }
   }
@@ -7396,6 +7746,27 @@ class AppNavigationController {
     } catch (err) {
       alert(`Error al eliminar clave: ${err.message || 'Fallo de Cloudflare'}`);
     }
+  }
+
+  handleAdminLogout() {
+    // Cerrar sesión del maestro por completo y revocar su acceso administrativo
+    this.adminMasterKey = null;
+    this.adminLoadedKeys = [];
+    licenseService.deactivate();
+    licenseService.clearSavedCredentials();
+    authService.logout();
+
+    if (this.regLicenseInput) this.regLicenseInput.value = '';
+    if (this.loginPasswordInput) this.loginPasswordInput.value = '';
+    this.pendingLicenseKey = null;
+
+    if (this.welcomeTopUserPill) {
+      this.welcomeTopUserPill.setAttribute('aria-hidden', 'true');
+      this.welcomeTopUserPill.style.display = 'none';
+    }
+
+    // Regresar a la pantalla de 'Hola' y requerir nueva clave para ingresar
+    this.switchView('view-splash');
   }
 
   handleLogout() {

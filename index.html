@@ -807,6 +807,36 @@
                       <option value="ACADEMIC">PsiOS Académico / Estudiantes</option>
                     </select>
 
+                    <div class="generator-row-duo">
+                      <div class="generator-col">
+                        <label class="form-label" for="admin-key-duration-select">Vigencia / Duración</label>
+                        <select id="admin-key-duration-select" class="glass-select">
+                          <option value="30">30 Días (1 Mes)</option>
+                          <option value="90">90 Días (3 Meses)</option>
+                          <option value="180">180 Días (6 Meses)</option>
+                          <option value="365" selected>365 Días (1 Año)</option>
+                          <option value="custom">📅 Fecha Personalizada...</option>
+                          <option value="perpetual">♾️ Perpetua (Sin Caducidad)</option>
+                        </select>
+                      </div>
+
+                      <div class="generator-col">
+                        <label class="form-label" for="admin-key-max-devices">Límite de Equipos (PCs)</label>
+                        <select id="admin-key-max-devices" class="glass-select">
+                          <option value="1" selected>1 Equipo (Exclusivo)</option>
+                          <option value="2">2 Equipos</option>
+                          <option value="3">3 Equipos</option>
+                          <option value="5">5 Equipos</option>
+                          <option value="10">10 Equipos</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div id="admin-key-custom-date-wrap" style="display: none;">
+                      <label class="form-label" for="admin-key-custom-date">Fecha de Vencimiento Exacta</label>
+                      <input type="date" id="admin-key-custom-date" class="glass-text-input" />
+                    </div>
+
                     <label class="form-label" for="admin-key-custom-note">Nota o Destinatario (Opcional)</label>
                     <input type="text" id="admin-key-custom-note" class="glass-text-input" placeholder="Ej: Dr. Morales - Hospital Central" />
 
@@ -837,7 +867,7 @@
                   <div class="table-section-header">
                     <div>
                       <h2 class="section-title">Registro de Claves y Usuarios Vinculados</h2>
-                      <span class="section-subtitle">Regla activa: 1 clave = 1 usuario único</span>
+                      <span class="section-subtitle">Gestión de vigencia, límite de computadoras y control de acceso</span>
                     </div>
                     <div class="table-search-box">
                       <input type="text" id="admin-keys-search" class="glass-search-input" placeholder="Filtrar por clave o usuario..." />
@@ -851,14 +881,15 @@
                           <th>Clave de Producto</th>
                           <th>Estado</th>
                           <th>Usuario Vinculado</th>
+                          <th>Vigencia / Vencimiento</th>
+                          <th>Equipos</th>
                           <th>Plan</th>
-                          <th>Fecha Creación</th>
                           <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody id="admin-keys-tbody">
                         <tr>
-                          <td colspan="6" class="loading-td">Cargando registros de Cloudflare KV...</td>
+                          <td colspan="7" class="loading-td">Cargando registros de Cloudflare KV...</td>
                         </tr>
                       </tbody>
                     </table>
@@ -1626,8 +1657,108 @@
           </div>
         </div>
 
-        <div class="modal-card-footer auth-modal-footer">
-          <button type="button" class="modal-btn-cancel" id="btn-close-auth-footer">Cerrar</button>
+    <!-- Modal: Configuración de Clave (Duración, Pausa, Equipos) en Panel Maestro -->
+    <div class="psios-modal-backdrop" id="modal-admin-key-config" aria-hidden="true">
+      <div class="psios-modal-card admin-key-modal-card" role="dialog" aria-modal="true" aria-labelledby="admin-modal-key-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon">⚙️</span>
+            <div>
+              <span class="modal-tag-badge" id="admin-modal-key-tag">Licencia Clínica</span>
+              <h3 class="modal-title" id="admin-modal-key-title">PSIOS-XXXX-XXXX-XXXX</h3>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-admin-key-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <div class="modal-card-body admin-key-modal-body">
+          <!-- Summary Pill -->
+          <div class="admin-key-modal-summary">
+            <div class="summary-item">
+              <span class="summary-label">Usuario Vinculado:</span>
+              <strong class="summary-val" id="admin-modal-user-val">—</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Estado Actual:</span>
+              <span class="table-badge badge-active" id="admin-modal-status-badge">Activa</span>
+            </div>
+          </div>
+
+          <!-- Section 1: Pausar / Reactivar -->
+          <div class="admin-config-section">
+            <h4 class="config-sec-title">Estado Operativo de la Clave</h4>
+            <p class="config-sec-desc">Puedes pausar temporalmente el acceso del usuario a la clínica o reactivarlo.</p>
+            <div class="config-toggle-row">
+              <button type="button" class="admin-status-toggle-btn" id="btn-admin-modal-toggle-pause">
+                <span id="admin-modal-toggle-icon">⏸️</span>
+                <span id="admin-modal-toggle-text">Pausar Licencia</span>
+              </button>
+              <span class="config-toggle-hint" id="admin-modal-pause-hint">La clave está operativa para el usuario.</span>
+            </div>
+          </div>
+
+          <!-- Section 2: Duración y Vigencia -->
+          <div class="admin-config-section">
+            <h4 class="config-sec-title">Fecha de Vencimiento / Duración</h4>
+            <p class="config-sec-desc">Al agregar más tiempo o renovar la fecha, la clave se reactiva automáticamente.</p>
+            
+            <div class="expiry-display-box" id="admin-modal-expiry-display">
+              <span class="expiry-label">Vence el:</span>
+              <strong class="expiry-date-text" id="admin-modal-expiry-text">31 de diciembre de 2026</strong>
+              <span class="expiry-countdown-pill" id="admin-modal-countdown-pill">Quedan 45 días</span>
+            </div>
+
+            <!-- Quick Add Duration Chips -->
+            <div class="quick-extend-label">Extender duración rápidamente:</div>
+            <div class="quick-extend-chips">
+              <button type="button" class="extend-chip" data-days="30">+30 Días</button>
+              <button type="button" class="extend-chip" data-days="90">+3 Meses</button>
+              <button type="button" class="extend-chip" data-days="180">+6 Meses</button>
+              <button type="button" class="extend-chip" data-days="365">+1 Año</button>
+              <button type="button" class="extend-chip perpetual" data-days="perpetual">♾️ Hacer Perpetua</button>
+            </div>
+
+            <div class="form-group-field custom-date-row">
+              <label for="admin-modal-custom-date" class="field-label">O define una fecha de vencimiento exacta:</label>
+              <input type="date" id="admin-modal-custom-date" class="modal-text-input" />
+            </div>
+          </div>
+
+          <!-- Section 3: Límite de Equipos -->
+          <div class="admin-config-section">
+            <h4 class="config-sec-title">Límite de Equipos (Computadoras Autorizadas)</h4>
+            <p class="config-sec-desc">Define cuántas computadoras pueden tener activada esta misma clave para este usuario.</p>
+            
+            <div class="devices-control-row">
+              <div class="max-devices-input-wrap">
+                <label for="admin-modal-max-devices" class="field-label">Equipos Permitidos:</label>
+                <input type="number" id="admin-modal-max-devices" class="modal-text-input num-input" min="1" max="50" value="1" />
+              </div>
+              <div class="devices-active-count">
+                <span class="field-label">Equipos Registrados:</span>
+                <strong class="devices-count-text" id="admin-modal-devices-count">1 de 1 equipo(s)</strong>
+              </div>
+            </div>
+
+            <div class="registered-devices-box">
+              <div class="devices-list-header">
+                <span>Identificadores de Hardware (UUID):</span>
+                <button type="button" class="btn-subtle-reset-devices" id="btn-admin-modal-reset-devices" title="Desvincular todas las computadoras para permitir nuevas activaciones">
+                  🔄 Restablecer Equipos Registrados
+                </button>
+              </div>
+              <ul class="registered-devices-list" id="admin-modal-devices-list">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-card-footer">
+          <button type="button" class="modal-btn-cancel" id="btn-close-admin-key-footer">Cancelar</button>
+          <button type="button" class="primary-gradient-btn" id="btn-save-admin-key-config">
+            <span>💾 Guardar Cambios en Cloudflare</span>
+          </button>
         </div>
       </div>
     </div>
