@@ -251,6 +251,62 @@
                 </form>
               </div>
 
+              <!-- PASO 3: INICIO DE SESIÓN DE USUARIO REGISTRADO (Solo pide contraseña) -->
+              <div class="register-step-pane" id="register-step-login" style="display: none;">
+                <div class="register-header">
+                  <div class="step-badge-row">
+                    <span class="form-kicker">ACCESO SEGURO • PSIOS</span>
+                    <span class="license-verified-tag">✓ Estación Activa</span>
+                  </div>
+                  <div class="login-user-profile-summary">
+                    <div class="login-avatar-circle" id="login-avatar-circle">👨‍⚕️</div>
+                    <div class="login-user-info">
+                      <h2 class="register-heading login-user-name" id="login-user-name">Profesional Clínico</h2>
+                      <p class="register-subprompt">Ingresa tu contraseña para acceder a tus registros clínicos</p>
+                    </div>
+                  </div>
+                </div>
+
+                <form class="register-form" id="form-login-session" onsubmit="return false;">
+                  <div class="form-group password-group">
+                    <label class="form-label" for="login-password-input">Contraseña de Privacidad</label>
+                    <div class="input-composite-wrap">
+                      <span class="input-key-icon">🔒</span>
+                      <input 
+                        type="password" 
+                        id="login-password-input" 
+                        class="glass-text-input" 
+                        placeholder="Ingresa tu contraseña" 
+                        autocomplete="current-password" 
+                        required 
+                      />
+                      <button type="button" class="btn-toggle-pwd" id="btn-toggle-login-pwd" title="Mostrar u ocultar contraseña" tabindex="-1">
+                        👁️
+                      </button>
+                    </div>
+                    <span class="input-error-hint" id="login-password-error">Contraseña incorrecta. Por favor verifica tus credenciales.</span>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="button" class="liquid-glass-btn btn-continuar" id="btn-submit-login">
+                      <span class="btn-text">Ingresar a PsiOS</span>
+                      <span class="btn-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div class="login-secondary-links">
+                    <button type="button" class="btn-switch-user-link" id="btn-switch-account">
+                      🔄 Cambiar de usuario o ingresar otra clave de producto
+                    </button>
+                  </div>
+                </form>
+              </div>
+
             </div>
           </div>
 

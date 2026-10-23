@@ -6593,6 +6593,16 @@ class AppNavigationController {
     this.btnRegAdminChip = document.getElementById('btn-reg-admin-chip');
     this.btnVerifyLicense = document.getElementById('btn-verify-license');
 
+    // Returning User Login Elements (Beta 0.0.3 - Solo Contraseña)
+    this.regStepLogin = document.getElementById('register-step-login');
+    this.loginUserName = document.getElementById('login-user-name');
+    this.loginAvatarCircle = document.getElementById('login-avatar-circle');
+    this.loginPasswordInput = document.getElementById('login-password-input');
+    this.loginPasswordError = document.getElementById('login-password-error');
+    this.btnToggleLoginPwd = document.getElementById('btn-toggle-login-pwd');
+    this.btnSubmitLogin = document.getElementById('btn-submit-login');
+    this.btnSwitchAccount = document.getElementById('btn-switch-account');
+
     // Admin Panel Elements (Beta 0.0.2 - Acceso Maestro)
     this.viewAdmin = document.getElementById('view-admin');
     this.btnAdminRefresh = document.getElementById('btn-admin-refresh-keys');
@@ -6654,13 +6664,56 @@ class AppNavigationController {
     // 1. 'Ingresar' Button Click
     if (this.btnIngresar) {
       this.btnIngresar.addEventListener('click', () => {
+        if (licenseService.isAdminSession()) {
+          const lic = licenseService.getLicenseInfo();
+          this.adminMasterKey = lic?.licenseKey || 'PSIOS-ADMIN-MASTER-2026';
+          this.openAdminPanel(this.adminMasterKey);
+          return;
+        }
+
         const savedUser = this.getSavedUser();
         const isLicensed = licenseService.isActivated();
         if (savedUser && isLicensed) {
-          this.showWelcomeView(savedUser);
+          // Si el usuario ya está registrado: saltar clave y "¿Quién eres?", solo pedir contraseña
+          this.showLoginView(savedUser);
         } else {
+          // Primera vez: pedir clave de producto
           this.showRegistrationView();
         }
+      });
+    }
+
+    // 1.0 Login de Usuario Existente (Solo contraseña)
+    if (this.btnToggleLoginPwd && this.loginPasswordInput) {
+      this.btnToggleLoginPwd.addEventListener('click', () => {
+        const isPwd = this.loginPasswordInput.type === 'password';
+        this.loginPasswordInput.type = isPwd ? 'text' : 'password';
+        this.btnToggleLoginPwd.textContent = isPwd ? '🙈' : '👁️';
+      });
+    }
+
+    if (this.loginPasswordInput) {
+      this.loginPasswordInput.addEventListener('input', () => {
+        if (this.loginPasswordError) this.loginPasswordError.classList.remove('visible');
+      });
+
+      this.loginPasswordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.handleLoginSubmit();
+        }
+      });
+    }
+
+    if (this.btnSubmitLogin) {
+      this.btnSubmitLogin.addEventListener('click', () => {
+        this.handleLoginSubmit();
+      });
+    }
+
+    if (this.btnSwitchAccount) {
+      this.btnSwitchAccount.addEventListener('click', () => {
+        this.handleFullReset();
       });
     }
 
@@ -6990,25 +7043,104 @@ class AppNavigationController {
     }
   }
 
-  showRegistrationView() {
-    const isLicensed = licenseService.isActivated();
-    if (!isLicensed) {
-      // Step 1: Force product key entry
-      if (this.regStepLicense) this.regStepLicense.style.display = 'flex';
-      if (this.regStepProfile) this.regStepProfile.style.display = 'none';
-      this.switchView('view-register');
-      setTimeout(() => {
-        if (this.regLicenseInput) this.regLicenseInput.focus();
-      }, 420);
-    } else {
-      // Step 2: Show name & password entry
-      if (this.regStepLicense) this.regStepLicense.style.display = 'none';
-      if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
-      this.switchView('view-register');
-      setTimeout(() => {
-        if (this.nameInput) this.nameInput.focus();
-      }, 420);
+  showLoginView(user) {
+    if (this.regStepLicense) this.regStepLicense.style.display = 'none';
+    if (this.regStepProfile) this.regStepProfile.style.display = 'none';
+    if (this.regStepLogin) this.regStepLogin.style.display = 'flex';
+
+    const displayName = user.doctorFullName || `${this.resolveTitle(user.title, user.gender)} ${user.rawName}`.trim();
+    if (this.loginUserName) {
+      this.loginUserName.textContent = displayName;
     }
+    if (this.loginAvatarCircle) {
+      this.loginAvatarCircle.textContent = user.gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
+    }
+    if (this.loginPasswordInput) {
+      this.loginPasswordInput.value = '';
+    }
+    if (this.loginPasswordError) {
+      this.loginPasswordError.classList.remove('visible');
+    }
+
+    this.switchView('view-register');
+    setTimeout(() => {
+      if (this.loginPasswordInput) this.loginPasswordInput.focus();
+    }, 420);
+  }
+
+  async handleLoginSubmit() {
+    const rawPassword = (this.loginPasswordInput?.value || '').trim();
+    if (!rawPassword) {
+      if (this.loginPasswordError) {
+        this.loginPasswordError.textContent = 'Por favor ingresa tu contraseña de privacidad.';
+        this.loginPasswordError.classList.add('visible');
+      }
+      if (this.loginPasswordInput) this.loginPasswordInput.focus();
+      return;
+    }
+
+    const savedUser = this.getSavedUser();
+    if (!savedUser) {
+      this.showRegistrationView();
+      return;
+    }
+
+    if (this.btnSubmitLogin) {
+      this.btnSubmitLogin.disabled = true;
+      const textSpan = this.btnSubmitLogin.querySelector('.btn-text');
+      if (textSpan) textSpan.textContent = 'Verificando...';
+    }
+
+    try {
+      const isValid = await licenseService.verifySavedPassword(rawPassword);
+      if (!isValid) {
+        if (this.loginPasswordError) {
+          this.loginPasswordError.textContent = 'Contraseña incorrecta. Por favor verifica tus credenciales.';
+          this.loginPasswordError.classList.add('visible');
+        }
+        if (this.loginPasswordInput) {
+          this.loginPasswordInput.focus();
+          this.loginPasswordInput.select();
+        }
+        return;
+      }
+
+      // Contraseña correcta -> entrar inmediatamente a la aplicación
+      if (this.loginPasswordError) this.loginPasswordError.classList.remove('visible');
+      this.showWelcomeView(savedUser);
+    } catch (err) {
+      console.warn('Error verificando contraseña:', err);
+      if (this.loginPasswordError) {
+        this.loginPasswordError.textContent = 'Error al validar contraseña.';
+        this.loginPasswordError.classList.add('visible');
+      }
+    } finally {
+      if (this.btnSubmitLogin) {
+        this.btnSubmitLogin.disabled = false;
+        const textSpan = this.btnSubmitLogin.querySelector('.btn-text');
+        if (textSpan) textSpan.textContent = 'Ingresar a PsiOS';
+      }
+    }
+  }
+
+  showRegistrationView(forceKeyStep = false) {
+    const isLicensed = licenseService.isActivated();
+    const savedUser = this.getSavedUser();
+
+    // Si ya tiene usuario y licencia y no se forzó el reseteo, pedir solo contraseña
+    if (savedUser && isLicensed && !forceKeyStep) {
+      this.showLoginView(savedUser);
+      return;
+    }
+
+    // Primera vez o cambio de usuario: mostrar paso 1 clave de producto
+    if (this.regStepLogin) this.regStepLogin.style.display = 'none';
+    if (this.regStepProfile) this.regStepProfile.style.display = 'none';
+    if (this.regStepLicense) this.regStepLicense.style.display = 'flex';
+    this.switchView('view-register');
+    setTimeout(() => {
+      if (this.regLicenseInput) this.regLicenseInput.focus();
+    }, 420);
   }
 
   async handleVerifyLicenseStep() {
@@ -7051,22 +7183,47 @@ class AppNavigationController {
     // 2. Validación de formato de clave estándar
     if (!key.startsWith('PSIOS-') || key.length < 8) {
       if (this.regLicenseError) {
-        this.regLicenseError.textContent = 'Formato de clave no válido. Debe comenzar con PSIOS- (ej: PSIOS-PRO-2026-CLINIC).';
+        this.regLicenseError.textContent = 'Formato de clave no válido. Debe comenzar con PSIOS- (ej: PSIOS-CLIN-XXXX-XXXX).';
         this.regLicenseError.classList.add('visible');
       }
       if (this.regLicenseInput) this.regLicenseInput.focus();
       return;
     }
 
-    this.pendingLicenseKey = key;
-    if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
+    // 3. VALIDACIÓN ESTRICTA EN CLOUDFLARE KV:
+    // SOLO SE PUEDEN ACTIVAR CLAVES GENERADAS POR EL MAESTRO
+    if (this.btnVerifyLicense) {
+      this.btnVerifyLicense.disabled = true;
+      const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
+      if (textSpan) textSpan.textContent = 'Verificando en Cloudflare KV...';
+    }
 
-    // Transición a Paso 2 ('¿Quién eres?' + Contraseña de Privacidad)
-    if (this.regStepLicense) this.regStepLicense.style.display = 'none';
-    if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
-    setTimeout(() => {
-      if (this.nameInput) this.nameInput.focus();
-    }, 200);
+    try {
+      const validated = await licenseService.validateKeyForActivation(key);
+      this.pendingLicenseKey = key;
+      this.pendingLicensePlan = validated.plan;
+      if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
+
+      // Transición a Paso 2 ('¿Quién eres?' + Contraseña de Privacidad)
+      if (this.regStepLicense) this.regStepLicense.style.display = 'none';
+      if (this.regStepLogin) this.regStepLogin.style.display = 'none';
+      if (this.regStepProfile) this.regStepProfile.style.display = 'flex';
+      setTimeout(() => {
+        if (this.nameInput) this.nameInput.focus();
+      }, 200);
+    } catch (err) {
+      if (this.regLicenseError) {
+        this.regLicenseError.textContent = err.message || 'Esta clave no existe o no ha sido generada por el Administrador Maestro.';
+        this.regLicenseError.classList.add('visible');
+      }
+      if (this.regLicenseInput) this.regLicenseInput.focus();
+    } finally {
+      if (this.btnVerifyLicense) {
+        this.btnVerifyLicense.disabled = false;
+        const textSpan = this.btnVerifyLicense.querySelector('.btn-text');
+        if (textSpan) textSpan.textContent = 'Verificar y Continuar';
+      }
+    }
   }
 
   // ==========================================
@@ -7242,7 +7399,25 @@ class AppNavigationController {
   }
 
   handleLogout() {
-    // Clear user, credentials, and license persistence
+    // Cerrar sesión activa (bloquear estación)
+    authService.logout();
+
+    // Reset password input
+    if (this.loginPasswordInput) this.loginPasswordInput.value = '';
+    if (this.loginPasswordError) this.loginPasswordError.classList.remove('visible');
+
+    // Ocultar cápsula de usuario superior
+    if (this.welcomeTopUserPill) {
+      this.welcomeTopUserPill.setAttribute('aria-hidden', 'true');
+      this.welcomeTopUserPill.style.display = 'none';
+    }
+
+    // Volver a la pantalla 'Hola'
+    this.switchView('view-splash');
+  }
+
+  handleFullReset() {
+    // Reseteo completo para cambiar de usuario o ingresar otra clave
     try {
       localStorage.removeItem('psios_user_profile');
       localStorage.removeItem('psios_clinical_user_v1');
@@ -7253,26 +7428,18 @@ class AppNavigationController {
     licenseService.clearSavedCredentials();
     authService.logout();
 
-    // Reset form inputs
     if (this.regLicenseInput) this.regLicenseInput.value = '';
     if (this.nameInput) this.nameInput.value = '';
     if (this.userPasswordInput) this.userPasswordInput.value = '';
-    if (this.regLicenseError) this.regLicenseError.classList.remove('visible');
-    if (this.nameError) this.nameError.classList.remove('visible');
-    if (this.passwordError) this.passwordError.classList.remove('visible');
+    if (this.loginPasswordInput) this.loginPasswordInput.value = '';
+    this.pendingLicenseKey = null;
 
-    // Reset registration step panes
-    if (this.regStepLicense) this.regStepLicense.style.display = 'flex';
-    if (this.regStepProfile) this.regStepProfile.style.display = 'none';
-
-    // Hide top capsule
     if (this.welcomeTopUserPill) {
       this.welcomeTopUserPill.setAttribute('aria-hidden', 'true');
       this.welcomeTopUserPill.style.display = 'none';
     }
 
-    // Return to Splash view
-    this.switchView('view-splash');
+    this.showRegistrationView(true);
   }
 
   showWelcomeView(user) {

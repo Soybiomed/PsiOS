@@ -6396,7 +6396,80 @@ html, body {
 }
 
 /* ==========================================================================
-   VIEW ADMIN: PANEL MAESTRO DE ADMINISTRACIÓN (BETA 0.0.2)
+   LOGIN STEP FOR RETURNING USERS (SOLO PIDE CONTRASEÑA)
+   ========================================================================== */
+.login-user-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  margin: 0.65rem 0 0.35rem 0;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.login-avatar-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.login-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.login-user-name {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem) !important;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.login-secondary-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-switch-user-link {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-switch-user-link:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   VIEW ADMIN: PANEL MAESTRO DE ADMINISTRACIÓN (BETA 0.0.3)
    ========================================================================== */
 #view-admin.view-panel,
 .view-panel.view-admin {

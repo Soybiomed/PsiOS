@@ -140,47 +140,57 @@ export class LicenseService {
    */
   async fetchCloudKeys() {
     const workerUrl = this.getWorkerUrl();
-    try {
-      // 1. Intentar endpoint dedicado /api/admin/keys
-      const directRes = await fetch(`${workerUrl}/api/admin/keys?masterKey=PSIOS-ADMIN-MASTER-2026`, {
-        headers: {
-          'Authorization': 'Bearer PSIOS-ADMIN-MASTER-2026',
-          'X-License-Key': 'PSIOS-ADMIN-MASTER-2026',
-          'X-PsiOS-Version': '0.0.3'
+    const isOnline = typeof navigator === 'undefined' || navigator.onLine !== false;
+
+    if (workerUrl && isOnline) {
+      try {
+        // 1. Intentar endpoint dedicado /api/admin/keys
+        const directRes = await fetch(`${workerUrl}/api/admin/keys?masterKey=PSIOS-ADMIN-MASTER-2026`, {
+          headers: {
+            'Authorization': 'Bearer PSIOS-ADMIN-MASTER-2026',
+            'X-License-Key': 'PSIOS-ADMIN-MASTER-2026',
+            'X-PsiOS-Version': '0.0.3'
+          }
+        });
+        if (directRes.ok) {
+          const data = await directRes.json();
+          const list = Array.isArray(data) ? data : (data.keys || []);
+          if (Array.isArray(list) && list.length > 0) {
+            this.cacheLocalKeys(list);
+            return list;
+          }
         }
-      });
-      if (directRes.ok) {
-        const data = await directRes.json();
-        const list = Array.isArray(data) ? data : (data.keys || []);
-        if (Array.isArray(list) && list.length > 0) {
-          this.cacheLocalKeys(list);
-          return list;
-        }
+      } catch (e) {
+        console.warn('Direct admin/keys unreachable, trying Cloudflare KV sync engine:', e);
       }
-    } catch (e) {
-      console.warn('Direct admin/keys unreachable, trying Cloudflare KV sync engine:', e);
+
+      try {
+        // 2. Consulta de Cloudflare KV mediante motor sincronizado
+        const kvRes = await fetch(`${workerUrl}/api/clinic/restore?licenseKey=${encodeURIComponent(CLOUD_LICENSES_KV_KEY)}`, {
+          headers: {
+            'X-License-Key': CLOUD_LICENSES_KV_KEY
+          }
+        });
+        if (kvRes.ok) {
+          const json = await kvRes.json();
+          if (json && json.success && json.data && Array.isArray(json.data.patients) && json.data.patients.length > 0) {
+            const list = json.data.patients;
+            this.cacheLocalKeys(list);
+            return list;
+          }
+        }
+      } catch (e) {
+        console.warn('Error leyendo desde Cloudflare KV:', e);
+      }
     }
 
-    try {
-      // 2. Consulta de Cloudflare KV mediante motor sincronizado
-      const kvRes = await fetch(`${workerUrl}/api/clinic/restore?licenseKey=${encodeURIComponent(CLOUD_LICENSES_KV_KEY)}`, {
-        headers: {
-          'X-License-Key': CLOUD_LICENSES_KV_KEY
-        }
-      });
-      if (kvRes.ok) {
-        const json = await kvRes.json();
-        if (json && json.success && json.data && Array.isArray(json.data.patients) && json.data.patients.length > 0) {
-          const list = json.data.patients;
-          this.cacheLocalKeys(list);
-          return list;
-        }
-      }
-    } catch (e) {
-      console.warn('Error leyendo desde Cloudflare KV:', e);
+    // 3. Si la base en Cloudflare KV está vacía o se trabaja offline, usar claves cacheadas
+    const cached = this.getCachedLocalKeys();
+    if (cached && cached.length > 0) {
+      return cached;
     }
 
-    // 3. Si la base en Cloudflare KV está recién creada o vacía, inicializarla en Cloudflare KV
+    // 4. Claves iniciales del sistema
     const initialKeys = [
       {
         key: 'PSIOS-PRO-2026-CLINIC',
@@ -209,7 +219,6 @@ export class LicenseService {
     ];
 
     await this.pushCloudKeys(initialKeys).catch(() => {});
-    this.cacheLocalKeys(initialKeys);
     return initialKeys;
   }
 
@@ -220,7 +229,8 @@ export class LicenseService {
     const workerUrl = this.getWorkerUrl();
     this.cacheLocalKeys(keysList);
 
-    if (!navigator.onLine || !workerUrl) return;
+    const isOnline = typeof navigator === 'undefined' || navigator.onLine !== false;
+    if (!isOnline || !workerUrl) return;
 
     try {
       await fetch(`${workerUrl}/api/clinic/backup`, {
@@ -254,6 +264,10 @@ export class LicenseService {
     } catch {
       return [];
     }
+  }
+
+  getLocalAdminKeys() {
+    return this.getCachedLocalKeys();
   }
 
   // =========================================================================
@@ -388,6 +402,67 @@ export class LicenseService {
   // ACTIVACIÓN DE PRODUCTO CON ENLACE ÚNICO EN CLOUDFLARE KV
   // =========================================================================
 
+  /**
+   * Valida en Cloudflare KV que la clave haya sido GENERADA POR EL MAESTRO
+   * y que se encuentre disponible antes de permitir pasar al paso "¿Quién eres?".
+   */
+  async validateKeyForActivation(key) {
+    if (!key || typeof key !== 'string') {
+      throw new Error('Debe ingresar una clave de producto válida.');
+    }
+
+    const cleanKey = key.trim().toUpperCase();
+
+    // 1. Acceso Administrador Maestro
+    if (this.isMasterKey(cleanKey)) {
+      return { isValid: true, isAdmin: true, key: cleanKey, plan: 'PsiOS Administrador Maestro' };
+    }
+
+    // 2. Consulta en tiempo real a Cloudflare KV
+    const cloudKeys = await this.fetchCloudKeys();
+    const existingRecord = cloudKeys.find(k => k.key === cleanKey);
+
+    // REGLA ESTRICTA: Solo se permite si fue generada en el Panel Maestro
+    if (!existingRecord) {
+      throw new Error('Esta clave de producto no existe o no ha sido generada por el Administrador Maestro en Cloudflare.');
+    }
+
+    // 3. Verificar si ya está enlazada a otro profesional
+    if (existingRecord.status === 'active' && existingRecord.linkedUser) {
+      throw new Error(`Esta clave ya está vinculada al usuario "${existingRecord.linkedUser}". Cada clave es exclusiva para un único usuario.`);
+    }
+
+    return {
+      isValid: true,
+      isAdmin: false,
+      key: cleanKey,
+      plan: existingRecord.plan || 'PsiOS Profesional Clínico',
+      tier: existingRecord.tier || 'pro'
+    };
+  }
+
+  async verifySavedPassword(enteredPassword) {
+    if (!enteredPassword) return false;
+    const storedHash = localStorage.getItem('psios_user_pwd_hash');
+    if (!storedHash) return true;
+
+    // Comparación 1: Base64
+    try {
+      if (storedHash === btoa(enteredPassword)) return true;
+    } catch {}
+
+    // Comparación 2: SHA-256
+    try {
+      const enc = new TextEncoder();
+      const raw = `${enteredPassword}::PSIOS_CLINICAL_SECURE_SALT_2026_V2`;
+      const digest = await crypto.subtle.digest('SHA-256', enc.encode(raw));
+      const hex = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+      if (storedHash === hex) return true;
+    } catch {}
+
+    return false;
+  }
+
   async activate(key, doctorName = 'Profesional Clínico', password = '') {
     if (!key || typeof key !== 'string') {
       throw new Error('Debe proporcionar una clave de producto válida.');
@@ -415,18 +490,21 @@ export class LicenseService {
       return adminRecord;
     }
 
-    // 2. Verificar regla de 1 usuario único en Cloudflare KV
+    // 2. Verificar que la clave exista en Cloudflare KV (generada por el maestro)
     const cloudKeys = await this.fetchCloudKeys();
     const existingCloudRecord = cloudKeys.find(k => k.key === normalizedKey);
-    if (existingCloudRecord) {
-      if (existingCloudRecord.status === 'active' && existingCloudRecord.linkedUser && existingCloudRecord.linkedUser !== doctorName) {
-        throw new Error(`Esta clave ya está vinculada en Cloudflare a otro usuario (${existingCloudRecord.linkedUser}). Solo se permite 1 usuario por clave.`);
-      }
+    
+    if (!existingCloudRecord) {
+      throw new Error('Clave rechazada: Esta clave no existe o no ha sido generada por el Administrador Maestro en Cloudflare.');
+    }
+
+    if (existingCloudRecord.status === 'active' && existingCloudRecord.linkedUser && existingCloudRecord.linkedUser !== doctorName) {
+      throw new Error(`Esta clave ya está vinculada en Cloudflare a otro usuario (${existingCloudRecord.linkedUser}). Solo se permite 1 usuario por clave.`);
     }
 
     // 3. Activación directa contra el endpoint /api/activate de Cloudflare
     let token = `TOK-CF-${normalizedKey.substring(0, 8)}-${Date.now().toString(16).toUpperCase()}`;
-    let plan = existingCloudRecord ? existingCloudRecord.plan : 'PsiOS Profesional Clínico';
+    let plan = existingCloudRecord.plan || 'PsiOS Profesional Clínico';
     let features = ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup'];
 
     if (workerUrl && navigator.onLine) {
@@ -459,23 +537,12 @@ export class LicenseService {
       }
     }
 
-    // 4. Vincular el usuario a la clave en Cloudflare KV
-    if (existingCloudRecord) {
-      existingCloudRecord.status = 'active';
-      existingCloudRecord.linkedUser = doctorName;
-      existingCloudRecord.doctorName = doctorName;
-      existingCloudRecord.activatedAt = new Date().toISOString();
-    } else {
-      cloudKeys.unshift({
-        key: normalizedKey,
-        plan,
-        tier: 'pro',
-        status: 'active',
-        linkedUser: doctorName,
-        doctorName,
-        activatedAt: new Date().toISOString()
-      });
-    }
+    // 4. Vincular el usuario a la clave existente en Cloudflare KV
+    existingCloudRecord.status = 'active';
+    existingCloudRecord.linkedUser = doctorName;
+    existingCloudRecord.doctorName = doctorName;
+    existingCloudRecord.activatedAt = new Date().toISOString();
+    
     await this.pushCloudKeys(cloudKeys);
 
     // 5. Guardar registro local de activación permanente

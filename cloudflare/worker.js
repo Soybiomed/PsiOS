@@ -269,27 +269,11 @@ export default {
           licenseData = { ...BUILTIN_LICENSES[normalizedKey] };
         }
 
-        // Si no está en KV pero cumple con el formato algorítmico
-        const keyPattern = /^PSIOS-[A-Z0-9]{3,5}-[A-Z0-9]{4,5}-[A-Z0-9]{4,5}$/;
-        if (!licenseData && keyPattern.test(normalizedKey)) {
-          licenseData = {
-            key: normalizedKey,
-            plan: 'PsiOS Profesional Clínico',
-            maxDevices: 5,
-            expiresAt: null,
-            tier: 'pro',
-            status: 'available',
-            linkedUser: null,
-            createdAt: new Date().toISOString(),
-            features: ['offline_books', 'clinical_sync', 'unlimited_patients', 'full_semiology', 'cloud_backup']
-          };
-        }
-
         if (!licenseData) {
           return jsonResponse({
             success: false,
             error: 'INVALID_LICENSE_KEY',
-            message: 'La clave de producto ingresada no es válida o fue revocada.'
+            message: 'La clave de producto ingresada no existe o no ha sido generada por el Administrador Maestro en Cloudflare.'
           }, 403);
         }
 
