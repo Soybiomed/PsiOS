@@ -245,19 +245,37 @@ export class ClinicSyncService {
    */
   async pullFromCloudflare(licenseKey = '', password = '') {
     if (!navigator.onLine) return null;
+    const cleanKey = (licenseKey || '').trim().toUpperCase();
+    if (!cleanKey) return null;
+
     const workerUrl = 'https://psios-licensing-worker.villalpandojhosuasami.workers.dev';
     try {
       this.setStatus('syncing');
-      const res = await fetch(`${workerUrl}/api/clinic/restore`, {
-        method: 'POST',
+
+      // 1. Intentar primero vía GET (formato soportado en vivo por Cloudflare Worker)
+      const getUrl = `${workerUrl}/api/clinic/restore?licenseKey=${encodeURIComponent(cleanKey)}${password ? `&password=${encodeURIComponent(password)}` : ''}`;
+      let res = await fetch(getUrl, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          'X-License-Key': licenseKey || 'DEFAULT_CLINIC'
-        },
-        body: JSON.stringify({ licenseKey, password })
+          'X-License-Key': cleanKey,
+          'Accept': 'application/json'
+        }
       });
-      const json = await res.json();
-      if (res.ok && json.success && json.data) {
+
+      // 2. Si GET no responde 200, intentar POST como respaldo
+      if (!res.ok) {
+        res = await fetch(`${workerUrl}/api/clinic/restore`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-License-Key': cleanKey
+          },
+          body: JSON.stringify({ licenseKey: cleanKey, password })
+        });
+      }
+
+      const json = await res.json().catch(() => null);
+      if (res.ok && json && json.success && json.data) {
         this.lastSyncTime = new Date();
         this.setStatus('synced');
         return json.data;

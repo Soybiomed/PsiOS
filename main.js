@@ -4750,10 +4750,28 @@ class ClinicController {
     this.pushToCloudflare();
   }
 
+  getLicenseKey() {
+    const creds = licenseService.getSavedCredentials() || {};
+    let key = creds.licenseKey || licenseService.getLicenseInfo()?.licenseKey;
+    if (!key) {
+      try {
+        const lic = JSON.parse(localStorage.getItem('psios_license_v2') || localStorage.getItem('psios_license_v1') || '{}');
+        key = lic.licenseKey;
+      } catch {}
+    }
+    if (!key) {
+      try {
+        const sc = JSON.parse(localStorage.getItem('psios_saved_credentials_v2') || '{}');
+        key = sc.licenseKey;
+      } catch {}
+    }
+    return (key || '').trim().toUpperCase();
+  }
+
   async pushToCloudflare() {
     try {
       const creds = licenseService.getSavedCredentials() || {};
-      const licenseKey = creds.licenseKey || licenseService.getLicenseInfo()?.licenseKey || '';
+      const licenseKey = this.getLicenseKey();
       let pwd = '';
       try {
         const b64 = localStorage.getItem('psios_user_pwd_hash');
@@ -4803,7 +4821,7 @@ class ClinicController {
 
     try {
       const creds = licenseService.getSavedCredentials() || {};
-      const licenseKey = creds.licenseKey || licenseService.getLicenseInfo()?.licenseKey || '';
+      const licenseKey = this.getLicenseKey();
       let pwd = '';
       try {
         const b64 = localStorage.getItem('psios_user_pwd_hash');
@@ -6895,6 +6913,9 @@ class AppNavigationController {
     if (this.btnPortalClinic) {
       this.btnPortalClinic.addEventListener('click', () => {
         this.switchView('view-clinic');
+        if (this.clinic) {
+          this.clinic.syncCloudData(false);
+        }
       });
     }
 
@@ -6925,6 +6946,9 @@ class AppNavigationController {
     if (this.btnLibraryGotoClinic) {
       this.btnLibraryGotoClinic.addEventListener('click', () => {
         this.switchView('view-clinic');
+        if (this.clinic) {
+          this.clinic.syncCloudData(false);
+        }
       });
     }
 
@@ -7162,6 +7186,7 @@ class AppNavigationController {
         gender: this.selectedGender,
         doctorFullName,
         hasPassword: true,
+        pwdHash: btoa(rawPassword),
         registeredAt: Date.now()
       };
 
@@ -7186,9 +7211,9 @@ class AppNavigationController {
         lastLogin: new Date().toISOString()
       });
 
-      // 4. Sincronizar historias clínicas si el módulo está disponible
-      if (this.clinic && this.clinic.syncCloudData) {
-        this.clinic.syncCloudData(false);
+      // 4. Sincronizar historias clínicas hacia Cloudflare KV
+      if (this.clinic) {
+        await this.clinic.pushToCloudflare();
       }
 
       this.showWelcomeView(userData);
@@ -7269,8 +7294,11 @@ class AppNavigationController {
         return;
       }
 
-      // Contraseña correcta -> entrar inmediatamente a la aplicación
+      // Contraseña correcta -> entrar inmediatamente a la aplicación y sincronizar datos de la clínica
       if (this.loginPasswordError) this.loginPasswordError.classList.remove('visible');
+      if (this.clinic) {
+        this.clinic.syncCloudData(false);
+      }
       this.showWelcomeView(savedUser);
     } catch (err) {
       console.warn('Error verificando contraseña:', err);
