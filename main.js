@@ -5490,8 +5490,27 @@ class ClinicController {
       tab.addEventListener('click', () => {
         const targetTab = tab.dataset.tab;
         this.switchTab(targetTab);
+        if (window.innerWidth <= 1024) {
+          setSidebarCollapsed(true);
+        }
       });
     });
+
+    // Auto-close sidebar drawer on outside tap for mobile / tablet screens
+    document.addEventListener('pointerdown', (e) => {
+      if (window.innerWidth <= 1024 && this.sidebar && !this.sidebar.classList.contains('is-collapsed')) {
+        const isClickInsideSidebar = this.sidebar.contains(e.target);
+        const isClickToggle = this.btnToggleSidebar && this.btnToggleSidebar.contains(e.target);
+        if (!isClickInsideSidebar && !isClickToggle) {
+          setSidebarCollapsed(true);
+        }
+      }
+    });
+
+    // Default to collapsed sidebar on initial mobile load
+    if (window.innerWidth <= 1024) {
+      setSidebarCollapsed(true);
+    }
 
     // 3. Modals open triggers
     const patientOpeners = [this.btnSidebarNewPatient, this.btnDashNewPatient, this.btnOpenPatientModal];

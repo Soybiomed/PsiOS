@@ -5066,57 +5066,512 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIVE OVERRIDES FOR WORKSPACE, BIBLIOTECA & CLÍNICA
+   COMPREHENSIVE RESPONSIVE SYSTEM (TABLETS, PHABLETS & MOBILE PHONES)
+   Ultra-optimized mobile experience across all views, headers, cards & modals
    ========================================================================== */
+
+/* 1. TABLET BREAKPOINT (<= 1024px) */
 @media (max-width: 1024px) {
-  .clinic-workspace-container {
-    flex-direction: column;
+  #app.workspace-mode-active .hero-left {
+    padding: max(3.5rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom)) 1.5rem;
   }
 
+  .clinic-workspace-container {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* Off-canvas slide-over drawer on tablets and mobile */
   .clinic-sidebar {
-    width: 100%;
-    min-height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 310px;
+    max-width: 85vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 10000;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-radius: 0 24px 24px 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.25);
+    padding: 1.5rem 1.25rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(0);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   }
 
   .clinic-sidebar.is-collapsed {
-    display: none !important;
+    transform: translateX(-105%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
     margin-right: 0 !important;
   }
 
   .clinic-dashboard-layout {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .appointments-master-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 }
 
-@media (max-width: 640px) {
-  .welcome-portal-grid {
-    grid-template-columns: 1fr;
+/* 2. HANDHELD & MOBILE PHONE BREAKPOINT (<= 768px) */
+@media (max-width: 768px) {
+  /* Workspace padding reduction for mobile screens */
+  #app.workspace-mode-active .hero-left {
+    padding: max(1rem, env(safe-area-inset-top)) 0.75rem max(1.75rem, env(safe-area-inset-bottom)) 0.75rem;
+    overflow-x: hidden;
   }
 
+  /* Hide floating brand header & floating user pill in workspace mode on mobile to avoid overlapping content */
+  #app.workspace-mode-active .brand-header {
+    display: none !important;
+  }
+  #app.workspace-mode-active .welcome-top-user-pill {
+    display: none !important;
+  }
+
+  /* Common Module Header Bar on Mobile (Biblioteca & Clínica) */
+  .module-header-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .module-header-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .kinetic-view-title {
+    font-size: 1.55rem;
+    line-height: 1.15;
+  }
+
+  /* Full-width Search Bar row on mobile */
+  .header-search-wrap {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0.25rem;
+    height: 44px;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+
+  .header-search-input {
+    font-size: 0.88rem;
+    width: 100%;
+  }
+
+  /* Actions and pills row */
+  .module-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    flex-wrap: nowrap;
+  }
+
+  .module-header-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cross-module-btn {
+    height: 36px;
+    padding: 0 0.85rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .header-status-pill {
+    height: 34px;
+    padding: 0 0.65rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .clinic-sync-indicator {
+    height: 34px;
+    padding: 0 0.65rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Library Category Filter Chips */
+  .library-categories-track {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .library-categories-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lib-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.76rem;
+  }
+
+  .library-meta-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  /* Single column Library Cards on mobile */
+  .library-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .lib-resource-card {
+    padding: 1.15rem;
+    border-radius: 18px;
+  }
+
+  .lib-card-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .lib-card-actions .primary-gradient-btn,
+  .lib-card-actions .btn-row-action {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  /* Clinic Tab Navigation */
+  .clinic-tab-view {
+    gap: 1rem;
+  }
+
+  /* Metrics Stack */
   .dashboard-metrics-grid {
     grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .metric-glass-card {
+    padding: 0.95rem 1.15rem;
+    border-radius: 16px;
+  }
+
+  .metric-number {
+    font-size: 1.75rem;
+  }
+
+  /* Patient Directory Card Format on Mobile */
+  .patient-table-header {
+    display: none !important;
   }
 
   .patient-table-row {
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
   }
 
-  .patient-table-row > *:nth-child(2),
-  .patient-table-row > *:nth-child(3),
-  .patient-table-row > *:nth-child(4) {
+  .patient-table-row > * {
+    display: block !important;
+  }
+
+  .patient-table-row div:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .patient-table-row div:last-child .btn-row-action {
+    flex: 1;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Patient Sheet Modal Fullscreen on Mobile */
+  .patient-sheet-modal-card {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    margin: 0;
+    border: none;
+  }
+
+  .patient-sheet-header {
+    padding: 0.85rem 1rem;
+  }
+
+  .patient-sheet-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1.6rem;
+    border-radius: 12px;
+  }
+
+  .patient-sheet-title {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .patient-sheet-body {
+    padding: 0.85rem;
+    gap: 1rem;
+  }
+
+  .sheet-demographics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .sheet-tile {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .sheet-section-card {
+    padding: 0.85rem;
+    border-radius: 14px;
+    gap: 0.65rem;
+  }
+
+  .patient-sheet-footer {
+    padding: 0.75rem 1rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .sheet-footer-left {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .sheet-action-secondary,
+  .modal-btn-cancel {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  /* Notebook / Whiteboard on Mobile */
+  .sheet-evolution-mode-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .sheet-mode-tabs {
+    width: 100%;
+  }
+
+  .sheet-mode-tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .notebook-toolbar {
+    padding: 0.45rem;
+    gap: 0.4rem;
+  }
+
+  .notebook-divider {
     display: none;
+  }
+
+  .sheet-notebook-canvas {
+    height: 310px;
+  }
+
+  .notebook-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .notebook-caption-input {
+    width: 100%;
+    min-height: 42px;
+    font-size: 16px;
+  }
+
+  .notebook-footer > div {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .notebook-footer button {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  /* Modal Dialog Cards (Nuevo Paciente, Nueva Cita, etc.) */
+  .psios-modal-card {
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 92dvh;
+    border-radius: 20px;
+  }
+
+  .modal-card-header {
+    padding: 1.15rem 1.25rem 0.85rem 1.25rem;
+  }
+
+  .modal-card-body {
+    padding: 1rem 1.15rem;
+  }
+
+  .modal-card-footer {
+    padding: 0.85rem 1.15rem 1.15rem 1.15rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .modal-card-footer button {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
   }
 
   .form-row-duo {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px; /* Prevents auto-zoom in iOS Safari */
+    min-height: 44px;
   }
 
   .gender-segmented-picker {
     grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+/* 3. ULTRA COMPACT MOBILE SCREENS (<= 480px) */
+@media (max-width: 480px) {
+  .welcome-portal-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .portal-card-btn {
+    padding: 0.95rem 1.1rem;
+    border-radius: 16px;
+  }
+
+  .portal-card-icon-wrap {
+    width: 42px;
+    height: 42px;
+    font-size: 1.3rem;
+  }
+
+  .portal-card-title {
+    font-size: 0.95rem;
+  }
+
+  .portal-card-desc {
+    font-size: 0.78rem;
+  }
+
+  .greeting-headline {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .liquid-glass-btn.btn-enter {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+    font-size: 1.05rem;
+  }
+
+  .sheet-demographics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .appt-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .appt-item-row .appt-badge {
+    align-self: flex-start;
+  }
+
+  .drawing-viewer-card {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .admin-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-kpi-card {
+    padding: 1rem;
   }
 }
 
