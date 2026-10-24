@@ -3382,11 +3382,19 @@ class LibraryController {
     }
 
     if (this.btnPdfFullscreen) {
-      this.btnPdfFullscreen.addEventListener('click', () => {
+      this.btnPdfFullscreen.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const card = this.pdfModal?.querySelector('.pdf-reader-modal-card');
         if (card) {
-          card.classList.toggle('is-fullscreen');
-          this.btnPdfFullscreen.textContent = card.classList.contains('is-fullscreen') ? '🗗' : '⛶';
+          const isFs = card.classList.toggle('is-fullscreen');
+          this.btnPdfFullscreen.textContent = isFs ? '🗗' : '⛶';
+          this.btnPdfFullscreen.title = isFs ? 'Salir de pantalla completa' : 'Pantalla completa';
+          this.btnPdfFullscreen.classList.toggle('active', isFs);
+          if (this.pdfModal) this.pdfModal.classList.toggle('is-fullscreen-backdrop', isFs);
+          setTimeout(() => {
+            this.fitWidth();
+          }, 120);
         }
       });
     }
@@ -4510,21 +4518,35 @@ class ClinicalNotebook {
     // Fullscreen change listener to sync UI if exited via browser / ESC key
     this.fsChangeHandler = () => {
       const isFs = Boolean(document.fullscreenElement);
-      if (!isFs && this.isFullscreen) {
+      if (!isFs && this.isFullscreen && this.enteredNativeFullscreen) {
+        this.enteredNativeFullscreen = false;
         this.toggleFullscreen(false);
       }
     };
     document.addEventListener('fullscreenchange', this.fsChangeHandler);
     document.addEventListener('webkitfullscreenchange', this.fsChangeHandler);
+
+    this.escHandler = (e) => {
+      if (e.key === 'Escape' && this.isFullscreen) {
+        this.toggleFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', this.escHandler);
   }
 
   destroy() {
+    if (this.isFullscreen) {
+      this.toggleFullscreen(false);
+    }
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
     }
     if (this.fsChangeHandler) {
       document.removeEventListener('fullscreenchange', this.fsChangeHandler);
       document.removeEventListener('webkitfullscreenchange', this.fsChangeHandler);
+    }
+    if (this.escHandler) {
+      window.removeEventListener('keydown', this.escHandler);
     }
   }
 
@@ -4773,41 +4795,74 @@ class ClinicalNotebook {
     // Fullscreen Toggle
     const btnFullscreen = this.container.querySelector('#btn-notebook-fullscreen');
     const btnExitFullscreen = this.container.querySelector('#btn-notebook-exit-fullscreen');
-    const toggleFullscreen = (desiredState) => {
-      this.toggleFullscreen(desiredState);
-    };
 
-    if (btnFullscreen) btnFullscreen.addEventListener('click', () => toggleFullscreen(true));
-    if (btnExitFullscreen) btnExitFullscreen.addEventListener('click', () => toggleFullscreen(false));
-    this.toggleFullscreen = toggleFullscreen;
+    if (btnFullscreen) {
+      btnFullscreen.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleFullscreen();
+      };
+    }
+    if (btnExitFullscreen) {
+      btnExitFullscreen.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleFullscreen(false);
+      };
+    }
   }
 
   toggleFullscreen(desiredState) {
-    if (desiredState === undefined) {
-      this.isFullscreen = !this.isFullscreen;
-    } else {
-      this.isFullscreen = desiredState;
-    }
+    const nextState = (desiredState === undefined) ? !this.isFullscreen : Boolean(desiredState);
+    if (this.isFullscreen === nextState) return;
+    this.isFullscreen = nextState;
 
     const btnFullscreen = this.container.querySelector('#btn-notebook-fullscreen');
 
     if (this.isFullscreen) {
+      // Create DOM placeholder to maintain exact position when minimizing
+      if (!this.placeholder && this.container.parentNode) {
+        this.placeholder = document.createElement('div');
+        this.placeholder.id = 'sheet-notebook-dom-placeholder';
+        this.placeholder.style.display = 'none';
+        this.container.parentNode.insertBefore(this.placeholder, this.container);
+      }
+      document.body.appendChild(this.container);
       this.container.classList.add('is-fullscreen');
+      document.body.classList.add('notebook-fullscreen-active');
       document.body.style.overflow = 'hidden';
-      if (btnFullscreen) btnFullscreen.innerHTML = '<span>🗗 Minimizar</span>';
+
+      if (btnFullscreen) {
+        btnFullscreen.innerHTML = '<span>🗗 Minimizar</span>';
+        btnFullscreen.classList.add('active');
+      }
 
       try {
         if (!document.fullscreenElement && this.container.requestFullscreen) {
-          this.container.requestFullscreen().catch(() => {});
+          this.container.requestFullscreen()
+            .then(() => { this.enteredNativeFullscreen = true; })
+            .catch(() => {});
         }
       } catch {}
     } else {
+      // Return container from body to original spot
+      if (this.placeholder && this.placeholder.parentNode) {
+        this.placeholder.parentNode.insertBefore(this.container, this.placeholder);
+        this.placeholder.remove();
+        this.placeholder = null;
+      }
       this.container.classList.remove('is-fullscreen');
+      document.body.classList.remove('notebook-fullscreen-active');
       document.body.style.overflow = '';
-      if (btnFullscreen) btnFullscreen.innerHTML = '<span>⛶ Pantalla Completa</span>';
+
+      if (btnFullscreen) {
+        btnFullscreen.innerHTML = '<span>⛶ Pantalla Completa</span>';
+        btnFullscreen.classList.remove('active');
+      }
 
       try {
-        if (document.fullscreenElement && document.exitFullscreen) {
+        if (document.fullscreenElement && document.exitFullscreen && this.enteredNativeFullscreen) {
+          this.enteredNativeFullscreen = false;
           document.exitFullscreen().catch(() => {});
         }
       } catch {}
@@ -4816,7 +4871,7 @@ class ClinicalNotebook {
     setTimeout(() => {
       this.resize(true);
       this.updateScrollIndicator();
-    }, 80);
+    }, 60);
   }
 
   bindScrollEvents() {
@@ -6487,13 +6542,27 @@ class ClinicController {
 
           <!-- 1. Text Editor Mode -->
           <div class="sheet-evolution-editor" id="sheet-text-editor-container">
+            <div class="text-editor-fullscreen-header" id="text-editor-fs-header">
+              <div class="notebook-fs-title-box">
+                <span style="font-size: 1.25rem;">⌨️</span>
+                <strong>Evolución Clínica — Redacción de Sesión</strong>
+                <span class="notebook-fs-badge">${patient.name}</span>
+              </div>
+              <div class="notebook-fs-actions">
+                <button type="button" class="notebook-btn" id="btn-fs-save-evolution" style="background: #10b981; color: #ffffff; border-color: #10b981;">💾 Guardar Nota</button>
+                <button type="button" class="notebook-btn" id="btn-text-exit-fullscreen" title="Salir de Pantalla Completa">✕ Salir</button>
+              </div>
+            </div>
             <textarea
               class="sheet-evolution-textarea"
               id="sheet-evolution-input"
               rows="3"
               placeholder="Ingresa los hallazgos de la sesión, intervenciones aplicadas, acuerdos y tareas para la próxima consulta..."
             ></textarea>
-            <div style="display: flex; justify-content: flex-end;">
+            <div class="sheet-evolution-bottom-row" style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="notebook-btn" id="btn-text-evolution-fullscreen" title="Redactar nota a pantalla completa">
+                <span>⛶ Pantalla Completa</span>
+              </button>
               <button type="button" class="primary-gradient-btn" id="btn-sheet-save-evolution" style="padding: 0.55rem 1.15rem; font-size: 0.82rem;">
                 💾 Guardar Nota de Evolución
               </button>
@@ -6656,6 +6725,50 @@ class ClinicController {
         this.activeNotebook = new ClinicalNotebook(notebookContainer);
       }
 
+      // Text Editor Fullscreen controls
+      const btnTextFs = document.getElementById('btn-text-evolution-fullscreen');
+      const btnTextExitFs = document.getElementById('btn-text-exit-fullscreen');
+      const btnFsSaveEvolution = document.getElementById('btn-fs-save-evolution');
+      const btnSaveEvolution = document.getElementById('btn-sheet-save-evolution');
+      let isTextEditorFs = false;
+
+      const toggleTextEditorFs = (forceState) => {
+        if (!textEditorContainer) return;
+        isTextEditorFs = (forceState === undefined) ? !isTextEditorFs : Boolean(forceState);
+        if (isTextEditorFs) {
+          textEditorContainer.classList.add('is-fullscreen');
+          document.body.classList.add('text-fullscreen-active');
+          document.body.style.overflow = 'hidden';
+          if (btnTextFs) btnTextFs.innerHTML = '<span>🗗 Minimizar</span>';
+        } else {
+          textEditorContainer.classList.remove('is-fullscreen');
+          document.body.classList.remove('text-fullscreen-active');
+          document.body.style.overflow = '';
+          if (btnTextFs) btnTextFs.innerHTML = '<span>⛶ Pantalla Completa</span>';
+        }
+      };
+
+      if (btnTextFs) {
+        btnTextFs.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleTextEditorFs();
+        };
+      }
+      if (btnTextExitFs) {
+        btnTextExitFs.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleTextEditorFs(false);
+        };
+      }
+      if (btnFsSaveEvolution && btnSaveEvolution) {
+        btnFsSaveEvolution.onclick = () => {
+          btnSaveEvolution.click();
+          toggleTextEditorFs(false);
+        };
+      }
+
       // Mode switching
       if (tabText && tabNotebook && textEditorContainer && notebookContainer) {
         tabText.addEventListener('click', () => {
@@ -6663,6 +6776,9 @@ class ClinicController {
           tabNotebook.classList.remove('active');
           textEditorContainer.style.display = 'flex';
           notebookContainer.classList.remove('active');
+          if (this.activeNotebook && this.activeNotebook.isFullscreen) {
+            this.activeNotebook.toggleFullscreen(false);
+          }
         });
 
         tabNotebook.addEventListener('click', () => {
@@ -6670,6 +6786,7 @@ class ClinicController {
           tabText.classList.remove('active');
           textEditorContainer.style.display = 'none';
           notebookContainer.classList.add('active');
+          toggleTextEditorFs(false);
           if (this.activeNotebook) {
             setTimeout(() => this.activeNotebook.resize(true), 50);
           }
@@ -6750,7 +6867,6 @@ class ClinicController {
       }
 
       // Save Evolution Note handler
-      const btnSaveEvolution = document.getElementById('btn-sheet-save-evolution');
       const inputEvolution = document.getElementById('sheet-evolution-input');
       if (btnSaveEvolution && inputEvolution) {
         btnSaveEvolution.addEventListener('click', () => {
@@ -6790,6 +6906,21 @@ class ClinicController {
       }
     }
 
+    // Wire modal fullscreen button
+    const btnSheetFs = document.getElementById('btn-patient-sheet-fullscreen');
+    if (btnSheetFs) {
+      btnSheetFs.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = this.sheetModal ? this.sheetModal.querySelector('.patient-sheet-modal-card') : null;
+        if (card) {
+          const isFs = card.classList.toggle('is-fullscreen');
+          btnSheetFs.textContent = isFs ? '🗗' : '⛶';
+          btnSheetFs.title = isFs ? 'Salir de pantalla completa' : 'Pantalla completa de ficha clínica';
+        }
+      };
+    }
+
     this.sheetModal.classList.add('active');
     this.sheetModal.setAttribute('aria-hidden', 'false');
   }
@@ -6800,6 +6931,11 @@ class ClinicController {
       this.activeNotebook.destroy();
       this.activeNotebook = null;
     }
+    const sheetCard = this.sheetModal.querySelector('.patient-sheet-modal-card');
+    if (sheetCard) sheetCard.classList.remove('is-fullscreen');
+    const btnSheetFs = document.getElementById('btn-patient-sheet-fullscreen');
+    if (btnSheetFs) btnSheetFs.textContent = '⛶';
+
     this.sheetModal.classList.remove('active');
     this.sheetModal.setAttribute('aria-hidden', 'true');
     this.activeSheetPatientId = null;

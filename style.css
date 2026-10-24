@@ -3842,12 +3842,25 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
   transition: all 0.3s var(--ease-smooth);
 }
 
+.pdf-reader-backdrop.is-fullscreen-backdrop {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #000000 !important;
+}
+
 .pdf-reader-modal-card.is-fullscreen {
-  width: 100vw;
-  max-width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  border-radius: 0;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 200000 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
 }
 
 /* 3-Zone Header: Left Meta, Center Controls, Right Actions (Always Pinned) */
@@ -4709,6 +4722,103 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
 .sheet-evolution-textarea:focus {
   border-color: var(--text-primary);
   box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.05);
+}
+
+.text-editor-fullscreen-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: max(0.65rem, env(safe-area-inset-top)) 1.25rem 0.65rem 1.25rem;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.sheet-evolution-editor.is-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 200000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  background: #0f172a !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.sheet-evolution-editor.is-fullscreen .text-editor-fullscreen-header {
+  display: flex !important;
+}
+
+.sheet-evolution-editor.is-fullscreen .sheet-evolution-textarea {
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: 250px !important;
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+  padding: 1.5rem !important;
+  resize: none !important;
+  box-shadow: none !important;
+}
+
+.sheet-evolution-editor.is-fullscreen .sheet-evolution-bottom-row {
+  background: #1e293b !important;
+  padding: 0.75rem 1.25rem max(0.75rem, env(safe-area-inset-bottom)) 1.25rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.sheet-evolution-editor.is-fullscreen .sheet-evolution-bottom-row #btn-text-evolution-fullscreen {
+  display: none !important;
+}
+
+body.notebook-fullscreen-active,
+body.text-fullscreen-active {
+  overflow: hidden !important;
+}
+
+body.notebook-fullscreen-active #modal-patient-sheet-backdrop,
+body.text-fullscreen-active #modal-patient-sheet-backdrop {
+  z-index: 200000 !important;
+}
+
+.patient-sheet-modal-card.is-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 200000 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.patient-sheet-modal-card.is-fullscreen .patient-sheet-body {
+  max-height: none !important;
+  flex: 1 !important;
 }
 
 /* Evolution Mode Switcher (Texto vs Cuadernillo / Pizarra) */
