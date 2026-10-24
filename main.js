@@ -4426,6 +4426,489 @@ class LibraryController {
 }
 
 /* ==========================================================================
+   CLINICAL NOTEBOOK & WHITEBOARD ENGINE (MODO PIZARRA / CUADERNILLO)
+   Soporte avanzado para Pen / Stylus (Apple Pencil, S-Pen, Surface, Touch & Mouse)
+   ========================================================================== */
+class ClinicalNotebook {
+  constructor(containerEl, options = {}) {
+    this.container = containerEl;
+    this.canvas = containerEl ? containerEl.querySelector('#sheet-notebook-canvas') : null;
+    if (!this.canvas) return;
+
+    this.ctx = this.canvas.getContext('2d');
+    this.inkCanvas = document.createElement('canvas');
+    this.inkCtx = this.inkCanvas.getContext('2d');
+
+    // Drawing state
+    this.tool = 'pen'; // 'pen' | 'highlighter' | 'eraser'
+    this.color = '#0f172a'; // clinical ink
+    this.size = 2; // base stroke width
+    this.paperStyle = 'ruled'; // 'ruled' | 'grid' | 'blank'
+    this.strokes = []; // for undo history
+    this.currentStroke = null;
+    this.isDrawing = false;
+    this.isFullscreen = false;
+
+    this.init();
+  }
+
+  init() {
+    this.bindToolbar();
+    this.bindCanvasEvents();
+    this.resize(true);
+
+    this.resizeHandler = () => {
+      this.resize(true);
+    };
+    window.addEventListener('resize', this.resizeHandler);
+  }
+
+  destroy() {
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+    }
+  }
+
+  resize(redraw = true) {
+    if (!this.canvas) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    const width = Math.max(rect.width || 800, 320);
+    const height = Math.max(rect.height || 380, 260);
+
+    const targetWidth = Math.round(width * dpr);
+    const targetHeight = Math.round(height * dpr);
+
+    if (this.canvas.width !== targetWidth || this.canvas.height !== targetHeight) {
+      this.canvas.width = targetWidth;
+      this.canvas.height = targetHeight;
+      this.inkCanvas.width = targetWidth;
+      this.inkCanvas.height = targetHeight;
+    }
+
+    if (redraw) {
+      this.redraw();
+    }
+  }
+
+  bindToolbar() {
+    if (!this.container) return;
+
+    // Tools
+    const toolBtns = this.container.querySelectorAll('[data-notebook-tool]');
+    toolBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toolBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.tool = btn.getAttribute('data-notebook-tool');
+      });
+    });
+
+    // Colors
+    const colorBtns = this.container.querySelectorAll('[data-notebook-color]');
+    toolBtns.forEach(b => {});
+    colorBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        colorBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.color = btn.getAttribute('data-notebook-color');
+        if (this.tool === 'eraser') {
+          const penBtn = this.container.querySelector('[data-notebook-tool="pen"]');
+          if (penBtn) {
+            toolBtns.forEach(b => b.classList.remove('active'));
+            penBtn.classList.add('active');
+            this.tool = 'pen';
+          }
+        }
+      });
+    });
+
+    // Sizes
+    const sizeBtns = this.container.querySelectorAll('[data-notebook-size]');
+    sizeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sizeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.size = parseFloat(btn.getAttribute('data-notebook-size')) || 2;
+      });
+    });
+
+    // Paper Styles
+    const paperBtns = this.container.querySelectorAll('[data-notebook-paper]');
+    paperBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        paperBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.paperStyle = btn.getAttribute('data-notebook-paper');
+        this.redraw();
+      });
+    });
+
+    // Undo
+    const btnUndo = this.container.querySelector('#btn-notebook-undo');
+    if (btnUndo) {
+      btnUndo.addEventListener('click', () => this.undo());
+    }
+
+    // Clear
+    const btnClear = this.container.querySelector('#btn-notebook-clear');
+    if (btnClear) {
+      btnClear.addEventListener('click', () => {
+        if (this.strokes.length === 0) return;
+        if (confirm('¿Deseas limpiar todos los trazos de este apunte?')) {
+          this.clear();
+        }
+      });
+    }
+
+    // Fullscreen toggle (Pantalla completa / expandir para mayor espacio)
+    const btnFullscreen = this.container.querySelector('#btn-notebook-fullscreen');
+    const btnExitFullscreen = this.container.querySelector('#btn-notebook-exit-fullscreen');
+    const toggleFullscreen = () => {
+      this.isFullscreen = !this.isFullscreen;
+      if (this.isFullscreen) {
+        this.container.classList.add('is-fullscreen');
+        if (btnFullscreen) btnFullscreen.innerHTML = '<span>🗗 Minimizar</span>';
+      } else {
+        this.container.classList.remove('is-fullscreen');
+        if (btnFullscreen) btnFullscreen.innerHTML = '<span>⛶ Pantalla Completa</span>';
+      }
+      setTimeout(() => this.resize(true), 60);
+    };
+
+    if (btnFullscreen) btnFullscreen.addEventListener('click', toggleFullscreen);
+    if (btnExitFullscreen) btnExitFullscreen.addEventListener('click', toggleFullscreen);
+    this.toggleFullscreen = toggleFullscreen;
+  }
+
+  bindCanvasEvents() {
+    if (!this.canvas) return;
+
+    const getNormalizedPos = (e) => {
+      const rect = this.canvas.getBoundingClientRect();
+      const nx = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const ny = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+      const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
+      return { nx, ny, p: pressure };
+    };
+
+    this.canvas.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+      this.canvas.setPointerCapture(e.pointerId);
+      this.isDrawing = true;
+
+      const pt = getNormalizedPos(e);
+      this.currentStroke = {
+        tool: this.tool,
+        color: this.color,
+        size: this.size,
+        points: [pt]
+      };
+
+      this.drawSingleDot(pt, this.currentStroke);
+    });
+
+    this.canvas.addEventListener('pointermove', (e) => {
+      if (!this.isDrawing || !this.currentStroke) return;
+      const pt = getNormalizedPos(e);
+      this.currentStroke.points.push(pt);
+      this.drawLatestSegment(this.currentStroke);
+    });
+
+    const endStroke = (e) => {
+      if (!this.isDrawing) return;
+      this.isDrawing = false;
+      if (this.currentStroke && this.currentStroke.points.length > 0) {
+        this.strokes.push(this.currentStroke);
+        this.currentStroke = null;
+        this.redraw();
+      }
+      try {
+        if (this.canvas.hasPointerCapture(e.pointerId)) {
+          this.canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch {}
+    };
+
+    this.canvas.addEventListener('pointerup', endStroke);
+    this.canvas.addEventListener('pointercancel', endStroke);
+  }
+
+  drawSingleDot(pt, stroke) {
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    const x = pt.nx * w;
+    const y = pt.ny * h;
+
+    const baseSize = stroke.size * (w / 900);
+    const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseSize * 3 : (stroke.tool === 'eraser' ? baseSize * 4 : baseSize * (0.6 + pt.p * 0.8))) / 2);
+
+    this.inkCtx.save();
+    if (stroke.tool === 'eraser') {
+      this.inkCtx.globalCompositeOperation = 'destination-out';
+      this.inkCtx.beginPath();
+      this.inkCtx.arc(x, y, radius, 0, Math.PI * 2);
+      this.inkCtx.fill();
+    } else {
+      this.inkCtx.globalCompositeOperation = 'source-over';
+      this.inkCtx.fillStyle = stroke.color;
+      this.inkCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
+      this.inkCtx.beginPath();
+      this.inkCtx.arc(x, y, radius, 0, Math.PI * 2);
+      this.inkCtx.fill();
+    }
+    this.inkCtx.restore();
+
+    this.ctx.clearRect(0, 0, w, h);
+    this.drawBackground(this.ctx, w, h);
+    this.ctx.drawImage(this.inkCanvas, 0, 0);
+  }
+
+  drawLatestSegment(stroke) {
+    const pts = stroke.points;
+    if (pts.length < 2) return;
+
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    const p1 = pts[pts.length - 2];
+    const p2 = pts[pts.length - 1];
+
+    const x1 = p1.nx * w;
+    const y1 = p1.ny * h;
+    const x2 = p2.nx * w;
+    const y2 = p2.ny * h;
+
+    const baseWidth = stroke.size * (w / 900);
+    const avgPressure = (p1.p + p2.p) / 2;
+    const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
+
+    this.inkCtx.save();
+    this.inkCtx.lineCap = 'round';
+    this.inkCtx.lineJoin = 'round';
+
+    if (stroke.tool === 'eraser') {
+      this.inkCtx.globalCompositeOperation = 'destination-out';
+      this.inkCtx.lineWidth = lineWidth;
+      this.inkCtx.beginPath();
+      this.inkCtx.moveTo(x1, y1);
+      this.inkCtx.lineTo(x2, y2);
+      this.inkCtx.stroke();
+    } else {
+      this.inkCtx.globalCompositeOperation = 'source-over';
+      this.inkCtx.strokeStyle = stroke.color;
+      this.inkCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
+      this.inkCtx.lineWidth = lineWidth;
+      this.inkCtx.beginPath();
+      this.inkCtx.moveTo(x1, y1);
+      this.inkCtx.lineTo(x2, y2);
+      this.inkCtx.stroke();
+    }
+    this.inkCtx.restore();
+
+    this.ctx.clearRect(0, 0, w, h);
+    this.drawBackground(this.ctx, w, h);
+    this.ctx.drawImage(this.inkCanvas, 0, 0);
+  }
+
+  drawBackground(targetCtx, w, h) {
+    if (this.paperStyle === 'ruled') {
+      targetCtx.fillStyle = '#fcfbfa';
+    } else if (this.paperStyle === 'grid') {
+      targetCtx.fillStyle = '#ffffff';
+    } else {
+      targetCtx.fillStyle = '#ffffff';
+    }
+    targetCtx.fillRect(0, 0, w, h);
+
+    if (this.paperStyle === 'ruled') {
+      targetCtx.save();
+      // Red vertical margin line
+      const marginX = Math.round(52 * (w / 900));
+      targetCtx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+      targetCtx.lineWidth = Math.max(1, 1.5 * (w / 900));
+      targetCtx.beginPath();
+      targetCtx.moveTo(marginX, 0);
+      targetCtx.lineTo(marginX, h);
+      targetCtx.stroke();
+
+      // Blue horizontal lines
+      const lineSpacing = Math.round(30 * (h / 500));
+      targetCtx.strokeStyle = 'rgba(203, 213, 225, 0.55)';
+      targetCtx.lineWidth = Math.max(1, 1 * (w / 900));
+
+      for (let y = lineSpacing; y < h; y += lineSpacing) {
+        targetCtx.beginPath();
+        targetCtx.moveTo(0, y);
+        targetCtx.lineTo(w, y);
+        targetCtx.stroke();
+      }
+      targetCtx.restore();
+    } else if (this.paperStyle === 'grid') {
+      targetCtx.save();
+      const gridSize = Math.round(24 * (w / 900));
+      targetCtx.strokeStyle = 'rgba(226, 232, 240, 0.7)';
+      targetCtx.lineWidth = 1;
+
+      for (let x = gridSize; x < w; x += gridSize) {
+        targetCtx.beginPath();
+        targetCtx.moveTo(x, 0);
+        targetCtx.lineTo(x, h);
+        targetCtx.stroke();
+      }
+      for (let y = gridSize; y < h; y += gridSize) {
+        targetCtx.beginPath();
+        targetCtx.moveTo(0, y);
+        targetCtx.lineTo(w, y);
+        targetCtx.stroke();
+      }
+      targetCtx.restore();
+    }
+  }
+
+  redraw() {
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    if (w === 0 || h === 0) return;
+
+    this.inkCtx.clearRect(0, 0, w, h);
+
+    for (const stroke of this.strokes) {
+      const pts = stroke.points;
+      if (!pts || pts.length === 0) continue;
+
+      const baseWidth = stroke.size * (w / 900);
+
+      this.inkCtx.save();
+      this.inkCtx.lineCap = 'round';
+      this.inkCtx.lineJoin = 'round';
+
+      if (stroke.tool === 'eraser') {
+        this.inkCtx.globalCompositeOperation = 'destination-out';
+      } else {
+        this.inkCtx.globalCompositeOperation = 'source-over';
+        this.inkCtx.strokeStyle = stroke.color;
+        this.inkCtx.fillStyle = stroke.color;
+        this.inkCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
+      }
+
+      if (pts.length === 1) {
+        const x = pts[0].nx * w;
+        const y = pts[0].ny * h;
+        const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseWidth * 3 : (stroke.tool === 'eraser' ? baseWidth * 4 : baseWidth * (0.6 + pts[0].p * 0.8))) / 2);
+        this.inkCtx.beginPath();
+        this.inkCtx.arc(x, y, radius, 0, Math.PI * 2);
+        this.inkCtx.fill();
+      } else {
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const x1 = p1.nx * w;
+          const y1 = p1.ny * h;
+          const x2 = p2.nx * w;
+          const y2 = p2.ny * h;
+          const avgPressure = (p1.p + p2.p) / 2;
+          const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
+
+          this.inkCtx.lineWidth = lineWidth;
+          this.inkCtx.beginPath();
+          this.inkCtx.moveTo(x1, y1);
+          this.inkCtx.lineTo(x2, y2);
+          this.inkCtx.stroke();
+        }
+      }
+      this.inkCtx.restore();
+    }
+
+    this.ctx.clearRect(0, 0, w, h);
+    this.drawBackground(this.ctx, w, h);
+    this.ctx.drawImage(this.inkCanvas, 0, 0);
+  }
+
+  undo() {
+    if (this.strokes.length > 0) {
+      this.strokes.pop();
+      this.redraw();
+    }
+  }
+
+  clear() {
+    this.strokes = [];
+    this.redraw();
+  }
+
+  hasContent() {
+    return this.strokes.length > 0;
+  }
+
+  exportImage() {
+    const exportWidth = 1080;
+    const exportHeight = 640;
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = exportWidth;
+    exportCanvas.height = exportHeight;
+    const expCtx = exportCanvas.getContext('2d');
+
+    this.drawBackground(expCtx, exportWidth, exportHeight);
+
+    for (const stroke of this.strokes) {
+      const pts = stroke.points;
+      if (!pts || pts.length === 0) continue;
+
+      const baseWidth = stroke.size * (exportWidth / 900);
+
+      expCtx.save();
+      expCtx.lineCap = 'round';
+      expCtx.lineJoin = 'round';
+
+      if (stroke.tool === 'eraser') {
+        expCtx.globalCompositeOperation = 'destination-out';
+      } else {
+        expCtx.globalCompositeOperation = 'source-over';
+        expCtx.strokeStyle = stroke.color;
+        expCtx.fillStyle = stroke.color;
+        expCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
+      }
+
+      if (pts.length === 1) {
+        const x = pts[0].nx * exportWidth;
+        const y = pts[0].ny * exportHeight;
+        const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseWidth * 3 : (stroke.tool === 'eraser' ? baseWidth * 4 : baseWidth * (0.6 + pts[0].p * 0.8))) / 2);
+        expCtx.beginPath();
+        expCtx.arc(x, y, radius, 0, Math.PI * 2);
+        expCtx.fill();
+      } else {
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const x1 = p1.nx * exportWidth;
+          const y1 = p1.ny * exportHeight;
+          const x2 = p2.nx * exportWidth;
+          const y2 = p2.ny * exportHeight;
+          const avgPressure = (p1.p + p2.p) / 2;
+          const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
+
+          expCtx.lineWidth = lineWidth;
+          expCtx.beginPath();
+          expCtx.moveTo(x1, y1);
+          expCtx.lineTo(x2, y2);
+          expCtx.stroke();
+        }
+      }
+      expCtx.restore();
+    }
+
+    try {
+      const webp = exportCanvas.toDataURL('image/webp', 0.85);
+      if (webp && webp.startsWith('data:image/webp')) {
+        return webp;
+      }
+    } catch {}
+    return exportCanvas.toDataURL('image/png');
+  }
+}
+
+/* ==========================================================================
    7. CLINIC CONTROLLER (Pacientes, Citas, Calendario, Reloj y Sidebar)
    ========================================================================== */
 class ClinicController {
@@ -4481,6 +4964,17 @@ class ClinicController {
     this.btnSheetNewAppt = document.getElementById('btn-sheet-new-appt');
     this.btnSheetPrint = document.getElementById('btn-sheet-print');
     this.activeSheetPatientId = null;
+
+    // Lightbox modal for handwritten notes (Modo Pizarra)
+    this.viewerModal = document.getElementById('modal-drawing-viewer');
+    this.viewerImg = document.getElementById('drawing-viewer-img');
+    this.viewerTitle = document.getElementById('drawing-viewer-title');
+    this.viewerDate = document.getElementById('drawing-viewer-date');
+    this.btnCloseViewer = document.getElementById('btn-close-drawing-viewer');
+    this.btnCloseViewerFooter = document.getElementById('btn-close-drawing-viewer-footer');
+    this.btnDownloadViewer = document.getElementById('btn-drawing-viewer-download');
+    this.activeViewerNote = null;
+    this.activeNotebook = null;
 
     // Appointment modal elements
     this.apptModal = document.getElementById('modal-appointment-backdrop');
@@ -5157,10 +5651,31 @@ class ClinicController {
       });
     }
 
+    // Drawing Viewer (Lightbox) Events
+    if (this.btnCloseViewer) this.btnCloseViewer.addEventListener('click', () => this.closeDrawingViewer());
+    if (this.btnCloseViewerFooter) this.btnCloseViewerFooter.addEventListener('click', () => this.closeDrawingViewer());
+    if (this.viewerModal) {
+      this.viewerModal.addEventListener('click', (e) => {
+        if (e.target === this.viewerModal) this.closeDrawingViewer();
+      });
+    }
+    if (this.btnDownloadViewer) {
+      this.btnDownloadViewer.addEventListener('click', () => {
+        if (this.activeViewerNote && this.activeViewerNote.drawing) {
+          const dateSafe = (this.activeViewerNote.dateStr || 'apunte').replace(/[^a-zA-Z0-9]/g, '_');
+          this.downloadDrawing(this.activeViewerNote.drawing, `Apunte_${dateSafe}.png`);
+        }
+      });
+    }
+
     // Global Escape Key to close open modals
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (this.sheetModal && this.sheetModal.classList.contains('active')) {
+        if (this.viewerModal && this.viewerModal.classList.contains('active')) {
+          this.closeDrawingViewer();
+        } else if (this.activeNotebook && this.activeNotebook.isFullscreen) {
+          this.activeNotebook.toggleFullscreen();
+        } else if (this.sheetModal && this.sheetModal.classList.contains('active')) {
           this.closePatientSheet();
         } else if (this.patientModal && this.patientModal.classList.contains('active')) {
           this.closePatientModal();
@@ -5169,6 +5684,32 @@ class ClinicController {
         }
       }
     });
+  }
+
+  openDrawingViewer(note, patientName = '') {
+    if (!this.viewerModal) return;
+    this.activeViewerNote = note;
+    if (this.viewerImg) this.viewerImg.src = note.drawing || '';
+    if (this.viewerTitle) this.viewerTitle.textContent = note.text || 'Apunte Clínico Manuscrito';
+    if (this.viewerDate) this.viewerDate.textContent = `📅 Sesión: ${note.dateStr} ${patientName ? `• Paciente: ${patientName}` : ''}`;
+    this.viewerModal.classList.add('active');
+    this.viewerModal.setAttribute('aria-hidden', 'false');
+  }
+
+  closeDrawingViewer() {
+    if (!this.viewerModal) return;
+    this.viewerModal.classList.remove('active');
+    this.viewerModal.setAttribute('aria-hidden', 'true');
+    this.activeViewerNote = null;
+  }
+
+  downloadDrawing(dataUrl, filename = 'apunte_clinico.png') {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   onActivated() {
@@ -5346,18 +5887,91 @@ class ClinicController {
       if (!historyEl) return;
       if (!patient.evolutionNotes || patient.evolutionNotes.length === 0) {
         historyEl.innerHTML = `
-          <div style="padding: 1rem; text-align: center; color: var(--text-tertiary); font-size: 0.8rem; background: rgba(0,0,0,0.015); border-radius: 10px;">
-            Sin notas de evolución registradas aún. Ingresa la primera nota de sesión arriba.
+          <div style="padding: 1.25rem; text-align: center; color: var(--text-tertiary); font-size: 0.82rem; background: rgba(0,0,0,0.015); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.08);">
+            Sin notas de evolución registradas aún. Ingresa un apunte de texto o manuscrito arriba.
           </div>
         `;
         return;
       }
-      historyEl.innerHTML = patient.evolutionNotes.map(n => `
-        <div class="sheet-evolution-item">
-          <span class="sheet-evolution-date">📅 ${n.dateStr}</span>
-          <p style="margin: 0; white-space: pre-wrap;">${n.text}</p>
-        </div>
-      `).join('');
+      historyEl.innerHTML = patient.evolutionNotes.map(n => {
+        const isDrawing = Boolean(n.drawing);
+        if (isDrawing) {
+          return `
+            <div class="sheet-evolution-item sheet-evolution-drawing-item" data-note-item-id="${n.id}">
+              <div class="sheet-evolution-header-row">
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <span class="sheet-evolution-date">📅 ${n.dateStr}</span>
+                  <span class="sheet-note-type-pill">✍️ Apunte de Pizarra</span>
+                </div>
+                <div class="sheet-evolution-item-actions">
+                  <button type="button" class="btn-note-action" data-zoom-drawing-id="${n.id}" title="Ver apunte a pantalla completa">🔍 Ampliar</button>
+                  <button type="button" class="btn-note-action" data-dl-drawing-id="${n.id}" title="Descargar imagen">📥 Descargar</button>
+                  <button type="button" class="btn-note-action" data-delete-ev-id="${n.id}" title="Eliminar nota" style="color: #ef4444;">🗑️</button>
+                </div>
+              </div>
+              ${n.text ? `<p class="sheet-drawing-caption">${n.text}</p>` : ''}
+              <div class="sheet-drawing-card-wrapper" data-zoom-drawing-id="${n.id}" title="Click para ver en tamaño completo">
+                <img src="${n.drawing}" class="sheet-drawing-img-preview" alt="Apunte clínico manuscrito" loading="lazy" />
+                <div class="sheet-drawing-hover-overlay">
+                  <span>🔍 Click para ampliar</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="sheet-evolution-item" data-note-item-id="${n.id}">
+            <div class="sheet-evolution-header-row">
+              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="sheet-evolution-date">📅 ${n.dateStr}</span>
+                <span class="sheet-note-type-pill text-pill">⌨️ Nota de Texto</span>
+              </div>
+              <div class="sheet-evolution-item-actions">
+                <button type="button" class="btn-note-action" data-delete-ev-id="${n.id}" title="Eliminar nota" style="color: #ef4444;">🗑️</button>
+              </div>
+            </div>
+            <p style="margin: 0; white-space: pre-wrap;">${n.text}</p>
+          </div>
+        `;
+      }).join('');
+
+      // Wire zoom listeners
+      const zoomBtns = historyEl.querySelectorAll('[data-zoom-drawing-id]');
+      zoomBtns.forEach(el => {
+        el.addEventListener('click', () => {
+          const noteId = el.getAttribute('data-zoom-drawing-id');
+          const note = patient.evolutionNotes.find(x => x.id === noteId);
+          if (note) this.openDrawingViewer(note, patient.name);
+        });
+      });
+
+      // Wire download listeners
+      const dlBtns = historyEl.querySelectorAll('[data-dl-drawing-id]');
+      dlBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const noteId = btn.getAttribute('data-dl-drawing-id');
+          const note = patient.evolutionNotes.find(x => x.id === noteId);
+          if (note && note.drawing) {
+            this.downloadDrawing(note.drawing, `Apunte_${patient.name.replace(/\s+/g, '_')}_${note.id}.png`);
+          }
+        });
+      });
+
+      // Wire delete listeners
+      const deleteBtns = historyEl.querySelectorAll('[data-delete-ev-id]');
+      deleteBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const noteId = btn.getAttribute('data-delete-ev-id');
+          if (confirm('¿Deseas eliminar esta nota de la historia clínica?')) {
+            patient.evolutionNotes = patient.evolutionNotes.filter(x => x.id !== noteId);
+            this.savePatients(this.patients);
+            renderEvolutionList();
+          }
+        });
+      });
     };
 
     // Render body content
@@ -5475,7 +6089,24 @@ class ClinicController {
             <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Confidencial</span>
           </div>
 
-          <div class="sheet-evolution-editor">
+          <!-- Mode Switcher (Texto vs Cuadernillo / Pizarra) -->
+          <div class="sheet-evolution-mode-bar">
+            <div class="sheet-mode-tabs">
+              <button type="button" class="sheet-mode-tab-btn active" id="tab-btn-evolution-text">
+                <span>⌨️ Modo Texto</span>
+              </button>
+              <button type="button" class="sheet-mode-tab-btn" id="tab-btn-evolution-notebook">
+                <span>✍️ Modo Cuadernillo / Pizarra</span>
+                <span class="sheet-mode-tab-badge">Pen / Stylus</span>
+              </button>
+            </div>
+            <span style="font-size: 0.73rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem;">
+              <span>🖊️</span> Apto para tablet, lápiz óptico y touch
+            </span>
+          </div>
+
+          <!-- 1. Text Editor Mode -->
+          <div class="sheet-evolution-editor" id="sheet-text-editor-container">
             <textarea
               class="sheet-evolution-textarea"
               id="sheet-evolution-input"
@@ -5489,6 +6120,103 @@ class ClinicController {
             </div>
           </div>
 
+          <!-- 2. Whiteboard / Notebook Mode -->
+          <div class="sheet-notebook-container" id="sheet-notebook-container">
+            <div class="notebook-fullscreen-header">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.25rem;">✍️</span>
+                <strong>Cuadernillo Clínico de Notas - ${patient.name}</strong>
+              </div>
+              <button type="button" class="notebook-btn" id="btn-notebook-exit-fullscreen">✕ Salir de Pantalla Completa</button>
+            </div>
+
+            <div class="notebook-toolbar">
+              <!-- Tools -->
+              <div class="notebook-tool-group">
+                <button type="button" class="notebook-btn active" data-notebook-tool="pen" title="Pluma / Bolígrafo clínico">
+                  <span>🖊️ Pluma</span>
+                </button>
+                <button type="button" class="notebook-btn" data-notebook-tool="highlighter" title="Resaltador clínico">
+                  <span>🖍️ Resaltador</span>
+                </button>
+                <button type="button" class="notebook-btn" data-notebook-tool="eraser" title="Borrador">
+                  <span>🧹 Borrador</span>
+                </button>
+              </div>
+
+              <div class="notebook-divider"></div>
+
+              <!-- Sizes -->
+              <div class="notebook-tool-group">
+                <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Trazo:</span>
+                <button type="button" class="notebook-btn notebook-size-pill active" data-notebook-size="2" title="Trazo fino (2px)">Fino</button>
+                <button type="button" class="notebook-btn notebook-size-pill" data-notebook-size="4" title="Trazo medio (4px)">Medio</button>
+                <button type="button" class="notebook-btn notebook-size-pill" data-notebook-size="8" title="Trazo grueso (8px)">Grueso</button>
+              </div>
+
+              <div class="notebook-divider"></div>
+
+              <!-- Clinical Inks -->
+              <div class="notebook-tool-group">
+                <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Tinta:</span>
+                <button type="button" class="notebook-color-btn active" data-notebook-color="#0f172a" style="background: #0f172a;" title="Negro Carbón"></button>
+                <button type="button" class="notebook-color-btn" data-notebook-color="#1d4ed8" style="background: #1d4ed8;" title="Azul Tinta"></button>
+                <button type="button" class="notebook-color-btn" data-notebook-color="#dc2626" style="background: #dc2626;" title="Rojo Clínico"></button>
+                <button type="button" class="notebook-color-btn" data-notebook-color="#16a34a" style="background: #16a34a;" title="Verde"></button>
+                <button type="button" class="notebook-color-btn" data-notebook-color="#facc15" style="background: #facc15;" title="Amarillo Marcador"></button>
+                <button type="button" class="notebook-color-btn" data-notebook-color="#7c3aed" style="background: #7c3aed;" title="Violeta"></button>
+              </div>
+
+              <div class="notebook-divider"></div>
+
+              <!-- Paper Styles -->
+              <div class="notebook-tool-group">
+                <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Hoja:</span>
+                <button type="button" class="notebook-btn active" data-notebook-paper="ruled" title="Cuaderno rayado">📜 Rayado</button>
+                <button type="button" class="notebook-btn" data-notebook-paper="grid" title="Cuaderno cuadriculado">📐 Cuadrícula</button>
+                <button type="button" class="notebook-btn" data-notebook-paper="blank" title="Pizarra blanca lisa">📋 Blanca</button>
+              </div>
+
+              <div class="notebook-divider"></div>
+
+              <!-- Actions -->
+              <div class="notebook-tool-group">
+                <button type="button" class="notebook-btn" id="btn-notebook-undo" title="Deshacer trazo anterior">
+                  <span>↩️ Deshacer</span>
+                </button>
+                <button type="button" class="notebook-btn" id="btn-notebook-clear" title="Limpiar hoja">
+                  <span>🗑️ Limpiar</span>
+                </button>
+                <button type="button" class="notebook-btn" id="btn-notebook-fullscreen" title="Expandir a pantalla completa para tablet">
+                  <span>⛶ Pantalla Completa</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas wrapper -->
+            <div class="notebook-paper-wrapper">
+              <canvas id="sheet-notebook-canvas" class="sheet-notebook-canvas"></canvas>
+            </div>
+
+            <!-- Notebook footer -->
+            <div class="notebook-footer">
+              <input
+                type="text"
+                class="notebook-caption-input"
+                id="sheet-notebook-caption"
+                placeholder="Título o tema del apunte (ej: Esquema cognitivo, Genograma, Síntomas, Acuerdos)..."
+              />
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button type="button" class="sheet-action-secondary" id="btn-notebook-download" title="Descargar como imagen PNG" style="font-size: 0.8rem; padding: 0.55rem 0.85rem;">
+                  📥 Descargar PNG
+                </button>
+                <button type="button" class="primary-gradient-btn" id="btn-sheet-save-notebook" style="padding: 0.55rem 1.15rem; font-size: 0.82rem;">
+                  💾 Guardar Apunte Manuscrito
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div class="sheet-evolution-history" id="sheet-evolution-history-list">
             <!-- Populated via renderEvolutionList -->
           </div>
@@ -5497,6 +6225,94 @@ class ClinicController {
 
       // Render existing evolution notes
       renderEvolutionList();
+
+      // Initialize Clinical Notebook instance
+      const notebookContainer = document.getElementById('sheet-notebook-container');
+      const textEditorContainer = document.getElementById('sheet-text-editor-container');
+      const tabText = document.getElementById('tab-btn-evolution-text');
+      const tabNotebook = document.getElementById('tab-btn-evolution-notebook');
+
+      if (this.activeNotebook) {
+        this.activeNotebook.destroy();
+        this.activeNotebook = null;
+      }
+      if (notebookContainer) {
+        this.activeNotebook = new ClinicalNotebook(notebookContainer);
+      }
+
+      // Mode switching
+      if (tabText && tabNotebook && textEditorContainer && notebookContainer) {
+        tabText.addEventListener('click', () => {
+          tabText.classList.add('active');
+          tabNotebook.classList.remove('active');
+          textEditorContainer.style.display = 'flex';
+          notebookContainer.classList.remove('active');
+        });
+
+        tabNotebook.addEventListener('click', () => {
+          tabNotebook.classList.add('active');
+          tabText.classList.remove('active');
+          textEditorContainer.style.display = 'none';
+          notebookContainer.classList.add('active');
+          if (this.activeNotebook) {
+            setTimeout(() => this.activeNotebook.resize(true), 50);
+          }
+        });
+      }
+
+      // Save Handwritten Note handler
+      const btnSaveNotebook = document.getElementById('btn-sheet-save-notebook');
+      const inputNotebookCaption = document.getElementById('sheet-notebook-caption');
+      const btnNotebookDownload = document.getElementById('btn-notebook-download');
+
+      if (btnNotebookDownload && this.activeNotebook) {
+        btnNotebookDownload.addEventListener('click', () => {
+          if (!this.activeNotebook.hasContent()) {
+            alert('Realiza algún trazo en la pizarra antes de descargar.');
+            return;
+          }
+          const dataUrl = this.activeNotebook.exportImage();
+          this.downloadDrawing(dataUrl, `Cuadernillo_${patient.name.replace(/\s+/g, '_')}_${Date.now()}.png`);
+        });
+      }
+
+      if (btnSaveNotebook && this.activeNotebook) {
+        btnSaveNotebook.addEventListener('click', () => {
+          if (!this.activeNotebook.hasContent()) {
+            alert('Por favor realiza tus anotaciones o dibujos en la pizarra antes de guardar.');
+            return;
+          }
+
+          const now = new Date();
+          const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+          const day = now.getDate().toString().padStart(2, '0');
+          const month = months[now.getMonth()];
+          const year = now.getFullYear();
+          const hh = now.getHours().toString().padStart(2, '0');
+          const mm = now.getMinutes().toString().padStart(2, '0');
+          const dateStr = `${day} ${month} ${year}, ${hh}:${mm}`;
+
+          const caption = inputNotebookCaption ? inputNotebookCaption.value.trim() : '';
+          const dataUrl = this.activeNotebook.exportImage();
+
+          const newNote = {
+            id: `ev-${Date.now()}`,
+            timestamp: Date.now(),
+            dateStr,
+            type: 'drawing',
+            text: caption || 'Apunte clínico manuscrito / Esquema',
+            drawing: dataUrl
+          };
+
+          if (!Array.isArray(patient.evolutionNotes)) patient.evolutionNotes = [];
+          patient.evolutionNotes.unshift(newNote);
+
+          this.savePatients(this.patients);
+          this.activeNotebook.clear();
+          if (inputNotebookCaption) inputNotebookCaption.value = '';
+          renderEvolutionList();
+        });
+      }
 
       // Inline new appointment button inside sheet
       const btnInlineAppt = document.getElementById('btn-sheet-inline-new-appt');
@@ -5536,6 +6352,7 @@ class ClinicController {
             id: `ev-${Date.now()}`,
             timestamp: Date.now(),
             dateStr,
+            type: 'text',
             text
           };
 
@@ -5556,6 +6373,10 @@ class ClinicController {
 
   closePatientSheet() {
     if (!this.sheetModal) return;
+    if (this.activeNotebook) {
+      this.activeNotebook.destroy();
+      this.activeNotebook = null;
+    }
     this.sheetModal.classList.remove('active');
     this.sheetModal.setAttribute('aria-hidden', 'true');
     this.activeSheetPatientId = null;

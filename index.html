@@ -1360,6 +1360,36 @@
       </div>
     </div>
 
+    <!-- Modal: Visor de Apuntes y Pizarra en Grande (Lightbox) -->
+    <div class="psios-modal-backdrop" id="modal-drawing-viewer" aria-hidden="true">
+      <div class="psios-modal-card drawing-viewer-card" role="dialog" aria-modal="true" aria-labelledby="drawing-viewer-title">
+        <div class="modal-card-header drawing-viewer-header">
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <span style="font-size: 1.4rem;">✍️</span>
+            <div>
+              <h2 class="modal-card-title" id="drawing-viewer-title" style="font-size: 1.05rem; margin: 0;">Apunte Manuscrito Clínico</h2>
+              <span class="modal-card-subtitle" id="drawing-viewer-date" style="font-size: 0.76rem;">Fecha de sesión</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button type="button" class="sheet-action-secondary" id="btn-drawing-viewer-download" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">
+              <span>📥 Descargar PNG</span>
+            </button>
+            <button type="button" class="modal-close-btn" id="btn-close-drawing-viewer" title="Cerrar visor">✕</button>
+          </div>
+        </div>
+        <div class="modal-card-body drawing-viewer-body">
+          <div class="drawing-viewer-image-wrapper">
+            <img id="drawing-viewer-img" src="" alt="Apunte clínico ampliado" />
+          </div>
+        </div>
+        <div class="modal-card-footer drawing-viewer-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.5rem;">
+          <span style="font-size: 0.75rem; color: var(--text-tertiary);">Apunte original capturado con pen / stylus en PsiOS Clínica</span>
+          <button type="button" class="modal-btn-cancel" id="btn-close-drawing-viewer-footer">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal: Activación y Licencia de Producto (Cloudflare Worker) -->
     <div class="psios-modal-backdrop" id="modal-license-activation" aria-hidden="true">
       <div class="psios-modal-card license-modal-card" role="dialog" aria-modal="true" aria-labelledby="license-modal-title">
