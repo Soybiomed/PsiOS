@@ -6539,11 +6539,11 @@ class ClinicController {
     if (this.dashTodayList) {
       if (todayAppts.length === 0) {
         this.dashTodayList.innerHTML = `
-          <div style="padding: 2.2rem 1.2rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 16px; border: 1px dashed rgba(0,0,0,0.08);">
-            <span style="font-size: 1.8rem; display: block; margin-bottom: 0.5rem;">☀️</span>
-            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block;">No hay citas agendadas para hoy</strong>
-            <p style="font-size: 0.8rem; margin: 0.25rem 0 0.85rem 0;">Puedes programar una sesión con un paciente o un ateneo clínico.</p>
-            <button type="button" class="btn-row-action" id="btn-dash-empty-appt">+ Programar Cita</button>
+          <div style="padding: clamp(1.2rem, 4vw, 2rem) 0.85rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 16px; border: 1px dashed rgba(0,0,0,0.08); width: 100%; max-width: 100%; box-sizing: border-box; word-break: break-word;">
+            <span style="font-size: 1.8rem; display: block; margin-bottom: 0.4rem;">☀️</span>
+            <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; word-break: break-word;">No hay citas agendadas para hoy</strong>
+            <p style="font-size: 0.8rem; margin: 0.25rem 0 0.85rem 0; word-break: break-word; line-height: 1.4;">Puedes programar una sesión con un paciente o un ateneo clínico.</p>
+            <button type="button" class="btn-row-action" id="btn-dash-empty-appt" style="max-width: 100%; white-space: normal;">+ Programar Cita</button>
           </div>
         `;
         const btnEmptyAppt = document.getElementById('btn-dash-empty-appt');
@@ -6592,7 +6592,7 @@ class ClinicController {
 
       if (recentPatients.length === 0) {
         this.dashRecentList.innerHTML = `
-          <div style="padding: 1.5rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 14px;">
+          <div style="padding: 1.25rem 0.85rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 14px; width: 100%; max-width: 100%; box-sizing: border-box; word-break: break-word;">
             <p style="font-size: 0.82rem; margin: 0;">No hay pacientes registrados aún.</p>
           </div>
         `;
@@ -6851,11 +6851,11 @@ class ClinicController {
 
     if (filtered.length === 0) {
       this.agendaFeedList.innerHTML = `
-        <div style="padding: 2.5rem 1.5rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 18px; border: 1px dashed rgba(0,0,0,0.08);">
+        <div style="padding: clamp(1.5rem, 5vw, 2.5rem) 0.85rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 18px; border: 1px dashed rgba(0,0,0,0.08); width: 100%; max-width: 100%; box-sizing: border-box; word-break: break-word;">
           <span style="font-size: 2rem; display: block; margin-bottom: 0.5rem;">📅</span>
-          <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">No hay citas para esta fecha</strong>
-          <p style="font-size: 0.8rem; margin: 0 0 1rem 0;">Puedes agendar una nueva consulta con o sin paciente asociado.</p>
-          <button type="button" class="primary-gradient-btn" id="btn-agenda-new-appt">+ Programar Cita</button>
+          <strong style="color: var(--text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.25rem; word-break: break-word;">No hay citas para esta fecha</strong>
+          <p style="font-size: 0.8rem; margin: 0 0 1rem 0; word-break: break-word; line-height: 1.4;">Puedes agendar una nueva consulta con o sin paciente asociado.</p>
+          <button type="button" class="primary-gradient-btn" id="btn-agenda-new-appt" style="max-width: 100%; white-space: normal;">+ Programar Cita</button>
         </div>
       `;
       const btn = document.getElementById('btn-agenda-new-appt');
