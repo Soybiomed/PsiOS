@@ -4521,14 +4521,20 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
 }
 
 .patient-sheet-header {
-  padding: 1.5rem 1.75rem 1.25rem;
+  padding: 1.25rem 1.75rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .patient-sheet-profile-wrap {
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  min-width: 0;
+  flex: 1;
 }
 
 .patient-sheet-avatar {
@@ -4548,6 +4554,7 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
 }
 
 .patient-sheet-tag-row {
@@ -4566,6 +4573,9 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
   border-radius: 9999px;
   background: rgba(34, 197, 94, 0.12);
   color: #15803d;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
 }
 
 .sheet-code-badge {
@@ -4575,6 +4585,7 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
   background: rgba(0, 0, 0, 0.04);
   padding: 0.15rem 0.55rem;
   border-radius: 6px;
+  white-space: nowrap;
 }
 
 .patient-sheet-title {
@@ -6259,7 +6270,20 @@ body.text-fullscreen-active #modal-patient-sheet-backdrop {
   }
 
   .patient-sheet-header {
-    padding: 0.85rem 1rem;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.85rem 0.75rem 0.85rem !important;
+    gap: 0.65rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .patient-sheet-profile-wrap {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.65rem !important;
+    min-width: 0 !important;
+    flex: 1 !important;
   }
 
   .patient-sheet-avatar {
@@ -6267,11 +6291,25 @@ body.text-fullscreen-active #modal-patient-sheet-backdrop {
     height: 44px;
     font-size: 1.6rem;
     border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .patient-sheet-info-col {
+    min-width: 0 !important;
+    flex: 1 !important;
   }
 
   .patient-sheet-title {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
     line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .patient-sheet-header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    flex-shrink: 0 !important;
   }
 
   .patient-sheet-body {
