@@ -36,8 +36,17 @@ html, body {
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  touch-action: pan-y pinch-zoom;
+}
+
+input, textarea, select {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-card-btn {
   user-select: none;
-  touch-action: manipulation;
+  -webkit-user-select: none;
 }
 
 /* Master Container */
@@ -1024,107 +1033,131 @@ html, body {
    3D Element placed behind the text with soft ambient blur
    ========================================================================== */
 @media (max-width: 1024px) {
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
+    height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y pinch-zoom;
+  }
+
   .splash-screen {
     position: relative;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
+    width: 100%;
+    max-width: 100vw;
+    height: auto !important;
+    min-height: 100vh;
+    min-height: 100dvh;
     min-height: -webkit-fill-available;
-    overflow: hidden;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
   }
 
-  /* 3D Element moved behind the letters */
+  /* 3D Element moved behind the letters, fixed background */
   .hero-right {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    background-color: transparent;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    background-color: transparent !important;
   }
 
   /* Soft Blur on the 3D element in tablet mode */
   .canvas-wrapper {
-    filter: blur(8px) saturate(1.08);
-    transform: scale(1.06); /* Avoids clipping on blurred borders */
-    opacity: 0.88;
+    filter: blur(12px) saturate(1.08);
+    transform: scale(1.06);
+    opacity: 0.22;
+    pointer-events: none !important;
   }
 
-  /* Left Hero Content placed in front */
+  #three-canvas {
+    pointer-events: none !important;
+  }
+
+  /* Left Hero Content placed in front, free to expand and scroll */
   .hero-left {
     position: relative;
     z-index: 2;
-    flex: 1 1 100%;
+    flex: 1 0 auto;
     width: 100%;
-    height: 100%;
-    height: 100dvh;
-    padding: max(3rem, env(safe-area-inset-top)) 6vw max(2.5rem, env(safe-area-inset-bottom)) 6vw;
+    max-width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto !important;
+    padding: max(1.5rem, env(safe-area-inset-top)) 4vw max(2rem, env(safe-area-inset-bottom)) 4vw;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     background: transparent;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .views-wrapper {
+    position: relative;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+    margin: 1.25rem 0;
+  }
+
+  .view-panel {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 
   .greeting-viewport {
     max-width: 100%;
     min-height: auto;
-    margin: auto 0;
+    margin: 1.5rem 0;
+    width: 100%;
   }
 
   .greeting-headline {
-    font-size: clamp(2.8rem, 8vw, 4.4rem);
+    font-size: clamp(2.4rem, 8vw, 3.8rem);
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
   }
 
   .headline-container {
-    min-height: 6rem;
+    min-height: auto;
+    margin-bottom: 0.5rem;
   }
 
   .subtext-container {
-    min-height: 3rem;
-    margin-top: 1.25rem;
+    min-height: auto;
+    margin-top: 0.75rem;
   }
 
   .greeting-subtext {
-    font-size: clamp(1rem, 2.4vw, 1.2rem);
-    max-width: 95%;
+    font-size: clamp(1rem, 2.6vw, 1.2rem);
+    max-width: 100%;
   }
 
   .pagination-track {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 
   /* Tablet overrides for Welcome header and user card pill */
-  #app.welcome-mode-active .brand-header {
-    top: max(1.75rem, env(safe-area-inset-top));
-    left: max(1.75rem, env(safe-area-inset-left));
-  }
-
-  .welcome-top-user-pill {
-    top: max(1.75rem, env(safe-area-inset-top));
-    right: max(1.75rem, env(safe-area-inset-right));
-    height: 42px;
-    gap: 0.55rem;
-    padding: 0 0.75rem 0 0.85rem;
-  }
-}
-
-/* Intermediate breakpoint to maintain elegant non-colliding top bar */
-@media (max-width: 860px) {
-  .welcome-top-user-pill .user-status-tiny-label,
-  .welcome-top-user-pill .user-pill-separator {
-    display: none;
-  }
-}
-
-/* ==========================================================================
-   MOBILE PHONES (< 640px)
-   Ultra-refined ergonomic layout for handhelds
-   ========================================================================== */
-@media (max-width: 640px) {
-  .hero-left {
-    padding: max(1.75rem, env(safe-area-inset-top)) 1.5rem max(1.75rem, env(safe-area-inset-bottom)) 1.5rem;
+  #app.welcome-mode-active .hero-left {
+    padding-top: max(4.5rem, calc(env(safe-area-inset-top) + 3.8rem)) !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    height: auto !important;
+    min-height: 100dvh;
   }
 
   #app.welcome-mode-active .brand-header {
@@ -1136,97 +1169,132 @@ html, body {
     top: max(1.25rem, env(safe-area-inset-top));
     right: max(1.25rem, env(safe-area-inset-right));
     height: 38px;
-    padding: 0 0.65rem 0 0.75rem;
     gap: 0.45rem;
+    padding: 0 0.65rem 0 0.75rem;
+  }
+}
+
+/* Intermediate breakpoint to maintain elegant non-colliding top bar */
+@media (max-width: 860px) {
+  .welcome-top-user-pill .user-status-tiny-label,
+  .welcome-top-user-pill .user-pill-separator,
+  .welcome-top-user-pill .license-activated-pill {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE PHONES (< 640px)
+   Ultra-refined ergonomic layout for handhelds
+   ========================================================================== */
+@media (max-width: 640px) {
+  .hero-left {
+    padding: max(1.25rem, env(safe-area-inset-top)) 1rem max(1.75rem, env(safe-area-inset-bottom)) 1rem;
+  }
+
+  #app.welcome-mode-active .brand-header {
+    top: max(1rem, env(safe-area-inset-top));
+    left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .welcome-top-user-pill {
+    top: max(1rem, env(safe-area-inset-top));
+    right: max(1rem, env(safe-area-inset-right));
+    height: 36px;
+    padding: 0 0.5rem 0 0.6rem;
+    gap: 0.35rem;
   }
 
   .welcome-top-user-pill .user-pill-avatar {
-    width: 20px;
-    height: 20px;
-    font-size: 0.95rem;
+    width: 18px;
+    height: 18px;
+    font-size: 0.9rem;
   }
 
   .welcome-top-user-pill .user-pill-name {
-    font-size: 0.8rem;
-    max-width: 120px;
+    font-size: 0.76rem;
+    max-width: 85px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .welcome-top-user-pill .user-pill-change-btn {
+  .welcome-top-user-pill .user-pill-logout-btn {
     height: 24px;
-    padding: 0 0.55rem;
+    padding: 0 0.5rem;
     font-size: 0.7rem;
+    font-weight: 700;
   }
 
   .brand-pill {
-    height: 38px;
+    height: 36px;
     box-sizing: border-box;
-    padding: 0 0.85rem 0 0.45rem;
-    gap: 0.5rem;
+    padding: 0 0.65rem 0 0.35rem;
+    gap: 0.4rem;
   }
 
   .brand-symbol {
-    width: 1.6rem;
-    height: 1.6rem;
-    font-size: 0.95rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.9rem;
   }
 
   .brand-name {
     font-size: 0.85rem;
   }
 
-  .brand-badge {
-    font-size: 0.62rem;
-    letter-spacing: 0.05em;
-  }
-
-  #app.welcome-mode-active .brand-badge,
-  #app.welcome-mode-active .brand-separator {
-    display: none;
+  .brand-badge,
+  .brand-separator {
+    display: none !important;
   }
 
   .lang-meta-row {
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.65rem;
   }
 
   .lang-tag {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
   }
 
   .cycle-counter {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
 
   .greeting-headline {
-    font-size: clamp(2.2rem, 9.6vw, 3.2rem);
+    font-size: clamp(2rem, 9vw, 2.9rem);
     line-height: 1.12;
   }
 
   .headline-container {
-    min-height: 4.8rem;
+    min-height: auto;
   }
 
   .subtext-container {
-    min-height: 2.8rem;
-    margin-top: 0.85rem;
+    min-height: auto;
+    margin-top: 0.65rem;
   }
 
   .greeting-subtext {
-    font-size: 0.95rem;
-    line-height: 1.45;
+    font-size: 0.92rem;
+    line-height: 1.4;
   }
 
-  /* Slightly more pronounced blur on mobile to keep high-contrast legibility */
+  .liquid-glass-btn.btn-enter {
+    width: 100% !important;
+    min-height: 52px;
+    font-size: 1.05rem;
+    justify-content: center;
+  }
+
   .canvas-wrapper {
-    filter: blur(9px) saturate(1.1);
+    filter: blur(12px) saturate(1.1);
     transform: scale(1.08);
-    opacity: 0.82;
+    opacity: 0.18;
   }
 
   .pagination-track {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
     gap: 0.35rem;
   }
 
@@ -1237,6 +1305,14 @@ html, body {
 
   .dot-indicator.active {
     width: 18px;
+  }
+
+  .hero-footer {
+    margin-top: 1.5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .status-label {
@@ -5128,8 +5204,9 @@ html, body {
 @media (max-width: 768px) {
   /* Workspace padding reduction for mobile screens */
   #app.workspace-mode-active .hero-left {
-    padding: max(1rem, env(safe-area-inset-top)) 0.75rem max(1.75rem, env(safe-area-inset-bottom)) 0.75rem;
+    padding: max(1rem, env(safe-area-inset-top)) 0.75rem max(2rem, env(safe-area-inset-bottom)) 0.75rem;
     overflow-x: hidden;
+    overflow-y: visible;
   }
 
   /* Hide floating brand header & floating user pill in workspace mode on mobile to avoid overlapping content */
@@ -5138,6 +5215,23 @@ html, body {
   }
   #app.workspace-mode-active .welcome-top-user-pill {
     display: none !important;
+  }
+
+  /* Universal Mobile Form Controls: Prevent iOS Safari Auto-Zoom */
+  .modal-text-input,
+  .modal-select-input,
+  .modal-textarea,
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .header-search-input,
+  .data-search-box input,
+  .key-format-input,
+  .glass-text-input,
+  .license-key-input,
+  .notebook-caption-input,
+  .courtesy-select {
+    font-size: 16px !important;
   }
 
   /* Common Module Header Bar on Mobile (Biblioteca & Clínica) */
@@ -5153,15 +5247,39 @@ html, body {
   .module-header-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
+  .sidebar-toggle-action {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    flex-shrink: 0;
+  }
+
+  .module-home-btn {
+    height: 38px;
+    padding: 0 0.75rem;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
   .kinetic-view-title {
-    font-size: 1.55rem;
+    font-size: 1.5rem;
     line-height: 1.15;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .live-clock-pill {
+    height: 34px;
+    padding: 0 0.65rem;
+    font-size: 0.74rem;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   /* Full-width Search Bar row on mobile */
@@ -5176,7 +5294,7 @@ html, body {
   }
 
   .header-search-input {
-    font-size: 0.88rem;
+    font-size: 16px !important;
     width: 100%;
   }
 
@@ -5198,7 +5316,7 @@ html, body {
   }
 
   .cross-module-btn {
-    height: 36px;
+    height: 34px;
     padding: 0 0.85rem;
     font-size: 0.78rem;
     white-space: nowrap;
@@ -5241,6 +5359,7 @@ html, body {
     flex-shrink: 0;
     padding: 0.45rem 0.85rem;
     font-size: 0.76rem;
+    min-height: 36px;
   }
 
   .library-meta-row {
@@ -5271,7 +5390,7 @@ html, body {
   .lib-card-actions .primary-gradient-btn,
   .lib-card-actions .btn-row-action {
     width: 100%;
-    min-height: 42px;
+    min-height: 44px;
     justify-content: center;
   }
 
@@ -5296,6 +5415,39 @@ html, body {
   }
 
   /* Patient Directory Card Format on Mobile */
+  .subview-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .subview-header-row .primary-gradient-btn {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+
+  .data-toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .data-search-box {
+    width: 100%;
+    height: 44px;
+  }
+
+  .data-search-box input {
+    font-size: 16px !important;
+    width: 100%;
+  }
+
+  .data-total-pill {
+    align-self: flex-start;
+  }
+
   .patient-table-header {
     display: none !important;
   }
@@ -5330,22 +5482,44 @@ html, body {
 
   .patient-table-row div:last-child .btn-row-action {
     flex: 1;
-    min-height: 38px;
+    min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
+  /* Appointments Tab Mobile */
+  .calendar-expanded-surface {
+    padding: 1rem 0.75rem;
+    border-radius: 18px;
+  }
+
+  .full-cal-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .full-cal-nav-group {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .agenda-feed-surface {
+    padding: 1rem 0.85rem;
+    border-radius: 18px;
+  }
+
   /* Patient Sheet Modal Fullscreen on Mobile */
   .patient-sheet-modal-card {
-    width: 100vw;
-    max-width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-    border-radius: 0;
-    margin: 0;
-    border: none;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    border: none !important;
   }
 
   .patient-sheet-header {
@@ -5367,6 +5541,8 @@ html, body {
   .patient-sheet-body {
     padding: 0.85rem;
     gap: 1rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .sheet-demographics-grid {
@@ -5399,7 +5575,7 @@ html, body {
   .sheet-action-secondary,
   .modal-btn-cancel {
     width: 100%;
-    min-height: 44px;
+    min-height: 46px;
     justify-content: center;
   }
 
@@ -5432,6 +5608,7 @@ html, body {
 
   .sheet-notebook-canvas {
     height: 310px;
+    touch-action: none;
   }
 
   .notebook-footer {
@@ -5442,8 +5619,8 @@ html, body {
 
   .notebook-caption-input {
     width: 100%;
-    min-height: 42px;
-    font-size: 16px;
+    min-height: 44px;
+    font-size: 16px !important;
   }
 
   .notebook-footer > div {
@@ -5454,16 +5631,316 @@ html, body {
 
   .notebook-footer button {
     width: 100%;
-    min-height: 44px;
+    min-height: 46px;
     justify-content: center;
   }
 
-  /* Modal Dialog Cards (Nuevo Paciente, Nueva Cita, etc.) */
+  /* Register View & Registration Cards on Mobile */
+  .view-register {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+  }
+
+  .register-card {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    gap: 1.25rem;
+  }
+
+  .register-heading {
+    font-size: clamp(1.65rem, 6.5vw, 2.2rem) !important;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  .register-subprompt {
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .form-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+
+  .register-form {
+    gap: 1.15rem;
+  }
+
+  .input-composite-wrap {
+    min-height: 48px;
+    border-radius: 14px;
+  }
+
+  .courtesy-select {
+    padding: 0.75rem 1.6rem 0.75rem 0.85rem;
+    font-size: 16px !important;
+  }
+
+  .glass-text-input {
+    padding: 0.75rem 0.85rem;
+    font-size: 16px !important;
+  }
+
+  .gender-segmented-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.45rem !important;
+  }
+
+  .gender-option-btn {
+    padding: 0.65rem 0.25rem !important;
+    min-height: 68px !important;
+    gap: 0.3rem !important;
+    border-radius: 12px !important;
+  }
+
+  .gender-icon-box {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .gender-label {
+    font-size: 0.74rem !important;
+  }
+
+  .form-actions {
+    margin-top: 0.75rem;
+    width: 100%;
+  }
+
+  .liquid-glass-btn.btn-continuar,
+  #btn-verify-license,
+  #btn-submit-login {
+    width: 100% !important;
+    min-height: 52px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    justify-content: center !important;
+    border-radius: 9999px !important;
+  }
+
+  .login-user-profile-summary {
+    gap: 0.85rem;
+  }
+
+  .login-avatar-circle {
+    width: 52px;
+    height: 52px;
+    font-size: 1.6rem;
+  }
+
+  .login-user-name {
+    font-size: 1.35rem !important;
+  }
+
+  .btn-switch-user-link {
+    font-size: 0.82rem;
+    line-height: 1.4;
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin-top: 0.75rem;
+  }
+
+  /* Welcome View & Center Box on Mobile */
+  .view-welcome {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+  }
+
+  .welcome-center-box {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0.5rem 0 1.5rem 0;
+    gap: 0.75rem;
+  }
+
+  .welcome-hero-text {
+    font-size: clamp(2rem, 7.5vw, 2.75rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  .welcome-secondary-prompt {
+    font-size: clamp(1rem, 3.8vw, 1.25rem) !important;
+    line-height: 1.35 !important;
+  }
+
+  .welcome-portal-grid {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    gap: 0.85rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .portal-card-btn {
+    width: 100% !important;
+    padding: 1.15rem 1.25rem !important;
+    border-radius: 18px !important;
+    min-height: 78px !important;
+  }
+
+  .portal-card-icon-wrap {
+    width: 46px;
+    height: 46px;
+    font-size: 1.4rem;
+  }
+
+  .portal-card-title {
+    font-size: 1.05rem;
+  }
+
+  .portal-card-desc {
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  /* Admin View on Mobile */
+  .view-panel.view-admin,
+  #view-admin.view-panel {
+    padding: 0 0 2rem 0;
+  }
+
+  .admin-dashboard-container {
+    width: 100%;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .admin-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  .admin-brand-group {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .admin-shield-icon {
+    font-size: 1.85rem;
+  }
+
+  .admin-title {
+    font-size: 1.35rem;
+  }
+
+  .admin-subtitle {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .admin-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .admin-header-actions button {
+    flex: 1;
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  .admin-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem;
+  }
+
+  .admin-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .admin-generator-card {
+    padding: 1.15rem;
+    border-radius: 16px;
+  }
+
+  .generator-controls select,
+  .generator-controls input {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  .btn-generate-key {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .admin-keys-card {
+    padding: 1.15rem;
+    border-radius: 16px;
+  }
+
+  .keys-toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  #admin-keys-search {
+    font-size: 16px !important;
+    height: 44px;
+    width: 100%;
+  }
+
+  .admin-keys-table-surface {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+
+  .admin-keys-table {
+    min-width: 580px;
+  }
+
+  /* Admin Key Config Modal on Mobile */
+  .admin-key-modal-card {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 92dvh !important;
+    margin: 1rem auto !important;
+    border-radius: 18px !important;
+  }
+
+  .admin-key-modal-body {
+    padding: 1.15rem 1rem !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-key-modal-body input,
+  .admin-key-modal-body select {
+    font-size: 16px !important;
+  }
+
+  /* Modal Dialog Cards (Nuevo Paciente, Nueva Cita, Ficha Recurso, Licencia, etc.) */
+  .psios-modal-backdrop {
+    padding: 0.65rem !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    z-index: 99999 !important;
+  }
+
   .psios-modal-card {
-    width: 95vw;
-    max-width: 95vw;
-    max-height: 92dvh;
-    border-radius: 20px;
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: 0.75rem auto !important;
+    max-height: calc(100dvh - 1.5rem) !important;
+    border-radius: 18px !important;
   }
 
   .modal-card-header {
@@ -5472,6 +5949,9 @@ html, body {
 
   .modal-card-body {
     padding: 1rem 1.15rem;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100dvh - 140px);
   }
 
   .modal-card-footer {
@@ -5482,7 +5962,7 @@ html, body {
 
   .modal-card-footer button {
     width: 100%;
-    min-height: 44px;
+    min-height: 46px;
     justify-content: center;
   }
 
@@ -5491,16 +5971,43 @@ html, body {
     gap: 0.75rem;
   }
 
-  .form-input,
-  .form-select,
-  .form-textarea {
-    font-size: 16px; /* Prevents auto-zoom in iOS Safari */
-    min-height: 44px;
-  }
-
   .gender-segmented-picker {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+
+  /* Liquid Glass Info Dock on Mobile */
+  .liquid-glass-dock {
+    bottom: max(1rem, env(safe-area-inset-bottom)) !important;
+    right: max(1rem, env(safe-area-inset-right)) !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    z-index: 90;
+  }
+
+  .liquid-glass-trigger {
+    width: 44px;
+    height: 44px;
+  }
+
+  .liquid-glass-dock.is-expanded {
+    width: calc(100vw - 1.5rem) !important;
+    height: min(540px, 80dvh) !important;
+    border-radius: 18px !important;
+    right: 0.75rem !important;
+    bottom: max(1rem, env(safe-area-inset-bottom)) !important;
+    z-index: 999;
+  }
+
+  .glass-tab-header {
+    padding: 1rem 1.15rem 0.75rem 1.15rem;
+  }
+
+  .glass-tab-scroll {
+    padding: 1rem 1.15rem 1.5rem 1.15rem;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
