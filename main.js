@@ -4426,46 +4426,105 @@ class LibraryController {
 }
 
 /* ==========================================================================
-   CLINICAL NOTEBOOK & WHITEBOARD ENGINE (MODO PIZARRA / CUADERNILLO)
-   Soporte avanzado para Pen / Stylus (Apple Pencil, S-Pen, Surface, Touch & Mouse)
+   CLINICAL NOTEBOOK & WHITEBOARD ENGINE 2.0 (MODO PIZARRA / CUADERNILLO)
+   Soporte avanzado para Stylus/Pen (Apple Pencil, S-Pen, Surface), Touch & Mouse
+   Modo Pantalla Completa Inmersivo, Deslizamiento Fluido (Pan & Scroll) y Multi-Hoja
    ========================================================================== */
 class ClinicalNotebook {
   constructor(containerEl, options = {}) {
     this.container = containerEl;
     this.canvas = containerEl ? containerEl.querySelector('#sheet-notebook-canvas') : null;
+    this.paperWrapper = containerEl ? (containerEl.querySelector('#sheet-notebook-paper-wrapper') || containerEl.querySelector('.notebook-paper-wrapper')) : null;
     if (!this.canvas) return;
 
+    this.options = options;
     this.ctx = this.canvas.getContext('2d');
     this.inkCanvas = document.createElement('canvas');
     this.inkCtx = this.inkCanvas.getContext('2d');
 
+    // Logical dimensions for crisp, resolution-independent vector rendering
+    this.logicalWidth = 1000;
+    this.paperHeight = 1400; // generous vertical length for detailed notes
+
+    // Multi-page system
+    this.pages = [
+      {
+        id: 1,
+        strokes: [],
+        redoStack: [],
+        paperStyle: 'ruled',
+        paperHeight: 1400
+      }
+    ];
+    this.currentPageIndex = 0;
+
     // Drawing state
-    this.tool = 'pen'; // 'pen' | 'highlighter' | 'eraser'
-    this.color = '#0f172a'; // clinical ink
-    this.size = 2; // base stroke width
-    this.paperStyle = 'ruled'; // 'ruled' | 'grid' | 'blank'
-    this.strokes = []; // for undo history
+    this.tool = 'pen'; // 'pen' | 'highlighter' | 'eraser' | 'pan'
+    this.color = '#0f172a'; // clinical carbon ink
+    this.size = 3; // stroke width
+    this.paperStyle = 'ruled'; // 'ruled' | 'grid' | 'blank' | 'cream'
     this.currentStroke = null;
     this.isDrawing = false;
+    this.isPanning = false;
     this.isFullscreen = false;
 
+    // Multi-touch & Gesture tracking
+    this.activePointers = new Map();
+    this.lastMidpoint = null;
+
     this.init();
+  }
+
+  get strokes() {
+    return this.pages[this.currentPageIndex].strokes;
+  }
+
+  set strokes(val) {
+    this.pages[this.currentPageIndex].strokes = val;
+  }
+
+  get redoStack() {
+    return this.pages[this.currentPageIndex].redoStack;
+  }
+
+  set redoStack(val) {
+    this.pages[this.currentPageIndex].redoStack = val;
+  }
+
+  getCurrentPage() {
+    return this.pages[this.currentPageIndex];
   }
 
   init() {
     this.bindToolbar();
     this.bindCanvasEvents();
+    this.bindScrollEvents();
+    this.updatePageIndicator();
     this.resize(true);
 
     this.resizeHandler = () => {
       this.resize(true);
     };
     window.addEventListener('resize', this.resizeHandler);
+
+    // Fullscreen change listener to sync UI if exited via browser / ESC key
+    this.fsChangeHandler = () => {
+      const isFs = Boolean(document.fullscreenElement);
+      if (!isFs && this.isFullscreen) {
+        this.toggleFullscreen(false);
+      }
+    };
+    document.addEventListener('fullscreenchange', this.fsChangeHandler);
+    document.addEventListener('webkitfullscreenchange', this.fsChangeHandler);
   }
 
   destroy() {
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
+    }
+    if (this.fsChangeHandler) {
+      document.removeEventListener('fullscreenchange', this.fsChangeHandler);
+      document.removeEventListener('webkitfullscreenchange', this.fsChangeHandler);
     }
   }
 
@@ -4474,11 +4533,15 @@ class ClinicalNotebook {
     const rect = this.canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    const width = Math.max(rect.width || 800, 320);
-    const height = Math.max(rect.height || 380, 260);
+    // Maintain aspect ratio with logical coordinates
+    const scale = (rect.width || 800) / this.logicalWidth;
+    const currentLogicalHeight = this.getCurrentPage().paperHeight || this.paperHeight;
+    const targetHeightPx = Math.round(currentLogicalHeight * scale);
 
-    const targetWidth = Math.round(width * dpr);
-    const targetHeight = Math.round(height * dpr);
+    this.canvas.style.height = `${targetHeightPx}px`;
+
+    const targetWidth = Math.round((rect.width || 800) * dpr);
+    const targetHeight = Math.round(targetHeightPx * dpr);
 
     if (this.canvas.width !== targetWidth || this.canvas.height !== targetHeight) {
       this.canvas.width = targetWidth;
@@ -4490,35 +4553,143 @@ class ClinicalNotebook {
     if (redraw) {
       this.redraw();
     }
+    this.updateScrollIndicator();
+  }
+
+  extendPaper(extraPx = 500) {
+    const page = this.getCurrentPage();
+    page.paperHeight = (page.paperHeight || this.paperHeight) + extraPx;
+    this.paperHeight = page.paperHeight;
+    this.resize(true);
+
+    if (this.paperWrapper) {
+      setTimeout(() => {
+        this.paperWrapper.scrollBy({ top: extraPx, behavior: 'smooth' });
+      }, 50);
+    }
+  }
+
+  updateScrollIndicator() {
+    if (!this.paperWrapper) return;
+    const maxScroll = this.paperWrapper.scrollHeight - this.paperWrapper.clientHeight;
+    let pct = 0;
+    if (maxScroll > 0) {
+      pct = Math.min(100, Math.max(0, Math.round((this.paperWrapper.scrollTop / maxScroll) * 100)));
+    }
+    const pills = this.container.querySelectorAll('#notebook-slide-pos-pill');
+    pills.forEach(pill => {
+      pill.textContent = `${pct}%`;
+    });
+  }
+
+  updatePageIndicator() {
+    const total = this.pages.length;
+    const current = this.currentPageIndex + 1;
+    const label = `Hoja ${current} de ${total}`;
+
+    const indicators = this.container.querySelectorAll('#notebook-page-indicator, #fs-notebook-page-indicator');
+    indicators.forEach(ind => {
+      ind.textContent = label;
+    });
+
+    const prevBtns = this.container.querySelectorAll('#btn-notebook-prev-page, #btn-fs-prev-page');
+    prevBtns.forEach(btn => {
+      btn.disabled = this.currentPageIndex === 0;
+      btn.style.opacity = this.currentPageIndex === 0 ? '0.4' : '1';
+    });
+
+    const nextBtns = this.container.querySelectorAll('#btn-notebook-next-page, #btn-fs-next-page');
+    nextBtns.forEach(btn => {
+      btn.disabled = this.currentPageIndex === total - 1;
+      btn.style.opacity = this.currentPageIndex === total - 1 ? '0.4' : '1';
+    });
+  }
+
+  addPage() {
+    const newPage = {
+      id: Date.now(),
+      strokes: [],
+      redoStack: [],
+      paperStyle: this.paperStyle,
+      paperHeight: this.paperHeight
+    };
+    this.pages.push(newPage);
+    this.currentPageIndex = this.pages.length - 1;
+    this.updatePageIndicator();
+    this.updatePaperButtons();
+    this.resize(true);
+    if (this.paperWrapper) this.paperWrapper.scrollTop = 0;
+  }
+
+  prevPage() {
+    if (this.currentPageIndex > 0) {
+      this.currentPageIndex--;
+      this.paperStyle = this.getCurrentPage().paperStyle || this.paperStyle;
+      this.updatePageIndicator();
+      this.updatePaperButtons();
+      this.resize(true);
+      if (this.paperWrapper) this.paperWrapper.scrollTop = 0;
+    }
+  }
+
+  nextPage() {
+    if (this.currentPageIndex < this.pages.length - 1) {
+      this.currentPageIndex++;
+      this.paperStyle = this.getCurrentPage().paperStyle || this.paperStyle;
+      this.updatePageIndicator();
+      this.updatePaperButtons();
+      this.resize(true);
+      if (this.paperWrapper) this.paperWrapper.scrollTop = 0;
+    }
+  }
+
+  updatePaperButtons() {
+    const currentPaper = this.getCurrentPage().paperStyle || this.paperStyle;
+    const paperBtns = this.container.querySelectorAll('[data-notebook-paper]');
+    paperBtns.forEach(b => {
+      if (b.getAttribute('data-notebook-paper') === currentPaper) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
   }
 
   bindToolbar() {
     if (!this.container) return;
 
-    // Tools
+    // Tool switching
     const toolBtns = this.container.querySelectorAll('[data-notebook-tool]');
     toolBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         toolBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.tool = btn.getAttribute('data-notebook-tool');
+        if (this.canvas) {
+          if (this.tool === 'pan') {
+            this.canvas.classList.add('is-panning-cursor');
+          } else {
+            this.canvas.classList.remove('is-panning-cursor');
+            this.canvas.classList.remove('is-panning-active');
+          }
+        }
       });
     });
 
-    // Colors
+    // Inks / Colors
     const colorBtns = this.container.querySelectorAll('[data-notebook-color]');
-    toolBtns.forEach(b => {});
     colorBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         colorBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.color = btn.getAttribute('data-notebook-color');
-        if (this.tool === 'eraser') {
+        if (this.tool === 'eraser' || this.tool === 'pan') {
           const penBtn = this.container.querySelector('[data-notebook-tool="pen"]');
           if (penBtn) {
             toolBtns.forEach(b => b.classList.remove('active'));
             penBtn.classList.add('active');
             this.tool = 'pen';
+            if (this.canvas) this.canvas.classList.remove('is-panning-cursor');
           }
         }
       });
@@ -4530,7 +4701,7 @@ class ClinicalNotebook {
       btn.addEventListener('click', () => {
         sizeBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        this.size = parseFloat(btn.getAttribute('data-notebook-size')) || 2;
+        this.size = parseFloat(btn.getAttribute('data-notebook-size')) || 3;
       });
     });
 
@@ -4541,64 +4712,170 @@ class ClinicalNotebook {
         paperBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.paperStyle = btn.getAttribute('data-notebook-paper');
+        this.getCurrentPage().paperStyle = this.paperStyle;
         this.redraw();
       });
     });
 
-    // Undo
+    // Multi-Page Handlers
+    const addPageBtns = this.container.querySelectorAll('#btn-notebook-add-page, #btn-fs-add-page');
+    addPageBtns.forEach(btn => btn.addEventListener('click', () => this.addPage()));
+
+    const prevPageBtns = this.container.querySelectorAll('#btn-notebook-prev-page, #btn-fs-prev-page');
+    prevPageBtns.forEach(btn => btn.addEventListener('click', () => this.prevPage()));
+
+    const nextPageBtns = this.container.querySelectorAll('#btn-notebook-next-page, #btn-fs-next-page');
+    nextPageBtns.forEach(btn => btn.addEventListener('click', () => this.nextPage()));
+
+    // Undo / Redo
     const btnUndo = this.container.querySelector('#btn-notebook-undo');
     if (btnUndo) {
       btnUndo.addEventListener('click', () => this.undo());
     }
+    const btnRedo = this.container.querySelector('#btn-notebook-redo');
+    if (btnRedo) {
+      btnRedo.addEventListener('click', () => this.redo());
+    }
 
-    // Clear
+    // Clear current page
     const btnClear = this.container.querySelector('#btn-notebook-clear');
     if (btnClear) {
       btnClear.addEventListener('click', () => {
         if (this.strokes.length === 0) return;
-        if (confirm('¿Deseas limpiar todos los trazos de este apunte?')) {
+        if (confirm('¿Deseas limpiar todos los trazos de esta hoja?')) {
           this.clear();
         }
       });
     }
 
-    // Fullscreen toggle (Pantalla completa / expandir para mayor espacio)
+    // Quick Slide & Extend Floating Dock
+    const btnSlideUp = this.container.querySelector('#btn-slide-up');
+    if (btnSlideUp && this.paperWrapper) {
+      btnSlideUp.addEventListener('click', () => {
+        this.paperWrapper.scrollBy({ top: -380, behavior: 'smooth' });
+      });
+    }
+
+    const btnSlideDown = this.container.querySelector('#btn-slide-down');
+    if (btnSlideDown && this.paperWrapper) {
+      btnSlideDown.addEventListener('click', () => {
+        this.paperWrapper.scrollBy({ top: 380, behavior: 'smooth' });
+      });
+    }
+
+    const btnExtendSheet = this.container.querySelector('#btn-extend-sheet');
+    if (btnExtendSheet) {
+      btnExtendSheet.addEventListener('click', () => {
+        this.extendPaper(500);
+      });
+    }
+
+    // Fullscreen Toggle
     const btnFullscreen = this.container.querySelector('#btn-notebook-fullscreen');
     const btnExitFullscreen = this.container.querySelector('#btn-notebook-exit-fullscreen');
-    const toggleFullscreen = () => {
-      this.isFullscreen = !this.isFullscreen;
-      if (this.isFullscreen) {
-        this.container.classList.add('is-fullscreen');
-        if (btnFullscreen) btnFullscreen.innerHTML = '<span>🗗 Minimizar</span>';
-      } else {
-        this.container.classList.remove('is-fullscreen');
-        if (btnFullscreen) btnFullscreen.innerHTML = '<span>⛶ Pantalla Completa</span>';
-      }
-      setTimeout(() => this.resize(true), 60);
+    const toggleFullscreen = (desiredState) => {
+      this.toggleFullscreen(desiredState);
     };
 
-    if (btnFullscreen) btnFullscreen.addEventListener('click', toggleFullscreen);
-    if (btnExitFullscreen) btnExitFullscreen.addEventListener('click', toggleFullscreen);
+    if (btnFullscreen) btnFullscreen.addEventListener('click', () => toggleFullscreen(true));
+    if (btnExitFullscreen) btnExitFullscreen.addEventListener('click', () => toggleFullscreen(false));
     this.toggleFullscreen = toggleFullscreen;
+  }
+
+  toggleFullscreen(desiredState) {
+    if (desiredState === undefined) {
+      this.isFullscreen = !this.isFullscreen;
+    } else {
+      this.isFullscreen = desiredState;
+    }
+
+    const btnFullscreen = this.container.querySelector('#btn-notebook-fullscreen');
+
+    if (this.isFullscreen) {
+      this.container.classList.add('is-fullscreen');
+      document.body.style.overflow = 'hidden';
+      if (btnFullscreen) btnFullscreen.innerHTML = '<span>🗗 Minimizar</span>';
+
+      try {
+        if (!document.fullscreenElement && this.container.requestFullscreen) {
+          this.container.requestFullscreen().catch(() => {});
+        }
+      } catch {}
+    } else {
+      this.container.classList.remove('is-fullscreen');
+      document.body.style.overflow = '';
+      if (btnFullscreen) btnFullscreen.innerHTML = '<span>⛶ Pantalla Completa</span>';
+
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch {}
+    }
+
+    setTimeout(() => {
+      this.resize(true);
+      this.updateScrollIndicator();
+    }, 80);
+  }
+
+  bindScrollEvents() {
+    if (!this.paperWrapper) return;
+    this.paperWrapper.addEventListener('scroll', () => {
+      this.updateScrollIndicator();
+    }, { passive: true });
   }
 
   bindCanvasEvents() {
     if (!this.canvas) return;
 
-    const getNormalizedPos = (e) => {
+    const getLogicalPos = (e) => {
       const rect = this.canvas.getBoundingClientRect();
-      const nx = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const ny = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+      const scale = rect.width / this.logicalWidth;
+      const lx = Math.max(0, Math.min(this.logicalWidth, (e.clientX - rect.left) / scale));
+      const ly = Math.max(0, Math.min(this.getCurrentPage().paperHeight || this.paperHeight, (e.clientY - rect.top) / scale));
       const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-      return { nx, ny, p: pressure };
+      return { lx, ly, p: pressure };
     };
 
     this.canvas.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+      this.activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
+
+      // If 2 fingers touch screen: switch immediately to 2-finger pan/slide gesture
+      if (this.activePointers.size >= 2) {
+        if (this.isDrawing) {
+          this.isDrawing = false;
+          this.currentStroke = null;
+          this.redraw();
+        }
+        this.isPanning = true;
+        const pts = Array.from(this.activePointers.values());
+        this.lastMidpoint = {
+          x: (pts[0].x + pts[1].x) / 2,
+          y: (pts[0].y + pts[1].y) / 2
+        };
+        return;
+      }
+
+      // Hand / Pan Tool
+      if (this.tool === 'pan') {
+        this.isPanning = true;
+        this.panStart = { x: e.clientX, y: e.clientY };
+        this.scrollStart = {
+          x: this.paperWrapper ? this.paperWrapper.scrollLeft : 0,
+          y: this.paperWrapper ? this.paperWrapper.scrollTop : 0
+        };
+        this.canvas.classList.add('is-panning-active');
+        this.canvas.setPointerCapture(e.pointerId);
+        return;
+      }
+
+      // Single pointer Drawing
       this.canvas.setPointerCapture(e.pointerId);
       this.isDrawing = true;
 
-      const pt = getNormalizedPos(e);
+      const pt = getLogicalPos(e);
       this.currentStroke = {
         tool: this.tool,
         color: this.color,
@@ -4610,20 +4887,66 @@ class ClinicalNotebook {
     });
 
     this.canvas.addEventListener('pointermove', (e) => {
+      if (this.activePointers.has(e.pointerId)) {
+        this.activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
+      }
+
+      // Two-Finger Gesture Pan / Sliding
+      if (this.activePointers.size >= 2 && this.paperWrapper) {
+        const pts = Array.from(this.activePointers.values());
+        const currentMidpoint = {
+          x: (pts[0].x + pts[1].x) / 2,
+          y: (pts[0].y + pts[1].y) / 2
+        };
+        if (this.lastMidpoint) {
+          const dx = currentMidpoint.x - this.lastMidpoint.x;
+          const dy = currentMidpoint.y - this.lastMidpoint.y;
+          this.paperWrapper.scrollLeft -= dx;
+          this.paperWrapper.scrollTop -= dy;
+          this.updateScrollIndicator();
+        }
+        this.lastMidpoint = currentMidpoint;
+        return;
+      }
+
+      // Single Pointer Pan
+      if (this.isPanning && this.tool === 'pan' && this.paperWrapper) {
+        const dx = e.clientX - this.panStart.x;
+        const dy = e.clientY - this.panStart.y;
+        this.paperWrapper.scrollLeft = this.scrollStart.x - dx;
+        this.paperWrapper.scrollTop = this.scrollStart.y - dy;
+        this.updateScrollIndicator();
+        return;
+      }
+
+      // Drawing
       if (!this.isDrawing || !this.currentStroke) return;
-      const pt = getNormalizedPos(e);
+      const pt = getLogicalPos(e);
       this.currentStroke.points.push(pt);
       this.drawLatestSegment(this.currentStroke);
     });
 
-    const endStroke = (e) => {
-      if (!this.isDrawing) return;
-      this.isDrawing = false;
-      if (this.currentStroke && this.currentStroke.points.length > 0) {
-        this.strokes.push(this.currentStroke);
-        this.currentStroke = null;
-        this.redraw();
+    const endPointer = (e) => {
+      this.activePointers.delete(e.pointerId);
+      if (this.activePointers.size < 2) {
+        this.lastMidpoint = null;
       }
+
+      if (this.isPanning && this.tool === 'pan') {
+        this.isPanning = false;
+        this.canvas.classList.remove('is-panning-active');
+      }
+
+      if (this.isDrawing) {
+        this.isDrawing = false;
+        if (this.currentStroke && this.currentStroke.points.length > 0) {
+          this.strokes.push(this.currentStroke);
+          this.redoStack = []; // reset redo on new stroke
+          this.currentStroke = null;
+          this.redraw();
+        }
+      }
+
       try {
         if (this.canvas.hasPointerCapture(e.pointerId)) {
           this.canvas.releasePointerCapture(e.pointerId);
@@ -4631,18 +4954,17 @@ class ClinicalNotebook {
       } catch {}
     };
 
-    this.canvas.addEventListener('pointerup', endStroke);
-    this.canvas.addEventListener('pointercancel', endStroke);
+    this.canvas.addEventListener('pointerup', endPointer);
+    this.canvas.addEventListener('pointercancel', endPointer);
   }
 
   drawSingleDot(pt, stroke) {
-    const w = this.canvas.width;
-    const h = this.canvas.height;
-    const x = pt.nx * w;
-    const y = pt.ny * h;
+    const scale = this.canvas.width / this.logicalWidth;
+    const x = pt.lx * scale;
+    const y = pt.ly * scale;
 
-    const baseSize = stroke.size * (w / 900);
-    const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseSize * 3 : (stroke.tool === 'eraser' ? baseSize * 4 : baseSize * (0.6 + pt.p * 0.8))) / 2);
+    const baseSize = stroke.size * scale;
+    const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseSize * 3.5 : (stroke.tool === 'eraser' ? baseSize * 4.5 : baseSize * (0.6 + pt.p * 0.8))) / 2);
 
     this.inkCtx.save();
     if (stroke.tool === 'eraser') {
@@ -4660,8 +4982,10 @@ class ClinicalNotebook {
     }
     this.inkCtx.restore();
 
+    const w = this.canvas.width;
+    const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
-    this.drawBackground(this.ctx, w, h);
+    this.drawBackground(this.ctx, w, h, this.getCurrentPage().paperStyle);
     this.ctx.drawImage(this.inkCanvas, 0, 0);
   }
 
@@ -4669,17 +4993,16 @@ class ClinicalNotebook {
     const pts = stroke.points;
     if (pts.length < 2) return;
 
-    const w = this.canvas.width;
-    const h = this.canvas.height;
+    const scale = this.canvas.width / this.logicalWidth;
     const p1 = pts[pts.length - 2];
     const p2 = pts[pts.length - 1];
 
-    const x1 = p1.nx * w;
-    const y1 = p1.ny * h;
-    const x2 = p2.nx * w;
-    const y2 = p2.ny * h;
+    const x1 = p1.lx * scale;
+    const y1 = p1.ly * scale;
+    const x2 = p2.lx * scale;
+    const y2 = p2.ly * scale;
 
-    const baseWidth = stroke.size * (w / 900);
+    const baseWidth = stroke.size * scale;
     const avgPressure = (p1.p + p2.p) / 2;
     const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
 
@@ -4699,43 +5022,66 @@ class ClinicalNotebook {
       this.inkCtx.strokeStyle = stroke.color;
       this.inkCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
       this.inkCtx.lineWidth = lineWidth;
-      this.inkCtx.beginPath();
-      this.inkCtx.moveTo(x1, y1);
-      this.inkCtx.lineTo(x2, y2);
-      this.inkCtx.stroke();
+
+      // Quadratic smoothing if at least 3 points
+      if (pts.length >= 3) {
+        const p0 = pts[pts.length - 3];
+        const x0 = p0.lx * scale;
+        const y0 = p0.ly * scale;
+        const midX1 = (x0 + x1) / 2;
+        const midY1 = (y0 + y1) / 2;
+        const midX2 = (x1 + x2) / 2;
+        const midY2 = (y1 + y2) / 2;
+
+        this.inkCtx.beginPath();
+        this.inkCtx.moveTo(midX1, midY1);
+        this.inkCtx.quadraticCurveTo(x1, y1, midX2, midY2);
+        this.inkCtx.stroke();
+      } else {
+        this.inkCtx.beginPath();
+        this.inkCtx.moveTo(x1, y1);
+        this.inkCtx.lineTo(x2, y2);
+        this.inkCtx.stroke();
+      }
     }
     this.inkCtx.restore();
 
+    const w = this.canvas.width;
+    const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
-    this.drawBackground(this.ctx, w, h);
+    this.drawBackground(this.ctx, w, h, this.getCurrentPage().paperStyle);
     this.ctx.drawImage(this.inkCanvas, 0, 0);
   }
 
-  drawBackground(targetCtx, w, h) {
-    if (this.paperStyle === 'ruled') {
+  drawBackground(targetCtx, w, h, style = 'ruled') {
+    if (style === 'ruled') {
       targetCtx.fillStyle = '#fcfbfa';
-    } else if (this.paperStyle === 'grid') {
+    } else if (style === 'grid') {
       targetCtx.fillStyle = '#ffffff';
+    } else if (style === 'cream') {
+      targetCtx.fillStyle = '#fdfbf7';
     } else {
       targetCtx.fillStyle = '#ffffff';
     }
     targetCtx.fillRect(0, 0, w, h);
 
-    if (this.paperStyle === 'ruled') {
+    const scale = w / this.logicalWidth;
+
+    if (style === 'ruled') {
       targetCtx.save();
       // Red vertical margin line
-      const marginX = Math.round(52 * (w / 900));
-      targetCtx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
-      targetCtx.lineWidth = Math.max(1, 1.5 * (w / 900));
+      const marginX = Math.round(54 * scale);
+      targetCtx.strokeStyle = 'rgba(239, 68, 68, 0.38)';
+      targetCtx.lineWidth = Math.max(1, 1.5 * scale);
       targetCtx.beginPath();
       targetCtx.moveTo(marginX, 0);
       targetCtx.lineTo(marginX, h);
       targetCtx.stroke();
 
-      // Blue horizontal lines
-      const lineSpacing = Math.round(30 * (h / 500));
-      targetCtx.strokeStyle = 'rgba(203, 213, 225, 0.55)';
-      targetCtx.lineWidth = Math.max(1, 1 * (w / 900));
+      // Blue horizontal ruled lines
+      const lineSpacing = Math.round(32 * scale);
+      targetCtx.strokeStyle = 'rgba(203, 213, 225, 0.65)';
+      targetCtx.lineWidth = Math.max(1, 1 * scale);
 
       for (let y = lineSpacing; y < h; y += lineSpacing) {
         targetCtx.beginPath();
@@ -4744,10 +5090,10 @@ class ClinicalNotebook {
         targetCtx.stroke();
       }
       targetCtx.restore();
-    } else if (this.paperStyle === 'grid') {
+    } else if (style === 'grid') {
       targetCtx.save();
-      const gridSize = Math.round(24 * (w / 900));
-      targetCtx.strokeStyle = 'rgba(226, 232, 240, 0.7)';
+      const gridSize = Math.round(28 * scale);
+      targetCtx.strokeStyle = 'rgba(226, 232, 240, 0.75)';
       targetCtx.lineWidth = 1;
 
       for (let x = gridSize; x < w; x += gridSize) {
@@ -4763,6 +5109,85 @@ class ClinicalNotebook {
         targetCtx.stroke();
       }
       targetCtx.restore();
+    } else if (style === 'cream') {
+      targetCtx.save();
+      const lineSpacing = Math.round(34 * scale);
+      targetCtx.strokeStyle = 'rgba(217, 119, 6, 0.12)';
+      targetCtx.lineWidth = Math.max(1, 1 * scale);
+
+      for (let y = lineSpacing; y < h; y += lineSpacing) {
+        targetCtx.beginPath();
+        targetCtx.moveTo(0, y);
+        targetCtx.lineTo(w, y);
+        targetCtx.stroke();
+      }
+      targetCtx.restore();
+    }
+  }
+
+  renderStrokesToContext(targetCtx, strokesList, w, h) {
+    const scale = w / this.logicalWidth;
+
+    for (const stroke of strokesList) {
+      const pts = stroke.points;
+      if (!pts || pts.length === 0) continue;
+
+      const baseWidth = stroke.size * scale;
+
+      targetCtx.save();
+      targetCtx.lineCap = 'round';
+      targetCtx.lineJoin = 'round';
+
+      if (stroke.tool === 'eraser') {
+        targetCtx.globalCompositeOperation = 'destination-out';
+      } else {
+        targetCtx.globalCompositeOperation = 'source-over';
+        targetCtx.strokeStyle = stroke.color;
+        targetCtx.fillStyle = stroke.color;
+        targetCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
+      }
+
+      if (pts.length === 1) {
+        const x = pts[0].lx * scale;
+        const y = pts[0].ly * scale;
+        const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + pts[0].p * 0.8))) / 2);
+        targetCtx.beginPath();
+        targetCtx.arc(x, y, radius, 0, Math.PI * 2);
+        targetCtx.fill();
+      } else {
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+          const x1 = p1.lx * scale;
+          const y1 = p1.ly * scale;
+          const x2 = p2.lx * scale;
+          const y2 = p2.ly * scale;
+          const avgPressure = (p1.p + p2.p) / 2;
+          const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
+
+          targetCtx.lineWidth = lineWidth;
+          if (i > 0) {
+            const p0 = pts[i - 1];
+            const x0 = p0.lx * scale;
+            const y0 = p0.ly * scale;
+            const midX1 = (x0 + x1) / 2;
+            const midY1 = (y0 + y1) / 2;
+            const midX2 = (x1 + x2) / 2;
+            const midY2 = (y1 + y2) / 2;
+
+            targetCtx.beginPath();
+            targetCtx.moveTo(midX1, midY1);
+            targetCtx.quadraticCurveTo(x1, y1, midX2, midY2);
+            targetCtx.stroke();
+          } else {
+            targetCtx.beginPath();
+            targetCtx.moveTo(x1, y1);
+            targetCtx.lineTo(x2, y2);
+            targetCtx.stroke();
+          }
+        }
+      }
+      targetCtx.restore();
     }
   }
 
@@ -4772,134 +5197,70 @@ class ClinicalNotebook {
     if (w === 0 || h === 0) return;
 
     this.inkCtx.clearRect(0, 0, w, h);
-
-    for (const stroke of this.strokes) {
-      const pts = stroke.points;
-      if (!pts || pts.length === 0) continue;
-
-      const baseWidth = stroke.size * (w / 900);
-
-      this.inkCtx.save();
-      this.inkCtx.lineCap = 'round';
-      this.inkCtx.lineJoin = 'round';
-
-      if (stroke.tool === 'eraser') {
-        this.inkCtx.globalCompositeOperation = 'destination-out';
-      } else {
-        this.inkCtx.globalCompositeOperation = 'source-over';
-        this.inkCtx.strokeStyle = stroke.color;
-        this.inkCtx.fillStyle = stroke.color;
-        this.inkCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
-      }
-
-      if (pts.length === 1) {
-        const x = pts[0].nx * w;
-        const y = pts[0].ny * h;
-        const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseWidth * 3 : (stroke.tool === 'eraser' ? baseWidth * 4 : baseWidth * (0.6 + pts[0].p * 0.8))) / 2);
-        this.inkCtx.beginPath();
-        this.inkCtx.arc(x, y, radius, 0, Math.PI * 2);
-        this.inkCtx.fill();
-      } else {
-        for (let i = 0; i < pts.length - 1; i++) {
-          const p1 = pts[i];
-          const p2 = pts[i + 1];
-          const x1 = p1.nx * w;
-          const y1 = p1.ny * h;
-          const x2 = p2.nx * w;
-          const y2 = p2.ny * h;
-          const avgPressure = (p1.p + p2.p) / 2;
-          const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
-
-          this.inkCtx.lineWidth = lineWidth;
-          this.inkCtx.beginPath();
-          this.inkCtx.moveTo(x1, y1);
-          this.inkCtx.lineTo(x2, y2);
-          this.inkCtx.stroke();
-        }
-      }
-      this.inkCtx.restore();
-    }
+    this.renderStrokesToContext(this.inkCtx, this.strokes, w, h);
 
     this.ctx.clearRect(0, 0, w, h);
-    this.drawBackground(this.ctx, w, h);
+    this.drawBackground(this.ctx, w, h, this.getCurrentPage().paperStyle);
     this.ctx.drawImage(this.inkCanvas, 0, 0);
   }
 
   undo() {
     if (this.strokes.length > 0) {
-      this.strokes.pop();
+      const stroke = this.strokes.pop();
+      this.redoStack.push(stroke);
+      this.redraw();
+    }
+  }
+
+  redo() {
+    if (this.redoStack.length > 0) {
+      const stroke = this.redoStack.pop();
+      this.strokes.push(stroke);
       this.redraw();
     }
   }
 
   clear() {
     this.strokes = [];
+    this.redoStack = [];
     this.redraw();
   }
 
   hasContent() {
-    return this.strokes.length > 0;
+    return this.pages.some(p => p.strokes && p.strokes.length > 0);
   }
 
   exportImage() {
-    const exportWidth = 1080;
-    const exportHeight = 640;
+    const pagesWithContent = this.pages.filter(p => p.strokes && p.strokes.length > 0);
+    const targetPages = pagesWithContent.length > 0 ? pagesWithContent : [this.getCurrentPage()];
+
+    const exportW = 1080;
+    const basePageLogicalH = this.paperHeight || 1400;
+    const pageH = Math.round(exportW * (basePageLogicalH / this.logicalWidth));
+    const totalH = pageH * targetPages.length;
+
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = exportWidth;
-    exportCanvas.height = exportHeight;
+    exportCanvas.width = exportW;
+    exportCanvas.height = totalH;
     const expCtx = exportCanvas.getContext('2d');
 
-    this.drawBackground(expCtx, exportWidth, exportHeight);
-
-    for (const stroke of this.strokes) {
-      const pts = stroke.points;
-      if (!pts || pts.length === 0) continue;
-
-      const baseWidth = stroke.size * (exportWidth / 900);
-
+    targetPages.forEach((page, idx) => {
+      const offsetY = idx * pageH;
       expCtx.save();
-      expCtx.lineCap = 'round';
-      expCtx.lineJoin = 'round';
-
-      if (stroke.tool === 'eraser') {
-        expCtx.globalCompositeOperation = 'destination-out';
-      } else {
-        expCtx.globalCompositeOperation = 'source-over';
-        expCtx.strokeStyle = stroke.color;
-        expCtx.fillStyle = stroke.color;
-        expCtx.globalAlpha = stroke.tool === 'highlighter' ? 0.35 : 1.0;
-      }
-
-      if (pts.length === 1) {
-        const x = pts[0].nx * exportWidth;
-        const y = pts[0].ny * exportHeight;
-        const radius = Math.max(1, (stroke.tool === 'highlighter' ? baseWidth * 3 : (stroke.tool === 'eraser' ? baseWidth * 4 : baseWidth * (0.6 + pts[0].p * 0.8))) / 2);
-        expCtx.beginPath();
-        expCtx.arc(x, y, radius, 0, Math.PI * 2);
-        expCtx.fill();
-      } else {
-        for (let i = 0; i < pts.length - 1; i++) {
-          const p1 = pts[i];
-          const p2 = pts[i + 1];
-          const x1 = p1.nx * exportWidth;
-          const y1 = p1.ny * exportHeight;
-          const x2 = p2.nx * exportWidth;
-          const y2 = p2.ny * exportHeight;
-          const avgPressure = (p1.p + p2.p) / 2;
-          const lineWidth = Math.max(1, stroke.tool === 'highlighter' ? baseWidth * 3.5 : (stroke.tool === 'eraser' ? baseWidth * 4.5 : baseWidth * (0.6 + avgPressure * 0.8)));
-
-          expCtx.lineWidth = lineWidth;
-          expCtx.beginPath();
-          expCtx.moveTo(x1, y1);
-          expCtx.lineTo(x2, y2);
-          expCtx.stroke();
-        }
-      }
+      expCtx.translate(0, offsetY);
+      this.drawBackground(expCtx, exportW, pageH, page.paperStyle);
+      this.renderStrokesToContext(expCtx, page.strokes, exportW, pageH);
       expCtx.restore();
-    }
+
+      // Elegant separator between multi-page exports
+      if (idx < targetPages.length - 1) {
+        expCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        expCtx.fillRect(0, offsetY + pageH - 3, exportW, 3);
+      }
+    });
 
     try {
-      const webp = exportCanvas.toDataURL('image/webp', 0.85);
+      const webp = exportCanvas.toDataURL('image/webp', 0.88);
       if (webp && webp.startsWith('data:image/webp')) {
         return webp;
       }
@@ -6142,11 +6503,22 @@ class ClinicController {
           <!-- 2. Whiteboard / Notebook Mode -->
           <div class="sheet-notebook-container" id="sheet-notebook-container">
             <div class="notebook-fullscreen-header">
-              <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div class="notebook-fs-title-box">
                 <span style="font-size: 1.25rem;">✍️</span>
-                <strong>Cuadernillo Clínico de Notas - ${patient.name}</strong>
+                <strong>Cuadernillo Clínico de Notas</strong>
+                <span class="notebook-fs-badge">${patient.name}</span>
               </div>
-              <button type="button" class="notebook-btn" id="btn-notebook-exit-fullscreen">✕ Salir de Pantalla Completa</button>
+              <div class="notebook-fs-actions">
+                <div class="notebook-page-controls" style="background: rgba(255, 255, 255, 0.1);">
+                  <button type="button" class="notebook-btn" id="btn-fs-prev-page" title="Hoja anterior">‹</button>
+                  <span class="notebook-page-indicator" id="fs-notebook-page-indicator">Hoja 1 de 1</span>
+                  <button type="button" class="notebook-btn" id="btn-fs-next-page" title="Siguiente hoja">›</button>
+                  <button type="button" class="notebook-btn" id="btn-fs-add-page" title="Agregar nueva hoja">+ Hoja</button>
+                </div>
+                <button type="button" class="notebook-btn" id="btn-fs-download" title="Descargar apunte en PNG">📥 Descargar</button>
+                <button type="button" class="notebook-btn" id="btn-fs-quick-save" style="background: #10b981; color: #ffffff; border-color: #10b981;" title="Guardar nota manuscrita en historia">💾 Guardar</button>
+                <button type="button" class="notebook-btn" id="btn-notebook-exit-fullscreen" title="Salir de Pantalla Completa">✕ Salir</button>
+              </div>
             </div>
 
             <div class="notebook-toolbar">
@@ -6158,8 +6530,11 @@ class ClinicController {
                 <button type="button" class="notebook-btn" data-notebook-tool="highlighter" title="Resaltador clínico">
                   <span>🖍️ Resaltador</span>
                 </button>
-                <button type="button" class="notebook-btn" data-notebook-tool="eraser" title="Borrador">
+                <button type="button" class="notebook-btn" data-notebook-tool="eraser" title="Borrador de trazos">
                   <span>🧹 Borrador</span>
+                </button>
+                <button type="button" class="notebook-btn" data-notebook-tool="pan" title="Mano / Desplazar hoja (también puedes usar 2 dedos)">
+                  <span>🖐️ Desplazar</span>
                 </button>
               </div>
 
@@ -6190,10 +6565,23 @@ class ClinicController {
 
               <!-- Paper Styles -->
               <div class="notebook-tool-group">
-                <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Hoja:</span>
+                <span style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 600;">Papel:</span>
                 <button type="button" class="notebook-btn active" data-notebook-paper="ruled" title="Cuaderno rayado">📜 Rayado</button>
                 <button type="button" class="notebook-btn" data-notebook-paper="grid" title="Cuaderno cuadriculado">📐 Cuadrícula</button>
+                <button type="button" class="notebook-btn" data-notebook-paper="cream" title="Papel crema descansador de vista">📄 Crema</button>
                 <button type="button" class="notebook-btn" data-notebook-paper="blank" title="Pizarra blanca lisa">📋 Blanca</button>
+              </div>
+
+              <div class="notebook-divider"></div>
+
+              <!-- Multi-Page Controls in toolbar -->
+              <div class="notebook-tool-group">
+                <div class="notebook-page-controls">
+                  <button type="button" class="notebook-btn" id="btn-notebook-prev-page" title="Hoja anterior">‹</button>
+                  <span class="notebook-page-indicator" id="notebook-page-indicator">Hoja 1 de 1</span>
+                  <button type="button" class="notebook-btn" id="btn-notebook-next-page" title="Siguiente hoja">›</button>
+                  <button type="button" class="notebook-btn" id="btn-notebook-add-page" title="Agregar nueva hoja">+ Hoja</button>
+                </div>
               </div>
 
               <div class="notebook-divider"></div>
@@ -6203,18 +6591,27 @@ class ClinicController {
                 <button type="button" class="notebook-btn" id="btn-notebook-undo" title="Deshacer trazo anterior">
                   <span>↩️ Deshacer</span>
                 </button>
-                <button type="button" class="notebook-btn" id="btn-notebook-clear" title="Limpiar hoja">
+                <button type="button" class="notebook-btn" id="btn-notebook-redo" title="Rehacer trazo">
+                  <span>↪️ Rehacer</span>
+                </button>
+                <button type="button" class="notebook-btn" id="btn-notebook-clear" title="Limpiar hoja actual">
                   <span>🗑️ Limpiar</span>
                 </button>
-                <button type="button" class="notebook-btn" id="btn-notebook-fullscreen" title="Expandir a pantalla completa para tablet">
+                <button type="button" class="notebook-btn" id="btn-notebook-fullscreen" title="Expandir a pantalla completa inmersiva">
                   <span>⛶ Pantalla Completa</span>
                 </button>
               </div>
             </div>
 
-            <!-- Canvas wrapper -->
-            <div class="notebook-paper-wrapper">
+            <!-- Canvas wrapper (Scrollable & Pannable Paper) -->
+            <div class="notebook-paper-wrapper" id="sheet-notebook-paper-wrapper">
               <canvas id="sheet-notebook-canvas" class="sheet-notebook-canvas"></canvas>
+              <div class="notebook-floating-slide-dock" id="notebook-slide-dock">
+                <button type="button" class="notebook-slide-btn" id="btn-slide-up" title="Deslizar arriba">⬆️</button>
+                <span class="notebook-slide-pos-pill" id="notebook-slide-pos-pill" title="Posición en hoja">0%</span>
+                <button type="button" class="notebook-slide-btn" id="btn-slide-down" title="Deslizar abajo">⬇️</button>
+                <button type="button" class="notebook-slide-btn btn-extend-sheet" id="btn-extend-sheet" title="Extender más espacio hacia abajo (+500px)">➕ Espacio</button>
+              </div>
             </div>
 
             <!-- Notebook footer -->
@@ -6279,59 +6676,66 @@ class ClinicController {
         });
       }
 
-      // Save Handwritten Note handler
+      // Save Handwritten Note & Download handlers
       const btnSaveNotebook = document.getElementById('btn-sheet-save-notebook');
+      const btnFsQuickSave = document.getElementById('btn-fs-quick-save');
       const inputNotebookCaption = document.getElementById('sheet-notebook-caption');
       const btnNotebookDownload = document.getElementById('btn-notebook-download');
+      const btnFsDownload = document.getElementById('btn-fs-download');
 
-      if (btnNotebookDownload && this.activeNotebook) {
-        btnNotebookDownload.addEventListener('click', () => {
-          if (!this.activeNotebook.hasContent()) {
-            alert('Realiza algún trazo en la pizarra antes de descargar.');
-            return;
-          }
-          const dataUrl = this.activeNotebook.exportImage();
-          this.downloadDrawing(dataUrl, `Cuadernillo_${patient.name.replace(/\s+/g, '_')}_${Date.now()}.png`);
-        });
-      }
+      const performDownloadNotebook = () => {
+        if (!this.activeNotebook || !this.activeNotebook.hasContent()) {
+          alert('Realiza algún trazo en la pizarra antes de descargar.');
+          return;
+        }
+        const dataUrl = this.activeNotebook.exportImage();
+        this.downloadDrawing(dataUrl, `Cuadernillo_${patient.name.replace(/\s+/g, '_')}_${Date.now()}.png`);
+      };
 
-      if (btnSaveNotebook && this.activeNotebook) {
-        btnSaveNotebook.addEventListener('click', () => {
-          if (!this.activeNotebook.hasContent()) {
-            alert('Por favor realiza tus anotaciones o dibujos en la pizarra antes de guardar.');
-            return;
-          }
+      const performSaveNotebook = () => {
+        if (!this.activeNotebook || !this.activeNotebook.hasContent()) {
+          alert('Por favor realiza tus anotaciones o dibujos en la pizarra antes de guardar.');
+          return;
+        }
 
-          const now = new Date();
-          const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-          const day = now.getDate().toString().padStart(2, '0');
-          const month = months[now.getMonth()];
-          const year = now.getFullYear();
-          const hh = now.getHours().toString().padStart(2, '0');
-          const mm = now.getMinutes().toString().padStart(2, '0');
-          const dateStr = `${day} ${month} ${year}, ${hh}:${mm}`;
+        const now = new Date();
+        const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = months[now.getMonth()];
+        const year = now.getFullYear();
+        const hh = now.getHours().toString().padStart(2, '0');
+        const mm = now.getMinutes().toString().padStart(2, '0');
+        const dateStr = `${day} ${month} ${year}, ${hh}:${mm}`;
 
-          const caption = inputNotebookCaption ? inputNotebookCaption.value.trim() : '';
-          const dataUrl = this.activeNotebook.exportImage();
+        const caption = inputNotebookCaption ? inputNotebookCaption.value.trim() : '';
+        const dataUrl = this.activeNotebook.exportImage();
 
-          const newNote = {
-            id: `ev-${Date.now()}`,
-            timestamp: Date.now(),
-            dateStr,
-            type: 'drawing',
-            text: caption || 'Apunte clínico manuscrito / Esquema',
-            drawing: dataUrl
-          };
+        const newNote = {
+          id: `ev-${Date.now()}`,
+          timestamp: Date.now(),
+          dateStr,
+          type: 'drawing',
+          text: caption || 'Apunte clínico manuscrito / Esquema',
+          drawing: dataUrl
+        };
 
-          if (!Array.isArray(patient.evolutionNotes)) patient.evolutionNotes = [];
-          patient.evolutionNotes.unshift(newNote);
+        if (!Array.isArray(patient.evolutionNotes)) patient.evolutionNotes = [];
+        patient.evolutionNotes.unshift(newNote);
 
-          this.savePatients(this.patients);
-          this.activeNotebook.clear();
-          if (inputNotebookCaption) inputNotebookCaption.value = '';
-          renderEvolutionList();
-        });
-      }
+        this.savePatients(this.patients);
+        this.activeNotebook.clear();
+        if (inputNotebookCaption) inputNotebookCaption.value = '';
+        renderEvolutionList();
+
+        if (this.activeNotebook.isFullscreen) {
+          this.activeNotebook.toggleFullscreen(false);
+        }
+      };
+
+      if (btnNotebookDownload) btnNotebookDownload.addEventListener('click', performDownloadNotebook);
+      if (btnFsDownload) btnFsDownload.addEventListener('click', performDownloadNotebook);
+      if (btnSaveNotebook) btnSaveNotebook.addEventListener('click', performSaveNotebook);
+      if (btnFsQuickSave) btnFsQuickSave.addEventListener('click', performSaveNotebook);
 
       // Inline new appointment button inside sheet
       const btnInlineAppt = document.getElementById('btn-sheet-inline-new-appt');
@@ -6399,6 +6803,75 @@ class ClinicController {
     this.sheetModal.classList.remove('active');
     this.sheetModal.setAttribute('aria-hidden', 'true');
     this.activeSheetPatientId = null;
+  }
+
+  downloadDrawing(dataUrl, filename = 'apunte_clinico.png') {
+    if (!dataUrl) return;
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  openDrawingViewer(note, patientName = '') {
+    if (!note || !note.drawing) return;
+    let viewer = document.getElementById('psios-drawing-viewer-modal');
+    if (!viewer) {
+      viewer = document.createElement('div');
+      viewer.id = 'psios-drawing-viewer-modal';
+      viewer.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 250000;
+        background: rgba(10, 15, 29, 0.94);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        box-sizing: border-box;
+      `;
+      document.body.appendChild(viewer);
+    }
+
+    viewer.innerHTML = `
+      <div style="position: absolute; top: max(1rem, env(safe-area-inset-top)); left: 1.25rem; right: 1.25rem; display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+        <div style="color: #ffffff; display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.35rem;">✍️</span>
+          <div>
+            <strong style="font-size: 0.95rem; display: block; color: #f8fafc;">${note.text || 'Apunte Manuscrito'}</strong>
+            <span style="font-size: 0.75rem; color: #94a3b8;">${patientName ? `${patientName} • ` : ''}${note.dateStr || ''}</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button type="button" id="btn-viewer-download" class="notebook-btn" style="background: #3b82f6; color: #fff; border: none; font-size: 0.8rem; height: 36px; padding: 0 0.85rem; border-radius: 8px; cursor: pointer;">📥 Descargar</button>
+          <button type="button" id="btn-viewer-close" class="notebook-btn" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.2); font-size: 0.8rem; height: 36px; padding: 0 0.85rem; border-radius: 8px; cursor: pointer;">✕ Cerrar</button>
+        </div>
+      </div>
+      <div style="flex: 1; width: 100%; max-width: 1020px; max-height: calc(100vh - 120px); max-height: calc(100dvh - 120px); margin-top: 3.5rem; display: flex; align-items: center; justify-content: center; overflow: auto; -webkit-overflow-scrolling: touch; padding: 0.5rem;">
+        <img src="${note.drawing}" alt="Apunte Clínico" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.65); background: #ffffff;" />
+      </div>
+    `;
+    viewer.style.display = 'flex';
+
+    const closeBtn = viewer.querySelector('#btn-viewer-close');
+    const dlBtn = viewer.querySelector('#btn-viewer-download');
+    const handleClose = () => {
+      viewer.style.display = 'none';
+    };
+    if (closeBtn) closeBtn.onclick = handleClose;
+    viewer.onclick = (e) => {
+      if (e.target === viewer) handleClose();
+    };
+    if (dlBtn) {
+      dlBtn.onclick = () => {
+        this.downloadDrawing(note.drawing, `Apunte_${(patientName || 'clinico').replace(/\s+/g, '_')}_${note.id}.png`);
+      };
+    }
   }
 
   // --- MODAL: PROGRAMAR CITA ---
