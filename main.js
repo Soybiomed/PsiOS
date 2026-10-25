@@ -5,6 +5,7 @@ import { authService } from './firebase/auth-service.js';
 import { clinicSyncService } from './firebase/clinic-sync-service.js';
 import { LibraryAssetResolver } from './firebase/library-resolver.js';
 import { getStoredFirebaseConfig, setStoredFirebaseConfig } from './firebase/firebase-config.js';
+import { patientCryptoService } from './patient-crypto-service.js';
 
 
 /* ==========================================================================
@@ -5422,6 +5423,33 @@ class ClinicController {
     this.sidebarPatientCounter = document.getElementById('sidebar-patient-counter');
     this.sidebarApptCounter = document.getElementById('sidebar-appointment-counter');
 
+    // Encrypted Export & Import Modals
+    this.modalExport = document.getElementById('modal-export-patients-backdrop');
+    this.modalImport = document.getElementById('modal-import-patients-backdrop');
+    this.btnOpenExport = document.getElementById('btn-open-export-patients');
+    this.btnOpenImport = document.getElementById('btn-open-import-patients');
+    this.btnSheetExport = document.getElementById('btn-sheet-export-encrypted');
+    this.btnCloseExport = document.getElementById('btn-close-export-modal');
+    this.btnCancelExport = document.getElementById('btn-cancel-export-modal');
+    this.btnCloseImport = document.getElementById('btn-close-import-modal');
+    this.btnCancelImport = document.getElementById('btn-cancel-import-modal');
+    this.formExport = document.getElementById('form-export-patients');
+    this.formImport = document.getElementById('form-import-patients');
+    this.importDropzone = document.getElementById('import-dropzone');
+    this.inputImportFile = document.getElementById('input-import-file');
+    this.importSelectedFile = null;
+    this.exportScopeAll = document.getElementById('export-scope-all');
+    this.exportScopeSingle = document.getElementById('export-scope-single');
+    this.exportSingleSelectWrap = document.getElementById('export-single-select-wrap');
+    this.exportPatientSelect = document.getElementById('export-patient-select');
+    this.exportPasswordInput = document.getElementById('export-password-input');
+    this.exportPasswordConfirm = document.getElementById('export-password-confirm');
+    this.errExportPwd = document.getElementById('err-export-pwd');
+    this.errExportPwdConfirm = document.getElementById('err-export-pwd-confirm');
+    this.importPasswordInput = document.getElementById('import-password-input');
+    this.errImportFile = document.getElementById('err-import-file');
+    this.errImportPwd = document.getElementById('err-import-pwd');
+
     // Dashboard metrics & lists
     this.metricTodayCount = document.getElementById('metric-today-count');
     this.metricTodayCaption = document.getElementById('metric-today-caption');
@@ -6106,7 +6134,11 @@ class ClinicController {
     // Global Escape Key to close open modals
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (this.viewerModal && this.viewerModal.classList.contains('active')) {
+        if (this.modalExport && this.modalExport.classList.contains('active')) {
+          this.closeExportModal();
+        } else if (this.modalImport && this.modalImport.classList.contains('active')) {
+          this.closeImportModal();
+        } else if (this.viewerModal && this.viewerModal.classList.contains('active')) {
           this.closeDrawingViewer();
         } else if (this.activeNotebook && this.activeNotebook.isFullscreen) {
           this.activeNotebook.toggleFullscreen();
@@ -6119,6 +6151,8 @@ class ClinicController {
         }
       }
     });
+
+    this.bindCryptoModals();
   }
 
   openDrawingViewer(note, patientName = '') {
@@ -6154,21 +6188,134 @@ class ClinicController {
     this.syncCloudData(false);
   }
 
-  syncDoctorProfile() {
+  getCurrentDoctor() {
+    let doctorName = 'Profesional Clínico';
+    let doctorId = 'doc_default';
+    const licenseKey = this.getLicenseKey();
+
     try {
       const userRaw = localStorage.getItem('psios_user_profile');
       if (userRaw) {
         const user = JSON.parse(userRaw);
-        if (this.sidebarDocName) {
-          const title = user.displayTitle || user.title || 'Dr.';
-          this.sidebarDocName.textContent = `${title} ${user.firstName || user.rawName}`;
+        if (user.doctorFullName) {
+          doctorName = user.doctorFullName;
+        } else if (user.rawName) {
+          doctorName = `${user.displayTitle || user.title || 'Dr.'} ${user.rawName}`.trim();
         }
-        if (this.sidebarDocAvatar) {
-          if (user.gender === 'female') this.sidebarDocAvatar.textContent = '👩‍⚕️';
-          else if (user.gender === 'male') this.sidebarDocAvatar.textContent = '👨‍⚕️';
-          else this.sidebarDocAvatar.textContent = '🧠';
+
+        if (user.doctorId) {
+          doctorId = user.doctorId;
+        } else if (user.uid) {
+          doctorId = user.uid;
+        } else if (user.doctorFullName) {
+          doctorId = 'doc_' + user.doctorFullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+        } else if (user.rawName) {
+          doctorId = 'doc_' + user.rawName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
         }
       }
+    } catch {}
+
+    const authUser = authService.getCurrentUser();
+    if (authUser) {
+      if (!doctorId || doctorId === 'doc_default') doctorId = authUser.uid;
+      if (!doctorName || doctorName === 'Profesional Clínico') doctorName = authUser.displayName;
+    }
+
+    if (!doctorId || doctorId === 'doc_default') {
+      if (licenseKey) doctorId = 'doc_lic_' + licenseKey.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+    }
+
+    return { doctorId, doctorName, licenseKey };
+  }
+
+  getDoctorPatients() {
+    const doc = this.getCurrentDoctor();
+    let hasUnassigned = false;
+
+    // Filter patients belonging to current doctor
+    // (If a legacy patient has no doctorId, claim it for this active doctor so no data is lost)
+    this.patients.forEach(p => {
+      if (!p.doctorId) {
+        p.doctorId = doc.doctorId;
+        p.doctorName = doc.doctorName;
+        hasUnassigned = true;
+      }
+    });
+
+    if (hasUnassigned) {
+      try {
+        localStorage.setItem('psios_patients_v1', JSON.stringify(this.patients));
+      } catch {}
+    }
+
+    return this.patients.filter(p => p.doctorId === doc.doctorId);
+  }
+
+  getDoctorAppointments() {
+    const doc = this.getCurrentDoctor();
+    const docPatientIds = new Set(this.getDoctorPatients().map(p => p.id));
+    let hasUnassigned = false;
+
+    this.appointments.forEach(a => {
+      if (!a.doctorId) {
+        if (a.patientId && docPatientIds.has(a.patientId)) {
+          a.doctorId = doc.doctorId;
+          hasUnassigned = true;
+        }
+      }
+    });
+
+    if (hasUnassigned) {
+      try {
+        localStorage.setItem('psios_appointments_v1', JSON.stringify(this.appointments));
+      } catch {}
+    }
+
+    return this.appointments.filter(a => {
+      if (a.doctorId) return a.doctorId === doc.doctorId;
+      if (a.patientId && docPatientIds.has(a.patientId)) return true;
+      return false;
+    });
+  }
+
+  syncDoctorProfile() {
+    try {
+      const doc = this.getCurrentDoctor();
+      const userRaw = localStorage.getItem('psios_user_profile');
+      let title = 'Dr.';
+      let firstName = 'Profesional';
+      let gender = 'male';
+
+      if (userRaw) {
+        const user = JSON.parse(userRaw);
+        title = user.displayTitle || user.title || 'Dr.';
+        firstName = user.firstName || user.rawName || 'Profesional';
+        gender = user.gender || 'male';
+      }
+
+      const docDisplay = `${title} ${firstName}`;
+
+      if (this.sidebarDocName) {
+        this.sidebarDocName.textContent = docDisplay;
+      }
+      if (this.sidebarDocAvatar) {
+        if (gender === 'female') this.sidebarDocAvatar.textContent = '👩‍⚕️';
+        else if (gender === 'male') this.sidebarDocAvatar.textContent = '👨‍⚕️';
+        else this.sidebarDocAvatar.textContent = '🧠';
+      }
+
+      const headerDocName = document.getElementById('clinic-header-doc-name');
+      if (headerDocName) headerDocName.textContent = doc.doctorName || docDisplay;
+
+      const headerDocAvatar = document.getElementById('clinic-header-doc-avatar');
+      if (headerDocAvatar) {
+        if (gender === 'female') headerDocAvatar.textContent = '👩‍⚕️';
+        else if (gender === 'male') headerDocAvatar.textContent = '👨‍⚕️';
+        else headerDocAvatar.textContent = '🧠';
+      }
+
+      const importDocBadge = document.getElementById('import-doc-name-badge');
+      if (importDocBadge) importDocBadge.textContent = doc.doctorName || docDisplay;
     } catch (e) {
       console.warn('Could not sync doctor profile:', e);
     }
@@ -6256,6 +6403,7 @@ class ClinicController {
     const gender = genderEl ? genderEl.value : 'other';
     const phone = (this.patientPhoneInput?.value || '').trim();
     const notes = (this.patientNotesInput?.value || '').trim();
+    const currentDoc = this.getCurrentDoctor();
 
     const newPatient = {
       id: `pat-${Date.now()}`,
@@ -6265,6 +6413,8 @@ class ClinicController {
       gender,
       phone: phone || 'No informado',
       notes: notes || 'Sin notas clínicas preliminares.',
+      doctorId: currentDoc.doctorId,
+      doctorName: currentDoc.doctorName,
       evolutionNotes: [],
       createdAt: Date.now()
     };
@@ -6279,8 +6429,22 @@ class ClinicController {
   // --- MODAL: FICHA CLÍNICA EXPANDIDA (HOJA COMPLETA DE PACIENTE) ---
   openPatientSheet(patientId) {
     if (!this.sheetModal) return;
+    const currentDoc = this.getCurrentDoctor();
     const patient = this.patients.find(p => p.id === patientId);
     if (!patient) return;
+
+    // Security check: Verify doctor ownership
+    if (patient.doctorId && patient.doctorId !== currentDoc.doctorId) {
+      alert(`🔒 Acceso Denegado: Esta historia clínica es privada y pertenece al profesional ${patient.doctorName || 'asignado'}. No está disponible para tu cuenta.`);
+      return;
+    }
+
+    // Auto-claim unassigned legacy patient
+    if (!patient.doctorId) {
+      patient.doctorId = currentDoc.doctorId;
+      patient.doctorName = currentDoc.doctorName;
+      this.savePatients(this.patients);
+    }
 
     this.activeSheetPatientId = patientId;
     if (!Array.isArray(patient.evolutionNotes)) {
@@ -6306,7 +6470,7 @@ class ClinicController {
       this.sheetCodeTag.textContent = `HC-${cleanId.substring(0, 8).toUpperCase()}`;
     }
     if (this.sheetStatusTag) {
-      this.sheetStatusTag.textContent = 'Paciente Activo • Historia Abierta';
+      this.sheetStatusTag.textContent = `Paciente Activo • ${patient.doctorName || currentDoc.doctorName}`;
     }
 
     // Filter appointments for this patient
@@ -7028,9 +7192,10 @@ class ClinicController {
       this.apptTimeInput.value = `${nextHour}:00`;
     }
 
-    // Populate patient selector with "Ninguno" first, then registered patients
+    // Populate patient selector with "Ninguno" first, then registered patients of current doctor
     if (this.apptPatientSelect) {
-      const sortedPatients = [...this.patients].sort((a, b) => a.name.localeCompare(b.name));
+      const myPatients = this.getDoctorPatients();
+      const sortedPatients = [...myPatients].sort((a, b) => a.name.localeCompare(b.name));
       const options = [
         '<option value="none">Ninguno (Reunión / Supervisión / Sin paciente asociado)</option>',
         ...sortedPatients.map(p => `<option value="${p.id}">${p.name} (${p.age} años)</option>`)
@@ -7081,6 +7246,7 @@ class ClinicController {
       if (found) patientName = found.name;
     }
 
+    const currentDoc = this.getCurrentDoctor();
     const newAppt = {
       id: `appt-${Date.now()}`,
       title,
@@ -7090,6 +7256,7 @@ class ClinicController {
       patientName,
       modality,
       notes: notes || 'Sin notas adicionales.',
+      doctorId: currentDoc.doctorId,
       createdAt: Date.now()
     };
 
@@ -7110,10 +7277,12 @@ class ClinicController {
   }
 
   updateCounters() {
-    const totalPatients = this.patients.length;
-    const totalAppts = this.appointments.length;
+    const myPatients = this.getDoctorPatients();
+    const myAppts = this.getDoctorAppointments();
+    const totalPatients = myPatients.length;
+    const totalAppts = myAppts.length;
     const todayStr = this.getTodayDateString();
-    const todayAppts = this.appointments.filter(a => a.date === todayStr);
+    const todayAppts = myAppts.filter(a => a.date === todayStr);
 
     if (this.sidebarPatientCounter) this.sidebarPatientCounter.textContent = totalPatients.toString();
     if (this.sidebarApptCounter) this.sidebarApptCounter.textContent = todayAppts.length.toString();
@@ -7140,7 +7309,9 @@ class ClinicController {
   // --- PANTALLA PRINCIPAL DE CLÍNICA (RESUMEN GENERAL) ---
   renderDashboard() {
     const todayStr = this.getTodayDateString();
-    const todayAppts = this.appointments
+    const myPatients = this.getDoctorPatients();
+    const myAppts = this.getDoctorAppointments();
+    const todayAppts = myAppts
       .filter(a => a.date === todayStr)
       .sort((a, b) => a.time.localeCompare(b.time));
 
@@ -7194,15 +7365,15 @@ class ClinicController {
 
     // 2. Pequeña Lista de Pacientes Recientes
     if (this.dashRecentList) {
-      const recentPatients = [...this.patients].slice(0, 4);
+      const recentPatients = [...myPatients].slice(0, 4);
       if (this.dashRecentCount) {
-        this.dashRecentCount.textContent = `${this.patients.length} total`;
+        this.dashRecentCount.textContent = `${myPatients.length} total`;
       }
 
       if (recentPatients.length === 0) {
         this.dashRecentList.innerHTML = `
           <div style="padding: 1.25rem 0.85rem; text-align: center; color: var(--text-secondary); background: rgba(255,255,255,0.6); border-radius: 14px; width: 100%; max-width: 100%; box-sizing: border-box; word-break: break-word;">
-            <p style="font-size: 0.82rem; margin: 0;">No hay pacientes registrados aún.</p>
+            <p style="font-size: 0.82rem; margin: 0;">No hay pacientes en tu lista privada aún.</p>
           </div>
         `;
       } else {
@@ -7236,8 +7407,10 @@ class ClinicController {
   renderPatientsTable() {
     if (!this.patientsContainer) return;
 
+    const myPatients = this.getDoctorPatients();
+    const currentDoc = this.getCurrentDoctor();
     const query = (this.patientsSearchBox?.value || '').trim().toLowerCase();
-    const filtered = this.patients.filter(p => {
+    const filtered = myPatients.filter(p => {
       if (!query) return true;
       const haystack = `${p.name} ${p.notes} ${p.phone}`.toLowerCase();
       return haystack.includes(query);
@@ -7251,13 +7424,18 @@ class ClinicController {
       this.patientsContainer.innerHTML = `
         <div style="padding: 3rem 1.5rem; text-align: center; color: var(--text-secondary);">
           <span style="font-size: 2.2rem; display: block; margin-bottom: 0.5rem;">👥</span>
-          <strong style="color: var(--text-primary); font-size: 1.05rem; display: block; margin-bottom: 0.25rem;">No se encontraron pacientes</strong>
-          <p style="font-size: 0.85rem; margin: 0 0 1rem 0;">No hay registros que coincidan con la búsqueda.</p>
-          <button type="button" class="primary-gradient-btn" id="btn-table-new-patient">+ Registrar Nuevo Paciente</button>
+          <strong style="color: var(--text-primary); font-size: 1.05rem; display: block; margin-bottom: 0.25rem;">No se encontraron pacientes en tu lista privada</strong>
+          <p style="font-size: 0.85rem; margin: 0 0 1.25rem 0;">No hay pacientes registrados para el Dr./Dra. ${currentDoc.doctorName} o que coincidan con la búsqueda.</p>
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="primary-gradient-btn" id="btn-table-new-patient">+ Registrar Nuevo Paciente</button>
+            <button type="button" class="secondary-glass-btn" id="btn-table-empty-import">📥 Importar Cifrado (.psios)</button>
+          </div>
         </div>
       `;
       const btn = document.getElementById('btn-table-new-patient');
       if (btn) btn.addEventListener('click', () => this.openPatientModal());
+      const btnImp = document.getElementById('btn-table-empty-import');
+      if (btnImp) btnImp.addEventListener('click', () => this.openImportModal());
       return;
     }
 
@@ -7273,13 +7451,17 @@ class ClinicController {
         ${filtered.map(p => {
           const avatar = p.gender === 'female' ? '👩' : (p.gender === 'male' ? '👨' : '🧑');
           const genderBadge = p.gender === 'female' ? 'Mujer' : (p.gender === 'male' ? 'Hombre' : 'Neutro');
+          const docBadge = p.doctorName || currentDoc.doctorName;
           return `
             <div class="patient-table-row" data-table-patient-id="${p.id}" style="cursor: pointer;" title="Abrir ficha clínica de ${p.name}">
               <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <span style="font-size: 1.35rem; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center;">${avatar}</span>
                 <div>
                   <strong style="color: var(--text-primary); font-size: 0.92rem; display: block;">${p.name}</strong>
-                  <span style="color: var(--text-tertiary); font-size: 0.76rem;">${p.notes.substring(0, 48)}${p.notes.length > 48 ? '...' : ''}</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.15rem; flex-wrap: wrap;">
+                    <span style="font-size: 0.7rem; color: #059669; font-weight: 600; display: inline-flex; align-items: center; gap: 0.2rem; background: rgba(16, 185, 129, 0.08); padding: 0.1rem 0.45rem; border-radius: 9999px;">🔒 ${docBadge}</span>
+                    <span style="color: var(--text-tertiary); font-size: 0.75rem;">${p.notes.substring(0, 32)}${p.notes.length > 32 ? '...' : ''}</span>
+                  </div>
                 </div>
               </div>
 
@@ -7298,6 +7480,7 @@ class ClinicController {
 
               <div style="display: flex; gap: 0.4rem; justify-content: flex-end;" onclick="event.stopPropagation();">
                 <button type="button" class="btn-row-action" data-open-sheet-btn="${p.id}" title="Ver hoja completa del paciente" style="font-weight: 600; color: #2563eb;">Ver Ficha</button>
+                <button type="button" class="btn-row-action" data-export-patient="${p.id}" title="Exportar este paciente en paquete cifrado .psios" style="color: #059669; font-weight: 600;">🔒 Exportar</button>
                 <button type="button" class="btn-row-action" data-appt-for-patient="${p.id}" title="Agendar cita con este paciente">+ Cita</button>
                 <button type="button" class="btn-row-action" data-delete-patient="${p.id}" title="Eliminar paciente" style="color: #ef4444;">✕</button>
               </div>
@@ -7322,6 +7505,16 @@ class ClinicController {
         e.stopPropagation();
         const patId = btn.getAttribute('data-open-sheet-btn');
         if (patId) this.openPatientSheet(patId);
+      });
+    });
+
+    // Bind single patient export button
+    const exportBtns = this.patientsContainer.querySelectorAll('[data-export-patient]');
+    exportBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const patId = btn.getAttribute('data-export-patient');
+        if (patId) this.openExportModal(patId);
       });
     });
 
@@ -7374,8 +7567,9 @@ class ClinicController {
 
     const daysInMonth = new Date(this.viewYear, this.viewMonth + 1, 0).getDate();
 
-    // Map appointments for this month
-    const apptDateSet = new Set(this.appointments.map(a => a.date));
+    // Map appointments for this month (scoped to current doctor)
+    const myAppts = this.getDoctorAppointments();
+    const apptDateSet = new Set(myAppts.map(a => a.date));
 
     const buildCalendarHtml = (isCompact = false) => {
       let html = daysOfWeek.map(d => `<div class="cal-weekday">${d}</div>`).join('');
@@ -7436,7 +7630,7 @@ class ClinicController {
   renderAppointmentsAgenda() {
     if (!this.agendaFeedList) return;
 
-    let filtered = [...this.appointments];
+    let filtered = [...this.getDoctorAppointments()];
     if (this.selectedCalFilterDate) {
       filtered = filtered.filter(a => a.date === this.selectedCalFilterDate);
       if (this.agendaFeedTitle) {
@@ -7528,6 +7722,337 @@ class ClinicController {
         }
       });
     });
+  }
+
+  // --- EXPORTACIÓN E IMPORTACIÓN CIFRADA DE PACIENTES ---
+  bindCryptoModals() {
+    // Open Export triggers
+    if (this.btnOpenExport) {
+      this.btnOpenExport.addEventListener('click', () => this.openExportModal());
+    }
+    if (this.btnSheetExport) {
+      this.btnSheetExport.addEventListener('click', () => {
+        if (this.activeSheetPatientId) {
+          this.openExportModal(this.activeSheetPatientId);
+        }
+      });
+    }
+
+    // Open Import triggers
+    if (this.btnOpenImport) {
+      this.btnOpenImport.addEventListener('click', () => this.openImportModal());
+    }
+
+    // Close Export triggers
+    if (this.btnCloseExport) this.btnCloseExport.addEventListener('click', () => this.closeExportModal());
+    if (this.btnCancelExport) this.btnCancelExport.addEventListener('click', () => this.closeExportModal());
+    if (this.modalExport) {
+      this.modalExport.addEventListener('click', (e) => {
+        if (e.target === this.modalExport) this.closeExportModal();
+      });
+    }
+
+    // Close Import triggers
+    if (this.btnCloseImport) this.btnCloseImport.addEventListener('click', () => this.closeImportModal());
+    if (this.btnCancelImport) this.btnCancelImport.addEventListener('click', () => this.closeImportModal());
+    if (this.modalImport) {
+      this.modalImport.addEventListener('click', (e) => {
+        if (e.target === this.modalImport) this.closeImportModal();
+      });
+    }
+
+    // Export Submit
+    if (this.btnSubmitExport) {
+      this.btnSubmitExport.addEventListener('click', () => this.handleExportPatientsSubmit());
+    }
+
+    // Import Submit
+    if (this.btnSubmitImport) {
+      this.btnSubmitImport.addEventListener('click', () => this.handleImportPatientsSubmit());
+    }
+
+    // Import Dropzone & File Input
+    if (this.importDropzone && this.importFileInput) {
+      this.importDropzone.addEventListener('click', () => this.importFileInput.click());
+      this.importFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          this.handleImportFileSelected(e.target.files[0]);
+        }
+      });
+
+      this.importDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        this.importDropzone.style.borderColor = '#10b981';
+        this.importDropzone.style.background = 'rgba(16, 185, 129, 0.08)';
+      });
+
+      this.importDropzone.addEventListener('dragleave', () => {
+        this.importDropzone.style.borderColor = '';
+        this.importDropzone.style.background = '';
+      });
+
+      this.importDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        this.importDropzone.style.borderColor = '';
+        this.importDropzone.style.background = '';
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+          this.handleImportFileSelected(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    // Export radio scope change
+    if (this.exportScopeAll && this.exportScopeSingle) {
+      const updateScopeVisibility = () => {
+        if (this.exportScopeSingle.checked && !this.pendingExportPatientId) {
+          const docPatients = this.getDoctorPatients();
+          if (docPatients.length > 0) {
+            this.pendingExportPatientId = docPatients[0].id;
+            if (this.exportScopeSingleDesc) {
+              this.exportScopeSingleDesc.textContent = `Ficha clínica seleccionada: "${docPatients[0].name}"`;
+            }
+          }
+        }
+      };
+      this.exportScopeAll.addEventListener('change', updateScopeVisibility);
+      this.exportScopeSingle.addEventListener('change', updateScopeVisibility);
+    }
+  }
+
+  openExportModal(targetPatientId = null) {
+    if (!this.modalExport) return;
+    const doc = this.getCurrentDoctor();
+    const docPatients = this.getDoctorPatients();
+
+    if (this.exportDoctorBadge) {
+      this.exportDoctorBadge.textContent = doc.doctorName || 'Doctor';
+    }
+
+    this.pendingExportPatientId = targetPatientId;
+
+    if (targetPatientId) {
+      const pat = docPatients.find(p => p.id === targetPatientId);
+      if (this.exportScopeSingle) this.exportScopeSingle.checked = true;
+      if (this.exportScopeSingleDesc) {
+        this.exportScopeSingleDesc.textContent = pat ? `Ficha clínica seleccionada: "${pat.name}"` : 'Paciente seleccionado';
+      }
+    } else {
+      if (this.exportScopeAll) this.exportScopeAll.checked = true;
+      if (this.exportScopeSingleDesc) {
+        this.exportScopeSingleDesc.textContent = 'Solo el paciente activo en la ficha';
+      }
+    }
+
+    if (this.exportPassInput) this.exportPassInput.value = '';
+    if (this.exportPassConfirm) this.exportPassConfirm.value = '';
+    if (this.exportErrorHint) {
+      this.exportErrorHint.textContent = '';
+      this.exportErrorHint.style.display = 'none';
+    }
+
+    this.modalExport.classList.add('active');
+    this.modalExport.setAttribute('aria-hidden', 'false');
+  }
+
+  closeExportModal() {
+    if (!this.modalExport) return;
+    this.modalExport.classList.remove('active');
+    this.modalExport.setAttribute('aria-hidden', 'true');
+    this.pendingExportPatientId = null;
+  }
+
+  openImportModal() {
+    if (!this.modalImport) return;
+    const doc = this.getCurrentDoctor();
+    if (this.importDoctorBadge) {
+      this.importDoctorBadge.textContent = doc.doctorName || 'Doctor';
+    }
+
+    this.selectedImportFile = null;
+    if (this.importFileInput) this.importFileInput.value = '';
+    if (this.importPassInput) this.importPassInput.value = '';
+    if (this.importDropzone) {
+      const label = this.importDropzone.querySelector('strong');
+      if (label) label.textContent = 'Selecciona o arrastra el archivo cifrado (.psios)';
+    }
+    if (this.importErrorHint) {
+      this.importErrorHint.textContent = '';
+      this.importErrorHint.style.display = 'none';
+    }
+
+    this.modalImport.classList.add('active');
+    this.modalImport.setAttribute('aria-hidden', 'false');
+  }
+
+  closeImportModal() {
+    if (!this.modalImport) return;
+    this.modalImport.classList.remove('active');
+    this.modalImport.setAttribute('aria-hidden', 'true');
+    this.selectedImportFile = null;
+  }
+
+  handleImportFileSelected(file) {
+    if (!file) return;
+    this.selectedImportFile = file;
+    if (this.importDropzone) {
+      const label = this.importDropzone.querySelector('strong');
+      if (label) {
+        label.textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      }
+    }
+    if (this.importErrorHint) {
+      this.importErrorHint.style.display = 'none';
+    }
+  }
+
+  async handleExportPatientsSubmit() {
+    const doc = this.getCurrentDoctor();
+    const docPatients = this.getDoctorPatients();
+    const pass = (this.exportPassInput?.value || '');
+    const confirmPass = (this.exportPassConfirm?.value || '');
+
+    const showError = (msg) => {
+      if (this.exportErrorHint) {
+        this.exportErrorHint.textContent = msg;
+        this.exportErrorHint.style.display = 'block';
+      } else {
+        alert(msg);
+      }
+    };
+
+    if (!pass || pass.length < 6) {
+      showError('La contraseña de cifrado debe tener al menos 6 caracteres para proteger los datos médicos.');
+      if (this.exportPassInput) this.exportPassInput.focus();
+      return;
+    }
+
+    if (pass !== confirmPass) {
+      showError('Las contraseñas de cifrado no coinciden. Por favor verifícalas cuidadosamente.');
+      if (this.exportPassConfirm) this.exportPassConfirm.focus();
+      return;
+    }
+
+    const isSingle = this.exportScopeSingle && this.exportScopeSingle.checked;
+    let toExport = [];
+
+    if (isSingle && this.pendingExportPatientId) {
+      const p = docPatients.find(x => x.id === this.pendingExportPatientId);
+      if (p) toExport = [p];
+    } else {
+      toExport = docPatients;
+    }
+
+    if (toExport.length === 0) {
+      showError('No hay pacientes disponibles para exportar en tu lista privada.');
+      return;
+    }
+
+    const originalBtnText = this.btnSubmitExport ? this.btnSubmitExport.textContent : '';
+    if (this.btnSubmitExport) {
+      this.btnSubmitExport.disabled = true;
+      this.btnSubmitExport.textContent = '🔒 Cifrando paquete AES-256...';
+    }
+
+    try {
+      const encryptedJson = await patientCryptoService.encryptPatientsPackage(toExport, pass, {
+        doctorId: doc.doctorId,
+        doctorName: doc.doctorName
+      });
+
+      const dateStr = new Date().toISOString().slice(0, 10);
+      let filename = '';
+      if (isSingle && toExport[0]) {
+        const safeName = toExport[0].name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        filename = `paciente_${safeName}_${dateStr}.psios`;
+      } else {
+        const safeDoc = (doc.doctorName || 'doctor').toLowerCase().replace(/[^a-z0-9]/g, '_');
+        filename = `pacientes_${safeDoc}_${dateStr}.psios`;
+      }
+
+      patientCryptoService.downloadEncryptedFile(filename, encryptedJson);
+      this.closeExportModal();
+
+      alert(`✅ Exportación Cifrada Completada\n\nSe han cifrado y descargado ${toExport.length} paciente(s) en el archivo:\n${filename}\n\n⚠️ Guarda la contraseña de cifrado en un lugar seguro. Solo quien tenga esta clave podrá descifrar o importar los pacientes.`);
+    } catch (err) {
+      console.error('Error al exportar pacientes:', err);
+      showError(`Error durante el cifrado: ${err.message || 'Error desconocido'}`);
+    } finally {
+      if (this.btnSubmitExport) {
+        this.btnSubmitExport.disabled = false;
+        this.btnSubmitExport.textContent = originalBtnText;
+      }
+    }
+  }
+
+  async handleImportPatientsSubmit() {
+    const showError = (msg) => {
+      if (this.importErrorHint) {
+        this.importErrorHint.textContent = msg;
+        this.importErrorHint.style.display = 'block';
+      } else {
+        alert(msg);
+      }
+    };
+
+    if (!this.selectedImportFile) {
+      showError('Por favor selecciona o arrastra primero un archivo cifrado .psios.');
+      return;
+    }
+
+    const pass = (this.importPassInput?.value || '');
+    if (!pass) {
+      showError('Ingresa la contraseña de descifrado del paquete clínico.');
+      if (this.importPassInput) this.importPassInput.focus();
+      return;
+    }
+
+    const originalBtnText = this.btnSubmitImport ? this.btnSubmitImport.textContent : '';
+    if (this.btnSubmitImport) {
+      this.btnSubmitImport.disabled = true;
+      this.btnSubmitImport.textContent = '🔓 Descifrando y validando...';
+    }
+
+    try {
+      const fileText = await this.selectedImportFile.text();
+      const decryptedData = await patientCryptoService.decryptPatientsPackage(fileText, pass);
+
+      const currentDoc = this.getCurrentDoctor();
+      const rawPatients = decryptedData.patients || [];
+
+      if (!Array.isArray(rawPatients) || rawPatients.length === 0) {
+        throw new Error('El archivo no contiene registros de pacientes válidos.');
+      }
+
+      // Reassign imported patients exclusively to the importing doctor
+      const importedPatients = rawPatients.map(p => ({
+        ...p,
+        doctorId: currentDoc.doctorId,
+        doctorName: currentDoc.doctorName,
+        importedAt: Date.now()
+      }));
+
+      // Merge into local patient registry (replace matching IDs or append new ones)
+      const patientMap = new Map(this.patients.map(p => [p.id, p]));
+      importedPatients.forEach(p => {
+        patientMap.set(p.id, p);
+        clinicSyncService.savePatientToCloud(p);
+      });
+
+      const updatedList = Array.from(patientMap.values());
+      this.savePatients(updatedList);
+      this.renderAll();
+      this.closeImportModal();
+
+      alert(`✅ Importación Exitosa\n\nSe han incorporado ${importedPatients.length} paciente(s) a tu directorio privado del ${currentDoc.doctorName}.\nToda la información clínica, evoluciones y apuntes ya están disponibles.`);
+    } catch (err) {
+      console.error('Error al importar pacientes:', err);
+      showError(`Error al descifrar: ${err.message || 'Contraseña incorrecta o archivo incompatible.'}`);
+    } finally {
+      if (this.btnSubmitImport) {
+        this.btnSubmitImport.disabled = false;
+        this.btnSubmitImport.textContent = originalBtnText;
+      }
+    }
   }
 }
 

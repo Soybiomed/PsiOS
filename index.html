@@ -658,11 +658,19 @@
                   <div class="subview-header-row">
                     <div class="subview-titles">
                       <h2 class="subview-main-title">Directorio de Pacientes</h2>
-                      <p class="subview-lead">Registro de historias clínicas con medición automática de edad y gestión clínica.</p>
+                      <p class="subview-lead">Historias clínicas privadas protegidas por profesional a cargo.</p>
                     </div>
-                    <button type="button" class="primary-gradient-btn" id="btn-open-patient-modal">
-                      <span>+ Agregar Paciente</span>
-                    </button>
+                    <div class="subview-header-actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                      <button type="button" class="secondary-glass-btn" id="btn-open-import-patients" title="Importar pacientes desde un archivo cifrado .psios">
+                        <span>📥 Importar Cifrado</span>
+                      </button>
+                      <button type="button" class="secondary-glass-btn" id="btn-open-export-patients" title="Exportar pacientes en formato cifrado AES-256">
+                        <span>🔒 Exportar Cifrado</span>
+                      </button>
+                      <button type="button" class="primary-gradient-btn" id="btn-open-patient-modal">
+                        <span>+ Agregar Paciente</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div class="data-toolbar-row">
@@ -1104,6 +1112,128 @@
       </div>
     </div>
 
+    <!-- Modal: Exportar Pacientes con Cifrado AES-256-GCM -->
+    <div class="psios-modal-backdrop" id="modal-export-patients-backdrop" aria-hidden="true">
+      <div class="psios-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-export-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon">🔒</span>
+            <div>
+              <h3 class="modal-title" id="modal-export-title">Exportar Pacientes Cifrados</h3>
+              <p class="modal-subtitle">Cifrado de grado médico militar AES-256-GCM con PBKDF2</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-export-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <form id="form-export-patients" class="modal-card-body" novalidate>
+          <div style="background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.18); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="font-size: 1.25rem; flex-shrink: 0;">🛡️</span>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+              <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">Privacidad Estricta de Datos Médicos</strong>
+              El archivo descargado estará protegido con contraseña. Toda la información clínica (datos personales, evolución, notas manuscritas y citas) se empaquetará en un archivo <code>.psios</code> cifrado e ilegible para terceros.
+            </div>
+          </div>
+
+          <div class="form-group-field">
+            <label class="field-label">Alcance de la exportación</label>
+            <div class="gender-segmented-picker" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+              <label class="gender-chip-option">
+                <input type="radio" name="export_scope" value="all" checked id="export-scope-all" />
+                <span class="gender-chip-label">
+                  <span>👥 Mis pacientes (<span id="export-my-count">0</span>)</span>
+                </span>
+              </label>
+              <label class="gender-chip-option">
+                <input type="radio" name="export_scope" value="single" id="export-scope-single" />
+                <span class="gender-chip-label">
+                  <span>👤 Paciente individual</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group-field" id="export-single-select-wrap" style="display: none;">
+            <label for="export-patient-select" class="field-label">Seleccionar Paciente</label>
+            <select id="export-patient-select" class="modal-text-input">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group-field">
+            <label for="export-password-input" class="field-label">Contraseña de Cifrado <span class="required">*</span></label>
+            <div style="position: relative;">
+              <input type="password" id="export-password-input" class="modal-text-input" placeholder="Ingresa una clave segura (mín. 4 caracteres)..." required />
+              <button type="button" id="btn-toggle-export-pwd" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-tertiary); font-size: 0.88rem;">👁️</button>
+            </div>
+            <span class="field-error-hint" id="err-export-pwd">La contraseña debe tener al menos 4 caracteres.</span>
+          </div>
+
+          <div class="form-group-field">
+            <label for="export-password-confirm" class="field-label">Confirmar Contraseña <span class="required">*</span></label>
+            <input type="password" id="export-password-confirm" class="modal-text-input" placeholder="Repite la contraseña..." required />
+            <span class="field-error-hint" id="err-export-pwd-confirm">Las contraseñas no coinciden.</span>
+          </div>
+
+          <div class="modal-card-footer" style="padding-top: 1rem;">
+            <button type="button" class="modal-btn-cancel" id="btn-cancel-export-modal">Cancelar</button>
+            <button type="submit" class="modal-btn-submit" id="btn-submit-export-patients" style="background: #2563eb; color: #ffffff;">🔒 Descargar Archivo Cifrado (.psios)</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Importar Pacientes con Cifrado AES-256-GCM -->
+    <div class="psios-modal-backdrop" id="modal-import-patients-backdrop" aria-hidden="true">
+      <div class="psios-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-import-title">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-badge-icon">📥</span>
+            <div>
+              <h3 class="modal-title" id="modal-import-title">Importar Pacientes Cifrados</h3>
+              <p class="modal-subtitle">Descifrar e incorporar historias clínicas a tu lista privada</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-import-modal" title="Cerrar ventana">✕</button>
+        </div>
+
+        <form id="form-import-patients" class="modal-card-body" novalidate>
+          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="font-size: 1.25rem; flex-shrink: 0;">🔓</span>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+              <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">Asignación a Tu Lista Exclusiva</strong>
+              Los pacientes importados se descifrarán y se guardarán bajo tu perfil profesional (<strong id="import-doc-name-badge">Profesional Activo</strong>). Ningún otro profesional podrá verlos.
+            </div>
+          </div>
+
+          <div class="form-group-field">
+            <label class="field-label">Archivo Cifrado (.psios o .json) <span class="required">*</span></label>
+            <div id="import-dropzone" style="border: 2px dashed var(--border-medium); border-radius: 14px; padding: 1.5rem 1rem; text-align: center; background: rgba(0,0,0,0.015); cursor: pointer; transition: all 0.2s ease;">
+              <span style="font-size: 2rem; display: block; margin-bottom: 0.35rem;">📁</span>
+              <strong style="font-size: 0.88rem; color: var(--text-primary); display: block;" id="import-file-name">Haz clic o arrastra un archivo .psios aquí</strong>
+              <small style="color: var(--text-tertiary); font-size: 0.75rem; display: block; margin-top: 0.2rem;" id="import-file-meta">Formato encriptado seguro de PsiOS</small>
+            </div>
+            <input type="file" id="input-import-file" accept=".psios,.json" style="display: none;" />
+            <span class="field-error-hint" id="err-import-file">Debes seleccionar un archivo cifrado válido.</span>
+          </div>
+
+          <div class="form-group-field">
+            <label for="import-password-input" class="field-label">Contraseña de Descifrado <span class="required">*</span></label>
+            <div style="position: relative;">
+              <input type="password" id="import-password-input" class="modal-text-input" placeholder="Ingresa la contraseña con la que se cifró el archivo..." required />
+              <button type="button" id="btn-toggle-import-pwd" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-tertiary); font-size: 0.88rem;">👁️</button>
+            </div>
+            <span class="field-error-hint" id="err-import-pwd">Por favor ingresa la contraseña.</span>
+          </div>
+
+          <div class="modal-card-footer" style="padding-top: 1rem;">
+            <button type="button" class="modal-btn-cancel" id="btn-cancel-import-modal">Cancelar</button>
+            <button type="submit" class="modal-btn-submit" id="btn-submit-import-patients" style="background: #10b981; color: #ffffff;">🔓 Descifrar e Importar a Mi Lista</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Modal: Programar Cita -->
     <div class="psios-modal-backdrop" id="modal-appointment-backdrop" aria-hidden="true">
       <div class="psios-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-appointment-title">
@@ -1356,6 +1486,9 @@
             </button>
             <button type="button" class="sheet-action-secondary" id="btn-sheet-print" title="Imprimir Ficha Clínica">
               <span>🖨️ Imprimir Ficha</span>
+            </button>
+            <button type="button" class="sheet-action-secondary" id="btn-sheet-export-encrypted" title="Exportar este paciente con cifrado AES-256">
+              <span>🔒 Exportar Cifrado</span>
             </button>
           </div>
           <button type="button" class="modal-btn-cancel" id="btn-close-patient-sheet-footer">Cerrar</button>

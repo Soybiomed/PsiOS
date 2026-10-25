@@ -2945,6 +2945,32 @@ button, .brand-pill, .header-status-pill, .lib-chip, .sidebar-tab-btn, .portal-c
   transform: translateY(-1px);
 }
 
+.secondary-glass-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.15rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: 9999px;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s var(--ease-smooth);
+}
+
+.secondary-glass-btn:hover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
 /* Data Toolbar for Patients */
 .data-toolbar-row {
   display: flex;
