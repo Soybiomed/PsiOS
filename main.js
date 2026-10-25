@@ -9495,6 +9495,12 @@ class AppNavigationController {
 
   openAdminPanel(masterKey) {
     this.adminMasterKey = masterKey;
+    const appContainer = document.getElementById('app');
+    if (appContainer) appContainer.classList.add('admin-mode-active');
+    document.body.classList.add('in-admin-view');
+    const heroLeftEl = document.querySelector('.hero-left');
+    if (heroLeftEl) heroLeftEl.scrollTop = 0;
+    window.scrollTo(0, 0);
     this.switchView('view-admin');
     this.loadAdminKeys();
   }
@@ -9917,6 +9923,10 @@ class AppNavigationController {
     licenseService.clearSavedCredentials();
     authService.logout();
 
+    const appContainer = document.getElementById('app');
+    if (appContainer) appContainer.classList.remove('admin-mode-active');
+    document.body.classList.remove('in-admin-view');
+
     if (this.regLicenseInput) this.regLicenseInput.value = '';
     if (this.loginPasswordInput) this.loginPasswordInput.value = '';
     this.pendingLicenseKey = null;
@@ -10121,12 +10131,26 @@ class AppNavigationController {
         if (targetViewId === 'view-welcome') {
           appContainer.classList.add('welcome-mode-active');
           appContainer.classList.remove('workspace-mode-active');
-        } else if (targetViewId === 'view-library' || targetViewId === 'view-clinic' || targetViewId === 'view-admin') {
+          appContainer.classList.remove('admin-mode-active');
+          document.body.classList.remove('in-admin-view');
+        } else if (targetViewId === 'view-admin') {
+          appContainer.classList.add('workspace-mode-active');
+          appContainer.classList.add('admin-mode-active');
+          appContainer.classList.remove('welcome-mode-active');
+          document.body.classList.add('in-admin-view');
+          const heroLeftEl = document.querySelector('.hero-left');
+          if (heroLeftEl) heroLeftEl.scrollTop = 0;
+          window.scrollTo(0, 0);
+        } else if (targetViewId === 'view-library' || targetViewId === 'view-clinic') {
           appContainer.classList.add('workspace-mode-active');
           appContainer.classList.remove('welcome-mode-active');
+          appContainer.classList.remove('admin-mode-active');
+          document.body.classList.remove('in-admin-view');
         } else {
           appContainer.classList.remove('welcome-mode-active');
           appContainer.classList.remove('workspace-mode-active');
+          appContainer.classList.remove('admin-mode-active');
+          document.body.classList.remove('in-admin-view');
         }
       }
 
