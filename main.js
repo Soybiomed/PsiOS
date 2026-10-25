@@ -10117,10 +10117,14 @@ class AppNavigationController {
 
     // Enter transition with blur & fade-in after exit delay
     setTimeout(() => {
-      if (currentEl) {
-        currentEl.classList.remove('view-exit');
-        currentEl.style.display = 'none';
-      }
+      // Hide and reset all view panels except target to prevent any leaked layout heights
+      const allViewPanels = document.querySelectorAll('.views-wrapper .view-panel');
+      allViewPanels.forEach(panel => {
+        if (panel !== targetEl) {
+          panel.classList.remove('active', 'view-exit', 'view-enter');
+          panel.style.display = 'none';
+        }
+      });
 
       targetEl.style.display = 'flex';
       targetEl.classList.add('view-enter');
