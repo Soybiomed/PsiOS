@@ -6578,7 +6578,7 @@ class ClinicController {
                 <span class="notebook-fs-badge">${patient.name}</span>
               </div>
               <div class="notebook-fs-actions">
-                <div class="notebook-page-controls" style="background: rgba(255, 255, 255, 0.1);">
+                <div class="notebook-page-controls">
                   <button type="button" class="notebook-btn" id="btn-fs-prev-page" title="Hoja anterior">‹</button>
                   <span class="notebook-page-indicator" id="fs-notebook-page-indicator">Hoja 1 de 1</span>
                   <button type="button" class="notebook-btn" id="btn-fs-next-page" title="Siguiente hoja">›</button>
