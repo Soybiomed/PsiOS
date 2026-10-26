@@ -101,24 +101,41 @@ class KineticTypographyController {
     this.currentIndex = 0;
     this.isTransitioning = false;
     this.timerId = null;
+    this.exitTimeoutId = null;
     this.displayDuration = 2900; // Time greeting remains in sharp focus
     this.staggerInMs = 32;       // Stagger delay between characters entering
     this.staggerOutMs = 24;      // Stagger delay between characters exiting
 
     this.initPagination();
     this.renderCurrentGreeting(true);
+    this.bindVisibility();
     this.startCycle();
+  }
+
+  bindVisibility() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.pauseCycle();
+      } else {
+        const splashEl = document.getElementById('view-splash');
+        if (splashEl && splashEl.classList.contains('active')) {
+          this.resumeCycle();
+        }
+      }
+    });
   }
 
   initPagination() {
     if (!this.trackEl) return;
     this.trackEl.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     GREETINGS.forEach((_, idx) => {
       const dot = document.createElement('div');
       dot.className = `dot-indicator ${idx === 0 ? 'active' : ''}`;
       dot.dataset.index = idx.toString();
-      this.trackEl.appendChild(dot);
+      fragment.appendChild(dot);
     });
+    this.trackEl.appendChild(fragment);
   }
 
   updatePagination(index) {
@@ -146,9 +163,10 @@ class KineticTypographyController {
     // Update typography classes (scripts for CJK, Arabic, etc.)
     this.headlineEl.className = `greeting-headline ${item.fontClass}`;
 
-    // Split into characters and construct DOM
+    // Split into characters and construct DOM using DocumentFragment to minimize reflows
     this.headlineEl.innerHTML = '';
     const chars = Array.from(item.text);
+    const fragment = document.createDocumentFragment();
 
     chars.forEach((char) => {
       const span = document.createElement('span');
@@ -159,8 +177,9 @@ class KineticTypographyController {
       } else {
         span.textContent = char;
       }
-      this.headlineEl.appendChild(span);
+      fragment.appendChild(span);
     });
+    this.headlineEl.appendChild(fragment);
 
     // Subtext & Lang tag initial enter state
     this.subtextEl.className = 'greeting-subtext sub-enter';
@@ -220,7 +239,13 @@ class KineticTypographyController {
     // Wait until exit transitions conclude
     const exitDuration = (totalLetters * this.staggerOutMs) + 480;
 
-    setTimeout(() => {
+    if (this.exitTimeoutId) {
+      clearTimeout(this.exitTimeoutId);
+      this.exitTimeoutId = null;
+    }
+
+    this.exitTimeoutId = setTimeout(() => {
+      this.exitTimeoutId = null;
       this.currentIndex = (this.currentIndex + 1) % GREETINGS.length;
       this.renderCurrentGreeting();
       this.isTransitioning = false;
@@ -228,6 +253,7 @@ class KineticTypographyController {
   }
 
   startCycle() {
+    this.pauseCycle();
     this.timerId = setInterval(() => {
       this.transitionToNext();
     }, this.displayDuration + 900);
@@ -237,6 +263,11 @@ class KineticTypographyController {
     if (this.timerId) {
       clearInterval(this.timerId);
       this.timerId = null;
+    }
+    if (this.exitTimeoutId) {
+      clearTimeout(this.exitTimeoutId);
+      this.exitTimeoutId = null;
+      this.isTransitioning = false;
     }
   }
 
@@ -305,15 +336,14 @@ class ThreeDViewer {
       canvas: this.canvas,
       antialias: true,
       alpha: true, // Alpha true for seamless blending on tablets/mobile
-      powerPreference: 'high-performance'
+      powerPreference: 'default'
     });
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.12;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.enabled = false;
 
     this.scene.add(this.modelGroup);
   }
@@ -326,10 +356,6 @@ class ThreeDViewer {
     // 2. Main Key Light: Casts crisp highlights on pure white
     const keyLight = new THREE.DirectionalLight(0xfffaf0, 2.8);
     keyLight.position.set(4, 5, 4);
-    keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
-    keyLight.shadow.bias = -0.0005;
     this.scene.add(keyLight);
 
     // 3. Cool Fill Light: Softly sculpts curves and crevices
@@ -403,11 +429,9 @@ class ThreeDViewer {
       // Center geometry at origin
       gltfScene.position.sub(center);
 
-      // Apply material and shadow properties
+      // Apply material properties
       gltfScene.traverse((child) => {
         if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
           child.material = luxuryMaterial;
         }
       });
@@ -453,7 +477,6 @@ class ThreeDViewer {
     // Central vertical shaft
     const stemGeo = new THREE.CylinderGeometry(0.09, 0.09, 2.5, 32);
     const stem = new THREE.Mesh(stemGeo, material);
-    stem.castShadow = true;
     psiGroup.add(stem);
 
     // Curved fork (Torus section)
@@ -461,7 +484,6 @@ class ThreeDViewer {
     const fork = new THREE.Mesh(forkGeo, material);
     fork.rotation.z = Math.PI;
     fork.position.y = 0.2;
-    fork.castShadow = true;
     psiGroup.add(fork);
 
     // Horizontal cross bar
@@ -469,7 +491,6 @@ class ThreeDViewer {
     const bar = new THREE.Mesh(barGeo, material);
     bar.rotation.z = Math.PI / 2;
     bar.position.y = -0.3;
-    bar.castShadow = true;
     psiGroup.add(bar);
 
     this.baseScale = 1.0;
@@ -558,6 +579,15 @@ class ThreeDViewer {
   }
 
   handleResize() {
+    if (this._resizePending) return;
+    this._resizePending = true;
+    requestAnimationFrame(() => {
+      this._resizePending = false;
+      this._performResize();
+    });
+  }
+
+  _performResize() {
     const width = this.container.clientWidth || window.innerWidth;
     const height = this.container.clientHeight || window.innerHeight;
     if (width === 0 || height === 0) return;
@@ -4485,6 +4515,14 @@ class LibraryController {
     this.currentSort = 'none'; // 'none' (default), 'asc' (A → Z), 'desc' (Z → A)
     this.isReordering = false;
 
+    // Precompute normalized search strings once for O(1) matching
+    const normalizeStr = s => (s || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    LIBRARY_CATALOG.forEach(item => {
+      if (!item._searchHaystack) {
+        item._searchHaystack = normalizeStr(`${item.title} ${item.code} ${item.author} ${item.summary} ${item.categoryLabel} ${(item.areas || []).join(' ')} ${(item.topics || []).join(' ')} ${(item.categories || []).join(' ')}`);
+      }
+    });
+
     this.bindEvents();
     this.render();
   }
@@ -4497,14 +4535,55 @@ class LibraryController {
       });
     }
 
-    // Search input
+    // Search input with requestAnimationFrame debouncing
     if (this.searchInput) {
+      let searchRaf = null;
       this.searchInput.addEventListener('input', (e) => {
         this.currentSearch = (e.target.value || '').trim().toLowerCase();
         if (this.searchClear) {
           this.searchClear.style.display = this.currentSearch ? 'block' : 'none';
         }
-        this.render();
+        if (searchRaf) cancelAnimationFrame(searchRaf);
+        searchRaf = requestAnimationFrame(() => {
+          this.render();
+        });
+      });
+    }
+
+    // Delegated card clicks and inspection
+    if (this.cardsGrid) {
+      this.cardsGrid.addEventListener('click', (e) => {
+        const readPdfBtn = e.target.closest('[data-read-pdf-id]');
+        if (readPdfBtn) {
+          e.stopPropagation();
+          const id = readPdfBtn.getAttribute('data-read-pdf-id');
+          const book = LIBRARY_CATALOG.find(x => x.id === id);
+          if (book) this.openPdfReader(book, 1);
+          return;
+        }
+
+        const inspectBtn = e.target.closest('[data-inspect-id]');
+        if (inspectBtn) {
+          e.stopPropagation();
+          const id = inspectBtn.getAttribute('data-inspect-id');
+          if (id) this.openResourceModal(id);
+          return;
+        }
+
+        const card = e.target.closest('.lib-resource-card');
+        if (card) {
+          const id = card.getAttribute('data-resource-id');
+          if (id) this.openResourceModal(id);
+        }
+      });
+
+      this.cardsGrid.addEventListener('dblclick', (e) => {
+        const card = e.target.closest('.lib-resource-card');
+        if (card) {
+          e.preventDefault();
+          const id = card.getAttribute('data-resource-id');
+          if (id) this.openResourceModal(id);
+        }
       });
     }
 
@@ -4797,8 +4876,7 @@ class LibraryController {
 
       if (!this.currentSearch) return true;
       const normSearch = normalizeStr(this.currentSearch);
-      const haystack = normalizeStr(`${item.title} ${item.code} ${item.author} ${item.summary} ${item.categoryLabel} ${(item.areas || []).join(' ')} ${(item.topics || []).join(' ')} ${(item.categories || []).join(' ')}`);
-      return haystack.includes(normSearch);
+      return (item._searchHaystack || '').includes(normSearch);
     });
 
     // Alphabetical Sorting Application
@@ -4909,40 +4987,6 @@ class LibraryController {
         </article>
       `;
     }).join('');
-
-    // Bind card inspect clicks
-    const inspectButtons = this.cardsGrid.querySelectorAll('[data-inspect-id]');
-    inspectButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.getAttribute('data-inspect-id');
-        this.openResourceModal(id);
-      });
-    });
-
-    // Bind direct PDF read clicks from cards
-    const readPdfButtons = this.cardsGrid.querySelectorAll('[data-read-pdf-id]');
-    readPdfButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.getAttribute('data-read-pdf-id');
-        const book = LIBRARY_CATALOG.find(x => x.id === id);
-        if (book) this.openPdfReader(book, 1);
-      });
-    });
-
-    const cards = this.cardsGrid.querySelectorAll('.lib-resource-card');
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-resource-id');
-        this.openResourceModal(id);
-      });
-      card.addEventListener('dblclick', (e) => {
-        e.preventDefault();
-        const id = card.getAttribute('data-resource-id');
-        this.openResourceModal(id);
-      });
-    });
   }
 
   openResourceModal(id) {
@@ -7038,9 +7082,12 @@ class ClinicController {
     });
     setInterval(() => {
       if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
-        this.syncCloudData(false);
+        const app = document.getElementById('app');
+        if (app && app.classList.contains('workspace-mode-active')) {
+          this.syncCloudData(false);
+        }
       }
-    }, 15000);
+    }, 30000);
   }
 
   // --- PERSISTENCE ---
@@ -7419,6 +7466,11 @@ class ClinicController {
   // --- CLOCK & DATE REAL-TIME ENGINE ---
   initClock() {
     const update = () => {
+      if (typeof document !== 'undefined') {
+        if (document.hidden) return;
+        const clinicView = document.getElementById('view-clinic');
+        if (!clinicView || !clinicView.classList.contains('active')) return;
+      }
       const now = new Date();
       if (this.clockTimeEl) {
         const hh = now.getHours().toString().padStart(2, '0');
@@ -7436,6 +7488,7 @@ class ClinicController {
         this.clockDateEl.textContent = `${dayName}, ${dayNum} ${monthName} ${year}`;
       }
     };
+    this._clockUpdateFn = update;
     update();
     this.clockInterval = setInterval(update, 1000);
   }
@@ -7583,10 +7636,112 @@ class ClinicController {
       });
     }
 
-    // 6. Patient search in Patients Tab
+    // 6. Patient search in Patients Tab (with RAF debouncing)
     if (this.patientsSearchBox) {
+      let patSearchRaf = null;
       this.patientsSearchBox.addEventListener('input', () => {
-        this.renderPatientsTable();
+        if (patSearchRaf) cancelAnimationFrame(patSearchRaf);
+        patSearchRaf = requestAnimationFrame(() => {
+          this.renderPatientsTable();
+        });
+      });
+    }
+
+    // 6.1 Delegated click listener for Patients Directory Table
+    if (this.patientsContainer) {
+      this.patientsContainer.addEventListener('click', (e) => {
+        const sheetBtn = e.target.closest('[data-open-sheet-btn]');
+        if (sheetBtn) {
+          e.stopPropagation();
+          const patId = sheetBtn.getAttribute('data-open-sheet-btn');
+          if (patId) this.openPatientSheet(patId);
+          return;
+        }
+
+        const exportBtn = e.target.closest('[data-export-patient]');
+        if (exportBtn) {
+          e.stopPropagation();
+          const patId = exportBtn.getAttribute('data-export-patient');
+          if (patId) this.openExportModal(patId);
+          return;
+        }
+
+        const apptBtn = e.target.closest('[data-appt-for-patient]');
+        if (apptBtn) {
+          e.stopPropagation();
+          const patId = apptBtn.getAttribute('data-appt-for-patient');
+          this.openApptModal();
+          if (this.apptPatientSelect) {
+            this.apptPatientSelect.value = patId;
+          }
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-delete-patient]');
+        if (deleteBtn) {
+          e.stopPropagation();
+          const patId = deleteBtn.getAttribute('data-delete-patient');
+          const pat = this.patients.find(x => x.id === patId);
+          if (pat && confirm(`¿Deseas eliminar a ${pat.name} del directorio clínico?`)) {
+            const updated = this.patients.filter(x => x.id !== patId);
+            this.savePatients(updated);
+            clinicSyncService.deletePatientFromCloud(patId);
+            this.renderAll();
+          }
+          return;
+        }
+
+        const row = e.target.closest('.patient-table-row:not(.patient-table-header)');
+        if (row) {
+          const patId = row.getAttribute('data-table-patient-id');
+          if (patId) this.openPatientSheet(patId);
+        }
+      });
+    }
+
+    // 6.2 Delegated click listener for Agenda Feed
+    if (this.agendaFeedList) {
+      this.agendaFeedList.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-open-patient-id]');
+        if (link) {
+          e.stopPropagation();
+          const patId = link.getAttribute('data-open-patient-id');
+          if (patId) this.openPatientSheet(patId);
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-delete-appt]');
+        if (deleteBtn) {
+          e.stopPropagation();
+          const apptId = deleteBtn.getAttribute('data-delete-appt');
+          if (confirm('¿Deseas cancelar y eliminar esta cita de la agenda?')) {
+            const updated = this.appointments.filter(x => x.id !== apptId);
+            this.saveAppointments(updated);
+            clinicSyncService.deleteAppointmentFromCloud(apptId);
+            this.renderAll();
+          }
+        }
+      });
+    }
+
+    // 6.3 Delegated click listeners for Dashboard Lists
+    if (this.dashTodayList) {
+      this.dashTodayList.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-open-patient-id]');
+        if (link) {
+          e.stopPropagation();
+          const patId = link.getAttribute('data-open-patient-id');
+          if (patId) this.openPatientSheet(patId);
+        }
+      });
+    }
+    if (this.dashRecentList) {
+      this.dashRecentList.addEventListener('click', (e) => {
+        const card = e.target.closest('.recent-patient-card, [data-card-patient-id], [data-view-patient-id]');
+        if (card) {
+          const pid = card.getAttribute('data-card-patient-id') || card.getAttribute('data-view-patient-id');
+          if (pid) this.openPatientSheet(pid);
+        }
       });
     }
 
@@ -7727,6 +7882,7 @@ class ClinicController {
 
   onActivated() {
     triggerKineticTitleAnimation(this.titleEl);
+    if (this._clockUpdateFn) this._clockUpdateFn();
     this.syncDoctorProfile();
     this.renderAll();
     this.syncCloudData(false);
@@ -8895,15 +9051,6 @@ class ClinicController {
             </div>
           `;
         }).join('');
-
-        const patientNameLinks = this.dashTodayList.querySelectorAll('[data-open-patient-id]');
-        patientNameLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const patId = link.getAttribute('data-open-patient-id');
-            if (patId) this.openPatientSheet(patId);
-          });
-        });
       }
     }
 
@@ -8935,14 +9082,6 @@ class ClinicController {
             </div>
           `;
         }).join('');
-
-        const patientCards = this.dashRecentList.querySelectorAll('.recent-patient-card');
-        patientCards.forEach(card => {
-          card.addEventListener('click', () => {
-            const pid = card.getAttribute('data-card-patient-id');
-            if (pid) this.openPatientSheet(pid);
-          });
-        });
       }
     }
   }
@@ -9033,60 +9172,6 @@ class ClinicController {
         }).join('')}
       </div>
     `;
-
-    // Bind row click to open patient sheet
-    const tableRows = this.patientsContainer.querySelectorAll('.patient-table-row:not(.patient-table-header)');
-    tableRows.forEach(row => {
-      row.addEventListener('click', () => {
-        const patId = row.getAttribute('data-table-patient-id');
-        if (patId) this.openPatientSheet(patId);
-      });
-    });
-
-    const sheetBtns = this.patientsContainer.querySelectorAll('[data-open-sheet-btn]');
-    sheetBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const patId = btn.getAttribute('data-open-sheet-btn');
-        if (patId) this.openPatientSheet(patId);
-      });
-    });
-
-    // Bind single patient export button
-    const exportBtns = this.patientsContainer.querySelectorAll('[data-export-patient]');
-    exportBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const patId = btn.getAttribute('data-export-patient');
-        if (patId) this.openExportModal(patId);
-      });
-    });
-
-    // Bind action buttons
-    const apptBtns = this.patientsContainer.querySelectorAll('[data-appt-for-patient]');
-    apptBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const patId = btn.getAttribute('data-appt-for-patient');
-        this.openApptModal();
-        if (this.apptPatientSelect) {
-          this.apptPatientSelect.value = patId;
-        }
-      });
-    });
-
-    const deleteBtns = this.patientsContainer.querySelectorAll('[data-delete-patient]');
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const patId = btn.getAttribute('data-delete-patient');
-        const pat = this.patients.find(x => x.id === patId);
-        if (pat && confirm(`¿Deseas eliminar a ${pat.name} del directorio clínico?`)) {
-          const updated = this.patients.filter(x => x.id !== patId);
-          this.savePatients(updated);
-          clinicSyncService.deletePatientFromCloud(patId);
-          this.renderAll();
-        }
-      });
-    });
   }
 
   // --- CALENDARIOS INTERACTIVOS (MINI Y MASTER) ---
@@ -9244,28 +9329,6 @@ class ClinicController {
         </div>
       `;
     }).join('');
-
-    const patientNameLinks = this.agendaFeedList.querySelectorAll('[data-open-patient-id]');
-    patientNameLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const patId = link.getAttribute('data-open-patient-id');
-        if (patId) this.openPatientSheet(patId);
-      });
-    });
-
-    const deleteBtns = this.agendaFeedList.querySelectorAll('[data-delete-appt]');
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const apptId = btn.getAttribute('data-delete-appt');
-        if (confirm('¿Deseas cancelar y eliminar esta cita de la agenda?')) {
-          const updated = this.appointments.filter(x => x.id !== apptId);
-          this.saveAppointments(updated);
-          clinicSyncService.deleteAppointmentFromCloud(apptId);
-          this.renderAll();
-        }
-      });
-    });
   }
 
   // --- EXPORTACIÓN E IMPORTACIÓN CIFRADA DE PACIENTES ---
@@ -10528,8 +10591,34 @@ class AppNavigationController {
     }
 
     if (this.adminKeysSearch) {
+      let adminSearchRaf = null;
       this.adminKeysSearch.addEventListener('input', (e) => {
-        this.filterAdminKeys(e.target.value);
+        if (adminSearchRaf) cancelAnimationFrame(adminSearchRaf);
+        adminSearchRaf = requestAnimationFrame(() => {
+          this.filterAdminKeys(e.target.value);
+        });
+      });
+    }
+
+    // Delegated click listener for Admin Keys Table
+    if (this.adminKeysTbody) {
+      this.adminKeysTbody.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const key = btn.getAttribute('data-key');
+        if (action === 'copy') {
+          navigator.clipboard.writeText(key);
+          const orig = btn.textContent;
+          btn.textContent = '✓';
+          setTimeout(() => { btn.textContent = orig || '📋'; }, 2000);
+        } else if (action === 'config') {
+          this.openAdminKeyConfigModal(key);
+        } else if (action === 'unlink') {
+          this.handleAdminUnlinkKey(key);
+        } else if (action === 'delete') {
+          this.handleAdminDeleteKey(key);
+        }
       });
     }
 
@@ -11161,25 +11250,6 @@ class AppNavigationController {
         </tr>
       `;
     }).join('');
-
-    // Attach row event listeners
-    this.adminKeysTbody.querySelectorAll('button[data-action]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const action = btn.getAttribute('data-action');
-        const key = btn.getAttribute('data-key');
-        if (action === 'copy') {
-          navigator.clipboard.writeText(key);
-          btn.textContent = '✓';
-          setTimeout(() => { btn.textContent = '📋'; }, 2000);
-        } else if (action === 'config') {
-          this.openAdminKeyConfigModal(key);
-        } else if (action === 'unlink') {
-          this.handleAdminUnlinkKey(key);
-        } else if (action === 'delete') {
-          this.handleAdminDeleteKey(key);
-        }
-      });
-    });
   }
 
   filterAdminKeys(query) {
@@ -11549,6 +11619,9 @@ class AppNavigationController {
       // Solo si el usuario está en una pantalla activa (welcome, biblioteca, clínica, etc.)
       if (this.currentViewId === 'view-splash' || this.currentViewId === 'view-register') return;
 
+      // No saturar con peticiones si la ventana o pestaña está en segundo plano
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
+
       try {
         const validity = await licenseService.validateLiveLicenseStatus();
         if (!validity.valid) {
@@ -11580,8 +11653,8 @@ class AppNavigationController {
       }
     };
 
-    // Chequeo periódico cada 15 segundos
-    this._heartbeatInterval = setInterval(checkLiveStatus, 15000);
+    // Chequeo periódico cada 30 segundos
+    this._heartbeatInterval = setInterval(checkLiveStatus, 30000);
 
     // Chequeo inmediato al reenfocar la ventana o recuperar la conexión a internet
     window.addEventListener('focus', () => { checkLiveStatus(); });
@@ -11706,7 +11779,7 @@ class AppNavigationController {
       window.dispatchEvent(new Event('resize'));
 
       // Intelligent GPU throttle: resume Three.js only when 3D model is visible
-      if (targetViewId === 'view-splash' || targetViewId === 'view-welcome') {
+      if (targetViewId === 'view-splash' || targetViewId === 'view-welcome' || targetViewId === 'view-register') {
         window.psios3D?.resume();
       } else {
         window.psios3D?.pause();

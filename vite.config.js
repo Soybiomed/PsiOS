@@ -12,10 +12,16 @@ export default defineConfig({
     }
   },
   build: {
+    target: "es2022",
     rollupOptions: {
       output: {
-        manualChunks: {
-          'three-vendor': ['three']
+        manualChunks(id) {
+          if (id.includes("node_modules/three")) {
+            return "three-vendor";
+          }
+          if (id.includes("node_modules/firebase") || id.includes("node_modules/@firebase")) {
+            return "firebase-vendor";
+          }
         }
       }
     },

@@ -5,10 +5,11 @@
  */
 
 function uint8ArrayToBase64(bytes) {
+  const CHUNK_SIZE = 0x8000;
+  const len = bytes.length || bytes.byteLength;
   let binary = '';
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < len; i += CHUNK_SIZE) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + CHUNK_SIZE, len)));
   }
   return btoa(binary);
 }
