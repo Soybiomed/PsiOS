@@ -1275,6 +1275,141 @@ const LIBRARY_CATALOG = [
     }
   },
   {
+    id: 'eedp-desarrollo-psicomotor',
+    title: 'Escala de Evaluación del Desarrollo Psicomotor de 0-24 Meses (E.E.D.P.)',
+    category: 'books',
+    categoryLabel: 'Manual e Instrumento Estandarizado',
+    isBook: true,
+    code: 'LIB-EEDP-01',
+    icon: '👶',
+    author: 'Soledad Rodríguez, Violeta Arancibia y Consuelo Undurraga',
+    badge: 'Instrumento Estandarizado • 92 Páginas',
+    coverImage: '/libros/PORTADA_ESCALA DE EVALUACION DEL DESARROLLO PSICOMOTOR DE 0-24 MESES.png',
+    pdfUrl: '/libros/ESCALA DE EVALUACION DEL DESARROLLO PSICOMOTOR DE 0-24 MESES.pdf',
+    areas: ['EVALUACIÓN CLÍNICA', 'PSICOMETRÍA', 'DESARROLLO INFANTIL', 'NEUROPSICOLOGÍA', 'SEMIOLOGÍA', 'ATENCIÓN TEMPRANA'],
+    academicAffiliation: 'Psicólogas e Investigadoras de la Pontificia Universidad Católica de Chile • Servicio Nacional de Salud (SNS) • Editorial Galdoc',
+    summary: 'Primer instrumento psicométrico estandarizado para la medición del desarrollo psicomotor en lactantes de 0 a 24 meses. Consta de 75 ítems (5 por cada uno de los 15 grupos etarios) que evalúan cuatro áreas fundamentales: Motora (M), Coordinación (C), Lenguaje (L) y Social (S). Incluye la batería completa de prueba, manual detallado de administración, hojas de registro y perfil, tablas de conversión a Coeficiente de Desarrollo (Puntaje Estándar) y criterios de corrección.',
+    topics: [
+      'Antecedentes teóricos y justificación del desarrollo psicomotor en los primeros 2 años',
+      'Las 4 áreas del desarrollo: Motora (M), Coordinación (C), Lenguaje (L) y Social (S)',
+      'Estructura de la prueba: 75 ítems distribuidos en 15 grupos de edad (1 a 24 meses)',
+      'Batería de prueba y materiales estandarizados (campanilla, argolla, cuchara, cubos, etc.)',
+      'Manual de administración detallado ítem por ítem con criterio de crédito',
+      'Hojas de registro: protocolo de prueba, perfil psicomotor y gráfico evolutivo',
+      'Cálculo de la Edad Cronológica (E.C.) en días y meses',
+      'Determinación del Mes Base y cálculo de la Edad Mental (E.M.) ponderada',
+      'Tablas de conversión de la razón EM/EC a Coeficiente de Desarrollo (Puntaje Estándar)',
+      'Interpretación clínica: normalidad, rezago, riesgo y retraso del desarrollo',
+      'Instrucciones específicas y ejemplos prácticos de corrección y casos clínicos',
+      'Propiedades psicométricas: estandarización, objetividad, validez y confiabilidad test-retest'
+    ],
+    categories: [
+      'Evaluación del Desarrollo Infantil',
+      'Psicometría y Escalas Estandarizadas',
+      'Neurodesarrollo y Atención Temprana',
+      'Pediatría y Salud Infantil',
+      'Semiología y Examen Clínico del Lactante'
+    ],
+    prologue: {
+      author: 'Dr. Hernán Montenegro A. (SNS) & Sergio Maltés G. (PUC)',
+      date: 'Santiago de Chile • 1974 - 1978',
+      paragraphs: [
+        'PRÓLOGO I (Dr. Hernán Montenegro A. - Jefe Sección Salud Mental, Servicio Nacional de Salud, Santiago de Chile, 1974):',
+        'La Escala de Evaluación del Desarrollo Psicomotor, elaborada por las psicólogas S. Rodríguez, V. Arancibia y C. Undurraga, representa un trabajo de extraordinaria significación por varios conceptos.',
+        'En primer término constituye el primer instrumento de medición de desarrollo psicomotor estandarizado en lactantes chilenos. La metodología usada para este propósito se ajusta a las más estrictas normas científicas, garantizando de esta manera su validez. Sumado a este mérito de por sí relevante, está su simplicidad y factibilidad de ser administrado por personas o profesionales no especialistas.',
+        'Esta ventaja, en un país como el nuestro donde los recursos especializados en Salud Mental son tan escasos, permite su aplicación a vastos sectores de niños, por personal paramédico del Sector Salud, el que con muy escaso adiestramiento previo se ha probado ya que la puede utilizar eficientemente. Esta Escala de Desarrollo viene a llenar un vacío largamente sentido por los diversos profesionales que en su quehacer diario deben atender ese período de la vida del niño que es tan crítico y decisivo en el futuro del individuo, como es el período de 0 a 2 años.',
+        'PRÓLOGO II (Sergio Maltés G. - Sub-Director de Investigaciones, Escuela de Psicología, Pontificia U. Católica de Chile, 1978):',
+        'La Escala de Evaluación del Desarrollo Psicomotor, elaborada por Rodríguez, Arancibia y Undurraga en 1974, se ha constituido, con el correr del tiempo, en uno de los instrumentos más representativos de la evaluación del nivel de desarrollo de funciones psicológicas en Chile.',
+        'En estos cuatro años, una serie de estudios realizados por psicólogos y educadores han corroborado la utilidad de un instrumento que permite evaluar las condiciones de entrada de los niños a programas de intervención, los que, al modificar las condiciones deficitarias, ayudan al sujeto a alcanzar un nivel de desarrollo normal para su edad cronológica. Por estas mismas razones, la Escala es capaz de evaluar, en forma objetiva, válida y confiable el éxito del programa de intervención.',
+        'La Escala de Evaluación del Desarrollo Psicomotor llena una necesidad imperiosa en la Psicología chilena, cual es la de desarrollar instrumentos adecuados a nuestra idiosincrasia. Estos deben constituirse en pilares fundamentales para la investigación psicométrica y educacional.'
+      ]
+    },
+    indexTree: [
+      {
+        part: 'PRÓLOGOS Y PREFACIO',
+        page: 2,
+        items: [
+          { title: 'Prólogo a la primera edición (Dr. Hernán Montenegro A., SNS 1974)', page: 2 },
+          { title: 'Prólogo a la tercera edición (Sergio Maltés G., PUC 1978)', page: 3 },
+          { title: 'Prefacio a la tercera edición (Soledad Rodríguez S.)', page: 4 }
+        ]
+      },
+      {
+        part: 'PRIMERA PARTE: Antecedentes Teóricos y Descripción de la Escala',
+        page: 5,
+        items: [
+          { title: 'I. Antecedentes teóricos del desarrollo psicomotor', page: 6 },
+          {
+            title: 'II. Descripción de la Escala de Evaluación del Desarrollo Psicomotor (E.E.D.P.)',
+            page: 10,
+            subs: [
+              { title: '1. Áreas del desarrollo evaluadas: Motora (M), Lenguaje (L), Social (S), Coordinación (C)', page: 10 }
+            ]
+          }
+        ]
+      },
+      {
+        part: 'SEGUNDA PARTE: La Escala de Evaluación del Desarrollo Psicomotor 0 a 24 Meses',
+        page: 13,
+        items: [
+          { title: 'I. Batería de prueba: materiales requeridos y distribución por rango de edad', page: 14 },
+          {
+            title: 'II. Manual de administración (75 ítems ordenados por edad cronológica)',
+            page: 17,
+            subs: [
+              { title: 'Mes 1 a Mes 5 (Ítems 1 al 25)', page: 17 },
+              { title: 'Mes 6 a Mes 10 (Ítems 26 al 50)', page: 22 },
+              { title: 'Mes 12 a Mes 24 (Ítems 51 al 75)', page: 28 }
+            ]
+          },
+          { title: 'III. Hojas de registro: protocolo, perfil y gráfico del desarrollo psicomotor', page: 35 },
+          { title: 'IV. Tablas de puntajes: conversión de razón EM/EC a Coeficiente de Desarrollo (Puntaje Estándar)', page: 42 }
+        ]
+      },
+      {
+        part: 'TERCERA PARTE: Instrucciones para la Administración y Ejemplos de Corrección',
+        page: 70,
+        items: [
+          {
+            title: 'I. Instrucciones específicas y criterios de corrección',
+            page: 71,
+            subs: [
+              { title: '1) Edad cronológica (E.C.) en días y meses', page: 71 },
+              { title: '2) Edad Mental (E.M.): mes base y ponderaciones adicionales', page: 71 },
+              { title: '3) Razón entre Edad Mental y Edad Cronológica (EM/EC)', page: 73 },
+              { title: '4) Coeficiente de Desarrollo (C.D.) y 5) Perfil de Desarrollo', page: 73 }
+            ]
+          },
+          { title: 'II. Ejemplos de corrección y sistemas de evaluación (Casos clínicos)', page: 75 }
+        ]
+      },
+      {
+        part: 'CUARTA PARTE: Características Estadísticas de la Escala',
+        page: 80,
+        items: [
+          { title: 'I. Criterio de selección de la muestra de estandarización', page: 81 },
+          { title: 'II. Características de objetividad, confiabilidad, validez y obtención de normas', page: 82 },
+          { title: 'III. Confiabilidad y error de medición de la Escala', page: 86 },
+          { title: 'IV. Conversión de la razón EM/EC a Coeficiente de Desarrollo (Puntaje Estándar)', page: 87 }
+        ]
+      },
+      {
+        part: 'BIBLIOGRAFÍA BÁSICA E ÍNDICE DE MATERIAS',
+        page: 89,
+        items: [
+          { title: 'Bibliografía básica', page: 89 },
+          { title: 'Índice de materias', page: 91 }
+        ]
+      }
+    ],
+    details: {
+      edition: '3.ª Edición - Editorial Galdoc / Santiago de Chile',
+      pages: '92 páginas completas',
+      scope: 'Manual de referencia psicométrica y clínica pediátrica para evaluación del lactante de 0 a 24 meses.',
+      clinicalGuidance: 'Instrumento clave para el control de salud infantil, pesquisa precoz de rezago o retraso en neurodesarrollo y diseño de programas de estimulación temprana.'
+    }
+  },
+  {
     id: 'la-orientacion',
     title: 'La orientación',
     category: 'psicopatologia',
