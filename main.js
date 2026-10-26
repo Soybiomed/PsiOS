@@ -1421,6 +1421,55 @@ const LIBRARY_CATALOG = [
       '5.4 Evaluación de la Orientación: Temporal, Espacial y Autopsíquica',
       'Criterios Clínicos y Signos de Alerta'
     ]
+  },
+  {
+    id: 'la-atencion',
+    title: 'La atención',
+    category: 'psicopatologia',
+    categoryLabel: 'Definición Semiológica',
+    isClinicalEntity: true,
+    code: 'SEM-ATE-01',
+    icon: '🎯',
+    author: 'Psicopatología y Neuropsicología Clínica',
+    badge: 'Proceso Neurocognitivo • Redes & Alteraciones',
+    areas: ['PSICOPATOLOGÍA', 'SEMIOLOGÍA', 'PROCESOS PSICOLÓGICOS', 'EVALUACIÓN CLÍNICA', 'FUNCIONES COGNITIVAS', 'NEUROPSICOLOGÍA'],
+    academicAffiliation: 'Psicopatología de la Atención • Neuropsicología Cognitiva y Clínica',
+    summary: 'Definición: proceso que selecciona información relevante, inhibe distractores y regula los recursos mentales.\n\nComponentes: alerta, focalizada, sostenida, selectiva, alternante y dividida; además, control ejecutivo.\n\nAlteraciones clásicas: hipoprosexia = disminución; hiperprosexia = inestabilidad o aumento aparente de la actividad atencional; aprosexia = ausencia; pseudoaprosexia = aparente ausencia con atención dirigida a otros contenidos.\n\nEvaluación: observación clínica + entrevista + pruebas neuropsicológicas + análisis del impacto funcional.',
+    topics: [
+      'Definición de Atención',
+      'Redes Atencionales (Alerta, Orientación, Control Ejecutivo)',
+      'Bases Neurobiológicas',
+      'Componentes: Alerta, Focalizada, Sostenida, Selectiva, Alternante, Dividida',
+      'Características: Orientación, Focalización, Concentración, Ciclicidad, Intensidad, Estabilidad',
+      'Relación con Funciones Ejecutivas: Inhibición, Memoria de Trabajo, Flexibilidad, Autorregulación',
+      'Disprosexias Cuantitativas: Hipoprosexia, Hiperprosexia, Aprosexia',
+      'Disprosexia Cualitativa: Pseudoaprosexia',
+      'Signos Observables y Síntomas Referidos',
+      'Cuadros Clínicos Asociados: TDAH, Delirium, Depresión, Ansiedad, TCE',
+      'Evaluación para trastorno de atención'
+    ]
+  },
+  {
+    id: 'evaluacion-trastorno-atencion',
+    title: 'Evaluación para trastorno de atención',
+    category: 'evaluacion',
+    categoryLabel: 'Protocolo de Examen Clínico',
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: 'EVA-ATE-02',
+    icon: '📋',
+    author: 'Protocolo Clínico • Neuropsicología y Examen Mental',
+    badge: 'Exploración Clínica • Pruebas & Dimensiones',
+    areas: ['EVALUACIÓN CLÍNICA', 'EXAMEN MENTAL', 'SEMIOLOGÍA', 'PSICOPATOLOGÍA', 'PROCESOS PSICOLÓGICOS', 'NEUROPSICOLOGÍA'],
+    academicAffiliation: 'Evaluación Neuropsicológica y Semiología de la Atención',
+    summary: 'Protocolo estructurado de valoración clínica y neuropsicológica de la atención: pauta de observación conductual en consulta, entrevista estructurada (inicio, duración, frecuencia e impacto), pruebas estandarizadas (Continuous Performance Test CPT, Trail Making Test TMT, Stroop Test, Digit Span y Escalas de TDAH) y análisis en 6 dimensiones (intensidad, duración, selectividad, control inhibitorio, flexibilidad e impacto funcional).',
+    topics: [
+      '4.A Observación Clínica (Conducta y Lapsos Atencionales)',
+      '4.B Entrevista Clínica o Neuropsicológica (Repercusión y Contextos)',
+      '4.C Pruebas Estandarizadas: CPT, Trail Making Test, Stroop, Digit Span, Escalas TDAH',
+      'Criterios de Selección Clínica',
+      '4.D Seis Dimensiones Atencionales: Intensidad, Duración, Selectividad, Control, Flexibilidad, Impacto Funcional'
+    ]
   }
 ];
 
@@ -3228,6 +3277,598 @@ function getConsciousnessEvaluationDocHtml() {
   `;
 }
 
+function getAttentionDocHtml() {
+  return `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">🎯 DEFINICIÓN SEMIOLÓGICA & PROCESO NEUROCOGNITIVO</span>
+          <span class="modal-area-pill">🧬 ÁREA: PSICOPATOLOGÍA</span>
+          <span class="modal-area-pill">🩺 ÁREA: SEMIOLOGÍA</span>
+          <span class="modal-area-pill">🧠 ÁREA: PROCESOS PSICOLÓGICOS</span>
+          <span class="modal-area-pill">🔬 ÁREA: EVALUACIÓN CLÍNICA</span>
+          <span class="modal-area-pill">⚡ ÁREA: FUNCIONES COGNITIVAS</span>
+          <span class="modal-area-pill">🔬 ÁREA: NEUROPSICOLOGÍA</span>
+        </div>
+        <h2 class="orientation-main-title">La atención</h2>
+        <p class="orientation-authors-meta">Proceso Neurocognitivo • Redes Atencionales & Psicopatología de las Disprosexias</p>
+      </div>
+
+      <div class="orientation-subcard" style="background: rgba(59, 130, 246, 0.05); border-left: 3px solid #3b82f6;">
+        <p class="orientation-p" style="margin: 0; font-size: 0.88rem; color: var(--text-primary); line-height: 1.6;">
+          La síntesis se organiza en cuatro apartados: definición, conceptos básicos, tipos de alteraciones y forma de evaluación. Mantengo la terminología clásica presentada en el material y distingo las alteraciones de la atención de los métodos utilizados para evaluarla.<br><br>
+          <em>Nota sobre las fuentes:</em> en este turno solo tengo acceso a las diapositivas de Psicopatología de la atención, no al texto de los libros. Para respetar tu indicación, no atribuiré definiciones ni páginas a autores sin poder verificarlas. La síntesis siguiente recoge los conceptos del material compartido; si me facilitas los libros o sus páginas sobre atención, puedo incorporar las citas bibliográficas correspondientes.
+        </p>
+      </div>
+
+      <!-- Citas a libros de referencia disponibles en la biblioteca -->
+      <div style="margin: 0.75rem 0 1.25rem 0; display: flex; gap: 0.65rem; flex-wrap: wrap;">
+        <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="145" title="Consultar Psicopatología de la Atención en Capponi (Pág. 145)">
+          📖 Consultar en Capponi: Psicopatología de la Atención (Pág. 145) →
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="apir-psicopatologia" data-page="26" title="Consultar Psicopatología de la Atención en APIR (Pág. 26)">
+          📖 Consultar en APIR: Tema 4 Psicopatología de la Atención (Pág. 26) →
+        </button>
+      </div>
+
+      <!-- 1. Definición de atención -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 1</div>
+        <h3 class="orientation-sec-title">1. Definición de atención</h3>
+        <p class="orientation-lead-p">
+          La atención es un proceso neurocognitivo que permite seleccionar la información relevante, filtrar o inhibir los estímulos irrelevantes y distribuir los recursos mentales de acuerdo con los objetivos personales y las demandas del entorno.
+        </p>
+
+        <div class="orientation-subcard">
+          <h4 class="orientation-subcard-title">Participación en el sistema de procesos cognitivos</h4>
+          <p class="orientation-p" style="margin-bottom: 0.5rem;">
+            No es una función aislada, sino un sistema de procesos relacionados que participa en:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>La percepción de los estímulos.</strong></li>
+            <li><strong>La memoria de trabajo.</strong></li>
+            <li><strong>El aprendizaje.</strong></li>
+            <li><strong>La toma de decisiones.</strong></li>
+            <li><strong>El control ejecutivo y la regulación de la conducta.</strong></li>
+          </ul>
+        </div>
+
+        <!-- Bases neurobiológicas -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">1.1</span>
+            <h4 class="alteration-title">Bases neurobiológicas</h4>
+          </div>
+          <p class="orientation-p">
+            Se describen tres redes atencionales principales:
+          </p>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Red</th>
+                  <th>Función</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">Red de alerta</strong></td>
+                  <td>Mantener el estado de vigilancia y preparación para responder.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(16, 185, 129, 0.12); color: #059669;">Red de orientación</strong></td>
+                  <td>Dirigir la atención hacia estímulos relevantes.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5;">Red de control ejecutivo</strong></td>
+                  <td>Resolver conflictos, regular la atención e inhibir respuestas inadecuadas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="orientation-clinical-note" style="margin-top: 0.85rem;">
+            🧠 <strong>Estructuras cerebrales implicadas:</strong> Entre las estructuras cerebrales implicadas se encuentran la corteza prefrontal dorsolateral, la corteza cingulada anterior, la corteza parietal posterior, el tálamo y el sistema reticular activador ascendente.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Conceptos básicos de la atención -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 2</div>
+        <h3 class="orientation-sec-title">2. Conceptos básicos de la atención</h3>
+
+        <!-- A. Componentes atencionales -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">2.A</span>
+            <h4 class="alteration-title">Componentes atencionales</h4>
+          </div>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 36%;">Componente</th>
+                  <th>Definición</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag">Alerta y vigilancia</strong></td>
+                  <td>Mantener un estado adecuado de activación y preparación para responder.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Atención focalizada</strong></td>
+                  <td>Dirigir la atención hacia un estímulo específico y responder ante él.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Atención sostenida</strong></td>
+                  <td>Mantener el foco atencional durante un período prolongado.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Atención selectiva</strong></td>
+                  <td>Seleccionar la información relevante e inhibir los distractores.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Atención alternante</strong></td>
+                  <td>Cambiar flexiblemente el foco entre tareas o fuentes de información.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag">Atención dividida</strong></td>
+                  <td>Distribuir los recursos atencionales entre varias tareas simultáneas.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5;">Control ejecutivo de la atención</strong></td>
+                  <td>Supervisar y regular voluntariamente la atención según un objetivo.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- B. Características del funcionamiento atencional -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">2.B</span>
+            <h4 class="alteration-title">Características del funcionamiento atencional</h4>
+          </div>
+          <div class="orientation-dimensions-grid">
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🧭</span>
+                <div>
+                  <h4 class="dim-name">Orientación</h4>
+                  <span class="dim-badge">Direccional</span>
+                </div>
+              </div>
+              <p class="dim-desc">Dirigir los recursos cognitivos hacia objetos o acontecimientos relevantes.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🎯</span>
+                <div>
+                  <h4 class="dim-name">Focalización</h4>
+                  <span class="dim-badge">Foco selectivo</span>
+                </div>
+              </div>
+              <p class="dim-desc">Centrarse en un número limitado de estímulos.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">💡</span>
+                <div>
+                  <h4 class="dim-name">Concentración</h4>
+                  <span class="dim-badge">Volumen de recursos</span>
+                </div>
+              </div>
+              <p class="dim-desc">Cantidad de recursos atencionales dedicados a una actividad.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🔄</span>
+                <div>
+                  <h4 class="dim-name">Ciclicidad</h4>
+                  <span class="dim-badge">Ritmo y descanso</span>
+                </div>
+              </div>
+              <p class="dim-desc">Variación de la atención en relación con los períodos de actividad y descanso.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">⚡</span>
+                <div>
+                  <h4 class="dim-name">Intensidad</h4>
+                  <span class="dim-badge">Grado</span>
+                </div>
+              </div>
+              <p class="dim-desc">Grado de concentración aplicado a una actividad.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">⏱️</span>
+                <div>
+                  <h4 class="dim-name">Estabilidad</h4>
+                  <span class="dim-badge">Continuidad temporal</span>
+                </div>
+              </div>
+              <p class="dim-desc">Tiempo durante el cual se mantiene la atención sin interrupciones.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- C. Relación con las funciones ejecutivas -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">2.C</span>
+            <h4 class="alteration-title">Relación con las funciones ejecutivas</h4>
+          </div>
+          <p class="orientation-p">
+            La atención se relaciona estrechamente con cuatro funciones ejecutivas:
+          </p>
+          <div class="orientation-subcard">
+            <ul class="orientation-bullet-list">
+              <li><strong>1. Inhibición cognitiva:</strong> bloquear distractores y respuestas automáticas.</li>
+              <li><strong>2. Memoria de trabajo:</strong> mantener y manipular información temporalmente.</li>
+              <li><strong>3. Flexibilidad cognitiva:</strong> cambiar de estrategia ante nuevas demandas.</li>
+              <li><strong>4. Autorregulación conductual:</strong> dirigir la conducta voluntariamente hacia una meta.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Tipos de alteraciones de la atención -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 3</div>
+        <h3 class="orientation-sec-title">3. Tipos de alteraciones de la atención</h3>
+        <p class="orientation-lead-p">
+          En la clasificación psicopatológica clásica, las alteraciones atencionales se denominan <strong>disprosexias</strong>. Se organizan en alteraciones cuantitativas y cualitativas.
+        </p>
+
+        <!-- A. Alteraciones cuantitativas -->
+        <h4 class="orientation-subsection-title" style="margin-top: 1.25rem;">A. Alteraciones cuantitativas</h4>
+
+        <!-- 1. Hipoprosexia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.A.1</span>
+            <div>
+              <h4 class="alteration-title">Hipoprosexia</h4>
+              <span class="alteration-tag" style="background: rgba(2, 132, 199, 0.1); color: #0284c7;">Por defecto / Disminución</span>
+            </div>
+          </div>
+          <p class="orientation-p">
+            Es la <strong>disminución de la capacidad atencional</strong>. La persona presenta dificultades para dirigir o mantener la atención, incluso ante estímulos relevantes.
+          </p>
+          <div class="orientation-subcard">
+            <strong>Situaciones clínicas descritas:</strong> disminución del nivel de conciencia o vigilia, apatía, falta de interés y algunos estados de ansiedad en los que la atención no se mantiene por conflictos emocionales.
+          </div>
+        </div>
+
+        <!-- 2. Hiperprosexia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.A.2</span>
+            <div>
+              <h4 class="alteration-title">Hiperprosexia</h4>
+              <span class="alteration-tag" style="background: rgba(245, 158, 11, 0.12); color: #b45309;">Inestabilidad o exceso aparente</span>
+            </div>
+          </div>
+          <p class="orientation-p">
+            Se caracteriza por una <strong>focalización inestable</strong>: la atención cambia rápidamente de un estímulo a otro. La persona puede captar numerosos estímulos, pero tener dificultades para concentrarse en uno de ellos.
+          </p>
+          <div class="orientation-subcard">
+            <strong>Situaciones clínicas descritas:</strong> inquietud psicomotora, ansiedad, TDAH, síntomas maníacos y consumo de estimulantes.
+          </div>
+        </div>
+
+        <!-- 3. Aprosexia -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.A.3</span>
+            <div>
+              <h4 class="alteration-title">Aprosexia</h4>
+              <span class="alteration-tag" style="background: rgba(239, 68, 68, 0.12); color: #dc2626;">Por ausencia total</span>
+            </div>
+          </div>
+          <p class="orientation-p">
+            Se define clásicamente como la <strong>pérdida o ausencia de la función atencional</strong>.
+          </p>
+          <div class="orientation-subcard">
+            <strong>Situaciones clínicas descritas:</strong> agitación psicomotora intensa y estados graves de disminución de la conciencia, como estupor o coma.
+          </div>
+        </div>
+
+        <!-- B. Alteración cualitativa -->
+        <h4 class="orientation-subsection-title" style="margin-top: 1.5rem;">B. Alteración cualitativa</h4>
+
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">3.B</span>
+            <div>
+              <h4 class="alteration-title">Pseudoaprosexia</h4>
+              <span class="alteration-tag" style="background: rgba(147, 51, 234, 0.1); color: #7e22ce;">Cualitativa / Aparente ausencia</span>
+            </div>
+          </div>
+          <p class="orientation-p">
+            <strong>Pseudoaprosexia:</strong> apariencia de ausencia de atención ante un observador, aunque la capacidad atencional puede conservarse y estar dirigida hacia otros contenidos.
+          </p>
+          <div class="orientation-subcard">
+            <p class="orientation-p" style="margin-bottom: 0.4rem;">
+              El material describe situaciones en las que la atención parece ausente porque está concentrada en otros aspectos, como:
+            </p>
+            <ul class="orientation-bullet-list">
+              <li>La <strong>simulación de síntomas</strong>.</li>
+              <li>Las <strong>personas del entorno</strong>.</li>
+              <li>Las <strong>sensaciones corporales</strong>.</li>
+              <li>Las <strong>ideas delirantes</strong> o las alucinaciones.</li>
+            </ul>
+          </div>
+          <div class="orientation-clinical-note" style="margin-top: 0.85rem;">
+            ⚖️ <strong>Diferenciación diagnóstica:</strong> Es importante distinguir la apariencia de falta de atención de una pérdida real de la capacidad para atender.
+          </div>
+        </div>
+
+        <!-- C. Signos y síntomas que pueden observarse -->
+        <div class="alteration-card" style="margin-top: 1.25rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">3.C</span>
+            <h4 class="alteration-title">Signos y síntomas que pueden observarse</h4>
+          </div>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 48%;">Signos observables</th>
+                  <th>Síntomas referidos por la persona</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Distractibilidad.</strong></td>
+                  <td>Intolerancia a ambientes ruidosos.</td>
+                </tr>
+                <tr>
+                  <td><strong>Respuestas impulsivas.</strong></td>
+                  <td>Pérdida del hilo de una conversación.</td>
+                </tr>
+                <tr>
+                  <td><strong>Procesamiento cognitivo lentificado.</strong></td>
+                  <td>Frustración al realizar tareas simultáneas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Dificultades en tareas que exigen atención.</strong></td>
+                  <td>Sensación de dificultad para concentrarse.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fallos en el aprendizaje y la memoria inmediata.</strong></td>
+                  <td>Dificultad para mantener el rendimiento en actividades prolongadas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="orientation-clinical-note" style="margin-top: 0.85rem;">
+            📋 Las alteraciones de la atención pueden aparecer asociadas a diferentes cuadros neurológicos y psiquiátricos, como <strong>TDAH, trastornos neurocognitivos, delirium, depresión, ansiedad, esquizofrenia, trastorno bipolar y traumatismos craneoencefálicos</strong>. Su presencia aislada no permite establecer un diagnóstico.
+          </div>
+        </div>
+      </section>
+
+      <!-- Botón inferior para ir a Evaluación de Atención -->
+      <div class="orientation-bottom-cta">
+        <button type="button" class="btn-orientation-cta" id="btn-goto-attention-eval">
+          <span class="cta-icon">📋</span>
+          <div class="cta-texts">
+            <strong class="cta-title">Evaluación para trastorno de atención</strong>
+            <span class="cta-sub">Abrir protocolo estructurado: observación clínica, entrevista neuropsicológica, pruebas estandarizadas (CPT, TMT, Stroop, Dígitos) y 6 dimensiones</span>
+          </div>
+          <span class="cta-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function getAttentionEvaluationDocHtml() {
+  return `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">📋 PROTOCOLO DE EXAMEN CLÍNICO</span>
+          <span class="modal-area-pill">🔬 ÁREA: EVALUACIÓN CLÍNICA</span>
+          <span class="modal-area-pill">🩺 ÁREA: EXAMEN MENTAL</span>
+          <span class="modal-area-pill">🧬 ÁREA: SEMIOLOGÍA</span>
+          <span class="modal-area-pill">🧠 ÁREA: PSICOPATOLOGÍA</span>
+          <span class="modal-area-pill">⚡ ÁREA: PROCESOS PSICOLÓGICOS</span>
+          <span class="modal-area-pill">🔬 ÁREA: NEUROPSICOLOGÍA</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem;">
+          <div>
+            <h2 class="orientation-main-title">Evaluación para trastorno de atención</h2>
+            <p class="orientation-authors-meta">Exploración Clínica Directa del Estado Mental • Baterías Neuropsicológicas & Valoración Dimensional</p>
+          </div>
+          <button type="button" class="btn-back-to-def" id="btn-back-attention-def">
+            ← Ver Definición y Psicopatología
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Forma de evaluar la atención -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">SECCIÓN 4</div>
+        <h3 class="orientation-sec-title">4. Forma de evaluar la atención</h3>
+        <p class="orientation-lead-p">
+          La evaluación debe integrar la observación clínica, la entrevista y, cuando corresponda, pruebas neuropsicológicas. No basta con observar si una persona parece distraída: hay que identificar qué componente atencional está afectado y cómo repercute en su vida cotidiana.
+        </p>
+
+        <!-- A. Observación clínica -->
+        <div class="alteration-card">
+          <div class="alteration-header">
+            <span class="alteration-num">4.A</span>
+            <h4 class="alteration-title">Observación clínica</h4>
+          </div>
+          <p class="orientation-p">
+            Se examina cómo responde la persona durante la entrevista y ante las tareas propuestas.
+          </p>
+          <div class="orientation-subcard">
+            <strong style="display: block; font-size: 0.82rem; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Se observa sistemáticamente:</strong>
+            <ul class="orientation-bullet-list">
+              <li><strong>Si responde cuando se le habla.</strong></li>
+              <li><strong>Si logra mantener el hilo de la conversación.</strong></li>
+              <li><strong>Si se distrae con estímulos externos.</strong></li>
+              <li><strong>Si puede seguir instrucciones.</strong></li>
+              <li><strong>Si responde impulsivamente o tarda excesivamente.</strong></li>
+              <li><strong>Si mantiene la concentración durante la actividad.</strong></li>
+              <li><strong>Si necesita que se repitan las instrucciones.</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- B. Entrevista clínica o neuropsicológica -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">4.B</span>
+            <h4 class="alteration-title">Entrevista clínica o neuropsicológica</h4>
+          </div>
+          <p class="orientation-p">
+            Se pregunta por las dificultades atencionales, su <strong>inicio, duración, frecuencia y repercusión funcional</strong>. Conviene explorar si aparecen en diferentes contextos, por ejemplo, al estudiar, conversar, trabajar o realizar actividades cotidianas.
+          </p>
+          <div class="orientation-subcard" style="background: rgba(2, 132, 199, 0.05); border-left: 3px solid #0284c7;">
+            <p class="orientation-p" style="margin: 0; font-size: 0.86rem; color: var(--text-primary); line-height: 1.55;">
+              💡 <strong>Indagación integral:</strong> También se indaga sobre <strong>cambios cognitivos, estado emocional, sueño, medicamentos, consumo de sustancias y antecedentes neurológicos</strong>, cuando sean pertinentes.
+            </p>
+          </div>
+        </div>
+
+        <!-- C. Pruebas de evaluación -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">4.C</span>
+            <h4 class="alteration-title">Pruebas de evaluación</h4>
+          </div>
+          <div class="orientation-table-wrap">
+            <table class="orientation-table">
+              <thead>
+                <tr>
+                  <th style="width: 38%;">Prueba</th>
+                  <th>¿Qué evalúa principalmente?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">Continuous Performance Test (CPT)</strong></td>
+                  <td>Atención sostenida y capacidad para responder de manera consistente ante estímulos a lo largo del tiempo.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(16, 185, 129, 0.12); color: #059669;">Trail Making Test</strong></td>
+                  <td>Velocidad de procesamiento, exploración visual y, especialmente en la parte B, alternancia atencional y flexibilidad cognitiva.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5;">Stroop Test</strong></td>
+                  <td>Control inhibitorio y capacidad para manejar interferencias entre estímulos o respuestas en conflicto.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(245, 158, 11, 0.12); color: #b45309;">Digit Span (retención de dígitos)</strong></td>
+                  <td>Atención inmediata y memoria de trabajo, según la modalidad y la tarea empleada.</td>
+                </tr>
+                <tr>
+                  <td><strong class="table-type-tag" style="background: rgba(239, 68, 68, 0.12); color: #dc2626;">Escalas clínicas de TDAH</strong></td>
+                  <td>Frecuencia e intensidad de conductas relacionadas con inatención e hiperactividad-impulsividad.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="orientation-clinical-note" style="margin-top: 0.85rem;">
+            ⚠️ <strong>Criterio de selección clínica:</strong> Las pruebas no miden exactamente lo mismo. La selección debe depender de la <strong>pregunta clínica y de la edad, el nivel educativo, el idioma y las características</strong> de la persona evaluada.
+          </div>
+        </div>
+
+        <!-- D. Dimensiones que deben examinarse -->
+        <div class="alteration-card" style="margin-top: 1rem;">
+          <div class="alteration-header">
+            <span class="alteration-num">4.D</span>
+            <h4 class="alteration-title">Dimensiones que deben examinarse</h4>
+          </div>
+          <p class="orientation-p">
+            La evaluación puede organizarse en seis dimensiones:
+          </p>
+          <div class="orientation-dimensions-grid">
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">⚡</span>
+                <div>
+                  <h4 class="dim-name">1. Intensidad</h4>
+                  <span class="dim-badge">Concentración</span>
+                </div>
+              </div>
+              <p class="dim-desc">Cuánto logra concentrarse.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">⏱️</span>
+                <div>
+                  <h4 class="dim-name">2. Duración</h4>
+                  <span class="dim-badge">Tiempo</span>
+                </div>
+              </div>
+              <p class="dim-desc">Cuánto tiempo mantiene la atención.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🎯</span>
+                <div>
+                  <h4 class="dim-name">3. Selectividad</h4>
+                  <span class="dim-badge">Filtro</span>
+                </div>
+              </div>
+              <p class="dim-desc">Si distingue los estímulos relevantes de los distractores.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🛑</span>
+                <div>
+                  <h4 class="dim-name">4. Control inhibitorio</h4>
+                  <span class="dim-badge">Freno cognitivo</span>
+                </div>
+              </div>
+              <p class="dim-desc">Si puede frenar respuestas automáticas o inapropiadas.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">🔀</span>
+                <div>
+                  <h4 class="dim-name">5. Flexibilidad</h4>
+                  <span class="dim-badge">Alternancia</span>
+                </div>
+              </div>
+              <p class="dim-desc">Si cambia el foco atencional cuando la tarea lo exige.</p>
+            </div>
+            <div class="orientation-dim-item">
+              <div class="dim-item-header">
+                <span class="dim-icon">💼</span>
+                <div>
+                  <h4 class="dim-name">6. Impacto funcional</h4>
+                  <span class="dim-badge">Vida cotidiana</span>
+                </div>
+              </div>
+              <p class="dim-desc">Cómo afectan las dificultades a sus estudios, trabajo, relaciones y actividades diarias.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Botón inferior para regresar a definición -->
+      <div class="orientation-bottom-cta">
+        <button type="button" class="btn-orientation-cta secondary" id="btn-bottom-back-attention-def">
+          <span class="cta-icon">🎯</span>
+          <div class="cta-texts">
+            <strong class="cta-title">Volver a La atención (Definición & Semiología)</strong>
+            <span class="cta-sub">Consultar redes atencionales, componentes, disprosexias y bases neurocognitivas</span>
+          </div>
+          <span class="cta-arrow">←</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 class LibraryController {
   constructor() {
     this.searchInput = document.getElementById('library-search-input');
@@ -3590,10 +4231,14 @@ class LibraryController {
   render() {
     if (!this.cardsGrid) return;
 
+    const normalizeStr = s => (s || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
     const filtered = LIBRARY_CATALOG.filter(item => {
       let matchesCat = false;
-      if (this.currentCategory === 'all' || this.currentCategory === 'books') {
+      if (this.currentCategory === 'all') {
         matchesCat = true;
+      } else if (this.currentCategory === 'books') {
+        matchesCat = item.isBook || Boolean(item.pdfUrl) || item.category === 'books';
       } else if (this.currentCategory === 'psicopatologia') {
         matchesCat = (item.areas || []).includes('PSICOPATOLOGÍA') || item.category === 'psicopatologia' || (item.categories || []).some(c => c.toLowerCase().includes('psicopatología'));
       } else if (this.currentCategory === 'semiologia') {
@@ -3608,8 +4253,9 @@ class LibraryController {
       if (!matchesCat) return false;
 
       if (!this.currentSearch) return true;
-      const haystack = `${item.title} ${item.code} ${item.author} ${item.summary} ${item.categoryLabel} ${(item.areas || []).join(' ')} ${(item.topics || []).join(' ')} ${(item.categories || []).join(' ')}`.toLowerCase();
-      return haystack.includes(this.currentSearch);
+      const normSearch = normalizeStr(this.currentSearch);
+      const haystack = normalizeStr(`${item.title} ${item.code} ${item.author} ${item.summary} ${item.categoryLabel} ${(item.areas || []).join(' ')} ${(item.topics || []).join(' ')} ${(item.categories || []).join(' ')}`);
+      return haystack.includes(normSearch);
     });
 
     // Alphabetical Sorting Application
@@ -3876,6 +4522,52 @@ class LibraryController {
         if (btnBottomBackDef) {
           btnBottomBackDef.addEventListener('click', () => {
             this.openResourceModal('la-conciencia');
+          });
+        }
+        // Jump buttons to books
+        this.modalContent.querySelectorAll('[data-book-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const bookId = btn.getAttribute('data-book-id');
+            const page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+            const book = LIBRARY_CATALOG.find(x => x.id === bookId);
+            if (book) {
+              this.closeModal();
+              this.openPdfReader(book, page);
+            }
+          });
+        });
+      } else if (item.id === 'la-atencion') {
+        this.modalContent.innerHTML = getAttentionDocHtml();
+        const btnGotoEval = this.modalContent.querySelector('#btn-goto-attention-eval');
+        if (btnGotoEval) {
+          btnGotoEval.addEventListener('click', () => {
+            this.openResourceModal('evaluacion-trastorno-atencion');
+          });
+        }
+        // Jump buttons to books
+        this.modalContent.querySelectorAll('[data-book-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const bookId = btn.getAttribute('data-book-id');
+            const page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+            const book = LIBRARY_CATALOG.find(x => x.id === bookId);
+            if (book) {
+              this.closeModal();
+              this.openPdfReader(book, page);
+            }
+          });
+        });
+      } else if (item.id === 'evaluacion-trastorno-atencion') {
+        this.modalContent.innerHTML = getAttentionEvaluationDocHtml();
+        const btnBackDef = this.modalContent.querySelector('#btn-back-attention-def');
+        if (btnBackDef) {
+          btnBackDef.addEventListener('click', () => {
+            this.openResourceModal('la-atencion');
+          });
+        }
+        const btnBottomBackDef = this.modalContent.querySelector('#btn-bottom-back-attention-def');
+        if (btnBottomBackDef) {
+          btnBottomBackDef.addEventListener('click', () => {
+            this.openResourceModal('la-atencion');
           });
         }
         // Jump buttons to books
