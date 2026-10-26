@@ -1606,6 +1606,43 @@ const LIBRARY_CATALOG = [
       'Criterios de Selección Clínica',
       '4.D Seis Dimensiones Atencionales: Intensidad, Duración, Selectividad, Control, Flexibilidad, Impacto Funcional'
     ]
+  },
+  {
+    id: 'test-harris-lateralidad',
+    title: 'TEST DE HARRIS ( OBSERVACIÓN DE LA LATERALIDAD)',
+    category: 'tests',
+    categoryLabel: 'Test Psicométrico & Observacional',
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    isTest: true,
+    code: 'TEST-HAR-01',
+    icon: '✋',
+    author: 'Albert J. Harris (Harris Tests of Lateral Dominance)',
+    badge: 'Test Clínico de Lateralidad • Digital & Físico',
+    pdfUrl: '/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf',
+    areas: ['EVALUACIÓN CLÍNICA', 'PSICOMETRÍA', 'NEUROPSICOLOGÍA', 'SEMIOLOGÍA', 'DESARROLLO INFANTIL', 'PROCESOS PSICOLÓGICOS'],
+    academicAffiliation: 'Exploración Neurofuncional del Esquema Corporal, Dominancia Lateral y Psicomotricidad',
+    summary: 'Definición: Batería clínica estandarizada para evaluar la dominancia funcional de mano, pie, ojo y oído.\n\nFunciones: Determina la fórmula de dominancia lateral (D.D.D.D) y constata la preferencia espontánea vs. aprendida.\n\nPara qué sirve: Diagnóstico de lateralidad diestra, zurda, cruzada (dislexia/lectoescritura), mal afirmada o mixta/ambidextrismo; previene dificultades de lectoescritura, orientación espacial y dispraxias.\n\nEstructura: 26 ítems distribuidos en 4 dimensiones (10 mano, 10 pie, 3 ojo, 3 oído) con fórmula diagnóstica integrada.',
+    topics: [
+      'Dominancia de la Mano (10 ítems)',
+      'Dominancia del Pie (10 ítems)',
+      'Dominancia del Ojo (3 ítems)',
+      'Dominancia del Oído (3 ítems)',
+      'Fórmula de Lateralidad (Mano . Ojo . Pie . Oído)',
+      'Lateralidad Diestra y Zurda Homogénea',
+      'Lateralidad Cruzada (Riesgo en Dislexia y Lectoescritura)',
+      'Lateralidad Mal Afirmada o Indefinida',
+      'Ambidextrismo y Lateralidad Mixta',
+      'Descarga de Test en Físico (PDF)',
+      'Aplicación Digital Interactiva con Baremación en Tiempo Real'
+    ],
+    categories: [
+      'Evaluación Clínica y Neuropsicológica',
+      'Pruebas y Tests Psicométricos',
+      'Psicomotricidad y Desarrollo Infantil',
+      'Dificultades del Aprendizaje y Lectoescritura',
+      'Semiología del Esquema Corporal'
+    ]
   }
 ];
 
@@ -4005,6 +4042,374 @@ function getAttentionEvaluationDocHtml() {
   `;
 }
 
+function getHarrisTestDocHtml() {
+  const itemsMano = [
+    { num: 1, text: 'Tirar una pelota (lanzar con una mano hacia un blanco determinado)' },
+    { num: 2, text: 'Sacar punta a un lapicero o lápiz con un sacapuntas' },
+    { num: 3, text: 'Desenroscar o quitar la tapa a un frasco' },
+    { num: 4, text: 'Cepillarse los dientes (mano que sostiene el cepillo)' },
+    { num: 5, text: 'Coger un vaso con agua para beber' },
+    { num: 6, text: 'Sonarse la nariz con un pañuelo' },
+    { num: 7, text: 'Cortar una figura o línea con tijeras' },
+    { num: 8, text: 'Cortar con un cuchillo de mesa' },
+    { num: 9, text: 'Peinarse el pelo con peine o cepillo' },
+    { num: 10, text: 'Escribir su nombre o realizar trazos gráficos con lápiz' }
+  ];
+
+  const itemsPie = [
+    { num: 11, text: 'Dar una patada a un balón o pelota (patear hacia un objetivo)' },
+    { num: 12, text: 'Escribir una letra o figura con la punta del pie en el suelo' },
+    { num: 13, text: 'Saltar a la pata coja durante un recorrido de unos 10 metros' },
+    { num: 14, text: 'Mantener el equilibrio sobre un pie durante 10 segundos' },
+    { num: 15, text: 'Subir un escalón alto (primer pie que se apoya para la elevación)' },
+    { num: 16, text: 'Girar sobre un solo pie (pie de rotación o pivote)' },
+    { num: 17, text: 'Sacar una pelota de un rincón o debajo de una silla utilizando el pie' },
+    { num: 18, text: 'Conducir una pelota unos 7 metros controlándola con los pies' },
+    { num: 19, text: 'Levantar una pierna para apoyarla sobre una mesa o silla' },
+    { num: 20, text: 'Pierna que adelanta instintivamente para no caer al desequilibrarse' }
+  ];
+
+  const itemsOjo = [
+    { num: 21, text: 'Mirar por la boquilla o a través del fondo de una botella' },
+    { num: 22, text: 'Mirar por un orificio pequeño (en un cartón o cartulina perforada)' },
+    { num: 23, text: 'Simular que saca una foto con una cámara fotográfica (ojo en el visor)' }
+  ];
+
+  const itemsOido = [
+    { num: 24, text: 'Escuchar a través de una pared o puerta (oído que acerca a la superficie)' },
+    { num: 25, text: 'Contestar al teléfono (oído al que acerca espontáneamente el auricular)' },
+    { num: 26, text: 'Escuchar el tictac de un reloj o a través de un tubo acústico monoaural' }
+  ];
+
+  const renderItemRows = (items) => items.map(item => `
+    <div class="harris-item-row" data-row-num="${item.num}">
+      <span class="harris-item-num">${item.num}</span>
+      <div class="harris-item-body">
+        <span class="harris-item-text">${item.text}</span>
+        <input type="text" class="harris-item-note-input" data-harris-note="${item.num}" placeholder="Observaciones cualitativas (duda, temblor, cambio de mano, precisión...)" />
+      </div>
+      <div class="harris-item-options">
+        <button type="button" class="harris-opt-btn" data-harris-item="${item.num}" data-val="D" title="Mano/Pie/Ojo/Oído Derecho">D</button>
+        <button type="button" class="harris-opt-btn" data-harris-item="${item.num}" data-val="I" title="Mano/Pie/Ojo/Oído Izquierdo">I</button>
+        <button type="button" class="harris-opt-btn" data-harris-item="${item.num}" data-val="A" title="Ambos / Mixto / Ambivalente">A</button>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="orientation-doc-container harris-test-container">
+      <!-- Encabezado Clínico y Áreas -->
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">📋 TEST PSICOMÉTRICO & OBSERVACIONAL</span>
+          <span class="modal-area-pill">🔬 ÁREA: EVALUACIÓN CLÍNICA</span>
+          <span class="modal-area-pill">🧠 ÁREA: NEUROPSICOLOGÍA</span>
+          <span class="modal-area-pill">🧬 ÁREA: SEMIOLOGÍA</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">⚡ ÁREA: PROCESOS PSICOLÓGICOS</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem;">
+          <div>
+            <h2 class="orientation-main-title">TEST DE HARRIS ( OBSERVACIÓN DE LA LATERALIDAD)</h2>
+            <p class="orientation-authors-meta">Albert J. Harris • Batería de Observación y Baremación de la Dominancia Lateral (Mano, Pie, Ojo, Oído)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Acción Hero con el botón solicitado con puntito rojo PDF -->
+      <div class="harris-hero-action-bar">
+        <div class="harris-hero-left">
+          <span class="harris-hero-badge">⚡ Test Digital Interactivo (Activo)</span>
+          <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;">Aplicación en pantalla con baremación automática en tiempo real</span>
+        </div>
+        <a href="/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-top" title="Descargar test original en formato PDF para impresión">
+          <span class="pdf-pulse-badge">
+            <span class="pdf-red-dot"></span>
+            <span class="pdf-label-text">PDF</span>
+          </span>
+          <span class="btn-physical-text">Descargar Test en Físico</span>
+          <span class="btn-download-icon">⬇</span>
+        </a>
+      </div>
+
+      <!-- Sección 1: Ficha Técnica & ¿Para qué sirve? -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">FUNDAMENTACIÓN CLÍNICA</div>
+        <h3 class="orientation-sec-title">¿Para qué sirve el Test de Harris y qué evalúa?</h3>
+        <p class="orientation-lead-p">
+          El <strong>Test de Dominancia Lateral de Harris</strong> es una prueba clínica y psicopedagógica clásica diseñada para examinar de forma sistemática la preferencia y dominancia de cuatro segmentos corporales: <strong>Mano, Pie, Ojo y Oído</strong>. Permite contrastar la lateralidad espontánea o innata frente a la aprendida o forzada socialmente.
+        </p>
+
+        <div class="orientation-dimensions-grid" style="margin-top: 1rem;">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🎯</span>
+              <div>
+                <h4 class="dim-name">1. Lateralidad Cruzada</h4>
+                <span class="dim-badge">Riesgo en Aprendizaje</span>
+              </div>
+            </div>
+            <p class="dim-desc">Detecta discordancias entre el ojo director y la mano ejecutora (ej. ojo izquierdo y mano derecha). Es un factor crítico en dificultades de lectoescritura, dislexias, inversión de grafemas (b/d, p/q) y problemas en cálculo.</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🧭</span>
+              <div>
+                <h4 class="dim-name">2. Lateralidad Mal Afirmada</h4>
+                <span class="dim-badge">Esquema Corporal</span>
+              </div>
+            </div>
+            <p class="dim-desc">Identifica cuando no existe una clara dominancia hemisférica consolidada, generando vacilación motora, lentitud al escribir, fatiga atencional y dificultades de orientación derecha-izquierda.</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🧠</span>
+              <div>
+                <h4 class="dim-name">3. Zurdos Contrariados</h4>
+                <span class="dim-badge">Neurodesarrollo</span>
+              </div>
+            </div>
+            <p class="dim-desc">Diferencia la lateralidad biológica natural de adaptaciones culturales impuestas, previniendo alteraciones psicomotrices secundarias, tartamudez y bloqueos afectivos vinculados al forzamiento de la mano diestra.</p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">📋</span>
+              <div>
+                <h4 class="dim-name">4. Plan Psicomotriz</h4>
+                <span class="dim-badge">Intervención</span>
+              </div>
+            </div>
+            <p class="dim-desc">Proporciona el perfil y la fórmula de Harris completa para diseñar programas terapéuticos específicos de afianzamiento lateral, psicomotricidad y apoyo escolar.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección 2: Registro de Datos del Evaluado -->
+      <section class="orientation-block-card" style="padding: 1rem 1.25rem;">
+        <div class="orientation-section-badge">PROTOCOLO DE CONSULTA</div>
+        <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.65rem;">Datos del Paciente</h4>
+        <div class="harris-patient-bar">
+          <div class="harris-patient-field">
+            <label for="harris-patient-name">Nombre y Apellidos</label>
+            <input type="text" id="harris-patient-name" placeholder="Ej. Mateo Silva" />
+          </div>
+          <div class="harris-patient-field">
+            <label for="harris-patient-age">Edad / Curso Escolar</label>
+            <input type="text" id="harris-patient-age" placeholder="Ej. 7 años (2° Básico)" />
+          </div>
+          <div class="harris-patient-field">
+            <label for="harris-patient-date">Fecha de Evaluación</label>
+            <input type="text" id="harris-patient-date" value="${new Date().toLocaleDateString('es-ES')}" />
+          </div>
+          <div class="harris-patient-field">
+            <label for="harris-patient-examiner">Evaluador / Profesional</label>
+            <input type="text" id="harris-patient-examiner" placeholder="Ej. Psicólogo / Neuropsicólogo" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección 3: Dashboard de Baremación en Tiempo Real -->
+      <section class="harris-score-dashboard">
+        <div class="harris-dashboard-header">
+          <div class="harris-dashboard-title">
+            <span>📊</span>
+            <span>Baremación y Cálculo en Tiempo Real</span>
+          </div>
+          <span class="harris-progress-badge" id="harris-progress-label">0 / 26 ítems evaluados (0%)</span>
+        </div>
+
+        <!-- 4 Segmentos -->
+        <div class="harris-segments-grid">
+          <div class="harris-seg-card" id="harris-seg-mano-card">
+            <div class="harris-seg-name">✋ Mano (10 Ítems)</div>
+            <div class="harris-seg-grade" id="harris-seg-mano-grade">-</div>
+            <div class="harris-seg-counts" id="harris-seg-mano-counts">D: 0 | I: 0 | A: 0</div>
+          </div>
+          <div class="harris-seg-card" id="harris-seg-ojo-card">
+            <div class="harris-seg-name">👁️ Ojo (3 Ítems)</div>
+            <div class="harris-seg-grade" id="harris-seg-ojo-grade">-</div>
+            <div class="harris-seg-counts" id="harris-seg-ojo-counts">D: 0 | I: 0 | A: 0</div>
+          </div>
+          <div class="harris-seg-card" id="harris-seg-pie-card">
+            <div class="harris-seg-name">🦶 Pie (10 Ítems)</div>
+            <div class="harris-seg-grade" id="harris-seg-pie-grade">-</div>
+            <div class="harris-seg-counts" id="harris-seg-pie-counts">D: 0 | I: 0 | A: 0</div>
+          </div>
+          <div class="harris-seg-card" id="harris-seg-oido-card">
+            <div class="harris-seg-name">👂 Oído (3 Ítems)</div>
+            <div class="harris-seg-grade" id="harris-seg-oido-grade">-</div>
+            <div class="harris-seg-counts" id="harris-seg-oido-counts">D: 0 | I: 0 | A: 0</div>
+          </div>
+        </div>
+
+        <!-- Fórmula y Diagnóstico -->
+        <div class="harris-formula-banner">
+          <div class="harris-formula-card">
+            <label>Fórmula de Harris [ Mano . Ojo . Pie . Oído ]</label>
+            <div class="harris-formula-display" id="harris-formula-display">- . - . - . -</div>
+          </div>
+          <div class="harris-diag-card">
+            <div class="harris-diag-header">
+              <label style="margin: 0;">Diagnóstico Clínico de Lateralidad</label>
+              <span class="harris-diag-badge" id="harris-diag-badge">Pendiente de Evaluación</span>
+            </div>
+            <p class="harris-diag-desc" id="harris-diag-desc">
+              Seleccione las opciones observadas en los ítems inferiores para calcular la fórmula de Harris y el diagnóstico clínico de dominancia lateral.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección 4: Los 26 Ítems del Test Digital -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">BATERÍA DIGITAL INTERACTIVA</div>
+        <h3 class="orientation-sec-title">Protocolo de Aplicación Digital (26 Ítems de Observación)</h3>
+        <p class="orientation-p" style="margin-bottom: 1.25rem;">
+          Instrucción para el examinador: Pida al paciente que realice cada acción sin sugerirle con qué mano, pie u ojo realizarla. Marque <strong>[D]</strong> si usa el lado derecho, <strong>[I]</strong> si usa el izquierdo, o <strong>[A]</strong> si usa ambos o muestra ambivalencia marcada.
+        </p>
+
+        <!-- Bloque I: Mano -->
+        <div class="harris-dim-section">
+          <div class="harris-dim-header">
+            <div class="harris-dim-title-group">
+              <span class="harris-dim-badge-icon">✋</span>
+              <div>
+                <h4 class="harris-dim-title">I. Dominancia de la Mano (10 Ítems)</h4>
+                <span class="harris-dim-criterion">Criterio: D = 10 DER | d = 7-9 DER | I = 10 IZQ | i = 7-9 IZQ | A = Resto</span>
+              </div>
+            </div>
+          </div>
+          <div class="harris-items-list">
+            ${renderItemRows(itemsMano)}
+          </div>
+        </div>
+
+        <!-- Bloque II: Pie -->
+        <div class="harris-dim-section" style="margin-top: 1.25rem;">
+          <div class="harris-dim-header">
+            <div class="harris-dim-title-group">
+              <span class="harris-dim-badge-icon">🦶</span>
+              <div>
+                <h4 class="harris-dim-title">II. Dominancia del Pie (10 Ítems)</h4>
+                <span class="harris-dim-criterion">Criterio: D = 10 DER | d = 7-9 DER | I = 10 IZQ | i = 7-9 IZQ | A = Resto</span>
+              </div>
+            </div>
+          </div>
+          <div class="harris-items-list">
+            ${renderItemRows(itemsPie)}
+          </div>
+        </div>
+
+        <!-- Bloque III: Ojo -->
+        <div class="harris-dim-section" style="margin-top: 1.25rem;">
+          <div class="harris-dim-header">
+            <div class="harris-dim-title-group">
+              <span class="harris-dim-badge-icon">👁️</span>
+              <div>
+                <h4 class="harris-dim-title">III. Dominancia del Ojo (3 Ítems)</h4>
+                <span class="harris-dim-criterion">Criterio: D = 3/3 DER | d = 2/3 DER | I = 3/3 IZQ | i = 2/3 IZQ | A = Mixto</span>
+              </div>
+            </div>
+          </div>
+          <div class="harris-items-list">
+            ${renderItemRows(itemsOjo)}
+          </div>
+        </div>
+
+        <!-- Bloque IV: Oído -->
+        <div class="harris-dim-section" style="margin-top: 1.25rem;">
+          <div class="harris-dim-header">
+            <div class="harris-dim-title-group">
+              <span class="harris-dim-badge-icon">👂</span>
+              <div>
+                <h4 class="harris-dim-title">IV. Dominancia del Oído (3 Ítems)</h4>
+                <span class="harris-dim-criterion">Criterio: D = 3/3 DER | d = 2/3 DER | I = 3/3 IZQ | i = 2/3 IZQ | A = Mixto</span>
+              </div>
+            </div>
+          </div>
+          <div class="harris-items-list">
+            ${renderItemRows(itemsOido)}
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección 5: Tabla de Criterios y Baremos Teóricos -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">BAREMO CLÍNICO DE HARRIS</div>
+        <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">Criterios de Puntuación y Perfiles Diagnósticos</h4>
+        <div class="orientation-table-wrap">
+          <table class="orientation-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Segmento</th>
+                <th style="width: 20%;">Puntaje / Aciertos</th>
+                <th style="width: 15%;">Símbolo</th>
+                <th>Significado Clínico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mano (10 ítems)</strong></td>
+                <td>10 de 10 Derecha<br>7 a 9 Derecha<br>10 de 10 Izquierda<br>7 a 9 Izquierda<br>Otras combinaciones</td>
+                <td><strong style="color: #0284c7;">D</strong><br><strong style="color: #0284c7;">d</strong><br><strong style="color: #6366f1;">I</strong><br><strong style="color: #6366f1;">i</strong><br><strong style="color: #f59e0b;">A / M</strong></td>
+                <td>Diestro completo manual<br>Diestro moderado / incompleto<br>Zurdo completo manual<br>Zurdo moderado / incompleto<br>Ambidextrismo / uso indistinto</td>
+              </tr>
+              <tr>
+                <td><strong>Pie (10 ítems)</strong></td>
+                <td>10 de 10 Derecha<br>7 a 9 Derecha<br>10 de 10 Izquierda<br>7 a 9 Izquierda<br>Otras combinaciones</td>
+                <td><strong style="color: #0284c7;">D</strong><br><strong style="color: #0284c7;">d</strong><br><strong style="color: #6366f1;">I</strong><br><strong style="color: #6366f1;">i</strong><br><strong style="color: #f59e0b;">A / M</strong></td>
+                <td>Diestro podal completo<br>Diestro podal moderado<br>Zurdo podal completo<br>Zurdo podal moderado<br>Uso podal mixto / indistinto</td>
+              </tr>
+              <tr>
+                <td><strong>Ojo (3 ítems)</strong></td>
+                <td>3 de 3 Derecha<br>2 de 3 Derecha<br>3 de 3 Izquierda<br>2 de 3 Izquierda<br>Alternancia</td>
+                <td><strong style="color: #0284c7;">D</strong><br><strong style="color: #0284c7;">d</strong><br><strong style="color: #6366f1;">I</strong><br><strong style="color: #6366f1;">i</strong><br><strong style="color: #f59e0b;">A</strong></td>
+                <td>Ojo director derecho consistente<br>Ojo derecho predominante<br>Ojo director izquierdo consistente<br>Ojo izquierdo predominante<br>Preferencia ocular ambivalente</td>
+              </tr>
+              <tr>
+                <td><strong>Oído (3 ítems)</strong></td>
+                <td>3 de 3 Derecha<br>2 de 3 Derecha<br>3 de 3 Izquierda<br>2 de 3 Izquierda<br>Alternancia</td>
+                <td><strong style="color: #0284c7;">D</strong><br><strong style="color: #0284c7;">d</strong><br><strong style="color: #6366f1;">I</strong><br><strong style="color: #6366f1;">i</strong><br><strong style="color: #f59e0b;">A</strong></td>
+                <td>Oído director derecho consistente<br>Oído derecho predominante<br>Oído director izquierdo consistente<br>Oído izquierdo predominante<br>Preferencia auditiva ambivalente</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Barra de Acciones Inferior -->
+      <div class="harris-toolbar-bottom">
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="harris-btn-copy-report" id="btn-harris-copy-report">
+            <span>📋</span>
+            <span>Copiar Informe Clínico Completo</span>
+          </button>
+          <button type="button" class="harris-btn-reset" id="btn-harris-reset">
+            <span>🔄</span>
+            <span>Reiniciar Test</span>
+          </button>
+          <button type="button" class="harris-btn-reset" id="btn-harris-print">
+            <span>🖨️</span>
+            <span>Imprimir Evaluación</span>
+          </button>
+        </div>
+
+        <a href="/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-bottom" title="Descargar test original en formato PDF para impresión">
+          <span class="pdf-pulse-badge">
+            <span class="pdf-red-dot"></span>
+            <span class="pdf-label-text">PDF</span>
+          </span>
+          <span class="btn-physical-text">Descargar Test en Físico</span>
+          <span class="btn-download-icon">⬇</span>
+        </a>
+      </div>
+    </div>
+  `;
+}
+
 class LibraryController {
   constructor() {
     this.searchInput = document.getElementById('library-search-input');
@@ -4383,6 +4788,8 @@ class LibraryController {
         matchesCat = (item.areas || []).includes('PROCESOS PSICOLÓGICOS') || (item.categories || []).some(c => c.toLowerCase().includes('procesos'));
       } else if (this.currentCategory === 'evaluacion') {
         matchesCat = (item.areas || []).includes('EVALUACIÓN CLÍNICA') || (item.categories || []).some(c => c.toLowerCase().includes('evaluación'));
+      } else if (this.currentCategory === 'tests') {
+        matchesCat = item.isTest || item.category === 'tests' || (item.areas || []).includes('PSICOMETRÍA');
       } else {
         matchesCat = item.category === this.currentCategory;
       }
@@ -4436,6 +4843,13 @@ class LibraryController {
         <img src="${resolvedCover}" alt="Portada ${item.title}" class="lib-card-cover-thumb" loading="lazy" onerror="this.style.display='none'" />
       ` : '';
 
+      const physicalPdfBtnHtml = (item.id === 'test-harris-lateralidad' && item.pdfUrl) ? `
+        <a href="${item.pdfUrl}" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="lib-card-physical-download-btn" title="Descargar test original en formato PDF para impresión" onclick="event.stopPropagation()">
+          <span class="pdf-pulse-badge"><span class="pdf-red-dot"></span>PDF</span>
+          <span>Físico</span>
+        </a>
+      ` : '';
+
       const pdfBtnHtml = item.pdfUrl ? `
         <button type="button" class="lib-btn-read-pdf" data-read-pdf-id="${item.id}" title="Leer en lector nativo de PDF">
           <span>📖</span>
@@ -4483,10 +4897,11 @@ class LibraryController {
           </div>
           <div class="lib-card-footer">
             <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-tertiary);">${item.badge}</span>
-            <div style="display: flex; gap: 0.45rem; align-items: center;">
+            <div style="display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap;">
+              ${physicalPdfBtnHtml}
               ${pdfBtnHtml}
               <button type="button" class="lib-btn-inspect" data-inspect-id="${item.id}">
-                <span>${item.isEvaluationProtocol ? 'Explorar Protocolo' : (item.isClinicalEntity ? 'Ver Contenido' : 'Explorar Ficha')}</span>
+                <span>${item.isTest ? 'Abrir Test Digital' : (item.isEvaluationProtocol ? 'Explorar Protocolo' : (item.isClinicalEntity ? 'Ver Contenido' : 'Explorar Ficha'))}</span>
                 <span>→</span>
               </button>
             </div>
@@ -4718,6 +5133,9 @@ class LibraryController {
             }
           });
         });
+      } else if (item.id === 'test-harris-lateralidad') {
+        this.modalContent.innerHTML = getHarrisTestDocHtml();
+        this.initHarrisDigitalTest(this.modalContent);
       } else if (item.coverImage || item.prologue || item.indexTree) {
         const resolvedCover = (item.coverImage || item.coverUrl) ? LibraryAssetResolver.resolveCoverUrl(item) : '';
         const resolvedPdf = LibraryAssetResolver.resolvePdfUrl(item);
@@ -5259,6 +5677,304 @@ class LibraryController {
     if (this.pdfTouchHint && !this.pdfTouchHint.classList.contains('fade-out')) {
       this.pdfTouchHint.classList.add('fade-out');
     }
+  }
+
+  initHarrisDigitalTest(container) {
+    if (!container) return;
+
+    // State for 26 items: { [itemId]: 'D' | 'I' | 'A' | null }
+    const state = {};
+    for (let i = 1; i <= 26; i++) state[i] = null;
+
+    const optButtons = container.querySelectorAll('.harris-opt-btn');
+    const noteInputs = container.querySelectorAll('.harris-item-note-input');
+    const progressEl = container.querySelector('#harris-progress-label');
+    const segManoGrade = container.querySelector('#harris-seg-mano-grade');
+    const segManoCounts = container.querySelector('#harris-seg-mano-counts');
+    const segOjoGrade = container.querySelector('#harris-seg-ojo-grade');
+    const segOjoCounts = container.querySelector('#harris-seg-ojo-counts');
+    const segPieGrade = container.querySelector('#harris-seg-pie-grade');
+    const segPieCounts = container.querySelector('#harris-seg-pie-counts');
+    const segOidoGrade = container.querySelector('#harris-seg-oido-grade');
+    const segOidoCounts = container.querySelector('#harris-seg-oido-counts');
+    const formulaDisplay = container.querySelector('#harris-formula-display');
+    const diagBadge = container.querySelector('#harris-diag-badge');
+    const diagDesc = container.querySelector('#harris-diag-desc');
+    const btnCopy = container.querySelector('#btn-harris-copy-report');
+    const btnReset = container.querySelector('#btn-harris-reset');
+    const btnPrint = container.querySelector('#btn-harris-print');
+
+    const updateCalculations = () => {
+      const countMano = { D: 0, I: 0, A: 0, total: 0 };
+      const countPie = { D: 0, I: 0, A: 0, total: 0 };
+      const countOjo = { D: 0, I: 0, A: 0, total: 0 };
+      const countOido = { D: 0, I: 0, A: 0, total: 0 };
+
+      for (let i = 1; i <= 10; i++) {
+        const val = state[i];
+        if (val) { countMano[val]++; countMano.total++; }
+      }
+      for (let i = 11; i <= 20; i++) {
+        const val = state[i];
+        if (val) { countPie[val]++; countPie.total++; }
+      }
+      for (let i = 21; i <= 23; i++) {
+        const val = state[i];
+        if (val) { countOjo[val]++; countOjo.total++; }
+      }
+      for (let i = 24; i <= 26; i++) {
+        const val = state[i];
+        if (val) { countOido[val]++; countOido.total++; }
+      }
+
+      const totalAnswered = countMano.total + countPie.total + countOjo.total + countOido.total;
+
+      // Calculate grades:
+      // Mano (10 items): 10 D -> D; 7-9 D -> d; 10 I -> I; 7-9 I -> i; else -> A
+      let gradeMano = '-';
+      if (countMano.total > 0) {
+        if (countMano.D === 10) gradeMano = 'D';
+        else if (countMano.D >= 7) gradeMano = 'd';
+        else if (countMano.I === 10) gradeMano = 'I';
+        else if (countMano.I >= 7) gradeMano = 'i';
+        else if (countMano.total === 10) gradeMano = 'A';
+        else gradeMano = countMano.D > countMano.I ? 'd?' : (countMano.I > countMano.D ? 'i?' : 'A?');
+      }
+
+      // Pie (10 items)
+      let gradePie = '-';
+      if (countPie.total > 0) {
+        if (countPie.D === 10) gradePie = 'D';
+        else if (countPie.D >= 7) gradePie = 'd';
+        else if (countPie.I === 10) gradePie = 'I';
+        else if (countPie.I >= 7) gradePie = 'i';
+        else if (countPie.total === 10) gradePie = 'A';
+        else gradePie = countPie.D > countPie.I ? 'd?' : (countPie.I > countPie.D ? 'i?' : 'A?');
+      }
+
+      // Ojo (3 items): 3 D -> D; 2 D -> d; 3 I -> I; 2 I -> i; else -> A
+      let gradeOjo = '-';
+      if (countOjo.total > 0) {
+        if (countOjo.D === 3) gradeOjo = 'D';
+        else if (countOjo.D === 2) gradeOjo = 'd';
+        else if (countOjo.I === 3) gradeOjo = 'I';
+        else if (countOjo.I === 2) gradeOjo = 'i';
+        else if (countOjo.total === 3) gradeOjo = 'A';
+        else gradeOjo = countOjo.D > countOjo.I ? 'd?' : (countOjo.I > countOjo.D ? 'i?' : 'A?');
+      }
+
+      // Oído (3 items): 3 D -> D; 2 D -> d; 3 I -> I; 2 I -> i; else -> A
+      let gradeOido = '-';
+      if (countOido.total > 0) {
+        if (countOido.D === 3) gradeOido = 'D';
+        else if (countOido.D === 2) gradeOido = 'd';
+        else if (countOido.I === 3) gradeOido = 'I';
+        else if (countOido.I === 2) gradeOido = 'i';
+        else if (countOido.total === 3) gradeOido = 'A';
+        else gradeOido = countOido.D > countOido.I ? 'd?' : (countOido.I > countOido.D ? 'i?' : 'A?');
+      }
+
+      // Update UI
+      if (progressEl) progressEl.textContent = `${totalAnswered} / 26 ítems evaluados (${Math.round((totalAnswered / 26) * 100)}%)`;
+      if (segManoGrade) segManoGrade.textContent = gradeMano;
+      if (segManoCounts) segManoCounts.textContent = `D: ${countMano.D} | I: ${countMano.I} | A: ${countMano.A}`;
+      if (segOjoGrade) segOjoGrade.textContent = gradeOjo;
+      if (segOjoCounts) segOjoCounts.textContent = `D: ${countOjo.D} | I: ${countOjo.I} | A: ${countOjo.A}`;
+      if (segPieGrade) segPieGrade.textContent = gradePie;
+      if (segPieCounts) segPieCounts.textContent = `D: ${countPie.D} | I: ${countPie.I} | A: ${countPie.A}`;
+      if (segOidoGrade) segOidoGrade.textContent = gradeOido;
+      if (segOidoCounts) segOidoCounts.textContent = `D: ${countOido.D} | I: ${countOido.I} | A: ${countOido.A}`;
+
+      const formulaStr = `${gradeMano} . ${gradeOjo} . ${gradePie} . ${gradeOido}`;
+      if (formulaDisplay) formulaDisplay.textContent = formulaStr;
+
+      // Diagnosis logic
+      if (diagBadge && diagDesc) {
+        diagBadge.className = 'harris-diag-badge';
+        if (totalAnswered === 0) {
+          diagBadge.textContent = 'Pendiente de Evaluación';
+          diagDesc.textContent = 'Seleccione las respuestas del paciente para calcular la fórmula de dominancia lateral de Harris y su perfil clínico.';
+        } else if (totalAnswered < 26) {
+          diagBadge.textContent = 'En Progreso';
+          diagDesc.textContent = `Completados ${totalAnswered} de 26 ítems. La conclusión definitiva se consolidará al finalizar la batería.`;
+        } else {
+          // Completed
+          const cleanM = gradeMano.replace('?', '');
+          const cleanO = gradeOjo.replace('?', '');
+          const cleanP = gradePie.replace('?', '');
+          const cleanOi = gradeOido.replace('?', '');
+
+          const isPureD = cleanM === 'D' && cleanO === 'D' && cleanP === 'D' && cleanOi === 'D';
+          const isPureI = cleanM === 'I' && cleanO === 'I' && cleanP === 'I' && cleanOi === 'I';
+          const hasLower = [cleanM, cleanO, cleanP, cleanOi].some(g => g === 'd' || g === 'i');
+          const hasAmbi = [cleanM, cleanO, cleanP, cleanOi].some(g => g === 'A');
+
+          const isCrossEyeHand = (cleanM.toUpperCase() === 'D' && cleanO.toUpperCase() === 'I') || (cleanM.toUpperCase() === 'I' && cleanO.toUpperCase() === 'D');
+          const isCrossFootHand = (cleanM.toUpperCase() === 'D' && cleanP.toUpperCase() === 'I') || (cleanM.toUpperCase() === 'I' && cleanP.toUpperCase() === 'D');
+
+          if (isPureD) {
+            diagBadge.classList.add('status-diestro');
+            diagBadge.textContent = 'Diestro Completo (D.D.D.D)';
+            diagDesc.textContent = 'Preferencia homogénea diestra en todas las dimensiones corporales (mano, ojo, pie y oído). Adecuada integración interhemisférica sin cruces visomotores.';
+          } else if (isPureI) {
+            diagBadge.classList.add('status-zurdo');
+            diagBadge.textContent = 'Zurdo Completo (I.I.I.I)';
+            diagDesc.textContent = 'Preferencia homogénea zurda en todas las dimensiones corporales. Organización neurofuncional armónica del hemisferio derecho.';
+          } else if (isCrossEyeHand) {
+            diagBadge.classList.add('status-cruzada');
+            diagBadge.textContent = 'Lateralidad Cruzada Ojo-Mano';
+            diagDesc.textContent = 'Discrepancia entre la dominancia de la mano y del ojo director. Factor de riesgo clínico prioritario para dislexias, dificultades de lectoescritura, inversiones de grafemas y problemas visoespaciales.';
+          } else if (isCrossFootHand) {
+            diagBadge.classList.add('status-cruzada');
+            diagBadge.textContent = 'Lateralidad Cruzada Podal-Manual';
+            diagDesc.textContent = 'Discrepancia entre la extremidad superior e inferior. Puede repercutir en el esquema corporal global, equilibrio dinámico y coordinación psicomotriz gruesa.';
+          } else if (hasLower) {
+            diagBadge.classList.add('status-mal-afirmada');
+            diagBadge.textContent = 'Lateralidad Mal Afirmada / Incompleta';
+            diagDesc.textContent = 'Presencia de dominancia atenuada o fluctuante en uno o más segmentos. La lateralización se encuentra en consolidación o debilitada. Se desaconseja forzarla y se sugiere estimulación psicomotriz.';
+          } else if (hasAmbi) {
+            diagBadge.classList.add('status-mixta');
+            diagBadge.textContent = 'Lateralidad Mixta o Ambidextrismo';
+            diagDesc.textContent = 'Uso indiferenciado o mixto de ambos lados en tareas funcionales. Evaluar si existe dificultad de orientación espacial o fatiga ejecutiva.';
+          } else {
+            diagBadge.textContent = 'Perfil de Lateralidad Definido';
+            diagDesc.textContent = `Fórmula diagnóstica: ${formulaStr}. Se aprecian particularidades en la organización neurofuncional de los segmentos corporales.`;
+          }
+        }
+      }
+    };
+
+    // Bind option buttons
+    optButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemNum = parseInt(btn.getAttribute('data-harris-item'), 10);
+        const val = btn.getAttribute('data-val');
+        const parentRow = btn.closest('.harris-item-row');
+
+        if (state[itemNum] === val) {
+          // Deselect
+          state[itemNum] = null;
+          btn.classList.remove('is-active-d', 'is-active-i', 'is-active-a');
+          if (parentRow) parentRow.classList.remove('is-answered');
+        } else {
+          state[itemNum] = val;
+          const siblings = parentRow ? parentRow.querySelectorAll('.harris-opt-btn') : [];
+          siblings.forEach(s => s.classList.remove('is-active-d', 'is-active-i', 'is-active-a'));
+
+          if (val === 'D') btn.classList.add('is-active-d');
+          else if (val === 'I') btn.classList.add('is-active-i');
+          else if (val === 'A') btn.classList.add('is-active-a');
+
+          if (parentRow) parentRow.classList.add('is-answered');
+        }
+
+        updateCalculations();
+      });
+    });
+
+    // Reset button
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (!confirm('¿Deseas reiniciar todas las respuestas del Test de Harris?')) return;
+        for (let i = 1; i <= 26; i++) state[i] = null;
+        optButtons.forEach(b => b.classList.remove('is-active-d', 'is-active-i', 'is-active-a'));
+        noteInputs.forEach(n => { n.value = ''; });
+        container.querySelectorAll('.harris-item-row').forEach(r => r.classList.remove('is-answered'));
+        const patientInputs = container.querySelectorAll('.harris-patient-field input');
+        patientInputs.forEach(p => { p.value = ''; });
+        updateCalculations();
+      });
+    }
+
+    // Print button
+    if (btnPrint) {
+      btnPrint.addEventListener('click', () => {
+        window.print();
+      });
+    }
+
+    // Copy report button
+    if (btnCopy) {
+      btnCopy.addEventListener('click', () => {
+        const patientName = container.querySelector('#harris-patient-name')?.value || 'Sin especificar';
+        const patientAge = container.querySelector('#harris-patient-age')?.value || 'Sin especificar';
+        const evalDate = container.querySelector('#harris-patient-date')?.value || new Date().toLocaleDateString('es-ES');
+        const examiner = container.querySelector('#harris-patient-examiner')?.value || 'PsiOS';
+
+        const formStr = formulaDisplay ? formulaDisplay.textContent : '---';
+        const diagStr = diagBadge ? diagBadge.textContent : '---';
+        const descStr = diagDesc ? diagDesc.textContent : '---';
+
+        const manoCounts = segManoCounts ? segManoCounts.textContent : '';
+        const ojoCounts = segOjoCounts ? segOjoCounts.textContent : '';
+        const pieCounts = segPieCounts ? segPieCounts.textContent : '';
+        const oidoCounts = segOidoCounts ? segOidoCounts.textContent : '';
+
+        const manoG = segManoGrade ? segManoGrade.textContent : '-';
+        const ojoG = segOjoGrade ? segOjoGrade.textContent : '-';
+        const pieG = segPieGrade ? segPieGrade.textContent : '-';
+        const oidoG = segOidoGrade ? segOidoGrade.textContent : '-';
+
+        const notesList = [];
+        container.querySelectorAll('.harris-item-row').forEach(row => {
+          const num = row.querySelector('.harris-item-num')?.textContent?.trim();
+          const text = row.querySelector('.harris-item-text')?.textContent?.trim();
+          const note = row.querySelector('.harris-item-note-input')?.value?.trim();
+          const ans = state[parseInt(num, 10)] || 'No evaluado';
+          if (note || ans !== 'No evaluado') {
+            notesList.push(`- Ítem ${num}. ${text} [Resp: ${ans}]${note ? ` -> Nota: ${note}` : ''}`);
+          }
+        });
+
+        const reportText = `========================================================
+TEST DE HARRIS (OBSERVACIÓN DE LA LATERALIDAD)
+INFORME DE EVALUACIÓN DIGITAL CLÍNICA - PsiOS
+========================================================
+PACIENTE: ${patientName}
+EDAD / CURSO: ${patientAge}
+FECHA DE EVALUACIÓN: ${evalDate}
+EVALUADOR/A: ${examiner}
+
+--- RESULTADOS POR DIMENSIÓN ---
+1. Dominancia Manual (10 ítems):
+   ${manoCounts} | Clasificación: [ ${manoG} ]
+
+2. Dominancia Ocular (3 ítems):
+   ${ojoCounts} | Clasificación: [ ${ojoG} ]
+
+3. Dominancia Podal (10 ítems):
+   ${pieCounts} | Clasificación: [ ${pieG} ]
+
+4. Dominancia Auditiva (3 ítems):
+   ${oidoCounts} | Clasificación: [ ${oidoG} ]
+
+--- FÓRMULA DE HARRIS [ Mano . Ojo . Pie . Oído ] ---
+Fórmula: [ ${formStr} ]
+
+--- CONCLUSIÓN DIAGNÓSTICA ---
+Diagnóstico: ${diagStr}
+Interpretación Clínica:
+${descStr}
+
+--- REGISTRO DE ÍTEMS Y OBSERVACIONES CUALITATIVAS ---
+${notesList.length > 0 ? notesList.join('\n') : '(Sin observaciones cualitativas registradas)'}
+========================================================
+Generado por el Sistema PsiOS - Módulo Biblioteca & Psicometría`;
+
+        navigator.clipboard.writeText(reportText).then(() => {
+          const origText = btnCopy.innerHTML;
+          btnCopy.innerHTML = '<span>✓</span><span>¡Informe Copiado con Éxito!</span>';
+          setTimeout(() => {
+            btnCopy.innerHTML = origText;
+          }, 2500);
+        }).catch(err => {
+          alert('No se pudo copiar automáticamente: ' + err);
+        });
+      });
+    }
+
+    // Run initial calculation
+    updateCalculations();
   }
 }
 

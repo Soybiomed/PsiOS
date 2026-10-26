@@ -10442,9 +10442,636 @@ body.in-admin-view .hero-right {
   }
 }
 
+/* ==========================================================================
+   HARRIS LATERAL DOMINANCE TEST & PHYSICAL PDF DOWNLOAD BADGE
+   ========================================================================== */
 
+/* Physical PDF Download Button with Pulsing Red Dot Badge */
+.btn-download-physical-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(239, 68, 68, 0.28);
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #b91c1c;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+.btn-download-physical-pdf:hover {
+  background: #ffffff;
+  border-color: #ef4444;
+  color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2), 0 2px 6px rgba(0, 0, 0, 0.06);
+}
 
+.btn-download-physical-pdf:active {
+  transform: translateY(0);
+}
 
+.pdf-pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.2rem 0.55rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 9999px;
+  line-height: 1;
+}
 
+.pdf-red-dot {
+  width: 7.5px;
+  height: 7.5px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.85);
+  animation: pulsePdfRedDot 2s infinite ease-in-out;
+  display: inline-block;
+}
 
+@keyframes pulsePdfRedDot {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.85;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.pdf-label-text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #dc2626;
+  text-transform: uppercase;
+}
+
+.btn-physical-text {
+  letter-spacing: -0.01em;
+}
+
+.btn-download-icon {
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-download-physical-pdf:hover .btn-download-icon {
+  transform: translateY(1.5px);
+}
+
+/* Card version for catalog grid */
+.lib-card-physical-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #dc2626;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lib-card-physical-download-btn:hover {
+  background: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.18);
+  transform: translateY(-1px);
+}
+
+/* Harris Test Digital Container */
+.harris-test-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Hero Action Bar */
+.harris-hero-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.harris-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.harris-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  background: rgba(2, 132, 199, 0.1);
+  color: #0284c7;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Patient Bar */
+.harris-patient-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  padding: 1.15rem 1.35rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.harris-patient-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.harris-patient-field label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+}
+
+.harris-patient-field input {
+  padding: 0.5rem 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.harris-patient-field input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+/* Real-Time Live Scoring Dashboard */
+.harris-score-dashboard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 249, 255, 0.8) 100%);
+  border: 1.5px solid rgba(2, 132, 199, 0.2);
+  border-radius: 20px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 6px 24px rgba(2, 132, 199, 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.harris-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(2, 132, 199, 0.12);
+}
+
+.harris-dashboard-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0369a1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.harris-progress-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.harris-segments-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .harris-segments-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.harris-seg-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.harris-seg-card.active-dominance {
+  border-color: #0284c7;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
+}
+
+.harris-seg-name {
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin-bottom: 0.25rem;
+}
+
+.harris-seg-grade {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #0284c7;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+}
+
+.harris-seg-counts {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Formula & Diagnosis Cards */
+.harris-formula-banner {
+  display: grid;
+  grid-template-columns: minmax(210px, auto) 1fr;
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .harris-formula-banner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.harris-formula-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.harris-formula-card label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-bottom: 0.35rem;
+}
+
+.harris-formula-display {
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.harris-diag-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.harris-diag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.harris-diag-badge {
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+  display: inline-block;
+}
+
+.harris-diag-badge.status-diestro {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+}
+
+.harris-diag-badge.status-zurdo {
+  background: rgba(99, 102, 241, 0.14);
+  color: #4338ca;
+}
+
+.harris-diag-badge.status-cruzada {
+  background: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+
+.harris-diag-badge.status-mal-afirmada {
+  background: rgba(245, 158, 11, 0.14);
+  color: #b45309;
+}
+
+.harris-diag-badge.status-mixta {
+  background: rgba(168, 85, 247, 0.14);
+  color: #7e22ce;
+}
+
+.harris-diag-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Dimension Sections & Items */
+.harris-dim-section {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  padding: 1.25rem 1.4rem;
+  backdrop-filter: blur(10px);
+}
+
+.harris-dim-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.harris-dim-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.harris-dim-badge-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(2, 132, 199, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.harris-dim-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.harris-dim-criterion {
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+.harris-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.harris-item-row {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.harris-item-row:hover {
+  background: #ffffff;
+  border-color: rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.harris-item-row.is-answered {
+  border-left: 3.5px solid #0284c7;
+}
+
+@media (max-width: 640px) {
+  .harris-item-row {
+    grid-template-columns: 2rem 1fr;
+    gap: 0.6rem;
+  }
+  .harris-item-options {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+.harris-item-num {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.04);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.harris-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.harris-item-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.harris-item-note-input {
+  padding: 0.3rem 0.65rem;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.harris-item-note-input:focus {
+  background: #ffffff;
+  border-color: #0284c7;
+}
+
+.harris-item-options {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.harris-opt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.harris-opt-btn:hover {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.harris-opt-btn.is-active-d {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+}
+
+.harris-opt-btn.is-active-i {
+  background: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+}
+
+.harris-opt-btn.is-active-a {
+  background: #f59e0b;
+  color: #ffffff;
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+/* Action Toolbar (Bottom) */
+.harris-toolbar-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  padding: 1.1rem 1.4rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+}
+
+.harris-btn-copy-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  transition: all 0.2s ease;
+}
+
+.harris-btn-copy-report:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+}
+
+.harris-btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.harris-btn-reset:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.25);
+}
