@@ -99,6 +99,11 @@ export class LibraryAssetResolver {
       return rawUrl;
     }
 
+    if (item.id === 'test-harris-lateralidad') {
+      const r2Bucket = this.getCloudflareR2Url();
+      return `${r2Bucket}/TEST%20DE%20HARRIS%20(%20OBSERVACI%C3%93N%20DE%20LA%20LATERALIDAD).pdf`;
+    }
+
     const fileName = rawUrl.split('/').pop();
     if (!fileName) return '';
 

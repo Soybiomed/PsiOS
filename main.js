@@ -6,6 +6,7 @@ import { clinicSyncService } from './firebase/clinic-sync-service.js';
 import { LibraryAssetResolver } from './firebase/library-resolver.js';
 import { getStoredFirebaseConfig, setStoredFirebaseConfig } from './firebase/firebase-config.js';
 import { patientCryptoService } from './patient-crypto-service.js';
+import { ADDITIONAL_CLINICAL_CATALOG, ADDITIONAL_DOCS_HTML, setupAdditionalModalListeners } from './clinical-concepts-data.js';
 
 
 /* ==========================================================================
@@ -1649,7 +1650,11 @@ const LIBRARY_CATALOG = [
     icon: '✋',
     author: 'Albert J. Harris (Harris Tests of Lateral Dominance)',
     badge: 'Test Clínico de Lateralidad • Digital & Físico',
-    pdfUrl: '/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf',
+    cloudHosted: true,
+    pdfUrl: 'https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/TEST%20DE%20HARRIS%20(%20OBSERVACI%C3%93N%20DE%20LA%20LATERALIDAD).pdf',
+    chapters: [
+      { page: 1, title: 'Hoja de Observación y Baremación del Test de Harris' }
+    ],
     areas: ['EVALUACIÓN CLÍNICA', 'PSICOMETRÍA', 'NEUROPSICOLOGÍA', 'SEMIOLOGÍA', 'DESARROLLO INFANTIL', 'PROCESOS PSICOLÓGICOS'],
     academicAffiliation: 'Exploración Neurofuncional del Esquema Corporal, Dominancia Lateral y Psicomotricidad',
     summary: 'Definición: Batería clínica estandarizada para evaluar la dominancia funcional de mano, pie, ojo y oído.\n\nFunciones: Determina la fórmula de dominancia lateral (D.D.D.D) y constata la preferencia espontánea vs. aprendida.\n\nPara qué sirve: Diagnóstico de lateralidad diestra, zurda, cruzada (dislexia/lectoescritura), mal afirmada o mixta/ambidextrismo; previene dificultades de lectoescritura, orientación espacial y dispraxias.\n\nEstructura: 26 ítems distribuidos en 4 dimensiones (10 mano, 10 pie, 3 ojo, 3 oído) con fórmula diagnóstica integrada.',
@@ -1675,6 +1680,9 @@ const LIBRARY_CATALOG = [
     ]
   }
 ];
+
+LIBRARY_CATALOG.push(...ADDITIONAL_CLINICAL_CATALOG);
+window.__LIBRARY_CATALOG_REF = LIBRARY_CATALOG;
 
 
 
@@ -4146,20 +4154,26 @@ function getHarrisTestDocHtml() {
         </div>
       </div>
 
-      <!-- Barra de Acción Hero con el botón solicitado con puntito rojo PDF -->
+      <!-- Barra de Acción Hero con opciones de Lector PDF y Descarga Cloudflare -->
       <div class="harris-hero-action-bar">
         <div class="harris-hero-left">
           <span class="harris-hero-badge">⚡ Test Digital Interactivo (Activo)</span>
           <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;">Aplicación en pantalla con baremación automática en tiempo real</span>
         </div>
-        <a href="/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-top" title="Descargar test original en formato PDF para impresión">
-          <span class="pdf-pulse-badge">
-            <span class="pdf-red-dot"></span>
-            <span class="pdf-label-text">PDF</span>
-          </span>
-          <span class="btn-physical-text">Descargar Test en Físico</span>
-          <span class="btn-download-icon">⬇</span>
-        </a>
+        <div class="harris-hero-actions-group" style="display: inline-flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-open-harris-reader" id="btn-harris-open-reader-top" title="Abrir en el lector nativo de PDF integrado de PsiOS">
+            <span>📖</span>
+            <span>Abrir en Lector PDF</span>
+          </button>
+          <a href="https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/TEST%20DE%20HARRIS%20(%20OBSERVACI%C3%93N%20DE%20LA%20LATERALIDAD).pdf" target="_blank" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-top" title="Descargar o abrir test original en formato PDF desde Cloudflare R2">
+            <span class="pdf-pulse-badge">
+              <span class="pdf-red-dot"></span>
+              <span class="pdf-label-text">PDF</span>
+            </span>
+            <span class="btn-physical-text">Descargar Test en Físico</span>
+            <span class="btn-download-icon">⬇</span>
+          </a>
+        </div>
       </div>
 
       <!-- Sección 1: Ficha Técnica & ¿Para qué sirve? -->
@@ -4427,14 +4441,20 @@ function getHarrisTestDocHtml() {
           </button>
         </div>
 
-        <a href="/recursos/TEST_DE_HARRIS_OBSERVACION_DE_LA_LATERALIDAD.pdf" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-bottom" title="Descargar test original en formato PDF para impresión">
-          <span class="pdf-pulse-badge">
-            <span class="pdf-red-dot"></span>
-            <span class="pdf-label-text">PDF</span>
-          </span>
-          <span class="btn-physical-text">Descargar Test en Físico</span>
-          <span class="btn-download-icon">⬇</span>
-        </a>
+        <div class="harris-bottom-actions-group" style="display: inline-flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-open-harris-reader" id="btn-harris-open-reader-bottom" title="Abrir en el lector nativo de PDF integrado de PsiOS">
+            <span>📖</span>
+            <span>Abrir en Lector PDF</span>
+          </button>
+          <a href="https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/TEST%20DE%20HARRIS%20(%20OBSERVACI%C3%93N%20DE%20LA%20LATERALIDAD).pdf" target="_blank" download="TEST DE HARRIS ( OBSERVACION DE LA LATERALIDAD).pdf" class="btn-download-physical-pdf" id="btn-harris-download-bottom" title="Descargar o abrir test original en formato PDF desde Cloudflare R2">
+            <span class="pdf-pulse-badge">
+              <span class="pdf-red-dot"></span>
+              <span class="pdf-label-text">PDF</span>
+            </span>
+            <span class="btn-physical-text">Descargar Test en Físico</span>
+            <span class="btn-download-icon">⬇</span>
+          </a>
+        </div>
       </div>
     </div>
   `;
@@ -4442,6 +4462,7 @@ function getHarrisTestDocHtml() {
 
 class LibraryController {
   constructor() {
+    this.catalog = LIBRARY_CATALOG;
     this.searchInput = document.getElementById('library-search-input');
     this.searchClear = document.getElementById('library-search-clear');
     this.chips = document.querySelectorAll('.lib-chip');
@@ -4859,6 +4880,38 @@ class LibraryController {
         matchesCat = true;
       } else if (this.currentCategory === 'books') {
         matchesCat = item.isBook || Boolean(item.pdfUrl) || item.category === 'books';
+      } else if (this.currentCategory === 'instrumentos') {
+        matchesCat = (item.areas || []).includes('INSTRUMENTOS DEL VIVENCIAR') || 
+          ['la-conciencia', 'la-atencion', 'la-memoria', 'la-orientacion', 'la-inteligencia', 
+           'evaluacion-trastorno-conciencia', 'evaluacion-trastorno-atencion', 'evaluacion-trastorno-memoria', 
+           'evaluacion-trastorno-orientacion', 'evaluacion-trastorno-inteligencia',
+           'evaluacion-memoria-inmediata-trabajo', 'evaluacion-memoria-largo-plazo',
+           'evaluacion-conciencia-glasgow', 'evaluacion-conciencia-delirium-cam',
+           'evaluacion-deterioro-cognitivo-minimental'].includes(item.id);
+      } else if (this.currentCategory === 'elementos') {
+        matchesCat = (item.areas || []).includes('ELEMENTOS DEL VIVENCIAR') || 
+          ['el-pensamiento', 'evaluacion-trastorno-pensamiento', 'curso-pensamiento', 'evaluacion-curso-pensamiento', 
+           'contenido-delirios', 'evaluacion-contenido-delirios', 'la-sensopercepcion', 'evaluacion-trastorno-sensopercepcion', 
+           'distorsiones-sensoperceptivas', 'evaluacion-distorsiones-sensoperceptivas', 'alucinaciones-enganos', 
+           'evaluacion-alucinaciones-enganos', 'la-afectividad', 'evaluacion-trastorno-afectividad', 
+           'la-psicomotricidad', 'evaluacion-trastorno-psicomotricidad',
+           'evaluacion-afectividad-animo', 'evaluacion-riesgo-suicida', 'evaluacion-ansiedad-panico',
+           'evaluacion-sintomas-negativos', 'evaluacion-sintomas-obsesivos-ybocs',
+           'evaluacion-signos-extrapiramidales', 'evaluacion-mimica-expresion-facial'].includes(item.id);
+      } else if (this.currentCategory === 'yo-personalidad') {
+        matchesCat = (item.areas || []).includes('PSICOLOGÍA DEL YO') || (item.areas || []).includes('PERSONALIDAD') || 
+          ['psicopatologia-del-yo', 'evaluacion-psicopatologia-yo', 'trastornos-personalidad', 'evaluacion-trastornos-personalidad'].includes(item.id);
+      } else if (this.currentCategory === 'sindromes') {
+        matchesCat = (item.areas || []).includes('SÍNDROMES CLÍNICOS') || (item.areas || []).includes('DIAGNÓSTICO SINDROMÁTICO') || 
+          ['grandes-sindromes', 'evaluacion-grandes-sindromes', 'conducta-alimentaria', 'evaluacion-conducta-alimentaria', 
+           'control-impulsos', 'evaluacion-control-impulsos', 'el-sueno', 'evaluacion-trastorno-sueno', 
+           'el-lenguaje', 'evaluacion-trastorno-lenguaje', 'evaluacion-consumo-alcohol-cage',
+           'evaluacion-examen-estado-mental-global', 'evaluacion-fobias-ansiedad-social'].includes(item.id);
+      } else if (this.currentCategory === 'infancia') {
+        matchesCat = (item.areas || []).includes('DESARROLLO INFANTIL') || (item.areas || []).includes('NEURODESARROLLO') || 
+          ['eedp-desarrollo-psicomotor', 'el-desarrollo-psicomotor', 'evaluacion-desarrollo-psicomotor', 
+           'test-harris-lateralidad', 'eedp-motor-coordinacion', 'evaluacion-eedp-motor-coordinacion', 
+           'eedp-lenguaje-social', 'evaluacion-eedp-lenguaje-social', 'evaluacion-apego-vinculo-infantil'].includes(item.id);
       } else if (this.currentCategory === 'psicopatologia') {
         matchesCat = (item.areas || []).includes('PSICOPATOLOGÍA') || item.category === 'psicopatologia' || (item.categories || []).some(c => c.toLowerCase().includes('psicopatología'));
       } else if (this.currentCategory === 'semiologia') {
@@ -5017,7 +5070,10 @@ class LibraryController {
     if (this.modalContent) {
       const d = item.details || {};
 
-      if (item.id === 'la-memoria') {
+      if (ADDITIONAL_DOCS_HTML[item.id]) {
+        this.modalContent.innerHTML = ADDITIONAL_DOCS_HTML[item.id]();
+        setupAdditionalModalListeners(item.id, this.modalContent, this);
+      } else if (item.id === 'la-memoria') {
         this.modalContent.innerHTML = getMemoryDocHtml();
         const btnGotoEval = this.modalContent.querySelector('#btn-goto-memory-eval');
         if (btnGotoEval) {
@@ -6016,6 +6072,26 @@ Generado por el Sistema PsiOS - Módulo Biblioteca & Psicometría`;
         });
       });
     }
+
+    // Open Native PDF Reader buttons
+    const openHarrisPdfReader = () => {
+      const book = (window.__LIBRARY_CATALOG_REF || LIBRARY_CATALOG).find(x => x.id === 'test-harris-lateralidad');
+      if (book) {
+        if (window.psiosLibrary) {
+          window.psiosLibrary.closeModal();
+          window.psiosLibrary.openPdfReader(book, 1);
+        } else if (this && typeof this.openPdfReader === 'function') {
+          this.closeModal();
+          this.openPdfReader(book, 1);
+        }
+      }
+    };
+
+    const btnOpenTop = container.querySelector('#btn-harris-open-reader-top');
+    if (btnOpenTop) btnOpenTop.addEventListener('click', openHarrisPdfReader);
+
+    const btnOpenBottom = container.querySelector('#btn-harris-open-reader-bottom');
+    if (btnOpenBottom) btnOpenBottom.addEventListener('click', openHarrisPdfReader);
 
     // Run initial calculation
     updateCalculations();

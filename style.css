@@ -7541,6 +7541,112 @@ body.text-fullscreen-active #modal-patient-sheet-backdrop {
   transform: translateY(-1px);
 }
 
+/* Quick Section Navigation Bar inside Modals */
+.orientation-nav-pills-bar {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding: 0.35rem 0 0.65rem 0;
+  margin-bottom: 0.75rem;
+  scrollbar-width: thin;
+}
+
+.orientation-nav-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(0, 0, 0, 0.035);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.orientation-nav-pill-btn:hover {
+  background: var(--text-primary);
+  color: #ffffff;
+  border-color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+/* Patient Speech & Clinical Quotes Callout */
+.clinical-speech-box {
+  padding: 0.85rem 1.15rem;
+  background: rgba(99, 102, 241, 0.06);
+  border-left: 3px solid #6366f1;
+  border-radius: 0 12px 12px 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+  margin: 0.75rem 0;
+  position: relative;
+}
+
+.clinical-speech-box strong {
+  color: #4f46e5;
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.clinical-speech-quote {
+  font-style: italic;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Clear Pedagogical Subdivision Banner */
+.pedagogical-division-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 14px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pedagogical-banner-text {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.pedagogical-banner-text strong {
+  color: var(--text-primary);
+}
+
+.pedagogical-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.8rem;
+  background: #ffffff;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #4f46e5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pedagogical-link-btn:hover {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
 /* ==========================================================================
    10. CLOUDFLARE LICENSING & FIREBASE CLINICAL CLOUD STYLES
    Pure Minimalist & Neutral Liquid-Glass Design System
@@ -10445,6 +10551,38 @@ body.in-admin-view .hero-right {
 /* ==========================================================================
    HARRIS LATERAL DOMINANCE TEST & PHYSICAL PDF DOWNLOAD BADGE
    ========================================================================== */
+
+/* Open Harris PDF in Native Reader Button */
+.btn-open-harris-reader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1.5px solid rgba(37, 99, 235, 0.35);
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-open-harris-reader:hover {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: #2563eb;
+  color: #1e40af;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2), 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.btn-open-harris-reader:active {
+  transform: translateY(0);
+}
 
 /* Physical PDF Download Button with Pulsing Red Dot Badge */
 .btn-download-physical-pdf {
