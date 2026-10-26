@@ -84,53 +84,76 @@ export class LibraryAssetResolver {
 
   /**
    * Resuelve la URL óptima para abrir un libro o recurso PDF.
-   * En la app de escritorio, devuelve INCONDICIONALMENTE la ruta local sin peticiones web.
-   * En web, consulta Cloudflare R2 y recurre a la ruta local relativa si no está disponible.
+   * - Si el recurso tiene URL absoluta o está configurado en Cloudflare, conecta a la nube directamente.
+   * - En la app de escritorio, si es local y no requiere nube, usa la ruta empaquetada.
+   * - En web o modo nube, consulta Cloudflare R2 transparente y fluidamente.
    */
   static resolvePdfUrl(item) {
     if (!item) return '';
 
-    const localUrl = (item.pdfUrl || '').trim();
-    if (!localUrl) return '';
+    const rawUrl = (item.pdfUrl || '').trim();
+    if (!rawUrl) return '';
 
-    // Si es la aplicación instalada en computadora, usar siempre la ruta local instantánea
-    if (this.isDesktopApp()) {
-      return localUrl;
+    // Si ya es una URL remota directa (Cloudflare R2, CDN, etc.), devolverla directamente
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
     }
 
-    const fileName = localUrl.split('/').pop();
+    const fileName = rawUrl.split('/').pop();
     if (!fileName) return '';
 
-    // 1. Servidor Cloudflare R2 (Principal para Web)
     const r2Bucket = this.getCloudflareR2Url();
+
+    // Si el item solicita explícitamente Cloudflare o está alojado en la nube
+    if (item.cloudHosted || item.preferCloud || item.useCloud) {
+      return r2Bucket ? `${r2Bucket}/${encodeURIComponent(fileName)}` : rawUrl;
+    }
+
+    // Si es la aplicación instalada en computadora y el archivo está disponible localmente
+    if (this.isDesktopApp()) {
+      return rawUrl;
+    }
+
+    // 1. Servidor Cloudflare R2 (Principal para Web)
     if (r2Bucket) {
       return `${r2Bucket}/${encodeURIComponent(fileName)}`;
     }
 
     // Por defecto, ruta local relativa
-    return localUrl;
+    return rawUrl;
   }
 
   /**
    * Resuelve la portada del libro.
-   * En escritorio: siempre ruta local `/libros/...`.
-   * En web: Cloudflare R2.
-   * Si no posee carátula definida (definiciones semiológicas, protocolos de examen, etc.), retorna '' inmediatamente.
+   * - Si es remota o cloudHosted: conecta a Cloudflare R2.
+   * - En escritorio con carátula local: usa la ruta local.
+   * - Si no posee carátula definida, retorna '' inmediatamente.
    */
   static resolveCoverUrl(item) {
     if (!item) return '';
-    const localUrl = (item.coverImage || item.coverUrl || '').trim();
-    if (!localUrl) return '';
+    const rawUrl = (item.coverImage || item.coverUrl || '').trim();
+    if (!rawUrl) return '';
 
-    if (this.isDesktopApp()) return localUrl;
+    // Si ya es una URL remota directa (Cloudflare R2, CDN, etc.), devolverla directamente
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
 
-    const fileName = localUrl.split('/').pop();
+    const fileName = rawUrl.split('/').pop();
     if (!fileName) return '';
 
     const r2Bucket = this.getCloudflareR2Url();
+
+    // Si el item solicita explícitamente Cloudflare o está alojado en la nube
+    if (item.cloudHosted || item.preferCloud || item.useCloud) {
+      return r2Bucket ? `${r2Bucket}/${encodeURIComponent(fileName)}` : rawUrl;
+    }
+
+    if (this.isDesktopApp()) return rawUrl;
+
     if (r2Bucket) {
       return `${r2Bucket}/${encodeURIComponent(fileName)}`;
     }
-    return localUrl;
+    return rawUrl;
   }
 }
