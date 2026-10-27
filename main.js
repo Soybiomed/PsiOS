@@ -6141,7 +6141,10 @@ class LibraryController {
         matchesCat = (item.areas || []).includes('DESARROLLO INFANTIL') || (item.areas || []).includes('NEURODESARROLLO') || 
           ['eedp-desarrollo-psicomotor', 'nelson-ortiz-escala-abreviada', 'el-desarrollo-psicomotor', 'evaluacion-desarrollo-psicomotor', 
            'test-harris-lateralidad', 'eedp-motor-coordinacion', 'evaluacion-eedp-motor-coordinacion', 
-           'eedp-lenguaje-social', 'evaluacion-eedp-lenguaje-social', 'evaluacion-apego-vinculo-infantil'].includes(item.id);
+           'eedp-lenguaje-social', 'evaluacion-eedp-lenguaje-social', 'evaluacion-apego-vinculo-infantil',
+           'neurodesarrollo-infantil-ead', 'evaluacion-tamizaje-neurodesarrollo-ead1',
+           'coordinacion-visomotriz-fino-adaptativa', 'evaluacion-motricidad-fino-adaptativa-grafismo',
+           'lateralidad-esquema-corporal-desarrollo', 'evaluacion-lateralidad-dominancia-infantil'].includes(item.id);
       } else if (this.currentCategory === 'psicopatologia') {
         matchesCat = (item.areas || []).includes('PSICOPATOLOGÍA') || item.category === 'psicopatologia' || (item.categories || []).some(c => c.toLowerCase().includes('psicopatología'));
       } else if (this.currentCategory === 'semiologia') {
@@ -6151,7 +6154,11 @@ class LibraryController {
       } else if (this.currentCategory === 'evaluacion') {
         matchesCat = (item.areas || []).includes('EVALUACIÓN CLÍNICA') || (item.categories || []).some(c => c.toLowerCase().includes('evaluación'));
       } else if (this.currentCategory === 'tests') {
-        matchesCat = item.isTest || item.category === 'tests' || (item.areas || []).includes('PSICOMETRÍA');
+        matchesCat = item.isTest || item.category === 'tests' || (item.areas || []).includes('PSICOMETRÍA') ||
+          ['tests-psicologicos-anastasi-urbina', 'psicometria-teoria-medida-baremos',
+           'evaluacion-interpretacion-perfiles-psicometricos', 'confiabilidad-error-estandar-medicion',
+           'evaluacion-estimacion-error-estandar-eem', 'validez-psicometrica-multirrasgo',
+           'teoria-respuesta-item-tri'].includes(item.id);
       } else {
         matchesCat = item.category === this.currentCategory;
       }
@@ -11663,7 +11670,7 @@ class AppNavigationController {
           // Verificar en tiempo real si la licencia fue pausada, expirada o desvinculada por el Administrador Maestro
           if (this.footerStatus) this.footerStatus.textContent = 'Verificando estado de licencia en la nube...';
           const validity = await licenseService.validateLiveLicenseStatus();
-          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v1.0.0 • Modo Clínico Activo';
+          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v1.0.1 • Modo Clínico Activo';
 
           if (!validity.valid) {
             console.warn('[Ingresar] Estado de licencia inválido:', validity);
@@ -13380,7 +13387,7 @@ class AppNavigationController {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
   // Cierre de sesión y purga global para Beta 0.0.3 en app y web
-  const APP_VERSION = '1.0.0';
+  const APP_VERSION = '1.0.1';
   try {
     const previousVersion = localStorage.getItem('psios_app_version');
     if (previousVersion !== APP_VERSION) {

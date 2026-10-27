@@ -1,6 +1,6 @@
 /**
  * PsiOS Cloudflare Worker — Motor de Licenciamiento, Panel de Administración, Datos Clínicos y Servidor R2
- * Versión: v1.0.0
+ * Versión: v1.0.1
  * 
  * Endpoints:
  * - GET  /api/status               -> Estado de salud del servicio (KV y R2)
@@ -168,7 +168,7 @@ export default {
     if (pathname === '/' || pathname === '/api/status') {
       return jsonResponse({
         service: 'PsiOS Cloud Hub (Licensing, Admin Panel, Clinical Sync & R2 CDN)',
-        version: 'v1.0.0',
+        version: 'v1.0.1',
         environment: env?.ENVIRONMENT || 'production',
         kvBound: !!kv,
         r2Bound: !!r2,

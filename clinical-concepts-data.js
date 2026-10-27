@@ -838,6 +838,304 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
       'Patrón Desorganizado/Desorientado (Tipo D - Mary Main): Movimientos Incompletos, Congelamiento (Freezing) y Miedo a la Figura de Apego',
       'Pauta Observacional de Signos de Alerta Temprana en la Díada Madre-Lactante'
     ]
+  },
+
+  // =========================================================================
+  // BLOQUE A: PSICOMETRÍA Y MEDICIÓN (ANASTASI & URBINA)
+  // BLOQUE B: NEURODESARROLLO INFANTIL (NELSON ORTIZ EAD-1 & EEDP)
+  // =========================================================================
+  {
+    id: "psicometria-teoria-medida-baremos",
+    title: "Fundamentos de Psicometría: Teoría de la Medida, Baremos y Transformación de Puntuaciones",
+    category: "psicopatologia",
+    categoryLabel: "Definición Psicométrica",
+    isClinicalEntity: true,
+    code: "PSI-MED-BAR-01",
+    icon: "📊",
+    author: "Psicometría Clásica • Anne Anastasi & Susana Urbina",
+    badge: "Metodología • Baremos & Escalas Normalizadas",
+    areas: ["PSICOMETRÍA","EVALUACIÓN CLÍNICA","METODOLOGÍA","PROCESOS PSICOLÓGICOS"],
+    academicAffiliation: "Tests Psicológicos (Anastasi & Urbina, 7.ª Ed., Caps. 3 y 4, Págs. 48-83)",
+    summary: "Fundamentación matemática y clínica de la medición psicológica: niveles de escala de Stevens (nominal, ordinal, intervalo y razón), estandarización, grupos normativos de referencia y tipificación. Desarrollo profundo de las transformaciones de puntuación bruta a puntuaciones relativas: rangos percentilares, puntuaciones estándar Z (media 0, DT 1), puntuaciones T normalizadas (media 50, DT 10), CI de desviación Wechsler (media 100, DT 15) y eneatipos/stanines (media 5, DT 2).\n\nIncluye tabla comparativa de equivalencias psicométricas universales y normas para evitar los sesgos interpretativos y la falacia de intervalo en puntuaciones ordinales.",
+    topics: [
+          "Niveles de Medición de Stevens y Límites en la Evaluación Psicológica",
+          "Puntuaciones Brutas vs. Puntuaciones Derivadas Normativas",
+          "Puntuaciones Estándar Lineales vs. Normalizadas (Transformación Z y T)",
+          "Cociente Intelectual de Desviación Wechsler (CI: Media 100, DT 15)",
+          "Rangos Percentilares: Ventajas Clínicas y Distorsión de Intervalos",
+          "Eneatipos (Stanines), Decatipos (Sten) y Puntuaciones C",
+          "Tabla Maestra de Equivalencias y Conversión entre Escalas",
+          "Citas verificadas a Anne Anastasi & Susana Urbina (Págs. 48-83)"
+    ]
+  },
+
+  {
+    id: "evaluacion-interpretacion-perfiles-psicometricos",
+    title: "Protocolo de Interpretación de Perfiles Psicométricos y Campana de Gauss Interactiva",
+    category: "evaluacion",
+    categoryLabel: "Protocolo de Evaluación",
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: "EVA-PSI-GAU-02",
+    icon: "🔔",
+    author: "Protocolo Clínico • Curva Normal, Intervalos de Confianza y Diagnóstico",
+    badge: "Evaluación Psicométrica • Campana de Gauss Dinámica",
+    areas: ["EVALUACIÓN CLÍNICA","PSICOMETRÍA","INSTRUMENTOS DEL VIVENCIAR"],
+    academicAffiliation: "Interpretación de Perfiles y Baremos (Anastasi & Urbina Págs. 48-112)",
+    summary: "Protocolo clínico estructurado para la conversión, lectura integrada e interpretación cualitativo-cuantitativa de perfiles psicométricos. Incorpora la Campana de Gauss Psicométrica Interactiva con aguja dinámica en tiempo real, cálculo instantáneo de equivalencias entre CI Wechsler, Z, T, Percentil y Stanine, banda de intervalo de confianza al 95% basada en el Error Estándar de Medición (EEM), y las 5 fases clínicas para la redacción de informes según los estándares de la APA.",
+    topics: [
+          "Campana de Gauss Psicométrica Interactiva con Marcador Dinámico SVG",
+          "Conversión Multiescala en Tiempo Real (CI Wechsler, T, Z, Percentil, Stanine)",
+          "Banda Gráfica del Intervalo de Confianza al 95% con Error Estándar",
+          "Fase 1: Verificación de Validez del Protocolo y Escalas de Control",
+          "Fase 2: Interpretación del Índice Global Compuesto vs. Índices Específicos",
+          "Fase 3: Análisis de Discrepancias Intraindividuales (Puntos Fuertes y Débiles)",
+          "Fase 4: Formulación Diagnóstica Cualitativa (Clasificaciones DSM-5 / Wechsler)",
+          "Fase 5: Directrices para la Devolución del Informe Psicológico"
+    ]
+  },
+
+  {
+    id: "confiabilidad-error-estandar-medicion",
+    title: "Confiabilidad Psicométrica, Consistencia y Error Estándar de Medición (EEM)",
+    category: "psicopatologia",
+    categoryLabel: "Definición Psicométrica",
+    isClinicalEntity: true,
+    code: "PSI-CON-EEM-03",
+    icon: "🎯",
+    author: "Teoría Clásica de los Tests • Anne Anastasi & Charles Spearman",
+    badge: "Propiedades Psicométricas • Precisión & Varianza de Error",
+    areas: ["PSICOMETRÍA","METODOLOGÍA","EVALUACIÓN CLÍNICA"],
+    academicAffiliation: "Tests Psicológicos (Anastasi & Urbina, Cap. 4, Págs. 84-112)",
+    summary: "Teoría de la confiabilidad en la evaluación psicológica fundamentada en el modelo lineal clásico de Spearman: Puntuación Observada = Puntuación Verdadera + Error (X = V + e). Tipos y procedimientos de estimación: estabilidad temporal (test-retest), formas alternas o paralelas, consistencia interna (Alfa de Cronbach, KR-20, Omega de McDonald) y confiabilidad interjueces (Kappa de Cohen y Fleiss).\n\nDesarrollo matemático del Error Estándar de Medición (EEM = s * sqrt(1 - rxx)) y del Error Estándar de la Diferencia (EED) para determinar si las discrepancias entre dos puntuaciones o subtests son estadísticamente significativas o mero ruido de medida.",
+    topics: [
+          "Modelo Clásico de Spearman: Varianza Verdadera vs. Varianza de Error",
+          "Confiabilidad Test-Retest y Efectos de Práctica o Maduración",
+          "Formas Paralelas y Equivalencia de Muestreo de Contenido",
+          "Consistencia Interna: Alfa de Cronbach, KR-20 y Coeficiente Omega",
+          "Confiabilidad Interjueces: Coeficiente Kappa de Cohen y Concordancia",
+          "Fórmula y Significado Clínico del Error Estándar de Medición (EEM)",
+          "Error Estándar de la Diferencia (EED) en Discrepancias de Subtests",
+          "Citas verificadas a Anne Anastasi & Susana Urbina (Págs. 84-112)"
+    ]
+  },
+
+  {
+    id: "evaluacion-estimacion-error-estandar-eem",
+    title: "Protocolo Clínico de Estimación de Precisión y Calculadora de EEM",
+    category: "evaluacion",
+    categoryLabel: "Protocolo de Evaluación",
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: "EVA-EEM-CAL-04",
+    icon: "🧮",
+    author: "Protocolo Psicométrico • Calculadora Dinámica de Intervalos de Confianza",
+    badge: "Evaluación Metodológica • Precisión Diagnóstica",
+    areas: ["EVALUACIÓN CLÍNICA","PSICOMETRÍA","METODOLOGÍA"],
+    academicAffiliation: "Cálculo y Reporte del Error Estándar (Anastasi & Urbina Págs. 88, 98)",
+    summary: "Protocolo metodológico para la verificación de la calidad psicométrica de un instrumento antes de su aplicación diagnóstica. Incluye la Calculadora Dinámica de Error Estándar de Medición (EEM) e Intervalos de Confianza al 90%, 95% y 99% con inputs en vivo de puntuación observada, desviación típica de la prueba y coeficiente de confiabilidad rxx, junto con la rúbrica de decisión para determinar si un test es admisible para decisiones clínicas individuales.",
+    topics: [
+          "Calculadora Interactiva de EEM e Intervalos al 90%, 95% y 99%",
+          "Criterios de Idoneidad Psicométrica: Umbrales rxx >= 0.90 para Diagnóstico Individual",
+          "Cálculo de Intervalos de Confianza Alrededor de la Puntuación Observada y Verdadera",
+          "Protocolo de Comparación de Perfiles mediante Error Estándar de la Diferencia (EED)",
+          "Modelos de Redacción de Hallazgos Psicométricos según Normas APA",
+          "Guía Práctica: Errores Frecuentes al Informar Puntuaciones Puntuales sin Intervalo"
+    ]
+  },
+
+  {
+    id: "validez-psicometrica-multirrasgo",
+    title: "Validez Psicométrica: Evidencias de Contenido, Criterio y Constructo (MTMM)",
+    category: "psicopatologia",
+    categoryLabel: "Definición Psicométrica",
+    isClinicalEntity: true,
+    code: "PSI-VAL-MTM-05",
+    icon: "🔬",
+    author: "Metodología Psicométrica • Anne Anastasi, Messick & Campbell-Fiske",
+    badge: "Validez Unificada • Red Nomológica & Evidencias",
+    areas: ["PSICOMETRÍA","METODOLOGÍA","EVALUACIÓN CLÍNICA"],
+    academicAffiliation: "Tests Psicológicos (Anastasi & Urbina, Caps. 5 y 6, Págs. 113-171)",
+    summary: "Marco contemporáneo de la validez según Samuel Messick y los estándares APA: la validez como un juicio evaluativo unitario del grado en que la evidencia empírica y la teoría apoyan la adecuación de las interpretaciones basadas en las puntuaciones de las pruebas. Análisis sistemático de las fuentes de evidencia: validez de contenido (muestreo del dominio, índice de Lawshe), validez de criterio (concurrente, predictiva, curvas ROC, sensibilidad, especificidad y razones de verosimilitud) y validez de constructo (red nomológica, matriz multirrasgo-multimétodo MTMM de Campbell y Fiske, y análisis factorial confirmatorio).",
+    topics: [
+          "Concepto Unitario de Validez de Messick vs. Tríada Clásica",
+          "Evidencia de Contenido: Muestreo de Dominio y Coeficiente Lawshe CVR",
+          "Evidencia de Criterio: Validez Concurrente y Predictiva",
+          "Diagnóstico Clínico: Sensibilidad, Especificidad, VPP, VPN y Curvas ROC",
+          "Evidencia de Constructo: Red Nomológica y Estructura Factorial",
+          "Matriz Multirrasgo-Multimétodo (MTMM): Validez Convergente vs. Discriminante",
+          "Citas verificadas a Anne Anastasi & Susana Urbina (Págs. 113-171)"
+    ]
+  },
+
+  {
+    id: "teoria-respuesta-item-tri",
+    title: "Teoría de Respuesta al Ítem (TRI) y Modelado del Rasgo Latente",
+    category: "psicopatologia",
+    categoryLabel: "Definición Psicométrica",
+    isClinicalEntity: true,
+    code: "PSI-TRI-RAS-06",
+    icon: "📈",
+    author: "Modelos Psicométricos Modernos • Rasch, Lord, Birnbaum & Anastasi",
+    badge: "Psicometría Avanzada • Curvas Características del Ítem",
+    areas: ["PSICOMETRÍA","METODOLOGÍA","PROCESOS PSICOLÓGICOS"],
+    academicAffiliation: "Tests Psicológicos (Anastasi & Urbina, Págs. 172-204)",
+    summary: "Fundamentos de la Teoría de Respuesta al Ítem (TRI) frente a las limitaciones de invariancia de la Teoría Clásica de los Tests (TCT). Modelado matemático del rasgo latente theta y Curvas Características del Ítem (CCI). Explicación detallada de los modelos logísticos de 1 parámetro (Modelo de Rasch: dificultad b), 2 parámetros (Birnbaum: discriminación a y dificultad b) y 3 parámetros (adivinación o pseudo-azar c). Función de Información del Test (FIT), error de medición condicional y aplicaciones en Tests Adaptativos Computarizados (TAC).",
+    topics: [
+          "Límites de la TCT: Dependencia del Grupo Muestral y Dificultad del Test",
+          "Concepto de Rasgo Latente (Theta) y Curva Característica del Ítem (CCI)",
+          "Modelo 1PL de Rasch: Parámetro de Dificultad (b)",
+          "Modelo 2PL de Birnbaum: Parámetro de Discriminación (a)",
+          "Modelo 3PL: Parámetro de Pseudo-Adivinación o Azar (c)",
+          "Función de Información del Ítem (FII) y del Test (FIT)",
+          "Tests Adaptativos Computarizados (TAC): Medición Óptima Individualizada",
+          "Citas verificadas a Anne Anastasi & Susana Urbina (Págs. 172-204)"
+    ]
+  },
+
+  {
+    id: "neurodesarrollo-infantil-ead",
+    title: "Neurodesarrollo Infantil Integral: Principios Ontogenéticos y Alerta Temprana (0-60 Meses)",
+    category: "infancia",
+    categoryLabel: "Fundamentos de Neurodesarrollo",
+    isClinicalEntity: true,
+    code: "NEU-DES-ORT-01",
+    icon: "🌱",
+    author: "Neurodesarrollo Clínico • Dr. Nelson Ortiz Pinilla (EAD-1 / UNICEF)",
+    badge: "Desarrollo Infantil • 4 Áreas Sistémicas 0-5 Años",
+    areas: ["DESARROLLO INFANTIL","NEURODESARROLLO","SEMIOLOGÍA","EVALUACIÓN CLÍNICA"],
+    academicAffiliation: "Escala Abreviada de Desarrollo EAD-1 (Nelson Ortiz, Págs. 5-17)",
+    summary: "Modelo holístico y neurobiológico del desarrollo infantil en los primeros 5 años de vida: leyes ontogenéticas de maduración (céfalo-caudal y próximo-distal, diferenciación refleja a voluntaria), sinaptogénesis masiva, mielinización y periodos críticos o sensibles. Estructura de las 4 áreas del desarrollo propuestas por Nelson Ortiz en la EAD-1: Motricidad Gruesa (Área A), Motricidad Fino-Adaptativa (Área B), Audición y Lenguaje (Área C) y Conducta Personal-Social (Área D).\n\nFactores de riesgo biológico (prematuridad, hipoxia perinatal, bajo peso) y psicosocial (deprivación afectiva, negligencia), signos de alerta neurológica absoluta y criterios de remisión temprana.",
+    topics: [
+          "Leyes Fundamentales: Céfalo-Caudal, Próximo-Distal y Maduración Nerviosa",
+          "Ventanas de Oportunidad y Periodos Críticos de Plasticidad Cerebral",
+          "Área A: Motricidad Gruesa (Tono, Postura, Equilibrio y Locomoción)",
+          "Área B: Motricidad Fino-Adaptativa (Coordinación Óculo-Manual y Prensión)",
+          "Área C: Audición y Lenguaje (Vocalización, Comprensión y Expresión Verbal)",
+          "Área D: Conducta Personal-Social (Vínculo, Autonomía y Socialización)",
+          "Signos de Alarma Neurológica Inmediata en Lactantes y Preescolares",
+          "Citas verificadas a Nelson Ortiz Pinilla (Págs. 5-17)"
+    ]
+  },
+
+  {
+    id: "evaluacion-tamizaje-neurodesarrollo-ead1",
+    title: "Protocolo de Tamizaje EAD-1 con Semáforo Neuroevolutivo Interactivo (0-60 Meses)",
+    category: "evaluacion",
+    categoryLabel: "Protocolo de Tamizaje",
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: "EVA-EAD-SEM-02",
+    icon: "🚦",
+    author: "Protocolo de Tamizaje • Semáforo EAD-1 & Navegador Etario Dinámico",
+    badge: "Tamizaje Infantil • Baremos EAD-1 (Rojo/Amarillo/Verde)",
+    areas: ["EVALUACIÓN CLÍNICA","DESARROLLO INFANTIL","NEURODESARROLLO","INSTRUMENTOS DEL VIVENCIAR"],
+    academicAffiliation: "Protocolo de Aplicación EAD-1 (Nelson Ortiz Págs. 18-62)",
+    summary: "Protocolo clínico estructurado de tamizaje neuroevolutivo para niños de 0 a 60 meses. Incorpora el Semáforo EAD-1 Interactivo con clasificación inmediata por rangos normativos: Alerta Roja (P < 10, T < 35), Riesgo Medio-Bajo Amarillo (P 11-25, T 36-45), Rango Medio Típico Gris/Azul (P 26-74, T 46-55), Medio-Alto Azul (P 75-89, T 56-65) y Alto Verde (P > 90, T > 65).\n\nIncluye el Navegador Interactivo de los 9 Rangos Etarios con los criterios exhaustivos de observación y evaluación en las 4 áreas (Gruesa, Fina, Lenguaje, Social), condiciones de aplicación, cálculo de edad cronológica corregida por prematurez y directrices de derivación.",
+    topics: [
+          "Semáforo EAD-1 Interactivo: Puntos de Corte Normativos (Alerta, Medio, Alto)",
+          "Navegador Etario Dinámico de los 9 Grupos de Edad (0 a 60 Meses)",
+          "Criterios Específicos por Rango: Motricidad Gruesa, Fina, Lenguaje y Social",
+          "Cálculo de Edad Cronológica y Regla de Corrección por Prematuridad",
+          "Reglas de Parada: Punto de Partida y Techo de Fracaso en la EAD-1",
+          "Condiciones de Administración: Estado del Niño, Ambiente y Materiales",
+          "Algoritmo de Derivación Médica: Neuropediatría vs. Estimulación Temprana"
+    ]
+  },
+
+  {
+    id: "coordinacion-visomotriz-fino-adaptativa",
+    title: "Coordinación Visomotriz, Prensión y Grafomotricidad en la Primera Infancia",
+    category: "infancia",
+    categoryLabel: "Fundamentos de Neurodesarrollo",
+    isClinicalEntity: true,
+    code: "NEU-MOT-VIS-03",
+    icon: "✍️",
+    author: "Psicomotricidad Fina • Nelson Ortiz, Gesell & Anastasi",
+    badge: "Motricidad Fina • Ontogenia de Prensión & Trazo",
+    areas: ["DESARROLLO INFANTIL","NEURODESARROLLO","PROCESOS PSICOLÓGICOS","EVALUACIÓN CLÍNICA"],
+    academicAffiliation: "EAD-1 Área B (Nelson Ortiz Págs. 26-31) • Tests Psicológicos (Anastasi Págs. 440-455)",
+    summary: "Ontogenia de la función manipulativa, prensión digital y coordinación óculo-manual desde el nacimiento hasta los 5 años: transición del reflejo de prensión palmar arcaico a la prensión voluntaria cúbito-palmar (4-5 meses), pinza radial en tijera (7-9 meses), pinza digital fina superior con oposición índice-pulgar (10-12 meses), agarre palmar estático (15-24 meses), pronación digital (2-3 años) y trípode dinámico maduro (4-5 años).\n\nSecuencia cronológica del grafismo infantil: del garabato involuntario desordenado a las líneas direccionales, copia de figuras geométricas (círculo, cruz, triángulo) y dibujo de la figura humana.",
+    topics: [
+          "Neuroanatomía de la Motricidad Fina: Vía Corticoespinal y Feedback Visual",
+          "Evolución del Agarre: Del Reflejo Palmar a la Pinza Superior Digital Fina",
+          "Transición del Agarre del Lápiz: Palmar -> Prono Digital -> Trípode Dinámico",
+          "Ontogenia del Grafismo: Garabato (15m), Línea (24m), Círculo (36m), Cruz (48m)",
+          "Construcción Espacial Tridimensional con Bloques y Enhebrado",
+          "Citas verificadas a Nelson Ortiz (Págs. 26-31) y Anastasi & Urbina (Págs. 440-455)"
+    ]
+  },
+
+  {
+    id: "evaluacion-motricidad-fino-adaptativa-grafismo",
+    title: "Protocolo de Evaluación Visomotora: Batería de Bloques y Grafismo Evolutivo",
+    category: "evaluacion",
+    categoryLabel: "Protocolo de Evaluación",
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: "EVA-MOT-GRA-04",
+    icon: "🧱",
+    author: "Protocolo Psicomotor • Pruebas de Bloques, Tijeras y Copia de Figuras",
+    badge: "Evaluación Psicomotriz • Tabla Evolutiva 0-60m",
+    areas: ["EVALUACIÓN CLÍNICA","DESARROLLO INFANTIL","NEURODESARROLLO","INSTRUMENTOS DEL VIVENCIAR"],
+    academicAffiliation: "Baremos y Administración del Área B (Nelson Ortiz Págs. 27-31)",
+    summary: "Protocolo clínico estructurado de examen de la coordinación visomotriz y destreza adaptativa infantil. Presenta la Tabla Evolutiva Maestra de Construcción con Bloques (torre de 2, 4, 6, 8 cubos, tren con chimenea, puente de 3 bloques y puerta de 4), habilidades de tijera y ensartado de cuentas, y la batería de copia de figuras geométricas de Nelson Ortiz y Gesell con criterios cuantitativos de aprobación y guías de intervención sensoriomotriz.",
+    topics: [
+          "Tabla Maestra de Construcción Tridimensional con Cubos (0 a 60 Meses)",
+          "Pruebas de Destreza Digital: Ensartado de Cuentas y Manejo de Tijeras",
+          "Batería de Copia de Formas Geométricas: Criterios de Aprobación y Errores Típicos",
+          "Diferenciación entre Dispraxia Visoconstructiva y Retraso Psicomotor Global",
+          "Rúbrica de Registro de Severidad y Observación de la Tensión Tónica Muscular",
+          "Programa de Estimulación Sensoriomotriz Gradual para Terapia en Hogar y Escuela"
+    ]
+  },
+
+  {
+    id: "lateralidad-esquema-corporal-desarrollo",
+    title: "Evolución de la Lateralidad Hemisférica y Construcción del Esquema Corporal",
+    category: "infancia",
+    categoryLabel: "Fundamentos de Neurodesarrollo",
+    isClinicalEntity: true,
+    code: "NEU-LAT-ESQ-05",
+    icon: "🧭",
+    author: "Desarrollo Psicomotor • Nelson Ortiz, Harris, Piaget & Anastasi",
+    badge: "Lateralidad Infantil • Somatognosia & Dominancia",
+    areas: ["DESARROLLO INFANTIL","NEURODESARROLLO","SEMIOLOGÍA","PROCESOS PSICOLÓGICOS"],
+    academicAffiliation: "EAD-1 Desarrollo Psicomotor (Nelson Ortiz Págs. 18-31) • Anastasi & Urbina (Págs. 280-295)",
+    summary: "Bases neuroevolutivas de la lateralización cerebral, maduración del cuerpo calloso y consolidación de la dominancia funcional. Etapas ontogenéticas: indiferenciación bilateral (0-2 años), alternancia funcional y exploración (2-4 años) y afirmación o fijación definitiva (4-6 años). Tipologías de lateralidad: homogénea (diestra o zurda), cruzada (mano-ojo o mano-pie divergentes), invertida o contrariada (zurdo corregido) y mixta/ambidextra.\n\nEvolución del esquema corporal y somatognosia: reconocimiento en el propio cuerpo (3-5 años), orientación derecha-izquierda sobre sí mismo (5-6 años) y reversibilidad espacial en el otro o en objetos (7-8 años). Correlatos clínicos con el aprendizaje de la lectoescritura, rotación de grafemas (b/d, p/q) y dislexia.",
+    topics: [
+          "Neurobiología de la Asimetría Hemisférica y Mielinización del Cuerpo Calloso",
+          "Fases del Desarrollo: Indiferenciación (0-2a) -> Alternancia (2-4a) -> Fijación (4-6a)",
+          "Clasificación Clínica: Homogénea, Cruzada, Invertida y Mixta / Ambidextrismo",
+          "Evolución del Esquema Corporal (Somatognosia) y Orientación Espacial",
+          "Discriminación Derecha-Izquierda sobre Sí Mismo vs. en el Otro (Piaget & Head)",
+          "Impacto en el Aprendizaje Académico: Inversión de Letras, Disgrafía y Dislexia",
+          "Citas verificadas a Nelson Ortiz (Págs. 18-31) y Anastasi & Urbina (Págs. 280-295)"
+    ]
+  },
+
+  {
+    id: "evaluacion-lateralidad-dominancia-infantil",
+    title: "Protocolo de Dominancia Lateral y Esquema Corporal en Edad Infantil",
+    category: "evaluacion",
+    categoryLabel: "Protocolo de Evaluación",
+    isClinicalEntity: true,
+    isEvaluationProtocol: true,
+    code: "EVA-LAT-DOM-06",
+    icon: "✋",
+    author: "Protocolo Clínico • Harris & EAD-1 • Batería de 4 Dimensiones",
+    badge: "Evaluación Psicomotriz • Matriz Mano-Pie-Ojo-Oído",
+    areas: ["EVALUACIÓN CLÍNICA","DESARROLLO INFANTIL","NEURODESARROLLO","INSTRUMENTOS DEL VIVENCIAR"],
+    academicAffiliation: "Evaluación de la Lateralidad y Pruebas EAD-1 (Nelson Ortiz Págs. 21, 27 • Harris)",
+    summary: "Protocolo de examen clínico estructurado para determinar la dominancia motora y sensorial en niños de 3 a 7 años a través de 4 dimensiones independientes: Manual (10 tareas funcionales), Pedial (4 pruebas motoras), Ocular (3 pruebas de puntería monocular) y Auditiva (3 pruebas de auscultación). Incorpora la fórmula matemática del Coeficiente de Lateralidad (PL = (D - I) / (D + I) * 100), matriz de riesgo pedagógico y pautas de intervención sin forzar la lateralidad natural.",
+    topics: [
+          "Batería de Exploración en 4 Dimensiones: Mano, Pie, Ojo y Oído",
+          "Fórmula del Coeficiente de Lateralidad (PL) e Interpretación Numérica",
+          "Pruebas de Exploración del Esquema Corporal y Orientación Derecha-Izquierda",
+          "Matriz de Identificación de Riesgo: Cruce Óculo-Manual y Dislexia del Desarrollo",
+          "Pautas de Conducta Clínica: Errores Iatrogénicos de Forzar el Uso de la Mano Derecha",
+          "Plan de Reeducación Psicomotriz y Orientación a Docentes y Padres"
+    ]
   }
 ];
 
@@ -5681,6 +5979,2108 @@ export const ADDITIONAL_DOCS_HTML = {
       </section>
     </div>
   
+  `,
+
+  // =========================================================================
+  // BLOQUE A: PSICOMETRÍA (ANASTASI & URBINA)
+  // =========================================================================
+// =========================================================================
+  // 1. FUNDAMENTOS DE PSICOMETRÍA: TEORÍA DE LA MEDIDA Y BAREMOS
+  // =========================================================================
+  'psicometria-teoria-medida-baremos': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">📊 FUNDAMENTACIÓN PSICOMÉTRICA & TEORÍA DE LA MEDIDA</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🔬 ÁREA: METODOLOGÍA</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Fundamentos de Psicometría: Teoría de la Medida, Baremos y Transformación de Puntuaciones</h2>
+        <p class="orientation-authors-meta">Anne Anastasi & Susana Urbina • Tests Psicológicos (7.ª Edición, Capítulos 3 y 4, Págs. 48-83) • APA Standards</p>
+      </div>
+
+      <div class="pedagogical-division-banner">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Transición Metodológica Capital:</strong> Una puntuación bruta en un test psicológico carece por completo de significado interpretativo si no se compara con un <strong>Grupo Normativo de Referencia (Baremo)</strong> o con un criterio estandarizado. Comprender las transformaciones lineales y no lineales es el escudo fundamental contra los diagnósticos erróneos.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-goto-psicometria-eval">
+          <span>🔔 Ir a Campana de Gauss & Protocolo de Interpretación</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <div class="orientation-nav-pills-bar">
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-psi-escalas">
+          <span>📐</span>
+          <span>1. Niveles de Medición de Stevens</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-psi-transformaciones">
+          <span>🔄</span>
+          <span>2. Transformaciones de Puntuación</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-psi-tabla-maestra">
+          <span>📊</span>
+          <span>3. Tabla Maestra de Equivalencias</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-psi-sesgos">
+          <span>⚠️</span>
+          <span>4. Sesgos y Falacias Frecuentes</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-psi-citas">
+          <span>📚</span>
+          <span>5. Citas Textuales Verificadas</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN 1: NIVELES DE MEDICIÓN DE STEVENS -->
+      <section class="orientation-block-card" id="sec-psi-escalas">
+        <span class="orientation-section-badge">NIVELES EPISTEMOLÓGICOS DE MEDIDA</span>
+        <h3 class="orientation-sec-title">1. Las Cuatro Escalas de Stevens en la Evaluación Psicológica</h3>
+        <p class="orientation-lead-p">
+          En 1946, S. S. Stevens formuló la clasificación canónica de los niveles de medición que rige la psicometría moderna. Cada escala determina qué operaciones matemáticas y estadísticas son legítimas y cuáles constituyen aberraciones metodológicas:
+        </p>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🏷️</span>
+              <span class="dim-name">Escala Nominal (Identidad y Clasificación)</span>
+            </div>
+            <p class="orientation-p">
+              Los números funcionan exclusivamente como etiquetas o nombres cualitativos. No existe orden jerárquico ni magnitud.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Ejemplos Clínicos & Estadísticos</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Diagnóstico categorial:</strong> Código 1 = Depresión Mayor, 2 = Trastorno Bipolar, 3 = Esquizofrenia.</li>
+                <li><strong>Sexo / Género o Lateralidad:</strong> 1 = Diestro, 2 = Zurdo, 3 = Ambidextro.</li>
+                <li><strong>Estadísticos admisibles:</strong> Frecuencias absolutas, porcentajes y Moda. <em>Operaciones como la media o la resta no tienen sentido alguno.</em></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">📶</span>
+              <span class="dim-name">Escala Ordinal (Orden y Jerarquía)</span>
+            </div>
+            <p class="orientation-p">
+              Existe una relación de orden (mayor que, menor que), pero <strong>las distancias entre rangos adyacentes no son iguales</strong>.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Ejemplos Clínicos & Estadísticos</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Rangos Percentilares (PR):</strong> Un paciente en el percentil 90 tiene mayor rendimiento que uno en el percentil 80, pero la distancia cognitiva real entre PR 90 y PR 99 es inmensamente mayor que entre PR 50 y PR 59.</li>
+                <li><strong>Ítems tipo Likert:</strong> 0 = Nunca, 1 = A veces, 2 = Frecuentemente, 3 = Siempre.</li>
+                <li><strong>Estadísticos admisibles:</strong> Mediana, Cuartiles, Percentiles y Coeficiente de correlación de Spearman (rho).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">📏</span>
+              <span class="dim-name">Escala de Intervalo (Distancias Iguales)</span>
+            </div>
+            <p class="orientation-p">
+              Las unidades de medida son idénticas en cualquier tramo de la escala. Sin embargo, <strong>el cero es arbitrario y convencional</strong> (no implica ausencia total del rasgo psicológico).
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Ejemplos Clínicos & Estadísticos</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Puntuaciones Estándar (Z, T, CI Wechsler):</strong> La diferencia entre un CI de 100 y 115 (+1σ) equivale exactamente a la diferencia entre 115 y 130 (+1σ). Un CI de 0 no significa ausencia total de inteligencia.</li>
+                <li><strong>Temperatura Celsius o Fahrenheit:</strong> El 0°C es el punto de congelación del agua, no la ausencia de calor.</li>
+                <li><strong>Estadísticos admisibles:</strong> Media aritmética, Desviación típica, Correlación de Pearson (r), Análisis factorial y ANOVA.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⚖️</span>
+              <span class="dim-name">Escala de Razón (Cero Absoluto)</span>
+            </div>
+            <p class="orientation-p">
+              Posee intervalos iguales y un <strong>cero absoluto natural</strong> que indica nulidad total de la propiedad física evaluada.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Ejemplos Clínicos & Estadísticos</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Tiempo de Reacción:</strong> Medido en milisegundos en tareas atencionales de Stroop o CPT. Un tiempo de 400 ms es el doble de 200 ms.</li>
+                <li><strong>Frecuencia cardíaca / Conductancia de la piel:</strong> Registro psicofisiológico de la activación autonómica.</li>
+                <li><strong>Estadísticos admisibles:</strong> Todas las operaciones aritméticas, medias geométricas y coeficientes de variación.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: TRANSFORMACIONES DE PUNTUACIÓN -->
+      <section class="orientation-block-card" id="sec-psi-transformaciones">
+        <span class="orientation-section-badge">DERIVACIONES CUANTITATIVAS</span>
+        <h3 class="orientation-sec-title">2. De la Puntuación Bruta a las Puntuaciones Tipificadas</h3>
+        <p class="orientation-lead-p">
+          Una puntuación bruta (X) refleja únicamente el número directo de aciertos o ítems contestados. Para que adquiera valor clínico debe transformarse a una escala estándar con parámetros de media (μ) y desviación típica (σ) conocidos:
+        </p>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Principales Escalas Psicométricas Utilizadas en Clínica</div>
+          <ul class="orientation-bullet-list">
+            <li>
+              <strong>Puntuación Z (Puntuación Estándar Fundamental):</strong>
+              Expresa la distancia exacta de una puntuación a la media en unidades de desviación típica.
+              <br><code>z = (X - μ) / σ</code>
+              <br><em>Parámetros: Media = 0.00, Desviación Típica = 1.00.</em> Permite comparar directamente pruebas heterogéneas.
+            </li>
+            <li>
+              <strong>Puntuación T de McCall (Ampliamente usada en Personalidad y EAD-1):</strong>
+              Transformación lineal diseñada para eliminar los signos negativos y decimales de la escala Z.
+              <br><code>T = 50 + 10 · z</code>
+              <br><em>Parámetros: Media = 50, Desviación Típica = 10.</em> Utilizada en el MMPI-2, PAI, BASC-3 y en la tipificación de la Escala Abreviada de Nelson Ortiz.
+            </li>
+            <li>
+              <strong>Cociente Intelectual de Desviación de Wechsler (CI):</strong>
+              Creado por David Wechsler para sustituir el anticuado CI cociente mental (Edad Mental / Edad Cronológica × 100) que fracasaba en adultos.
+              <br><code>CI = 100 + 15 · z</code>
+              <br><em>Parámetros: Media = 100, Desviación Típica = 15.</em> Utilizado en WAIS-IV, WISC-V, WPPSI-IV y escalas Reynolds (RIAS).
+            </li>
+            <li>
+              <strong>Puntuaciones Escalares / Subtests Wechsler (PE):</strong>
+              Utilizadas en las subpruebas individuales (ej. Semejanzas, Dígitos, Matrices).
+              <br><code>PE = 10 + 3 · z</code>
+              <br><em>Parámetros: Media = 10, Desviación Típica = 3.</em> Rango típico entre 1 y 19.
+            </li>
+            <li>
+              <strong>Eneatipos o Stanines (Standard Nines):</strong>
+              Escala normalizada dividida en 9 intervalos estándar basada en la curva normal.
+              <br><code>Stanine = 5 + 2 · z</code> (redondeado a enteros de 1 a 9).
+              <br><em>Parámetros: Media = 5, Desviación Típica = 2.</em> Muy usada en baterías escolares y neuropsicológicas breves.
+            </li>
+            <li>
+              <strong>Decatipos o Sten (Standard Tens):</strong>
+              Escala de 10 unidades comúnmente empleada en el test 16PF de Cattell.
+              <br><code>Sten = 5.5 + 2 · z</code>
+              <br><em>Parámetros: Media = 5.5, Desviación Típica = 2.</em>
+            </li>
+          </ul>
+        </div>
+
+        <div class="orientation-clinical-alert">
+          <strong>⚠️ Advertencia Crítica de Anastasi & Urbina sobre los Rangos Percentilares:</strong>
+          Los percentiles son muy intuitivos para la devolución a pacientes y familiares ("supera al 75% de las personas de su edad"), pero <strong>comprimen los extremos y expanden el centro</strong>. Una diferencia de 5 puntos percentiles cerca de la media (del PR 48 al PR 53) representa una distancia en habilidad real casi insignificante (apenas 0.12 desviaciones típicas), mientras que esa misma diferencia de 5 percentiles en el extremo superior (del PR 94 al PR 99) representa una distancia colosal en habilidad latente (más de 0.8 desviaciones típicas).
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: TABLA MAESTRA DE EQUIVALENCIAS -->
+      <section class="orientation-block-card" id="sec-psi-tabla-maestra">
+        <span class="orientation-section-badge">SISTEMA INTEGRADO DE CONVERSIÓN</span>
+        <h3 class="orientation-sec-title">3. Tabla Maestra de Equivalencias Universales en la Curva Normal</h3>
+        <p class="orientation-p">
+          Relación exacta entre las distintas escalas psicométricas estandarizadas en función de las desviaciones típicas respecto a la media:
+        </p>
+
+        <div class="orientation-table-wrapper">
+          <table class="orientation-data-table">
+            <thead>
+              <tr>
+                <th>Desviación (σ)</th>
+                <th>Puntaje Z</th>
+                <th>CI Wechsler (μ=100, σ=15)</th>
+                <th>Puntaje T (μ=50, σ=10)</th>
+                <th>Subtest PE (μ=10, σ=3)</th>
+                <th>Percentil (PR)</th>
+                <th>Eneatipo (1-9)</th>
+                <th>Clasificación Clínica (DSM-5 / Wechsler)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>+3.00 σ</strong></td>
+                <td>+3.00</td>
+                <td>145</td>
+                <td>80</td>
+                <td>19</td>
+                <td>99.9%</td>
+                <td>9</td>
+                <td><span class="status-badge" style="background: rgba(168, 85, 247, 0.15); color: #7e22ce;">Muy Superior / Genialidad</span></td>
+              </tr>
+              <tr>
+                <td><strong>+2.00 σ</strong></td>
+                <td>+2.00</td>
+                <td>130</td>
+                <td>70</td>
+                <td>16</td>
+                <td>97.7%</td>
+                <td>9</td>
+                <td><span class="status-badge" style="background: rgba(147, 51, 234, 0.12); color: #6b21a8;">Superior / Altas Capacidades</span></td>
+              </tr>
+              <tr>
+                <td><strong>+1.33 σ</strong></td>
+                <td>+1.33</td>
+                <td>120</td>
+                <td>63</td>
+                <td>14</td>
+                <td>90.8%</td>
+                <td>8</td>
+                <td><span class="status-badge" style="background: rgba(59, 130, 246, 0.12); color: #1d4ed8;">Promedio Alto / Brillante</span></td>
+              </tr>
+              <tr>
+                <td><strong>+1.00 σ</strong></td>
+                <td>+1.00</td>
+                <td>115</td>
+                <td>60</td>
+                <td>13</td>
+                <td>84.1%</td>
+                <td>7</td>
+                <td><span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: #2563eb;">Promedio Normal-Alto</span></td>
+              </tr>
+              <tr>
+                <td><strong>0.00 σ (Media)</strong></td>
+                <td>0.00</td>
+                <td>100</td>
+                <td>50</td>
+                <td>10</td>
+                <td>50.0%</td>
+                <td>5</td>
+                <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">Promedio Típico Central</span></td>
+              </tr>
+              <tr>
+                <td><strong>-1.00 σ</strong></td>
+                <td>-1.00</td>
+                <td>85</td>
+                <td>40</td>
+                <td>7</td>
+                <td>15.9%</td>
+                <td>3</td>
+                <td><span class="status-badge" style="background: rgba(245, 158, 11, 0.12); color: #b45309;">Promedio Normal-Bajo</span></td>
+              </tr>
+              <tr>
+                <td><strong>-1.33 σ</strong></td>
+                <td>-1.33</td>
+                <td>80</td>
+                <td>37</td>
+                <td>6</td>
+                <td>9.2%</td>
+                <td>2</td>
+                <td><span class="status-badge" style="background: rgba(249, 115, 22, 0.12); color: #c2410c;">Rango Límite Inferior</span></td>
+              </tr>
+              <tr>
+                <td><strong>-2.00 σ</strong></td>
+                <td>-2.00</td>
+                <td>70</td>
+                <td>30</td>
+                <td>4</td>
+                <td>2.3%</td>
+                <td>1</td>
+                <td><span class="status-badge" style="background: rgba(239, 68, 68, 0.12); color: #b91c1c;">Capacidad Intelectual Limítrofe / Borderline</span></td>
+              </tr>
+              <tr>
+                <td><strong>-2.33 σ</strong></td>
+                <td>-2.33</td>
+                <td>65</td>
+                <td>27</td>
+                <td>3</td>
+                <td>1.0%</td>
+                <td>1</td>
+                <td><span class="status-badge" style="background: rgba(220, 38, 38, 0.15); color: #991b1b;">Discapacidad Intelectual Leve</span></td>
+              </tr>
+              <tr>
+                <td><strong>-3.00 σ</strong></td>
+                <td>-3.00</td>
+                <td>55</td>
+                <td>20</td>
+                <td>1</td>
+                <td>0.1%</td>
+                <td>1</td>
+                <td><span class="status-badge" style="background: rgba(185, 28, 28, 0.2); color: #7f1d1d;">Discapacidad Intelectual Moderada / Grave</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 4: SESGOS Y FALACIAS -->
+      <section class="orientation-block-card" id="sec-psi-sesgos">
+        <span class="orientation-section-badge">PRECAUCIONES CLÍNICAS & METODOLÓGICAS</span>
+        <h3 class="orientation-sec-title">4. Errores Críticos al Interpretar Baremos</h3>
+        <p class="orientation-p">
+          Anastasi & Urbina destacan las principales trampas en las que incurren evaluadores principiantes:
+        </p>
+
+        <div class="orientation-bullet-list">
+          <li>
+            <strong>Efecto Flynn y Antigüedad de los Baremos:</strong>
+            El rendimiento intelectual promedio de las poblaciones humanas aumentó progresivamente a lo largo del siglo XX a un ritmo de aproximadamente 3 puntos de CI por década. Si se evalúa a un niño contemporáneo con un baremo estandarizado hace 25 años, su CI estará artificialmente inflado entre 7 y 8 puntos, pudiendo enmascarar una discapacidad intelectual o un retraso del desarrollo.
+          </li>
+          <li>
+            <strong>Muestras Normativas No Representativas:</strong>
+            Aplicar baremos españoles o norteamericanos a población latinoamericana sin estudios de adaptación cultural y validación local introduce un sesgo sistemático de medición (construct underrepresentation o construct-irrelevant variance).
+          </li>
+          <li>
+            <strong>La Falacia de Reificación del CI:</strong>
+            El CI no es una propiedad estática inscrita en los genes del sujeto como la estatura, sino un indicador muestral del rendimiento del individuo en un conjunto específico de tareas culturales en un momento temporal dado.
+          </li>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 5: CITAS TEXTUALES VERIFICADAS -->
+      <section class="orientation-block-card" id="sec-psi-citas">
+        <span class="orientation-section-badge">FUENTES BIBLIOGRÁFICAS PRIMARIAS</span>
+        <h3 class="orientation-sec-title">5. Citas Textuales Verificadas en Anastasi & Urbina (7.ª Edición)</h3>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Anne Anastasi & Susana Urbina • Tests Psicológicos (Cap. 3, Pág. 52)</div>
+          <p class="orientation-p" style="font-style: italic; border-left: 3px solid #3b82f6; padding-left: 0.8rem;">
+            "Las puntuaciones crudas en cualquier prueba psicológica carecen de significado hasta que se evalúan en términos de datos interpretativos basados en normas [...] Un puntaje bruto de 65 en una prueba de vocabulario no nos dice si el examinado es brillante, promedio o deficiente. Sólo al comparar ese 65 con las puntuaciones de un grupo normativo adecuado podemos asignarle un significado clínico preciso."
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Anne Anastasi & Susana Urbina • Tests Psicológicos (Cap. 3, Pág. 68)</div>
+          <p class="orientation-p" style="font-style: italic; border-left: 3px solid #3b82f6; padding-left: 0.8rem;">
+            "La principal limitación de los rangos percentilares radica en la desigualdad de sus unidades, especialmente en los extremos de la distribución. Las diferencias entre rangos percentilares cercanos al centro son pequeñas en términos de diferencias en puntuaciones crudas, mientras que hacia los extremos de la distribución las diferencias entre rangos percentilares reflejan diferencias sustancialmente mayores en el desempeño real."
+          </p>
+        </div>
+
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
+            📖 Citas Verificadas en la Biblioteca de PsiOS (Clic para abrir en Lector PDF Nativo):
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="52" title="Consultar significado de puntuaciones brutas y baremos en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Baremos y Puntuaciones Estándar (Pág. 52) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="68" title="Consultar distorsión de percentiles en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Rangos Percentilares vs. Puntuaciones Z (Pág. 68) →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- BOTÓN INFERIOR DE NAVEGACIÓN -->
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-goto-psicometria-eval" style="padding: 0.8rem 1.4rem;">
+          <span>🔔 Ir al Protocolo con Campana de Gauss Interactiva</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 2. PROTOCOLO CON CAMPANA DE GAUSS PSICOMÉTRICA INTERACTIVA
+  // =========================================================================
+  'evaluacion-interpretacion-perfiles-psicometricos': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(99, 102, 241, 0.15); color: #4f46e5;">🔔 PROTOCOLO CLÍNICO & CAMPANA DE GAUSS DINÁMICA</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Protocolo de Interpretación de Perfiles Psicométricos y Campana de Gauss Interactiva</h2>
+        <p class="orientation-authors-meta">Psicometría Clínica • Curva Normal, Intervalos de Confianza al 95% y Directrices APA (Anastasi & Urbina Págs. 48-112)</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Regla de Oro en Psicometría Clínica:</strong> Toda puntuación psicológica debe concebirse no como un punto infinitesimal e inmutable, sino como una <strong>franja probabilística</strong> (Intervalo de Confianza) delimitada por el Error Estándar de Medición (EEM). Interactúe con la Campana de Gauss inferior para observar la conversión dinámica y su rango de error.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-back-psicometria-def" style="background: #4f46e5;">
+          <span>← Volver a Fundamentos de Medida & Baremos</span>
+        </button>
+      </div>
+
+      <!-- WIDGET DE LA CAMPANA DE GAUSS INTERACTIVA -->
+      <section class="orientation-block-card" id="sec-gauss-widget" style="border: 2px solid rgba(99, 102, 241, 0.3); background: rgba(255, 255, 255, 0.85);">
+        <span class="orientation-section-badge" style="background: rgba(99, 102, 241, 0.12); color: #4338ca;">HERRAMIENTA VISUAL DINÁMICA</span>
+        <h3 class="orientation-sec-title">Campana de Gauss Psicométrica Interactiva</h3>
+        <p class="orientation-p">
+          Mueva el control deslizante del CI Wechsler o ingrese cualquier valor para visualizar en tiempo real la ubicación en la distribución normal, el área bajo la curva, la banda del intervalo de confianza al 95% y las puntuaciones equivalentes en las demás escalas universales:
+        </p>
+
+        <!-- CONTROLES INTERACTIVOS -->
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1.25rem; padding: 1rem; background: rgba(99, 102, 241, 0.05); border-radius: 14px; border: 1px solid rgba(99, 102, 241, 0.15);">
+          <div style="flex: 1; min-width: 260px;">
+            <label for="gauss-ci-slider" style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 0.4rem;">
+              <span>Cociente Intelectual (Escala Wechsler):</span>
+              <span id="gauss-slider-val-label" style="color: #4f46e5; font-size: 1.1rem; font-weight: 800;">CI = 100</span>
+            </label>
+            <input type="range" id="gauss-ci-slider" min="40" max="160" step="1" value="100" style="width: 100%; accent-color: #4f46e5; cursor: pointer;">
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <label for="gauss-ci-input" style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary);">Entrada Manual:</label>
+            <input type="number" id="gauss-ci-input" min="40" max="160" value="100" style="width: 80px; padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.3); font-weight: 700; font-size: 1rem; text-align: center; color: #4338ca;">
+          </div>
+        </div>
+
+        <!-- BOTONES PRESET RÁPIDOS -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.25rem;">
+          <button type="button" class="gauss-preset-btn" data-ci="65" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.08); color: #b91c1c; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 65 (Discapacidad Leve)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="75" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.08); color: #b45309; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 75 (Limítrofe / Borderline)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="90" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.08); color: #1d4ed8; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 90 (Promedio Bajo)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="100" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.08); color: #047857; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 100 (Promedio Exacto μ)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="115" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.08); color: #1d4ed8; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 115 (Promedio Alto +1σ)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="130" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(147, 51, 234, 0.3); background: rgba(147, 51, 234, 0.08); color: #6b21a8; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 130 (Superior +2σ)</button>
+          <button type="button" class="gauss-preset-btn" data-ci="145" style="padding: 0.35rem 0.75rem; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.08); color: #7e22ce; font-size: 0.78rem; font-weight: 700; cursor: pointer;">CI 145 (Muy Superior / Genialidad)</button>
+        </div>
+
+        <!-- SVG DE LA CAMPANA DE GAUSS -->
+        <div style="width: 100%; overflow-x: auto; background: #ffffff; border-radius: 14px; padding: 0.5rem; box-shadow: inset 0 2px 6px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.08);">
+          <svg id="gauss-svg-canvas" viewBox="0 0 900 420" width="100%" height="auto" style="display: block; max-height: 400px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <defs>
+              <linearGradient id="gradCurvaNormal" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.02" />
+              </linearGradient>
+              <linearGradient id="gradZonaCentro" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.05" />
+              </linearGradient>
+              <filter id="shadowMarker" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#4f46e5" flood-opacity="0.4"/>
+              </filter>
+            </defs>
+
+            <!-- ZONAS DE DESVIACIÓN TÍPICA COLOREADAS -->
+            <!-- -3σ a -2σ (2.1%) -->
+            <path d="M 150,317.4 Q 200,305 250,287.5 L 250,320 L 150,320 Z" fill="rgba(239, 68, 68, 0.12)" />
+            <!-- -2σ a -1σ (13.6%) -->
+            <path d="M 250,287.5 Q 300,240 350,174.5 L 350,320 L 250,320 Z" fill="rgba(245, 158, 11, 0.12)" />
+            <!-- -1σ a 0 (34.1%) -->
+            <path d="M 350,174.5 Q 400,105 450,80 L 450,320 L 350,320 Z" fill="rgba(59, 130, 246, 0.15)" />
+            <!-- 0 a +1σ (34.1%) -->
+            <path d="M 450,80 Q 500,105 550,174.5 L 550,320 L 450,320 Z" fill="rgba(59, 130, 246, 0.15)" />
+            <!-- +1σ a +2σ (13.6%) -->
+            <path d="M 550,174.5 Q 600,240 650,287.5 L 650,320 L 550,320 Z" fill="rgba(99, 102, 241, 0.14)" />
+            <!-- +2σ a +3σ (2.1%) -->
+            <path d="M 650,287.5 Q 700,305 750,317.4 L 750,320 L 650,320 Z" fill="rgba(147, 51, 234, 0.14)" />
+
+            <!-- LÍNEA BASE -->
+            <line x1="100" y1="320" x2="800" y2="320" stroke="#94a3b8" stroke-width="2" />
+
+            <!-- LÍNEAS VERTICALES DE DESVIACIÓN TÍPICA -->
+            <line x1="150" y1="320" x2="150" y2="315" stroke="#cbd5e1" stroke-width="1.5" />
+            <line x1="250" y1="320" x2="250" y2="288" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1" />
+            <line x1="350" y1="320" x2="350" y2="175" stroke="#93c5fd" stroke-dasharray="3,3" stroke-width="1.5" />
+            <line x1="450" y1="320" x2="450" y2="80" stroke="#3b82f6" stroke-width="2" />
+            <line x1="550" y1="320" x2="550" y2="175" stroke="#93c5fd" stroke-dasharray="3,3" stroke-width="1.5" />
+            <line x1="650" y1="320" x2="650" y2="288" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1" />
+            <line x1="750" y1="320" x2="750" y2="315" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- CONTORNO CONTINUO DE LA CAMPANA DE GAUSS -->
+            <path d="M 100,319 C 140,318 190,305 250,287.5 C 310,270 380,120 450,80 C 520,120 590,270 650,287.5 C 710,305 760,318 800,319" 
+                  fill="url(#gradCurvaNormal)" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" />
+
+            <!-- PORCENTAJES DE ÁREA BAJO LA CURVA -->
+            <text x="200" y="310" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">2.14%</text>
+            <text x="300" y="275" text-anchor="middle" font-size="11" font-weight="700" fill="#d97706">13.59%</text>
+            <text x="400" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb">34.13%</text>
+            <text x="500" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb">34.13%</text>
+            <text x="600" y="275" text-anchor="middle" font-size="11" font-weight="700" fill="#7c3aed">13.59%</text>
+            <text x="700" y="310" text-anchor="middle" font-size="11" font-weight="700" fill="#9333ea">2.14%</text>
+
+            <!-- BANDA DEL INTERVALO DE CONFIANZA AL 95% (DINÁMICO) -->
+            <rect id="gauss-ci-band-rect" x="408" y="70" width="84" height="250" fill="rgba(99, 102, 241, 0.16)" rx="6" />
+
+            <!-- AGUJA / MARCADOR MÓVIL DEL PACIENTE -->
+            <g id="gauss-marker-group" transform="translate(450, 0)">
+              <line id="gauss-needle-line" x1="0" y1="50" x2="0" y2="320" stroke="#4f46e5" stroke-width="3" stroke-dasharray="4,2" />
+              <circle id="gauss-needle-circle" cx="0" cy="80" r="8" fill="#4f46e5" stroke="#ffffff" stroke-width="2.5" filter="url(#shadowMarker)" />
+              <g id="gauss-needle-tag" transform="translate(0, 38)">
+                <rect x="-40" y="-18" width="80" height="22" rx="6" fill="#1e1b4b" />
+                <text id="gauss-needle-tag-text" x="0" y="-3" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff">CI 100</text>
+              </g>
+            </g>
+
+            <!-- ETIQUETAS DEL EJE X: ESCALAS MULTIPLES -->
+            <!-- Desviación Típica (Z) -->
+            <text x="50" y="340" font-size="11" font-weight="700" fill="#64748b">Z (DT):</text>
+            <text x="150" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">-3σ</text>
+            <text x="250" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">-2σ</text>
+            <text x="350" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">-1σ</text>
+            <text x="450" y="340" text-anchor="middle" font-size="11" font-weight="800" fill="#1e293b">0 (μ)</text>
+            <text x="550" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">+1σ</text>
+            <text x="650" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">+2σ</text>
+            <text x="750" y="340" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">+3σ</text>
+
+            <!-- CI Wechsler -->
+            <text x="50" y="362" font-size="11" font-weight="700" fill="#4f46e5">CI Wechsler:</text>
+            <text x="150" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">55</text>
+            <text x="250" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">70</text>
+            <text x="350" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">85</text>
+            <text x="450" y="362" text-anchor="middle" font-size="12" font-weight="800" fill="#312e81">100</text>
+            <text x="550" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">115</text>
+            <text x="650" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">130</text>
+            <text x="750" y="362" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5">145</text>
+
+            <!-- Puntuación T -->
+            <text x="50" y="384" font-size="11" font-weight="700" fill="#0891b2">Puntaje T:</text>
+            <text x="150" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">20</text>
+            <text x="250" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">30</text>
+            <text x="350" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">40</text>
+            <text x="450" y="384" text-anchor="middle" font-size="11" font-weight="800" fill="#0e7490">50</text>
+            <text x="550" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">60</text>
+            <text x="650" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">70</text>
+            <text x="750" y="384" text-anchor="middle" font-size="11" font-weight="600" fill="#0891b2">80</text>
+
+            <!-- Rangos Percentilares -->
+            <text x="50" y="406" font-size="11" font-weight="700" fill="#059669">Percentil (PR):</text>
+            <text x="150" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">0.1%</text>
+            <text x="250" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">2.3%</text>
+            <text x="350" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">15.9%</text>
+            <text x="450" y="406" text-anchor="middle" font-size="11" font-weight="800" fill="#047857">50.0%</text>
+            <text x="550" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">84.1%</text>
+            <text x="650" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">97.7%</text>
+            <text x="750" y="406" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">99.9%</text>
+          </svg>
+        </div>
+
+        <!-- DASHBOARD DE RESULTADOS EN TIEMPO REAL -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 1.25rem;">
+          <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 0.85rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #4338ca; margin-bottom: 0.2rem;">Puntuación Z</div>
+            <div id="gauss-val-z" style="font-size: 1.4rem; font-weight: 800; color: #312e81;">0.00</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Media = 0, DT = 1</div>
+          </div>
+
+          <div style="background: rgba(8, 145, 178, 0.08); border: 1px solid rgba(8, 145, 178, 0.2); border-radius: 12px; padding: 0.85rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #0891b2; margin-bottom: 0.2rem;">Puntuación T</div>
+            <div id="gauss-val-t" style="font-size: 1.4rem; font-weight: 800; color: #0e7490;">50.0</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Media = 50, DT = 10</div>
+          </div>
+
+          <div style="background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: 12px; padding: 0.85rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #059669; margin-bottom: 0.2rem;">Rango Percentil (PR)</div>
+            <div id="gauss-val-pr" style="font-size: 1.4rem; font-weight: 800; color: #047857;">50.0 %</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Supera al 50.0%</div>
+          </div>
+
+          <div style="background: rgba(147, 51, 234, 0.08); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px; padding: 0.85rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #7c3aed; margin-bottom: 0.2rem;">Eneatipo / Stanine</div>
+            <div id="gauss-val-stanine" style="font-size: 1.4rem; font-weight: 800; color: #581c87;">5</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Escala del 1 al 9</div>
+          </div>
+
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 0.85rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #d97706; margin-bottom: 0.2rem;">Intervalo 95% (EEM 3.2)</div>
+            <div id="gauss-val-ci95" style="font-size: 1.25rem; font-weight: 800; color: #b45309;">94 - 106</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Puntuación Verdadera</div>
+          </div>
+        </div>
+
+        <!-- CLASIFICACIÓN DIAGNÓSTICA CUALITATIVA -->
+        <div style="margin-top: 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary);">Clasificación Cualitativa Normativa:</span>
+          <span id="gauss-val-diag" style="font-size: 0.95rem; font-weight: 800; padding: 0.35rem 0.85rem; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: #047857;">
+            Promedio / Rango Normal Típico
+          </span>
+        </div>
+      </section>
+
+      <!-- SECCIÓN DE PROTOCOLO DE INTERPRETACIÓN CLÍNICA EN 5 FASES -->
+      <section class="orientation-block-card" id="sec-fases-protocolo">
+        <span class="orientation-section-badge">METODOLOGÍA EN 5 ETAPAS</span>
+        <h3 class="orientation-sec-title">Protocolo Estructurado de Interpretación de Perfiles</h3>
+        <p class="orientation-p">
+          Para garantizar una lectura rigurosa de cualquier batería psicométrica (ej. WISC-V, WAIS-IV, MMPI-2, BASC-3), se debe ejecutar estrictamente la siguiente secuencia clínica:
+        </p>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 1: Verificación de Validez y Calidad del Protocolo</div>
+          <p class="orientation-p">
+            Antes de calcular puntuaciones, examine:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Condiciones físicas y motivacionales:</strong> Fatiga, ansiedad extrema, negativismo o sospecha de simulación.</li>
+            <li><strong>Escalas de Validez y Control:</strong> Ítems en blanco, aquiescencia o inconsistencia de respuestas (ej. VRIN/TRIN en pruebas de personalidad).</li>
+            <li><strong>Adecuación del Baremo:</strong> Confirmar que la edad cronológica exacta (años y meses) corresponda a la tabla utilizada.</li>
+          </ul>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 2: Interpretación del Índice Compuesto Global</div>
+          <p class="orientation-p">
+            Evalúe el Coeficiente Intelectual Total (CIT) o el Índice General de la prueba. <strong>Regla de homogeneidad:</strong> Si la discrepancia entre el índice más alto y el más bajo supera 1.5 desviaciones típicas (23 puntos de CI), el CIT no representa una entidad unitaria válida y debe interpretarse como un promedio artefacto, priorizando los índices específicos (Comprensión Verbal, Razonamiento Visoespacial, etc.).
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 3: Análisis de Discrepancias Intraindividuales (Puntos Fuertes y Débiles)</div>
+          <p class="orientation-p">
+            Compare el rendimiento de cada subescala con la media propia del sujeto (análisis ipsativo). Una fortaleza o debilidad solo se considera estadísticamente significativa si la diferencia excede el valor crítico al nivel de significación del 5% (p &lt; 0.05), calculado mediante el Error Estándar de la Diferencia (EED).
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 4: Formulación Diagnóstica Cuantitativa y Cualitativa</div>
+          <p class="orientation-p">
+            Nunca diagnostique basándose exclusivamente en una puntuación aislada. En discapacidad intelectual (DSM-5), el criterio exige déficit en el funcionamiento adaptativo en dominios conceptual, social y práctico, además del CI &lt; 70 ± 5.
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 5: Redacción del Informe según Estándares APA</div>
+          <p class="orientation-p">
+            Todo reporte profesional debe expresar las puntuaciones obligatoriamente acompañadas de su intervalo de confianza al 95%, su percentil de referencia y una descripción explicativa libre de tecnicismos incomprensibles para el paciente o su familia.
+          </p>
+        </div>
+      </section>
+
+      <!-- CITAS A LIBRO -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">REFERENCIA BIBLIOGRÁFICA</span>
+        <h3 class="orientation-sec-title">Citas Verificadas en Anastasi & Urbina (7.ª Edición)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(99, 102, 241, 0.06); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #4338ca; margin-bottom: 0.2rem;">
+            📖 Cita en Anastasi & Urbina:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="98" title="Consultar interpretación de perfiles y error estándar en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Interpretación de Perfiles y Curva Normal (Pág. 98) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-psicometria-def" style="background: #4f46e5; padding: 0.8rem 1.4rem;">
+          <span>← Volver a Definición: Baremos & Medida</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 3. CONFIABILIDAD Y ERROR ESTÁNDAR DE MEDICIÓN (CONCEPTO)
+  // =========================================================================
+  'confiabilidad-error-estandar-medicion': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">🎯 PROPIEDADES PSICOMÉTRICAS & TEORÍA CLÁSICA</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🔬 ÁREA: METODOLOGÍA</span>
+        </div>
+        <h2 class="orientation-main-title">Confiabilidad Psicométrica, Consistencia y Error Estándar de Medición (EEM)</h2>
+        <p class="orientation-authors-meta">Anne Anastasi & Susana Urbina • Tests Psicológicos (7.ª Edición, Cap. 4, Págs. 84-112) • Charles Spearman</p>
+      </div>
+
+      <div class="pedagogical-division-banner">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Fundamento Metodológico:</strong> La confiabilidad de un test responde a la pregunta crucial: <em>"¿Qué proporción de la varianza en las puntuaciones de los sujetos se debe a diferencias verdaderas en el rasgo y cuánto es mero ruido de error no sistemático?"</em>
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-goto-eem-eval">
+          <span>🧮 Ir a Calculadora de EEM & Protocolo de Precisión</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN 1: EL MODELO CLÁSICO DE SPEARMAN -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">TEORÍA CLÁSICA DE LOS TESTS (TCT)</span>
+        <h3 class="orientation-sec-title">1. El Modelo Lineal Clásico de Spearman</h3>
+        <p class="orientation-lead-p">
+          En la Teoría Clásica de los Tests formulada por Charles Spearman, toda puntuación observada (X) se descompone en dos sumandos hipotéticos:
+        </p>
+
+        <div style="background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 1.1rem; text-align: center; margin: 1rem 0;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b; letter-spacing: 0.05em;">X = V + e</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem;">
+            <strong>X</strong> (Puntuación Observada) = <strong>V</strong> (Puntuación Verdadera Latente) + <strong>e</strong> (Error de Medición No Sistemático)
+          </div>
+        </div>
+
+        <p class="orientation-p">
+          <strong>Supuestos Axiomáticos de Spearman:</strong>
+        </p>
+        <ul class="orientation-bullet-list">
+          <li><strong>Esperanza matemática del error nula:</strong> <code>E(e) = 0</code>. Los errores se distribuyen aleatoriamente con media cero; en infinitas mediciones los errores positivos y negativos se cancelan.</li>
+          <li><strong>Independencia entre error y puntuación verdadera:</strong> <code>r(V, e) = 0</code>. El instrumento no comete más errores con personas de nivel alto o bajo.</li>
+          <li><strong>Independencia entre errores de pruebas distintas:</strong> <code>r(e1, e2) = 0</code>. Los factores fortuitos que afectan una medición no correlacionan con los de otra aplicación.</li>
+        </ul>
+      </section>
+
+      <!-- SECCIÓN 2: MÉTODOS DE ESTIMACIÓN -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">PROCEDIMIENTOS EMPÍRICOS</span>
+        <h3 class="orientation-sec-title">2. Los Cuatro Métodos para Estimar la Confiabilidad</h3>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⏳</span>
+              <span class="dim-name">Estabilidad Temporal (Test-Retest)</span>
+            </div>
+            <p class="orientation-p">
+              Se administra la misma prueba en dos momentos temporales distintos a la misma muestra y se calcula la correlación de Pearson (r).
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Fuentes de Error Controladas</div>
+              <ul class="orientation-bullet-list">
+                <li>Sensible a fluctuaciones transitorias del examinado (enfermedad, fatiga, estrés).</li>
+                <li><strong>Riesgo:</strong> Efecto de práctica o aprendizaje si el intervalo es muy breve; maduración si es muy prolongado.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">👥</span>
+              <span class="dim-name">Formas Alternas / Paralelas</span>
+            </div>
+            <p class="orientation-p">
+              Se crean dos formas equivalentes del test con el mismo número de ítems, dificultad y formato, administradas de forma sucesiva.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Fuentes de Error Controladas</div>
+              <ul class="orientation-bullet-list">
+                <li>Muestreo de reactivos o contenido.</li>
+                <li>Elimina la memorización de respuestas específicas.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🧩</span>
+              <span class="dim-name">Consistencia Interna (Alfa & Omega)</span>
+            </div>
+            <p class="orientation-p">
+              Evalúa en una sola administración el grado en que todos los ítems miden el mismo constructo de forma coherente.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Coeficientes Clave</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Alfa de Cronbach (α):</strong> Promedio de todas las divisiones posibles por mitades. Sensible a la longitud de la prueba.</li>
+                <li><strong>Omega de McDonald (ω):</strong> Más robusto ante la violación de tau-equivalencia.</li>
+                <li><strong>KR-20:</strong> Versión para ítems dicotómicos (Acierto/Error).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⚖️</span>
+              <span class="dim-name">Confiabilidad Interjueces (Kappa)</span>
+            </div>
+            <p class="orientation-p">
+              Dos o más evaluadores independientes corrigen o califican los mismos protocolos clínicos o registros conductuales.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Coeficientes Clave</div>
+              <ul class="orientation-bullet-list">
+                <li><strong>Kappa de Cohen (κ):</strong> Para datos categoriales corregidos por concordancia debida al azar.</li>
+                <li><strong>Coeficiente de Correlación Intraclase (ICC):</strong> Para medidas cuantitativas continuas.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: ERROR ESTÁNDAR DE MEDICIÓN -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">PRECISIÓN DE LA PUNTUACIÓN INDIVIDUAL</span>
+        <h3 class="orientation-sec-title">3. El Error Estándar de Medición (EEM)</h3>
+        <p class="orientation-lead-p">
+          El coeficiente de confiabilidad (rxx) indica la consistencia general del test en un grupo, pero no permite saber el error en la puntuación de un paciente concreto. Para esto, Anastasi & Urbina enfatizan el uso del <strong>Error Estándar de Medición (EEM)</strong>:
+        </p>
+
+        <div style="background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 1rem; text-align: center; margin: 1rem 0;">
+          <div style="font-size: 1.4rem; font-weight: 800; color: #1d4ed8;">EEM = s · √(1 - rxx)</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            Donde <strong>s</strong> es la desviación típica de la prueba y <strong>rxx</strong> es el coeficiente de confiabilidad.
+          </div>
+        </div>
+
+        <p class="orientation-p">
+          <strong>Implicaciones clínicas fundamentales:</strong>
+        </p>
+        <ul class="orientation-bullet-list">
+          <li>Si un test tiene <em>s = 15</em> y una excelente confiabilidad <em>rxx = 0.96</em>, su <code>EEM = 15 · √(1 - 0.96) = 15 · 0.20 = 3.0 puntos</code>.</li>
+          <li>El intervalo de confianza al 95% para un CI de 100 será <code>100 ± 1.96 · 3.0 = [94.1, 105.9]</code>.</li>
+          <li>Si el test tuviera una confiabilidad mediocre de <em>rxx = 0.70</em>, el <code>EEM = 15 · √(1 - 0.70) = 15 · 0.548 = 8.2 puntos</code>, y el intervalo al 95% sería <code>[83.9, 116.1]</code>, ¡una franja de 32 puntos totalmente inútil para la toma de decisiones clínicas!</li>
+        </ul>
+
+        <div class="orientation-diff-note">
+          <strong>Regla de Decisión de Anastasi & Urbina:</strong> Ninguna decisión clínica individual que altere la vida del paciente (ej. escolarización especial, incapacidad legal, selección laboral) debe basarse en pruebas con coeficientes de confiabilidad inferiores a <strong>0.90</strong>.
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Anastasi & Urbina (7.ª Edición)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
+            📖 Citas en Anastasi & Urbina:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="88" title="Consultar cálculo de confiabilidad y error estándar en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Estimación de Confiabilidad & EEM (Pág. 88) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="95" title="Consultar confiabilidad interjueces y consistencia interna en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Confiabilidad Interjueces y Alfa (Pág. 95) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-goto-eem-eval" style="padding: 0.8rem 1.4rem;">
+          <span>🧮 Ir a la Calculadora Dinámica de EEM</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 4. PROTOCOLO Y CALCULADORA DE EEM (PROTOCOLO)
+  // =========================================================================
+  'evaluacion-estimacion-error-estandar-eem': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(16, 185, 129, 0.15); color: #047857;">🧮 PROTOCOLO METODOLÓGICO & CALCULADORA DINÁMICA</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Protocolo Clínico de Estimación de Precisión y Calculadora de EEM</h2>
+        <p class="orientation-authors-meta">Cálculo de Error Estándar e Intervalos de Confianza según Normas APA (Anastasi & Urbina Págs. 88, 98)</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Calculadora Psicométrica en Tiempo Real:</strong> Modifique la puntuación observada, la desviación típica y el coeficiente de confiabilidad para estimar instantáneamente el EEM y los tres intervalos de confianza normativos (90%, 95% y 99%).
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-back-eem-def" style="background: #059669;">
+          <span>← Volver a Fundamentos de Confiabilidad</span>
+        </button>
+      </div>
+
+      <!-- CALCULADORA DE EEM -->
+      <section class="orientation-block-card" style="border: 2px solid rgba(16, 185, 129, 0.3); background: rgba(255, 255, 255, 0.9);">
+        <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">CALCULADORA DINÁMICA</span>
+        <h3 class="orientation-sec-title">Estimador de Error Estándar de Medición</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; padding: 1.1rem; background: rgba(16, 185, 129, 0.05); border-radius: 14px; border: 1px solid rgba(16, 185, 129, 0.15);">
+          <div>
+            <label for="eem-calc-score" style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">
+              Puntuación Observada (X):
+            </label>
+            <input type="number" id="eem-calc-score" value="100" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); font-weight: 700; font-size: 1rem;">
+          </div>
+
+          <div>
+            <label for="eem-calc-sd" style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">
+              Desviación Típica de la Escala (s):
+            </label>
+            <input type="number" id="eem-calc-sd" value="15" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); font-weight: 700; font-size: 1rem;">
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.2rem;">Wechsler=15, T=10, Subtests=3</div>
+          </div>
+
+          <div>
+            <label for="eem-calc-rel" style="display: block; font-size: 0.84rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">
+              Confiabilidad del Test (rxx): <span id="eem-calc-rel-val" style="color: #047857; font-weight: 800;">0.94</span>
+            </label>
+            <input type="range" id="eem-calc-rel" min="0.50" max="0.99" step="0.01" value="0.94" style="width: 100%; accent-color: #059669; cursor: pointer;">
+          </div>
+        </div>
+
+        <!-- TARJETAS DE RESULTADOS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem;">
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #047857; margin-bottom: 0.2rem;">Error Estándar (EEM)</div>
+            <div id="eem-out-val" style="font-size: 1.6rem; font-weight: 800; color: #065f46;">3.67</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Margen elemental de error</div>
+          </div>
+
+          <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #1d4ed8; margin-bottom: 0.2rem;">Intervalo 90% (Z = 1.645)</div>
+            <div id="eem-out-ci90" style="font-size: 1.3rem; font-weight: 800; color: #1e40af;">94 - 106</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Pruebas de cribado</div>
+          </div>
+
+          <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #4338ca; margin-bottom: 0.2rem;">Intervalo 95% (Z = 1.960)</div>
+            <div id="eem-out-ci95" style="font-size: 1.3rem; font-weight: 800; color: #312e81;">93 - 107</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Estándar clínico oficial APA</div>
+          </div>
+
+          <div style="background: rgba(147, 51, 234, 0.08); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+            <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #7c3aed; margin-bottom: 0.2rem;">Intervalo 99% (Z = 2.576)</div>
+            <div id="eem-out-ci99" style="font-size: 1.3rem; font-weight: 800; color: #581c87;">91 - 109</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Forense / Peritajes</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary);">Idoneidad Psicométrica para Diagnóstico Individual:</span>
+          <span id="eem-out-verdict" style="font-size: 0.95rem; font-weight: 800; padding: 0.35rem 0.85rem; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: #047857;">
+            Excelente Confiabilidad (rxx ≥ 0.90) - Apta para Decisiones Clínicas
+          </span>
+        </div>
+      </section>
+
+      <!-- CITAS VERIFICADAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Anastasi & Urbina (7.ª Edición)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #047857; margin-bottom: 0.2rem;">
+            📖 Cita Verificada en Anastasi & Urbina:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="88" title="Consultar cálculo y reporte del error estándar en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Cálculo de EEM y Reporte de Intervalos (Pág. 88) →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- PROTOCOLO DE COMPARACIÓN: EED -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">COMPARACIÓN DE SUBTESTS</span>
+        <h3 class="orientation-sec-title">Error Estándar de la Diferencia (EED)</h3>
+        <p class="orientation-p">
+          ¿Cómo saber si la diferencia entre dos subtests (ej. Memoria de Trabajo vs. Comprensión Verbal) es real o debida al azar?
+        </p>
+        <div style="background: rgba(0,0,0,0.02); border-left: 3px solid #059669; padding: 0.85rem 1rem; border-radius: 0 10px 10px 0; margin: 0.75rem 0;">
+          <strong>Fórmula del EED:</strong> <code>EED = s · √(2 - r11 - r22)</code>
+          <br>Una diferencia se considera estadísticamente significativa si <code>|X1 - X2| ≥ 1.96 · EED</code> (al nivel del 5%).
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-eem-def" style="background: #059669; padding: 0.8rem 1.4rem;">
+          <span>← Volver a Fundamentos de Confiabilidad</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 5. VALIDEZ PSICOMÉTRICA MULTIRRASGO (CONCEPTO)
+  // =========================================================================
+  'validez-psicometrica-multirrasgo': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">🔬 MARCO UNITARIO DE VALIDEZ & EVIDENCIAS</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🔬 ÁREA: METODOLOGÍA</span>
+        </div>
+        <h2 class="orientation-main-title">Validez Psicométrica: Evidencias de Contenido, Criterio y Constructo (MTMM)</h2>
+        <p class="orientation-authors-meta">Anne Anastasi & Susana Urbina • Tests Psicológicos (Capítulos 5 y 6, Págs. 113-171) • Samuel Messick & Campbell-Fiske</p>
+      </div>
+
+      <div class="pedagogical-division-banner">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Principio de Validez Unificada de Messick:</strong> La validez no es un atributo estático del test (un test no es "válido" o "inválido" en abstracto), sino el grado en que la evidencia empírica respalda las <strong>inferencias e interpretaciones específicas</strong> que se hacen a partir de sus puntuaciones.
+        </div>
+      </div>
+
+      <!-- SECCIÓN 1: LAS FUENTES DE EVIDENCIA -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">TAXONOMÍA DE EVIDENCIAS</span>
+        <h3 class="orientation-sec-title">Las Fuentes de Evidencia de Validez</h3>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">📋</span>
+              <span class="dim-name">Evidencia Basada en el Contenido</span>
+            </div>
+            <p class="orientation-p">
+              Grado en que los reactivos constituyen una muestra representativa del dominio conductual o cognitivo que se pretende evaluar.
+            </p>
+            <ul class="orientation-bullet-list">
+              <li>Juicio de expertos e índice de validez de contenido de Lawshe (CVR).</li>
+              <li>Evita la <em>subrepresentación del constructo</em> (dejar facetas esenciales fuera) y la <em>varianza irrelevante al constructo</em> (ej. lenguaje excesivamente complejo en un test de razonamiento espacial).</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🎯</span>
+              <span class="dim-name">Evidencia Basada en Relaciones con Criterios</span>
+            </div>
+            <p class="orientation-p">
+              Eficacia de la prueba para predecir el desempeño del sujeto en una medida externa directa e independiente (el criterio).
+            </p>
+            <ul class="orientation-bullet-list">
+              <li><strong>Validez Concurrente:</strong> Criterio medido simultáneamente (ej. diagnóstico psiquiátrico mediante entrevista estructurada SCID).</li>
+              <li><strong>Validez Predictiva:</strong> Criterio medido en el futuro (ej. rendimiento académico universitario o respuesta al tratamiento).</li>
+              <li><strong>Análisis ROC:</strong> Sensibilidad, Especificidad, Área Bajo la Curva (AUC).</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🕸️</span>
+              <span class="dim-name">Evidencia Basada en el Constructo</span>
+            </div>
+            <p class="orientation-p">
+              Grado en que la prueba mide el constructo teórico latente para el cual fue diseñada dentro de una <strong>Red Nomológica</strong>.
+            </p>
+            <ul class="orientation-bullet-list">
+              <li>Análisis Factorial Exploratorio (AFE) y Confirmatorio (AFC).</li>
+              <li>Validez Convergente (correlación alta con pruebas que miden el mismo constructo).</li>
+              <li>Validez Discriminante (correlación baja con pruebas que miden rasgos ajenos).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: MATRIZ MULTIRRASGO-MULTIMÉTODO -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">DISEÑO CLÁSICO DE CAMPBELL & FISKE</span>
+        <h3 class="orientation-sec-title">La Matriz Multirrasgo-Multimétodo (MTMM)</h3>
+        <p class="orientation-lead-p">
+          Campbell y Fiske (1959) propusieron el diseño más riguroso para deslindar el rasgo psicológico del sesgo inherente al método de evaluación:
+        </p>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Los Cuatro Tipos de Coeficientes en la Matriz MTMM</div>
+          <ul class="orientation-bullet-list">
+            <li><strong>Mismo Rasgo - Mismo Método (Diagonal de Confiabilidad):</strong> La correlación de la prueba consigo misma (debe ser la más alta de la matriz, r &gt; 0.85).</li>
+            <li><strong>Mismo Rasgo - Diferente Método (Validez Convergente):</strong> Evaluar el mismo rasgo (ej. Ansiedad) mediante cuestionario de auto-informe y mediante observación conductual. Debe ser significativamente diferente de cero y elevada (r = 0.50 a 0.70).</li>
+            <li><strong>Diferente Rasgo - Mismo Método (Sesgo de Método):</strong> Evaluar rasgos distintos (ej. Ansiedad y Depresión) usando el mismo método (auto-informe). Si esta correlación es más alta que la de validez convergente, el test evalúa el sesgo de método (ej. deseabilidad social) y no el rasgo.</li>
+            <li><strong>Diferente Rasgo - Diferente Método (Validez Discriminante):</strong> Debe ser la correlación más baja de toda la matriz, confirmando la autonomía del constructo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Anastasi & Urbina (7.ª Edición)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
+            📖 Cita en Anastasi & Urbina:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="115" title="Consultar validez de constructo y matriz MTMM en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Validez de Constructo & Criterio (Pág. 115) →</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  `,
+
+  // =========================================================================
+  // 6. TEORÍA DE RESPUESTA AL ÍTEM (TRI) (CONCEPTO)
+  // =========================================================================
+  'teoria-respuesta-item-tri': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill">📈 PSICOMETRÍA AVANZADA & RASGO LATENTE</span>
+          <span class="modal-area-pill">📐 ÁREA: PSICOMETRÍA</span>
+          <span class="modal-area-pill">🔬 ÁREA: METODOLOGÍA</span>
+        </div>
+        <h2 class="orientation-main-title">Teoría de Respuesta al Ítem (TRI) y Modelado del Rasgo Latente</h2>
+        <p class="orientation-authors-meta">Anne Anastasi & Susana Urbina • Tests Psicológicos (Págs. 172-204) • Georg Rasch, Allan Birnbaum & Frederic Lord</p>
+      </div>
+
+      <div class="pedagogical-division-banner">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Salto Paradigmático:</strong> Mientras la Teoría Clásica asume que el error de medición es constante para todos los sujetos, la <strong>Teoría de Respuesta al Ítem (TRI)</strong> demuestra que el error es <em>condicional al nivel de habilidad (θ)</em> del sujeto.
+        </div>
+      </div>
+
+      <!-- SECCIÓN 1: LIMITACIONES DE LA TCT VS TRI -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">RUPTURA EPISTEMOLÓGICA</span>
+        <h3 class="orientation-sec-title">1. Por qué surgió la TRI frente a la Teoría Clásica</h3>
+        <p class="orientation-lead-p">
+          La Teoría Clásica de los Tests sufre de una circularidad insalvable: la puntuación del sujeto depende de la dificultad del examen específico que tomó, y la dificultad de los ítems depende de la habilidad de la muestra con la que se calibraron.
+        </p>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⏳</span>
+              <span class="dim-name">Teoría Clásica de los Tests (TCT)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>Unidad de análisis: la puntuación total del test.</li>
+              <li>Parámetros dependientes de la muestra normativa.</li>
+              <li>Error Estándar de Medición (EEM) constante e idéntico para todos los niveles de habilidad.</li>
+              <li>Pruebas de longitud fija para todos los evaluados.</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🚀</span>
+              <span class="dim-name">Teoría de Respuesta al Ítem (TRI)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>Unidad de análisis: el ítem individual y su Curva Característica (CCI).</li>
+              <li><strong>Invarianza de parámetros:</strong> La dificultad del ítem no cambia con el grupo examinado.</li>
+              <li>El error es condicional: la prueba mide con máxima precisión en ciertos niveles de θ y con alto error en otros.</li>
+              <li>Permite los Tests Adaptativos Computarizados (TAC).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: LOS MODELOS LOGÍSTICOS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">MODELADO MATEMÁTICO</span>
+        <h3 class="orientation-sec-title">2. Los Tres Modelos Logísticos Canónicos</h3>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">1. Modelo de 1 Parámetro (1PL / Modelo de Rasch)</div>
+          <p class="orientation-p">
+            Asume que los ítems sólo difieren en su <strong>dificultad (b)</strong>. Todos tienen igual capacidad discriminativa y el acierto por azar es nulo.
+            <br><code>P(θ) = e^(θ - b) / [1 + e^(θ - b)]</code>
+            <br>Es el modelo más parsimonioso y el único que posee la propiedad de medición específica objetiva.
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">2. Modelo de 2 Parámetros (2PL / Modelo de Birnbaum)</div>
+          <p class="orientation-p">
+            Incorpora el parámetro de <strong>discriminación (a)</strong>, que representa la pendiente de la Curva Característica en el punto de inflexión.
+            <br><code>P(θ) = e^[D · a · (θ - b)] / [1 + e^[D · a · (θ - b)]]</code> (con D = 1.7).
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">3. Modelo de 3 Parámetros (3PL)</div>
+          <p class="orientation-p">
+            Añade el parámetro de <strong>pseudo-adivinación o azar (c)</strong>, que representa la asíntota inferior (probabilidad de acertar el ítem al azar con habilidad θ infinitamente baja).
+            <br><code>P(θ) = c + (1 - c) · [e^[D · a · (θ - b)] / (1 + e^[D · a · (θ - b)])]</code>
+          </p>
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Anastasi & Urbina (7.ª Edición)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
+            📖 Cita en Anastasi & Urbina:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="180" title="Consultar modelos de Rasch y curvas de características de ítems en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Teoría de Respuesta al Ítem & Curvas CCI (Pág. 180) →</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  `,
+
+  // =========================================================================
+  // BLOQUE B: NEURODESARROLLO INFANTIL (NELSON ORTIZ EAD-1)
+  // =========================================================================
+// =========================================================================
+  // 7. NEURODESARROLLO INFANTIL INTEGRAL (CONCEPTO)
+  // =========================================================================
+  'neurodesarrollo-infantil-ead': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(16, 185, 129, 0.15); color: #047857;">🌱 NEURODESARROLLO INFANTIL INTEGRAL (0-60 MESES)</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🧠 ÁREA: NEURODESARROLLO</span>
+          <span class="modal-area-pill">🩺 ÁREA: SEMIOLOGÍA CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Neurodesarrollo Infantil Integral: Principios Ontogenéticos y Alerta Temprana (0-60 Meses)</h2>
+        <p class="orientation-authors-meta">Dr. Nelson Ortiz Pinilla • Escala Abreviada de Desarrollo EAD-1 (UNICEF / Ministerio de Salud, Págs. 5-17)</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Principio Holístico del Desarrollo:</strong> El desarrollo infantil no es un proceso lineal ni aislado, sino un fenómeno dinámico, multidimensional y sistémico. Nelson Ortiz define el desarrollo como la progresiva adquisición de habilidades motoras, adaptativas, comunicativas y afectivas resultantes de la maduración del Sistema Nervioso Central en continua interacción con el entorno sociocultural.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-goto-ead-eval" style="background: #059669;">
+          <span>🚦 Ver Protocolo con Semáforo EAD-1 Interactivo</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <div class="orientation-nav-pills-bar">
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-leyes">
+          <span>📜</span>
+          <span>1. Leyes Ontogenéticas</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-areas">
+          <span>🧩</span>
+          <span>2. Las 4 Áreas Sistémicas</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-alarmas">
+          <span>🚨</span>
+          <span>3. Signos de Alerta Temprana</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-citas">
+          <span>📚</span>
+          <span>4. Citas Textuales Verificadas</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN 1: LEYES DEL DESARROLLO -->
+      <section class="orientation-block-card" id="sec-neu-leyes">
+        <span class="orientation-section-badge">LEYES DE MADURACIÓN NEUROLÓGICA</span>
+        <h3 class="orientation-sec-title">1. Leyes Ontogenéticas de la Motricidad y Maduración Nerviosa</h3>
+        <p class="orientation-lead-p">
+          El neurodesarrollo sigue una secuencia universal e inviolable guiada por el proceso de mielinización corticoespinal:
+        </p>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">👤</span>
+              <span class="dim-name">Ley Céfalo-Caudal</span>
+            </div>
+            <p class="orientation-p">
+              La maduración neuromuscular progresa de la cabeza hacia los pies. El lactante adquiere primero el control cefálico (sostén de la cabeza a los 2-3 meses), posteriormente el tronco (sedestación estable a los 6-7 meses) y finalmente los miembros inferiores (marcha bípeda independiente a los 12-15 meses).
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">💪</span>
+              <span class="dim-name">Ley Próximo-Distal</span>
+            </div>
+            <p class="orientation-p">
+              El control motor se organiza desde el eje central del cuerpo hacia las extremidades periféricas. El niño controla primero los hombros y brazos para movimientos globales de alcance, luego el antebrazo y la muñeca, y finalmente la musculatura intrínseca de los dedos para la pinza digital fina y la grafomotricidad.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⚡</span>
+              <span class="dim-name">Diferenciación e Integración</span>
+            </div>
+            <p class="orientation-p">
+              Las respuestas motoras masivas, globales y desorganizadas del recién nacido (movimientos masivos en masa) dan paso a respuestas altamente específicas, voluntarias y moduladas corticalmente, mediante la progresiva inhibición de los reflejos arcaicos.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: LAS 4 ÁREAS DE NELSON ORTIZ -->
+      <section class="orientation-block-card" id="sec-neu-areas">
+        <span class="orientation-section-badge">MODELO SISTÉMICO EAD-1</span>
+        <h3 class="orientation-sec-title">2. Las 4 Áreas del Neurodesarrollo según Nelson Ortiz</h3>
+        <p class="orientation-lead-p">
+          La Escala Abreviada de Desarrollo EAD-1 evalúa cuatro ejes complementarios que cubren todo el espectro funcional de los primeros 5 años de vida:
+        </p>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🏃‍♂️</span>
+              <span class="dim-name">Área A: Motricidad Gruesa</span>
+            </div>
+            <p class="orientation-p">
+              Comprende la maduración del tono muscular, postura, control cefálico y de tronco, giros corporales, equilibrio estático y dinámico, marcha, carrera, trepado y salto.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Hitos de Referencia</div>
+              <ul class="orientation-bullet-list">
+                <li>3 meses: Sostén cefálico firme al elevar los brazos.</li>
+                <li>6-7 meses: Sedestación sin apoyo.</li>
+                <li>12-14 meses: Marcha independiente con base de sustentación amplia.</li>
+                <li>3 años: Salto con ambos pies; sube escaleras alternando.</li>
+                <li>5 años: Salto en un solo pie y equilibrio en puntas.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">✍️</span>
+              <span class="dim-name">Área B: Motricidad Fino-Adaptativa</span>
+            </div>
+            <p class="orientation-p">
+              Capacidad de coordinar movimientos musculares finos de la mano y los ojos, manipulación de objetos, cálculo espacial de alcance, destreza constructiva y grafomotricidad.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Hitos de Referencia</div>
+              <ul class="orientation-bullet-list">
+                <li>4 meses: Agarre voluntario a dos manos al contacto visual.</li>
+                <li>9-10 meses: Pinza digital superior índice-pulgar con objeto diminuto.</li>
+                <li>18 meses: Torre de 3 cubos y garabato espontáneo.</li>
+                <li>3 años: Copia de círculo y enhebrado de cuentas.</li>
+                <li>5 años: Copia de triángulo y dibujo de figura humana reconocible.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🗣️</span>
+              <span class="dim-name">Área C: Audición y Lenguaje</span>
+            </div>
+            <p class="orientation-p">
+              Evolución de la recepción auditiva y comprensión comunicativa, desde las vocalizaciones prelingüísticas hasta la estructura sintáctica, léxica y narrativa del habla.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Hitos de Referencia</div>
+              <ul class="orientation-bullet-list">
+                <li>3 meses: Orientación hacia la voz humana y sonrisas vocálicas.</li>
+                <li>6 meses: Balbuceo canónico polisilábico (ba-ba, ma-ma).</li>
+                <li>12 meses: Primera palabra con significado intencional referencial.</li>
+                <li>24 meses: Frases de dos palabras ("mamá agua") y comprensión de órdenes simples.</li>
+                <li>4-5 años: Relato fluido de historias completas con tiempos verbales y vocabulario amplio.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🤝</span>
+              <span class="dim-name">Área D: Conducta Personal-Social</span>
+            </div>
+            <p class="orientation-p">
+              Procesos de apego, vínculo afectivo, autonomía en actividades de la vida diaria (vestido, higiene, alimentación), empatía y seguimiento de normas de convivencia social.
+            </p>
+            <div class="orientation-subcard">
+              <div class="orientation-subcard-title">Hitos de Referencia</div>
+              <ul class="orientation-bullet-list">
+                <li>2 meses: Sonrisa social de respuesta al rostro del cuidador.</li>
+                <li>8 meses: Angustia del octavo mes ante extraños y permanencia del objeto.</li>
+                <li>18 meses: Uso funcional de la cuchara y aviso de necesidades.</li>
+                <li>3 años: Juego simbólico activo y diferenciación de género.</li>
+                <li>5 años: Juego cooperativo con reglas y autonomía total en vestido.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: SIGNOS DE ALERTA -->
+      <section class="orientation-block-card" id="sec-neu-alarmas">
+        <span class="orientation-section-badge">CRITERIOS DE DERIVACIÓN URGENTE</span>
+        <h3 class="orientation-sec-title">3. Banderas Rojas y Signos de Alerta Temprana en Neurodesarrollo</h3>
+        <p class="orientation-p">
+          Cualquiera de los siguientes signos en la edad señalada constituye indicación perentoria de evaluación neuropediátrica:
+        </p>
+
+        <div class="orientation-clinical-alert">
+          <strong>🚨 Banderas Rojas Absolutas según Nelson Ortiz:</strong>
+          <ul class="orientation-bullet-list" style="margin-top: 0.5rem;">
+            <li><strong>A los 3 meses:</strong> Ausencia de sostén cefálico; ausencia de fijación o seguimiento visual; manos persistentemente empuñadas con el pulgar atrapado (pulgar cortical).</li>
+            <li><strong>A los 6 meses:</strong> Hipotonía axial marcada (cabeza y tronco cuelgan péndulos); persistencia de reflejos arcaicos (Moro, tónico cervical); asimetría motora entre hemicuerpos (sospecha de parálisis cerebral hemipléjica).</li>
+            <li><strong>A los 9 meses:</strong> Incapacidad para mantenerse sentado sin apoyo; ausencia de silabeo o respuesta al propio nombre; falta de interés por agarrar objetos.</li>
+            <li><strong>A los 12 meses:</strong> Ausencia de pinza digital; incapacidad para sostenerse en pie con apoyo; falta total de balbuceo imitativo o gestos comunicativos (señalar con el dedo).</li>
+            <li><strong>A los 18 meses:</strong> No camina de forma independiente; no pronuncia ninguna palabra con significado; pérdida de cualquier habilidad previamente adquirida (regresión del desarrollo).</li>
+            <li><strong>A los 24 meses:</strong> Ausencia de frases de dos palabras; marcha en puntillas permanente; desconexión social o falta de contacto ocular (cribado de TEA).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 4: CITAS -->
+      <section class="orientation-block-card" id="sec-neu-citas">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">4. Citas Textuales Verificadas en Nelson Ortiz Pinilla</h3>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Nelson Ortiz Pinilla • Escala Abreviada de Desarrollo EAD-1 (Pág. 8)</div>
+          <p class="orientation-p" style="font-style: italic; border-left: 3px solid #10b981; padding-left: 0.8rem;">
+            "El desarrollo psicomotor infantil es un proceso continuo que refleja la maduración del sistema nervioso central y su integración adaptativa con el medio físico y sociocultural. La detección precoz de cualquier retraso o desviación en las pautas evolutivas normales de motricidad, lenguaje o socialización constituye la herramienta preventiva más eficaz para evitar secuelas neurológicas permanentes en la infancia."
+          </p>
+        </div>
+
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #047857; margin-bottom: 0.2rem;">
+            📖 Cita Verificada en la Biblioteca de PsiOS (Clic para abrir en Lector PDF Nativo):
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="8" title="Consultar fundamentos del neurodesarrollo en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Principios del Desarrollo & EAD-1 (Pág. 8) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="19" title="Consultar Área de Motricidad en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Maduración Motriz y Reflejos (Pág. 19) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-goto-ead-eval" style="background: #059669; padding: 0.8rem 1.4rem;">
+          <span>🚦 Ir al Semáforo EAD-1 & Navegador Etario</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 8. EVALUACIÓN Y SEMÁFORO EAD-1 INTERACTIVO (PROTOCOLO)
+  // =========================================================================
+  'evaluacion-tamizaje-neurodesarrollo-ead1': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(16, 185, 129, 0.15); color: #047857;">🚦 PROTOCOLO DE TAMIZAJE & SEMÁFORO EAD-1</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🧠 ÁREA: NEURODESARROLLO</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Protocolo de Tamizaje EAD-1 con Semáforo Neuroevolutivo Interactivo (0-60 Meses)</h2>
+        <p class="orientation-authors-meta">Dr. Nelson Ortiz Pinilla • Protocolo de Evaluación y Baremos Normativos (EAD-1 Págs. 18-62)</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Navegador Clínico Interactivo:</strong> Seleccione cualquiera de los 9 rangos de edad en el control inferior para consultar instantáneamente los criterios exactos de evaluación en las 4 áreas (Motricidad Gruesa, Fina, Lenguaje y Personal-Social). Al mismo tiempo, consulte los puntos de corte del Semáforo Normativo de Nelson Ortiz.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-back-ead-def" style="background: #059669;">
+          <span>← Volver a Fundamentos de Neurodesarrollo</span>
+        </button>
+      </div>
+
+      <!-- SEMÁFORO EAD-1 INTERACTIVO (PUNTOS DE CORTE) -->
+      <section class="orientation-block-card" id="sec-ead-semaforo-widget" style="border: 2px solid rgba(16, 185, 129, 0.3); background: rgba(255, 255, 255, 0.9);">
+        <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">SEMÁFORO DE ALERTAS DEL DESARROLLO (NELSON ORTIZ)</span>
+        <h3 class="orientation-sec-title">Puntos de Corte Normativos EAD-1</h3>
+        <p class="orientation-p">
+          El baremo oficial de Nelson Ortiz clasifica las puntuaciones estándar normalizadas T (media 50, DT 10) y rangos percentilares en 5 niveles diagnósticos:
+        </p>
+
+        <!-- BARRAS DEL SEMÁFORO -->
+        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin: 1.15rem 0;">
+          <!-- NIVEL 1: ALERTA (ROJO) -->
+          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(239, 68, 68, 0.08); border: 1.5px solid rgba(239, 68, 68, 0.3); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">🔴</span>
+              <div>
+                <strong style="color: #b91c1c; font-size: 0.95rem;">ALERTA (Sospecha de Retraso Patológico)</strong>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T &lt; 35 • Rango Percentilar &lt; 10</div>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #991b1b; background: rgba(239, 68, 68, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
+              ⚠️ Remisión Urgente a Neuropediatría / Terapia Integral
+            </div>
+          </div>
+
+          <!-- NIVEL 2: MEDIO-BAJO (AMARILLO) -->
+          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(245, 158, 11, 0.08); border: 1.5px solid rgba(245, 158, 11, 0.3); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">🟡</span>
+              <div>
+                <strong style="color: #b45309; font-size: 0.95rem;">MEDIO-BAJO (Riesgo Evolutivo / Alerta Preventiva)</strong>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 36 a 45 • Rango Percentilar 11 a 25</div>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #92400e; background: rgba(245, 158, 11, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
+              ⏱️ Estimulación Activa en Hogar + Reevaluación a los 30 Días
+            </div>
+          </div>
+
+          <!-- NIVEL 3: MEDIO (GRIS/AZUL) -->
+          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(59, 130, 246, 0.06); border: 1.5px solid rgba(59, 130, 246, 0.25); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">⚪</span>
+              <div>
+                <strong style="color: #1d4ed8; font-size: 0.95rem;">MEDIO (Desarrollo Típico Esperado)</strong>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 46 a 55 • Rango Percentilar 26 a 74</div>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #1e40af; background: rgba(59, 130, 246, 0.12); padding: 0.35rem 0.75rem; border-radius: 8px;">
+              ✅ Control Periódico de Crecimiento y Desarrollo
+            </div>
+          </div>
+
+          <!-- NIVEL 4: MEDIO-ALTO (AZUL CIELO) -->
+          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(14, 165, 233, 0.08); border: 1.5px solid rgba(14, 165, 233, 0.3); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">🔵</span>
+              <div>
+                <strong style="color: #0369a1; font-size: 0.95rem;">MEDIO-ALTO (Habilidades Consolidadas)</strong>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 56 a 65 • Rango Percentilar 75 a 89</div>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #075985; background: rgba(14, 165, 233, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
+              🌟 Fortalecimiento del Entorno Psicoeducativo
+            </div>
+          </div>
+
+          <!-- NIVEL 5: ALTO (VERDE) -->
+          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(16, 185, 129, 0.08); border: 1.5px solid rgba(16, 185, 129, 0.3); flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span style="font-size: 1.4rem;">🟢</span>
+              <div>
+                <strong style="color: #047857; font-size: 0.95rem;">ALTO (Maduración Acelerada / Desempeño Sobresaliente)</strong>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T &gt; 65 • Rango Percentilar &gt; 90</div>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #065f46; background: rgba(16, 185, 129, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
+              🚀 Enriquecimiento de Talentos & Potencial Infantil
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NAVEGADOR INTERACTIVO DE LOS 9 RANGOS DE EDAD -->
+      <section class="orientation-block-card" id="sec-ead-navegador" style="border: 2px solid rgba(59, 130, 246, 0.25);">
+        <span class="orientation-section-badge" style="background: rgba(59, 130, 246, 0.12); color: #1d4ed8;">NAVEGADOR DE RANGOS ETARIOS DINÁMICO</span>
+        <h3 class="orientation-sec-title">Criterios de Evaluación EAD-1 por Grupo Etario (0 a 60 Meses)</h3>
+        <p class="orientation-p">
+          Haga clic en cualquiera de los 9 rangos etarios para cargar inmediatamente las pautas diagnósticas oficiales de Nelson Ortiz para las cuatro áreas:
+        </p>
+
+        <!-- BOTONES SELECTORES DE EDAD (TABS) -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;" id="ead-age-tabs-bar">
+          <button type="button" class="ead-age-tab-btn active" data-range-idx="0" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1.5px solid #059669; background: #059669; color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">1. 0 a 3 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="1" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">2. 4 a 6 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="2" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">3. 7 a 9 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="3" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">4. 10 a 12 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="4" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">5. 13 a 18 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="5" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">6. 19 a 24 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="6" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">7. 25 a 36 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="7" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">8. 37 a 48 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="8" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">9. 49 a 60 Meses</button>
+        </div>
+
+        <!-- CONTENEDOR DE DETALLE DEL RANGO SELECCIONADO (DINÁMICO) -->
+        <div id="ead-range-content-box" style="transition: opacity 0.2s ease;">
+          <!-- CONTENIDO INYECTADO DINÁMICAMENTE POR JS -->
+        </div>
+      </section>
+
+      <!-- REGLAS DE APLICACIÓN Y PARADA -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">REGLAS OFICIALES DE ADMINISTRACIÓN</span>
+        <h3 class="orientation-sec-title">Reglas de Administración, Calificación y Parada</h3>
+        <p class="orientation-p">
+          El protocolo de Nelson Ortiz (Págs. 18-24) establece pautas estrictas para garantizar la validez del tamizaje:
+        </p>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">📅</span>
+              <span class="dim-name">Cálculo de Edad Corregida por Prematuridad</span>
+            </div>
+            <p class="orientation-p">
+              En todo niño nacido antes de las 37 semanas de gestación, se debe calcular la edad corregida hasta que cumpla los 24 meses:
+            </p>
+            <div class="orientation-subcard">
+              <code>Edad Corregida = Edad Cronológica - [40 - Semanas de Gestación al Nacer]</code>
+            </div>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🎯</span>
+              <span class="dim-name">Punto de Partida y Techo de Fracaso</span>
+            </div>
+            <p class="orientation-p">
+              <strong>Punto de inicio:</strong> Comience siempre en el primer ítem correspondiente al rango de edad cronológica del niño.
+              <br><strong>Línea base:</strong> Si el niño fracasa en el primer ítem, retroceda al ítem anterior hasta que apruebe tres ítems consecutivos.
+              <br><strong>Criterio de parada (Techo):</strong> La prueba en esa área se suspende cuando el niño fracasa en <strong>tres ítems consecutivos</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz Pinilla (EAD-1)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #047857; margin-bottom: 0.2rem;">
+            📖 Cita Verificada en Nelson Ortiz:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="21" title="Consultar administración y baremos en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Baremos, Puntos de Corte y Calificación EAD-1 (Pág. 21) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-ead-def" style="background: #059669; padding: 0.8rem 1.4rem;">
+          <span>← Volver a Fundamentos de Neurodesarrollo</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 9. COORDINACIÓN VISOMOTRIZ Y MOTRICIDAD FINA (CONCEPTO)
+  // =========================================================================
+  'coordinacion-visomotriz-fino-adaptativa': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">✍️ MOTRICIDAD FINA & COORDINACIÓN VISOMOTRIZ</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🧠 ÁREA: NEURODESARROLLO</span>
+        </div>
+        <h2 class="orientation-main-title">Coordinación Visomotriz, Prensión y Grafomotricidad en la Primera Infancia</h2>
+        <p class="orientation-authors-meta">Nelson Ortiz Pinilla (EAD-1 Área B, Págs. 26-31) • Anne Anastasi & Susana Urbina (Págs. 440-455) • Arnold Gesell</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>El Vínculo Ojo-Mano:</strong> La motricidad fino-adaptativa refleja la progresiva diferenciación cortical de la mano humana como instrumento del pensamiento y la praxis constructiva.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-goto-fina-eval" style="background: #d97706;">
+          <span>🧱 Ver Batería de Bloques y Grafismo Evolutivo</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN 1: ONTOGÉNIA DEL AGARRE -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">DESARROLLO DE LA PRENSIÓN</span>
+        <h3 class="orientation-sec-title">1. Evolución del Agarre Digital (0 a 12 Meses)</h3>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">✊</span>
+              <span class="dim-name">0-3 Meses: Reflejo Palmar Arcaico</span>
+            </div>
+            <p class="orientation-p">
+              Cierre reflejo e involuntario de los dedos ante la estimulación de la palma. A los 2-3 meses las manos se van abriendo progresivamente y desaparece el reflejo tónico.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">✋</span>
+              <span class="dim-name">4-6 Meses: Prensión Cúbito-Palmar Voluntaria</span>
+            </div>
+            <p class="orientation-p">
+              Agarre voluntario pero tosco utilizando la palma y los últimos tres dedos (meñique, anular y medio) contra la eminencia hipotenar. El pulgar aún no interviene.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">✂️</span>
+              <span class="dim-name">7-9 Meses: Pinza en Tijera / Radial-Palmar</span>
+            </div>
+            <p class="orientation-p">
+              Aproximación lateral del pulgar en aducción contra el borde lateral del dedo índice para sujetar objetos medianos.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">👌</span>
+              <span class="dim-name">10-12 Meses: Pinza Superior Fina</span>
+            </div>
+            <p class="orientation-p">
+              Verdadera oposición pulgar-índice utilizando las yemas distales (pulpejo a pulpejo) para tomar migas o perlas diminutas sin apoyar la palma en la mesa.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: EVOLUCIÓN DEL GRAFISMO -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">ONTOGENIA DEL TRAZO</span>
+        <h3 class="orientation-sec-title">2. Secuencia Evolutiva del Grafismo Infantil (Gesell & Ortiz)</h3>
+        <p class="orientation-p">
+          El desarrollo del dibujo infantil sigue una maduración geométrica constante:
+        </p>
+
+        <div class="orientation-bullet-list">
+          <li><strong>15-18 meses:</strong> Garabato espontáneo desordenado (movimiento kinestésico impulsado desde el hombro).</li>
+          <li><strong>24 meses:</strong> Imitación de trazo vertical (|). Comienza a mirar el lápiz mientras dibuja.</li>
+          <li><strong>30 meses:</strong> Imitación de trazo horizontal (—).</li>
+          <li><strong>36 meses (3 años):</strong> Copia de círculo cerrado (○). Inicio del control inhibitorio motor.</li>
+          <li><strong>48 meses (4 años):</strong> Copia de cruz (+) y cuadrado (□). Dominio de los ángulos rectos.</li>
+          <li><strong>60 meses (5 años):</strong> Copia de triángulo (△) y dibujo de la figura humana reconocible con al menos 6 partes corporales.</li>
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz Pinilla & Anastasi</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #b45309; margin-bottom: 0.2rem;">
+            📖 Cita Verificada:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="29" title="Consultar Área B en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Coordinación Fino-Adaptativa (Pág. 29) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-goto-fina-eval" style="background: #d97706; padding: 0.8rem 1.4rem;">
+          <span>🧱 Ir a la Batería de Bloques y Grafismo</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 10. EVALUACIÓN VISOMOTORA Y BLOQUES (PROTOCOLO)
+  // =========================================================================
+  'evaluacion-motricidad-fino-adaptativa-grafismo': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">🧱 PROTOCOLO DE CONSTRUCCIÓN & GRAFISMO</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Protocolo de Evaluación Visomotora: Batería de Bloques y Grafismo Evolutivo</h2>
+        <p class="orientation-authors-meta">Pruebas Estructuradas EAD-1 (Nelson Ortiz Págs. 27-31) • Pautas de Manipulación y Construcción Tridimensional</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Pruebas Estandarizadas de Destreza Adaptativa:</strong> La construcción con cubos de madera (2.5 cm de arista) y las tareas de tijeras y enhebrado son los mejores indicadores clínicos de la función visoconstructiva infantil.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-back-fina-def" style="background: #d97706;">
+          <span>← Volver a Fundamentos de Motricidad Fina</span>
+        </button>
+      </div>
+
+      <!-- TABLA MAESTRA EVOLUTIVA -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">TABLA EVOLUTIVA MAESTRA DE CONSTRUCCIÓN Y DESTREZA</span>
+        <h3 class="orientation-sec-title">Hitos Cronológicos de Construcción con Cubos y Manejo de Herramientas</h3>
+
+        <div class="orientation-table-wrapper">
+          <table class="orientation-data-table">
+            <thead>
+              <tr>
+                <th>Edad Cronológica</th>
+                <th>Construcción con Cubos</th>
+                <th>Grafismo & Dibujo</th>
+                <th>Destreza Digital & Herramientas</th>
+                <th>Criterio de Aprobación EAD-1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>12-15 Meses</strong></td>
+                <td>Torre de 2 cubos</td>
+                <td>Garabato accidental espontáneo</td>
+                <td>Introduce bolita en botella</td>
+                <td>La torre se sostiene al soltar el 2° cubo sin caerse inmediatamente.</td>
+              </tr>
+              <tr>
+                <td><strong>18-20 Meses</strong></td>
+                <td>Torre de 4 cubos</td>
+                <td>Garabato vigoroso</td>
+                <td>Pasa páginas de libro grueso (de a varias)</td>
+                <td>Apila 4 cubos con estabilidad de al menos 5 segundos.</td>
+              </tr>
+              <tr>
+                <td><strong>24 Meses (2 Años)</strong></td>
+                <td>Torre de 6 cubos / Alinea cubos como tren</td>
+                <td>Imita trazo vertical (|)</td>
+                <td>Enhebra una cuenta grande en cordón rígido</td>
+                <td>Muestra dirección del trazo de arriba hacia abajo.</td>
+              </tr>
+              <tr>
+                <td><strong>36 Meses (3 Años)</strong></td>
+                <td>Torre de 8 cubos / Construye puente de 3 cubos</td>
+                <td>Copia círculo cerrado (○)</td>
+                <td>Corta papel con tijeras (flecos libres)</td>
+                <td>El círculo debe cerrarse sin cruzar los extremos más de 3 mm.</td>
+              </tr>
+              <tr>
+                <td><strong>48 Meses (4 Años)</strong></td>
+                <td>Construye puerta de 4-5 cubos con vano</td>
+                <td>Copia cruz (+) y cuadrado</td>
+                <td>Corta sobre línea recta de 10 cm con tijeras</td>
+                <td>Los brazos de la cruz deben intersectarse cerca del centro perpendicular.</td>
+              </tr>
+              <tr>
+                <td><strong>60 Meses (5 Años)</strong></td>
+                <td>Estructuras complejas simétricas</td>
+                <td>Copia triángulo (△) / Figura humana (6+ partes)</td>
+                <td>Recorta un círculo de papel siguiendo el contorno</td>
+                <td>El triángulo conserva 3 ángulos agudos reconocibles sin redondearse.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CITAS VERIFICADAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz (EAD-1)</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #b45309; margin-bottom: 0.2rem;">
+            📖 Cita Verificada en Nelson Ortiz:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="27" title="Consultar baremos de motricidad fina y grafismo en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Baremos de Cubos y Grafismo (Pág. 27) →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ESTIMULACIÓN EN EL HOGAR -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">INTERVENCIÓN TEMPRANA</span>
+        <h3 class="orientation-sec-title">Pautas de Estimulación Fino-Adaptativa</h3>
+        <ul class="orientation-bullet-list">
+          <li><strong>Modelado con plastilina o arcilla:</strong> Fortalece la musculatura intrínseca de la mano y regula el tono inhibitorio.</li>
+          <li><strong>Juegos de pinza con broches de ropa o pinzas de cocina:</strong> Favorece la oposición disociada del pulgar e índice.</li>
+          <li><strong>Rasgado y trozado de papel con los dedos:</strong> Desarrolla la coordinación bimanual asimétrica.</li>
+        </ul>
+      </section>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-fina-def" style="background: #d97706; padding: 0.8rem 1.4rem;">
+          <span>← Volver a Fundamentos de Motricidad Fina</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 11. LATERALIDAD Y ESQUEMA CORPORAL (CONCEPTO)
+  // =========================================================================
+  'lateralidad-esquema-corporal-desarrollo': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(147, 51, 234, 0.15); color: #7c3aed;">🧭 LATERALIDAD & ESQUEMA CORPORAL INFANTIL</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🧠 ÁREA: NEURODESARROLLO</span>
+        </div>
+        <h2 class="orientation-main-title">Evolución de la Lateralidad Hemisférica y Construcción del Esquema Corporal</h2>
+        <p class="orientation-authors-meta">Nelson Ortiz Pinilla (EAD-1) • Anne Anastasi & Susana Urbina (Págs. 280-295) • Albert J. Harris • Jean Piaget</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(147, 51, 234, 0.08); border-color: rgba(147, 51, 234, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>La Lateralidad como Síntesis Neurofuncional:</strong> La lateralización no consiste simplemente en "usar más una mano", sino en la progresiva especialización y asimetría funcional de los dos hemisferios cerebrales, articulada a través del cuerpo calloso.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-goto-lateralidad-eval" style="background: #7c3aed;">
+          <span>✋ Ver Protocolo de Evaluación de 4 Dimensiones</span>
+          <span>→</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN 1: ETAPAS DE CONSOLIDACIÓN -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">ETAPAS ONTOGENÉTICAS</span>
+        <h3 class="orientation-sec-title">Las Tres Fases del Desarrollo de la Lateralidad</h3>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">⚖️</span>
+              <span class="dim-name">1. Fase de Indiferenciación (0 a 2 Años)</span>
+            </div>
+            <p class="orientation-p">
+              El lactante utiliza indistintamente ambas manos de forma bilateral y simétrica. La prensión depende más de la posición física del objeto (si está a la izquierda usa la mano izquierda) que de una preferencia interna del sistema nervioso.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🔄</span>
+              <span class="dim-name">2. Fase de Alternancia y Exploración (2 a 4 Años)</span>
+            </div>
+            <p class="orientation-p">
+              El niño experimenta con ambos lados corporales, cambiando frecuentemente de mano para comer o garabatear. Es una etapa normal y necesaria para enriquecer el mapa sensoriomotor de ambos hemisferios cerebrales.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🎯</span>
+              <span class="dim-name">3. Fase de Definición y Afirmación (4 a 6 Años)</span>
+            </div>
+            <p class="orientation-p">
+              Se consolida la dominancia lateral funcional de forma espontánea y estable. El niño demuestra marcada superioridad en velocidad, fuerza y destreza en su hemicuerpo dominante.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: TIPOLOGÍAS Y RIESGOS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">CLASIFICACIÓN CLÍNICA</span>
+        <h3 class="orientation-sec-title">Tipos de Lateralidad y Repercusiones en Lectoescritura</h3>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Perfiles de Dominancia Lateral</div>
+          <ul class="orientation-bullet-list">
+            <li><strong>Homogénea Diestra (D-D-D-D) u Homogénea Zurda (I-I-I-I):</strong> Mano, pie, ojo y oído coinciden en el mismo lado. Proporciona máxima estabilidad visoespacial.</li>
+            <li><strong>Lateralidad Cruzada (ej. Mano Derecha - Ojo Izquierdo):</strong> Muy prevalente. Puede ocasionar dificultades de seguimiento sacádico en la lectura o rotación de letras en espejo (b/d, p/q) si no se acompaña de una sólida orientación espacial.</li>
+            <li><strong>Lateralidad Invertida o Contrariada:</strong> Sujeto zurdo por naturaleza al que se le obligó coactivamente a escribir con la mano derecha. Suele asociarse a bloqueos motores, disgrafía, tartamudez y ansiedad escolar.</li>
+            <li><strong>Lateralidad Mixta / Ambidextrismo Patológico:</strong> Incapacidad para consolidar dominancia a los 6 años. Refleja inmadurez en la mielinización del cuerpo calloso.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CITAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz & Anastasi</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(147, 51, 234, 0.06); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7c3aed; margin-bottom: 0.2rem;">
+            📖 Cita Verificada:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="27" title="Consultar lateralidad y pruebas psicomotoras en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Dominancia y Habilidades Motoras (Pág. 27) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-goto-lateralidad-eval" style="background: #7c3aed; padding: 0.8rem 1.4rem;">
+          <span>✋ Ir al Protocolo de Evaluación de Lateralidad</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  `,
+
+  // =========================================================================
+  // 12. EVALUACIÓN DE LATERALIDAD INFANTIL (PROTOCOLO)
+  // =========================================================================
+  'evaluacion-lateralidad-dominancia-infantil': () => `
+    <div class="orientation-doc-container">
+      <div class="orientation-doc-header">
+        <div class="modal-areas-row">
+          <span class="modal-type-pill" style="background: rgba(147, 51, 234, 0.15); color: #7c3aed;">✋ PROTOCOLO CLÍNICO & BATERÍA DE 4 DIMENSIONES</span>
+          <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
+          <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
+        </div>
+        <h2 class="orientation-main-title">Protocolo de Dominancia Lateral y Esquema Corporal en Edad Infantil</h2>
+        <p class="orientation-authors-meta">Batería de Observación EAD-1 & Harris • Evaluación en 4 Dimensiones (Nelson Ortiz Págs. 21, 27 • Harris)</p>
+      </div>
+
+      <div class="pedagogical-division-banner" style="background: rgba(147, 51, 234, 0.08); border-color: rgba(147, 51, 234, 0.25);">
+        <div class="pedagogical-banner-text">
+          💡 <strong>Evaluación Ecológica y Espontánea:</strong> La dominancia lateral debe registrarse en actividades funcionales naturales, sin anticipar al niño cuál lado corporal se está examinando para evitar sesgos de respuesta aprendida.
+        </div>
+        <button type="button" class="pedagogical-link-btn" id="btn-back-lateralidad-def" style="background: #7c3aed;">
+          <span>← Volver a Fundamentos de Lateralidad</span>
+        </button>
+      </div>
+
+      <!-- BATERÍA DE LAS 4 DIMENSIONES -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BATERÍA INTEGRAL EN 4 DIMENSIONES</span>
+        <h3 class="orientation-sec-title">Pruebas Clínicas para las 4 Esferas Corporales</h3>
+
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">✍️</span>
+              <span class="dim-name">1. Dominancia Manual (10 Tareas)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>1. Escribir o dibujar con lápiz.</li>
+              <li>2. Cortar con tijeras sobre papel.</li>
+              <li>3. Lanzar una pelota pequeña a una diana.</li>
+              <li>4. Cepillarse los dientes.</li>
+              <li>5. Usar la cuchara para comer sopa.</li>
+              <li>6. Abrir la manija de una puerta.</li>
+              <li>7. Desenroscar la tapa de un frasco.</li>
+              <li>8. Encender una cerilla simulada.</li>
+              <li>9. Martillar un clavo de plástico.</li>
+              <li>10. Peinarse frente a un espejo.</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🦶</span>
+              <span class="dim-name">2. Dominancia Pedial (4 Tareas)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>1. Patear un balón hacia una meta.</li>
+              <li>2. Saltar a la pata coja sobre un pie.</li>
+              <li>3. Iniciar la subida de una escalera.</li>
+              <li>4. Apagar una colilla imaginaria con la suela.</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">👁️</span>
+              <span class="dim-name">3. Dominancia Ocular (3 Tareas)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>1. Mirar por un catalejo o tubo opaco.</li>
+              <li>2. Mirar por el agujero de una cartulina (Test de Miles).</li>
+              <li>3. Apuntar con un ojo guiñando el otro.</li>
+            </ul>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">👂</span>
+              <span class="dim-name">4. Dominancia Auditiva (3 Tareas)</span>
+            </div>
+            <ul class="orientation-bullet-list">
+              <li>1. Escuchar el tic-tac de un reloj de cuerda.</li>
+              <li>2. Escuchar a través de una puerta cerrada.</li>
+              <li>3. Ponerse el auricular de un teléfono.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- FÓRMULA MATEMÁTICA DEL COEFICIENTE DE LATERALIDAD -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">CUANTIFICACIÓN MATEMÁTICA</span>
+        <h3 class="orientation-sec-title">Fórmula del Coeficiente de Lateralidad (PL)</h3>
+        <div style="background: rgba(147, 51, 234, 0.05); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px; padding: 1rem; text-align: center; margin: 1rem 0;">
+          <div style="font-size: 1.4rem; font-weight: 800; color: #6b21a8;">PL = [(D - I) / (D + I)] · 100</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            Donde <strong>D</strong> es el total de respuestas diestras e <strong>I</strong> el total de respuestas zurdas.
+          </div>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Criterios de Clasificación Diagnóstica</div>
+          <ul class="orientation-bullet-list">
+            <li><strong>PL = +100 a +70:</strong> Diestro Puro / Definido.</li>
+            <li><strong>PL = +69 a +30:</strong> Diestro Moderado con rasgos cruzados.</li>
+            <li><strong>PL = +29 a -29:</strong> Ambidextro / Lateralidad Mixta Mal Definida (Requiere estimulación).</li>
+            <li><strong>PL = -30 a -69:</strong> Zurdo Moderado.</li>
+            <li><strong>PL = -70 a -100:</strong> Zurdo Puro / Definido.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CITAS VERIFICADAS -->
+      <section class="orientation-block-card">
+        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
+        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz & Harris</h3>
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(147, 51, 234, 0.06); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7c3aed; margin-bottom: 0.2rem;">
+            📖 Citas Verificadas en Biblioteca:
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="21" title="Consultar pruebas motoras y lateralidad en Nelson Ortiz">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz:</strong> Lateralidad Infantil EAD-1 (Pág. 21) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="285" title="Consultar destreza motriz y dominancia en Anastasi & Urbina">
+            <span>📖</span>
+            <span><strong>Anastasi & Urbina:</strong> Pruebas Motoras y Dominancia (Pág. 285) →</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
+        <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-lateralidad-def" style="background: #7c3aed; padding: 0.8rem 1.4rem;">
+          <span>← Volver a Fundamentos de Lateralidad</span>
+        </button>
+      </div>
+    </div>
   `
 };
 
@@ -5688,7 +8088,668 @@ export const ADDITIONAL_DOCS_HTML = {
    EVENT LISTENERS SETUP FOR MODAL INTERACTIONS
    ========================================================================== */
 
+// Interactive Listeners and Logic for Bloque A & Bloque B
+
+const EAD_RANGES_DATA = [
+  {
+    range: 'Rango 1: 0 a 3 Meses',
+    subtitle: 'Periodo de Adaptación Neonatal y Reflejos Arcaicos Primarios',
+    areas: {
+      gruesa: {
+        item: 'Ítem 1-3: Control Cefálico Incipiente en Decúbito Ventral',
+        material: 'Camilla o colchoneta firme',
+        procedimiento: 'Colocar al lactante boca abajo sobre la colchoneta. Llamar suavemente su atención al frente.',
+        criterio: 'Levanta la cabeza de la superficie al menos 45 grados por 3 segundos consecutivos.'
+      },
+      fina: {
+        item: 'Ítem 1-3: Reflejo de Prensión Palmar e Inspección Ocular',
+        material: 'Dedo del examinador o sonajero pequeño',
+        procedimiento: 'Tocar suavemente la palma de la mano del lactante con el dedo índice del examinador.',
+        criterio: 'Cierra los dedos con firmeza alrededor del dedo estimulador (reflejo de prensión tónico).'
+      },
+      lenguaje: {
+        item: 'Ítem 1-3: Respuestas Auditivas Reflejas y Sonidos Guturales',
+        material: 'Campanilla o sonajero suave fuera del campo visual',
+        procedimiento: 'Hacer sonar suavemente el sonajero a 20 cm de cada oreja del bebé mientras está tranquilo.',
+        criterio: 'Muestra sobresalto, parpadeo o detención del movimiento (reflejo cócleo-palpebral).'
+      },
+      social: {
+        item: 'Ítem 1-3: Sonrisa Social de Respuesta y Contacto Ocular',
+        material: 'Rostro y voz del examinador o cuidador',
+        procedimiento: 'Colocarse a 30 cm frente a los ojos del bebé, hablarle con tono cálido y sonreírle.',
+        criterio: 'Fija la mirada en el rostro humano y responde con una sonrisa social intencional.'
+      }
+    }
+  },
+  {
+    range: 'Rango 2: 4 a 6 Meses',
+    subtitle: 'Sostén Cefálico Consolidado, Rolado y Agarre Voluntario Cúbito-Palmar',
+    areas: {
+      gruesa: {
+        item: 'Ítem 4-6: Control Cefálico Firme y Rolado Supino-Prono',
+        material: 'Colchoneta firme',
+        procedimiento: 'Tomar al lactante por los antebrazos y llevarlo suavemente a posición sedente.',
+        criterio: 'La cabeza se mantiene firmemente alineada con el tronco sin caer hacia atrás.'
+      },
+      fina: {
+        item: 'Ítem 4-6: Agarre Voluntario y Transferencia a la Línea Media',
+        material: 'Cubo de madera (2.5 cm) o argolla plástica roja',
+        procedimiento: 'Ofrecer el cubo frente al campo visual del niño a la altura de su pecho.',
+        criterio: 'Extiende ambos brazos y toma el objeto con agarre cúbito-palmar voluntario.'
+      },
+      lenguaje: {
+        item: 'Ítem 4-6: Balbuceo Monosilábico y Localización Sonora',
+        material: 'Voz humana y sonajero',
+        procedimiento: 'Observar los sonidos vocálicos que emite en reposo y hablarle desde un lado.',
+        criterio: 'Gira claramente la cabeza buscando la fuente de sonido y emite sonidos guturales (gu-gu, agú).'
+      },
+      social: {
+        item: 'Ítem 4-6: Interacción Activa con el Entorno y el Espejo',
+        material: 'Espejo irrompible',
+        procedimiento: 'Poner al niño frente a su imagen en el espejo a 25 cm.',
+        criterio: 'Sonríe a su propia imagen reflejada, vocaliza o intenta tocar el espejo con entusiasmo.'
+      }
+    }
+  },
+  {
+    range: 'Rango 3: 7 a 9 Meses',
+    subtitle: 'Sedestación Estable, Pinza en Tijera y Balbuceo Canónico',
+    areas: {
+      gruesa: {
+        item: 'Ítem 7-9: Sedestación sin Apoyo y Posición de Cuatro Puntos',
+        material: 'Colchoneta',
+        procedimiento: 'Sentar al niño en la colchoneta sin almohadas ni sujeción lateral.',
+        criterio: 'Permanece sentado de forma autónoma con la espalda erguida al menos 30 segundos.'
+      },
+      fina: {
+        item: 'Ítem 7-9: Pinza en Tijera y Paso de Objeto de una Mano a Otra',
+        material: 'Dos cubos de madera',
+        procedimiento: 'Dar un cubo en una mano y luego ofrecer un segundo cubo en la misma mano.',
+        criterio: 'Transfiere el primer cubo a la otra mano para agarrar el nuevo con pinza lateral (tijera).'
+      },
+      lenguaje: {
+        item: 'Ítem 7-9: Balbuceo Reduplicativo Polisílabo (Silabeo)',
+        material: 'Observación directa',
+        procedimiento: 'Estimular vocalmente al lactante y observar su producción espontánea.',
+        criterio: 'Emite cadenas silábicas repetitivas con inflexión de voz: "ba-ba-ba", "da-da-da", "ma-ma-ma".'
+      },
+      social: {
+        item: 'Ítem 7-9: Angustia ante Extraños y Juego de Ocultamiento',
+        material: 'Pañal de tela o toalla',
+        procedimiento: 'Cubrir el rostro del examinador con el pañal y destaparlo diciendo "¡Aquí está!".',
+        criterio: 'Demuestra anticipación, risa y retira el pañal con sus propias manos para buscar el rostro.'
+      }
+    }
+  },
+  {
+    range: 'Rango 4: 10 a 12 Meses',
+    subtitle: 'Bipedestación con Apoyo, Pinza Digital Superior y Primeras Palabras',
+    areas: {
+      gruesa: {
+        item: 'Ítem 10-12: Bipedestación con Sujeción y Desplazamiento Lateral',
+        material: 'Mesa baja o baranda firme',
+        procedimiento: 'Colocar al niño de pie frente a la mesa apoyando sus manos.',
+        criterio: 'Sostiene todo su peso corporal de pie durante 1 minuto e inicia pasos laterales asistidos.'
+      },
+      fina: {
+        item: 'Ítem 10-12: Pinza Digital Fina Superior (Índice-Pulgar)',
+        material: 'Pastilla pequeña o pasita sobre superficie blanca',
+        procedimiento: 'Colocar la pastilla frente al niño fuera del alcance de la boca.',
+        criterio: 'Coge la pastilla usando exclusivamente los extremos distales del pulgar e índice (pinza fina).'
+      },
+      lenguaje: {
+        item: 'Ítem 10-12: Primera Palabra con Significado Referencial',
+        material: 'Interacción directa con la madre/padre',
+        procedimiento: 'Preguntar a la madre qué palabras utiliza el niño para nombrar personas u objetos.',
+        criterio: 'Dice al menos una palabra comprensible (ej. "mamá", "papá", "tete") dirigida con intención clara.'
+      },
+      social: {
+        item: 'Ítem 10-12: Juego de Entrega y Gestos Sociales (Adiós, Aplauso)',
+        material: 'Juguete pequeño',
+        procedimiento: 'Pedir al niño "dame el juguete" extendiendo la mano con palma abierta.',
+        criterio: 'Entrega voluntariamente el juguete en la mano del examinador y aplaude o dice adiós con la mano.'
+      }
+    }
+  },
+  {
+    range: 'Rango 5: 13 a 18 Meses',
+    subtitle: 'Marcha Independiente, Torre de 2 Cubos y Jerga Expresiva',
+    areas: {
+      gruesa: {
+        item: 'Ítem 13-15: Marcha Independiente sin Ayuda',
+        material: 'Espacio despejado de 3 metros',
+        procedimiento: 'Estimular al niño a caminar hacia el cuidador sin sostenerse.',
+        criterio: 'Camina al menos 5 pasos de forma autónoma con marcha balanceante y brazos de equilibrio.'
+      },
+      fina: {
+        item: 'Ítem 13-15: Construcción de Torre de 2 Cubos y Garabateo',
+        material: 'Cubos de madera y hoja con crayón',
+        procedimiento: 'Mostrar al niño cómo poner un cubo encima del otro e invitarlo a hacerlo.',
+        criterio: 'Coloca un cubo sobre otro manteniéndose la torre en equilibrio al soltarlo.'
+      },
+      lenguaje: {
+        item: 'Ítem 13-15: Vocabulario de 3 a 5 Palabras y Comprensión de Órdenes',
+        material: 'Objetos cotidianos (pelota, zapato, vaso)',
+        procedimiento: 'Solicitar: "Tráeme la pelota" señalando sin tocar el objeto.',
+        criterio: 'Comprende la orden y nombra al menos 3 objetos reconocibles además de mamá/papá.'
+      },
+      social: {
+        item: 'Ítem 13-15: Uso Funcional de Instrumentos (Cuchara y Vaso)',
+        material: 'Cuchara plástica y taza infantil',
+        procedimiento: 'Observar cómo intenta llevar la cuchara a la boca para comer.',
+        criterio: 'Lleva la cuchara a la boca con intención de alimentarse, derramando solo parte del contenido.'
+      }
+    }
+  },
+  {
+    range: 'Rango 6: 19 a 24 Meses',
+    subtitle: 'Carrera, Patada de Balón, Torre de 4 Cubos y Frases de Dos Palabras',
+    areas: {
+      gruesa: {
+        item: 'Ítem 16-18: Carrera Inicial y Patear una Pelota',
+        material: 'Pelota mediana inflable',
+        procedimiento: 'Lanzar suavemente la pelota rodando hacia los pies del niño y pedirle que la patee.',
+        criterio: 'Patea la pelota hacia adelante sin caerse ni sujetarse a ningún apoyo.'
+      },
+      fina: {
+        item: 'Ítem 16-18: Torre de 4 Cubos y Paso de Páginas Individuales',
+        material: '6 cubos de madera y cuento infantil de hojas delgadas',
+        procedimiento: 'Pedir que construya la torre más alta posible.',
+        criterio: 'Apila con éxito 4 o más cubos y pasa páginas de un cuento una por una.'
+      },
+      lenguaje: {
+        item: 'Ítem 16-18: Construcción de Frases de Dos Palabras',
+        material: 'Registro del habla espontánea',
+        procedimiento: 'Observar la comunicación del niño durante el juego.',
+        criterio: 'Combina dos palabras con sentido sintáctico ("mamá agua", "vamos calle", "más leche").'
+      },
+      social: {
+        item: 'Ítem 16-18: Control de Esfínteres Inicial y Juego Paralelo',
+        material: 'Entrevista a cuidadores',
+        procedimiento: 'Preguntar si avisa la necesidad de orinar/defecar antes o después del acto.',
+        criterio: 'Avisa verbalmente o con gestos que tiene el pañal mojado o sucio; juega junto a otros niños.'
+      }
+    }
+  },
+  {
+    range: 'Rango 7: 25 a 36 Meses',
+    subtitle: 'Sube Escaleras Alternando, Copia Línea Vertical y Oraciones de 3 Palabras',
+    areas: {
+      gruesa: {
+        item: 'Ítem 19-21: Sube Escaleras con Apoyo y Salto Bipodal',
+        material: 'Escalera de 4 peldaños con pasamanos',
+        procedimiento: 'Indicar al niño que suba los peldaños.',
+        criterio: 'Sube alternando los pies sin colocar ambos pies en el mismo peldaño; salta con pies juntos.'
+      },
+      fina: {
+        item: 'Ítem 19-21: Torre de 8 Cubos, Puente de 3 y Trazo Vertical',
+        material: 'Cubos de madera, hoja blanca y lápiz',
+        procedimiento: 'Trazar una línea vertical e invitar al niño a trazar una idéntica al lado.',
+        criterio: 'Imita el trazo vertical (|) con dirección continua sin desviarse más de 30 grados.'
+      },
+      lenguaje: {
+        item: 'Ítem 19-21: Oraciones de Tres Palabras y Uso del Pronombre "Yo"',
+        material: 'Diálogo directo',
+        procedimiento: 'Preguntar "¿Qué estás jugando?" o "¿Cómo te llamas?".',
+        criterio: 'Responde usando estructura Sujeto-Verbo-Objeto ("yo quiero pan") y comprende adjetivos (grande/chico).'
+      },
+      social: {
+        item: 'Ítem 19-21: Desvestirse Parcialmente e Inicio del Juego Simbólico',
+        material: 'Prendas con broches sencillos',
+        procedimiento: 'Pedir que se quite los zapatos o el suéter.',
+        criterio: 'Se quita prendas abiertas sin ayuda; alimenta una muñeca o simula conducir un coche.'
+      }
+    }
+  },
+  {
+    range: 'Rango 8: 37 a 48 Meses',
+    subtitle: 'Salto en un Pie, Copia de Círculo y Cruz, y Preguntas de Causalidad ("¿Por qué?")',
+    areas: {
+      gruesa: {
+        item: 'Ítem 22-24: Salto Monopodal (Pata Coja) y Equilibrio en Puntas',
+        material: 'Piso despejado',
+        procedimiento: 'Demostrar cómo saltar en un solo pie y pedir que lo imite.',
+        criterio: 'Salta al menos 3 veces consecutivas sobre un pie sin tocar el piso con el otro.'
+      },
+      fina: {
+        item: 'Ítem 22-24: Copia de Círculo y Cruz (+) con Agarre Trípode',
+        material: 'Hoja con modelo impreso de círculo y cruz',
+        procedimiento: 'Mostrar los modelos y pedir: "Dibuja uno igualito aquí abajo".',
+        criterio: 'Copia el círculo cerrado y la cruz con dos líneas perpendiculares que se cruzan cerca del centro.'
+      },
+      lenguaje: {
+        item: 'Ítem 22-24: Oraciones Complejas, Plurales y Cuestionamiento Causal',
+        material: 'Láminas descriptivas',
+        procedimiento: 'Presentar una escena y mantener una conversación fluida.',
+        criterio: 'Formula preguntas causales frecuentes ("¿por qué llueve?") y utiliza plurales y tiempos pasados.'
+      },
+      social: {
+        item: 'Ítem 22-24: Juego Asociativo y Lavado Autónomo de Manos',
+        material: 'Lavamanos, jabón y toalla',
+        procedimiento: 'Invitarlo a lavarse y secarse las manos.',
+        criterio: 'Se lava y seca las manos solo; comparte juguetes en actividades estructuradas con pares.'
+      }
+    }
+  },
+  {
+    range: 'Rango 9: 49 a 60 Meses',
+    subtitle: 'Equilibrio Dinámico Avanzado, Copia de Triángulo y Figura Humana Completa',
+    areas: {
+      gruesa: {
+        item: 'Ítem 25-27: Marcha en Línea Recta (Tándem Talón-Punta)',
+        material: 'Línea de 3 metros en el suelo',
+        procedimiento: 'Pedir que camine sobre la línea apoyando el talón justo delante de la punta.',
+        criterio: 'Camina al menos 2 metros en tándem manteniendo el equilibrio sin salir de la línea.'
+      },
+      fina: {
+        item: 'Ítem 25-27: Copia de Triángulo y Dibujo de Figura Humana (6+ Partes)',
+        material: 'Hoja blanca y lápiz grafito',
+        procedimiento: 'Pedir: "Dibuja a una persona completa, lo mejor que puedas".',
+        criterio: 'Dibuja cabeza, tronco, brazos, piernas y al menos dos rasgos faciales claramente identificables.'
+      },
+      lenguaje: {
+        item: 'Ítem 25-27: Relato Narrativo Fluido y Definición de Palabras por Uso',
+        material: 'Preguntas verbales',
+        procedimiento: 'Preguntar: "¿Qué es una manzana? ¿Qué es un cuchillo?".',
+        criterio: 'Define conceptos por su función o categoría ("una manzana es para comer", "un caballo es un animal").'
+      },
+      social: {
+        item: 'Ítem 25-27: Juego Cooperativo con Reglas y Vestido Completo',
+        material: 'Juego de mesa simple o prendas con botones',
+        procedimiento: 'Observar cómo se abotona el abrigo y respeta turnos en un juego.',
+        criterio: 'Abotona y desabotona prendas sin ayuda; comprende y respeta las reglas de un juego grupal.'
+      }
+    }
+  }
+];
+
+// Functor to wire interactive DOM event listeners
+function setupBlockABModalListeners(itemId, modalContent, controller) {
+  if (!modalContent || !controller) return;
+
+  // 1. EVALUACIÓN Y CAMPANA DE GAUSS PSICOMÉTRICA
+  if (itemId === 'evaluacion-interpretacion-perfiles-psicometricos') {
+    const slider = modalContent.querySelector('#gauss-ci-slider');
+    const input = modalContent.querySelector('#gauss-ci-input');
+    const sliderValLabel = modalContent.querySelector('#gauss-slider-val-label');
+    const markerGroup = modalContent.querySelector('#gauss-marker-group');
+    const markerTagText = modalContent.querySelector('#gauss-needle-tag-text');
+    const ciBandRect = modalContent.querySelector('#gauss-ci-band-rect');
+
+    const outZ = modalContent.querySelector('#gauss-val-z');
+    const outT = modalContent.querySelector('#gauss-val-t');
+    const outPR = modalContent.querySelector('#gauss-val-pr');
+    const outStanine = modalContent.querySelector('#gauss-val-stanine');
+    const outCI95 = modalContent.querySelector('#gauss-val-ci95');
+    const outDiag = modalContent.querySelector('#gauss-val-diag');
+
+    function normalCDF(z) {
+      const p = 0.2316419;
+      const b1 = 0.319381530;
+      const b2 = -0.356563782;
+      const b3 = 1.781477937;
+      const b4 = -1.821255978;
+      const b5 = 1.330274429;
+      const t = 1.0 / (1.0 + p * Math.abs(z));
+      const poly = t * (b1 + t * (b2 + t * (b3 + t * (b4 + t * b5))));
+      const phi = (1.0 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * z * z);
+      const ans = 1.0 - phi * poly;
+      return z >= 0 ? ans : 1.0 - ans;
+    }
+
+    function updateGauss(rawCI) {
+      let ci = parseFloat(rawCI);
+      if (isNaN(ci)) ci = 100;
+      ci = Math.max(40, Math.min(160, ci));
+
+      // Sync inputs
+      if (slider && parseFloat(slider.value) !== ci) slider.value = ci;
+      if (input && parseFloat(input.value) !== ci) input.value = ci;
+      if (sliderValLabel) sliderValLabel.textContent = `CI = ${Math.round(ci)}`;
+
+      // Statistical calculations
+      const z = (ci - 100) / 15;
+      const t = 50 + 10 * z;
+      const pr = Math.max(0.1, Math.min(99.9, normalCDF(z) * 100));
+      const stanine = Math.max(1, Math.min(9, Math.round(5 + 2 * z)));
+
+      // 95% Confidence Interval assuming standard Wechsler SEM = 3.2
+      const sem = 3.2;
+      const margin95 = 1.96 * sem;
+      const ciLower = Math.max(30, Math.round((ci - margin95) * 10) / 10);
+      const ciUpper = Math.min(170, Math.round((ci + margin95) * 10) / 10);
+
+      // Qualitative Classification
+      let diagText = '';
+      let diagBg = '';
+      let diagColor = '';
+
+      if (ci >= 130) {
+        diagText = 'Muy Superior / Altas Capacidades Intelectuales';
+        diagBg = 'rgba(168, 85, 247, 0.18)';
+        diagColor = '#7e22ce';
+      } else if (ci >= 120) {
+        diagText = 'Superior';
+        diagBg = 'rgba(147, 51, 234, 0.15)';
+        diagColor = '#6b21a8';
+      } else if (ci >= 110) {
+        diagText = 'Promedio Alto (Brillante)';
+        diagBg = 'rgba(59, 130, 246, 0.15)';
+        diagColor = '#1d4ed8';
+      } else if (ci >= 90) {
+        diagText = 'Promedio / Rango Normal Típico';
+        diagBg = 'rgba(16, 185, 129, 0.15)';
+        diagColor = '#047857';
+      } else if (ci >= 80) {
+        diagText = 'Promedio Bajo';
+        diagBg = 'rgba(245, 158, 11, 0.15)';
+        diagColor = '#b45309';
+      } else if (ci >= 70) {
+        diagText = 'Capacidad Intelectual Limítrofe (Borderline)';
+        diagBg = 'rgba(249, 115, 22, 0.18)';
+        diagColor = '#c2410c';
+      } else if (ci >= 50) {
+        diagText = 'Discapacidad Intelectual Leve (DSM-5)';
+        diagBg = 'rgba(239, 68, 68, 0.2)';
+        diagColor = '#b91c1c';
+      } else if (ci >= 35) {
+        diagText = 'Discapacidad Intelectual Moderada';
+        diagBg = 'rgba(220, 38, 38, 0.22)';
+        diagColor = '#991b1b';
+      } else {
+        diagText = 'Discapacidad Intelectual Grave / Profunda';
+        diagBg = 'rgba(185, 28, 28, 0.25)';
+        diagColor = '#7f1d1d';
+      }
+
+      // Update text values
+      if (outZ) outZ.textContent = (z >= 0 ? '+' : '') + z.toFixed(2);
+      if (outT) outT.textContent = t.toFixed(1);
+      if (outPR) outPR.textContent = pr.toFixed(1) + ' %';
+      if (outStanine) outStanine.textContent = stanine;
+      if (outCI95) outCI95.textContent = `${ciLower} - ${ciUpper}`;
+      if (outDiag) {
+        outDiag.textContent = diagText;
+        outDiag.style.background = diagBg;
+        outDiag.style.color = diagColor;
+      }
+
+      // SVG Needle & CI Band positioning
+      // Center (mean 100) is at X = 450, 1 SD = 100 px.
+      const svgX = 450 + z * 100;
+      const clampedSvgX = Math.max(100, Math.min(800, svgX));
+
+      if (markerGroup) {
+        markerGroup.setAttribute('transform', `translate(${clampedSvgX}, 0)`);
+      }
+      if (markerTagText) {
+        markerTagText.textContent = `CI ${Math.round(ci)}`;
+      }
+
+      if (ciBandRect) {
+        const bandHalfWidth = (margin95 / 15) * 100; // in SVG pixels
+        const bandX = Math.max(100, svgX - bandHalfWidth);
+        const bandWidth = Math.min(700, bandHalfWidth * 2);
+        ciBandRect.setAttribute('x', bandX);
+        ciBandRect.setAttribute('width', bandWidth);
+      }
+    }
+
+    if (slider) {
+      slider.addEventListener('input', () => updateGauss(slider.value));
+    }
+    if (input) {
+      input.addEventListener('input', () => updateGauss(input.value));
+    }
+
+    modalContent.querySelectorAll('.gauss-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const presetCI = btn.getAttribute('data-ci');
+        if (presetCI) updateGauss(presetCI);
+      });
+    });
+
+    // Initialize with default 100
+    updateGauss(100);
+  }
+
+  // 2. CALCULADORA DE EEM E INTERVALOS DE CONFIANZA
+  if (itemId === 'evaluacion-estimacion-error-estandar-eem') {
+    const scoreInp = modalContent.querySelector('#eem-calc-score');
+    const sdInp = modalContent.querySelector('#eem-calc-sd');
+    const relInp = modalContent.querySelector('#eem-calc-rel');
+    const relValLbl = modalContent.querySelector('#eem-calc-rel-val');
+
+    const outVal = modalContent.querySelector('#eem-out-val');
+    const out90 = modalContent.querySelector('#eem-out-ci90');
+    const out95 = modalContent.querySelector('#eem-out-ci95');
+    const out99 = modalContent.querySelector('#eem-out-ci99');
+    const outVerdict = modalContent.querySelector('#eem-out-verdict');
+
+    function updateEEM() {
+      const x = parseFloat(scoreInp ? scoreInp.value : 100) || 100;
+      const s = parseFloat(sdInp ? sdInp.value : 15) || 15;
+      const rxx = parseFloat(relInp ? relInp.value : 0.94) || 0.94;
+
+      if (relValLbl) relValLbl.textContent = rxx.toFixed(2);
+
+      const eem = s * Math.sqrt(Math.max(0, 1 - rxx));
+
+      const ci90Low = Math.round((x - 1.645 * eem) * 10) / 10;
+      const ci90High = Math.round((x + 1.645 * eem) * 10) / 10;
+
+      const ci95Low = Math.round((x - 1.960 * eem) * 10) / 10;
+      const ci95High = Math.round((x + 1.960 * eem) * 10) / 10;
+
+      const ci99Low = Math.round((x - 2.576 * eem) * 10) / 10;
+      const ci99High = Math.round((x + 2.576 * eem) * 10) / 10;
+
+      if (outVal) outVal.textContent = eem.toFixed(2);
+      if (out90) out90.textContent = `${ci90Low} - ${ci90High}`;
+      if (out95) out95.textContent = `${ci95Low} - ${ci95High}`;
+      if (out99) out99.textContent = `${ci99Low} - ${ci99High}`;
+
+      if (outVerdict) {
+        if (rxx >= 0.90) {
+          outVerdict.textContent = 'Excelente Confiabilidad (rxx ≥ 0.90) - Apta para Decisiones Clínicas Individuales';
+          outVerdict.style.background = 'rgba(16, 185, 129, 0.15)';
+          outVerdict.style.color = '#047857';
+        } else if (rxx >= 0.80) {
+          outVerdict.textContent = 'Confiabilidad Moderada (0.80 ≤ rxx < 0.90) - Aceptable para Cribado / Investigación';
+          outVerdict.style.background = 'rgba(245, 158, 11, 0.15)';
+          outVerdict.style.color = '#b45309';
+        } else {
+          outVerdict.textContent = 'Confiabilidad Deficiente (rxx < 0.80) - Inadecuada para Diagnóstico Individual';
+          outVerdict.style.background = 'rgba(239, 68, 68, 0.15)';
+          outVerdict.style.color = '#b91c1c';
+        }
+      }
+    }
+
+    if (scoreInp) scoreInp.addEventListener('input', updateEEM);
+    if (sdInp) sdInp.addEventListener('input', updateEEM);
+    if (relInp) relInp.addEventListener('input', updateEEM);
+
+    updateEEM();
+  }
+
+  // 3. EVALUACIÓN Y SEMÁFORO EAD-1 (NAVEGADOR DE LOS 9 RANGOS DE EDAD)
+  if (itemId === 'evaluacion-tamizaje-neurodesarrollo-ead1') {
+    const tabsBar = modalContent.querySelector('#ead-age-tabs-bar');
+    const contentBox = modalContent.querySelector('#ead-range-content-box');
+
+    function renderEadRange(rangeIdx) {
+      const data = EAD_RANGES_DATA[rangeIdx] || EAD_RANGES_DATA[0];
+      if (!contentBox) return;
+
+      contentBox.innerHTML = `
+        <div style="background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(59, 130, 246, 0.25); border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #2563eb; letter-spacing: 0.05em;">GRUPO ETARIO SELECCIONADO:</span>
+              <h4 style="margin: 0.15rem 0; font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">${data.range}</h4>
+              <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary); font-style: italic;">${data.subtitle}</p>
+            </div>
+            <span style="padding: 0.35rem 0.75rem; border-radius: 8px; background: rgba(59, 130, 246, 0.1); color: #1d4ed8; font-weight: 700; font-size: 0.82rem;">EAD-1 Oficial</span>
+          </div>
+
+          <div class="orientation-dimensions-grid">
+            <!-- ÁREA A: MOTRICIDAD GRUESA -->
+            <div class="orientation-dim-item" style="border-top: 3px solid #3b82f6;">
+              <div class="dim-item-header">
+                <span class="dim-icon">🏃‍♂️</span>
+                <div>
+                  <span class="dim-name">Área A: Motricidad Gruesa</span>
+                  <div style="font-size: 0.72rem; color: #2563eb; font-weight: 700;">Tono, Postura y Locomoción</div>
+                </div>
+              </div>
+              <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.gruesa.item}</p>
+              <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.gruesa.procedimiento}</div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #1e40af; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary);">${data.areas.gruesa.criterio}</div>
+              </div>
+            </div>
+
+            <!-- ÁREA B: MOTRICIDAD FINO-ADAPTATIVA -->
+            <div class="orientation-dim-item" style="border-top: 3px solid #d97706;">
+              <div class="dim-item-header">
+                <span class="dim-icon">✍️</span>
+                <div>
+                  <span class="dim-name">Área B: Fino-Adaptativa</span>
+                  <div style="font-size: 0.72rem; color: #d97706; font-weight: 700;">Coordinación Óculo-Manual & Prensión</div>
+                </div>
+              </div>
+              <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.fina.item}</p>
+              <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.fina.procedimiento}</div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary);">${data.areas.fina.criterio}</div>
+              </div>
+            </div>
+
+            <!-- ÁREA C: AUDICIÓN Y LENGUAJE -->
+            <div class="orientation-dim-item" style="border-top: 3px solid #059669;">
+              <div class="dim-item-header">
+                <span class="dim-icon">🗣️</span>
+                <div>
+                  <span class="dim-name">Área C: Audición y Lenguaje</span>
+                  <div style="font-size: 0.72rem; color: #059669; font-weight: 700;">Comprensión, Léxico y Expresión</div>
+                </div>
+              </div>
+              <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.lenguaje.item}</p>
+              <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.lenguaje.procedimiento}</div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #047857; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary);">${data.areas.lenguaje.criterio}</div>
+              </div>
+            </div>
+
+            <!-- ÁREA D: CONDUCTA PERSONAL-SOCIAL -->
+            <div class="orientation-dim-item" style="border-top: 3px solid #7c3aed;">
+              <div class="dim-item-header">
+                <span class="dim-icon">🤝</span>
+                <div>
+                  <span class="dim-name">Área D: Personal-Social</span>
+                  <div style="font-size: 0.72rem; color: #7c3aed; font-weight: 700;">Apego, Autonomía y Normas</div>
+                </div>
+              </div>
+              <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.social.item}</p>
+              <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.social.procedimiento}</div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #6b21a8; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary);">${data.areas.social.criterio}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (tabsBar) {
+      tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(b => {
+            b.classList.remove('active');
+            b.style.background = 'rgba(0,0,0,0.03)';
+            b.style.color = 'var(--text-primary)';
+            b.style.borderColor = 'rgba(0,0,0,0.12)';
+          });
+          btn.classList.add('active');
+          btn.style.background = '#059669';
+          btn.style.color = '#ffffff';
+          btn.style.borderColor = '#059669';
+
+          const idx = parseInt(btn.getAttribute('data-range-idx'), 10) || 0;
+          renderEadRange(idx);
+        });
+      });
+    }
+
+    // Initial render
+    renderEadRange(0);
+  }
+
+  // Cross-navigation for the 5 new pairs
+  const btnGotoPsicoEval = modalContent.querySelector('#btn-goto-psicometria-eval');
+  if (btnGotoPsicoEval) btnGotoPsicoEval.addEventListener('click', () => controller.openResourceModal('evaluacion-interpretacion-perfiles-psicometricos'));
+  const btnBottomGotoPsicoEval = modalContent.querySelector('#btn-bottom-goto-psicometria-eval');
+  if (btnBottomGotoPsicoEval) btnBottomGotoPsicoEval.addEventListener('click', () => controller.openResourceModal('evaluacion-interpretacion-perfiles-psicometricos'));
+
+  const btnBackPsicoDef = modalContent.querySelector('#btn-back-psicometria-def');
+  if (btnBackPsicoDef) btnBackPsicoDef.addEventListener('click', () => controller.openResourceModal('psicometria-teoria-medida-baremos'));
+  const btnBottomBackPsicoDef = modalContent.querySelector('#btn-bottom-back-psicometria-def');
+  if (btnBottomBackPsicoDef) btnBottomBackPsicoDef.addEventListener('click', () => controller.openResourceModal('psicometria-teoria-medida-baremos'));
+
+  const btnGotoEemEval = modalContent.querySelector('#btn-goto-eem-eval');
+  if (btnGotoEemEval) btnGotoEemEval.addEventListener('click', () => controller.openResourceModal('evaluacion-estimacion-error-estandar-eem'));
+  const btnBottomGotoEemEval = modalContent.querySelector('#btn-bottom-goto-eem-eval');
+  if (btnBottomGotoEemEval) btnBottomGotoEemEval.addEventListener('click', () => controller.openResourceModal('evaluacion-estimacion-error-estandar-eem'));
+
+  const btnBackEemDef = modalContent.querySelector('#btn-back-eem-def');
+  if (btnBackEemDef) btnBackEemDef.addEventListener('click', () => controller.openResourceModal('confiabilidad-error-estandar-medicion'));
+  const btnBottomBackEemDef = modalContent.querySelector('#btn-bottom-back-eem-def');
+  if (btnBottomBackEemDef) btnBottomBackEemDef.addEventListener('click', () => controller.openResourceModal('confiabilidad-error-estandar-medicion'));
+
+  const btnGotoEadEval = modalContent.querySelector('#btn-goto-ead-eval');
+  if (btnGotoEadEval) btnGotoEadEval.addEventListener('click', () => controller.openResourceModal('evaluacion-tamizaje-neurodesarrollo-ead1'));
+  const btnBottomGotoEadEval = modalContent.querySelector('#btn-bottom-goto-ead-eval');
+  if (btnBottomGotoEadEval) btnBottomGotoEadEval.addEventListener('click', () => controller.openResourceModal('evaluacion-tamizaje-neurodesarrollo-ead1'));
+
+  const btnBackEadDef = modalContent.querySelector('#btn-back-ead-def');
+  if (btnBackEadDef) btnBackEadDef.addEventListener('click', () => controller.openResourceModal('neurodesarrollo-infantil-ead'));
+  const btnBottomBackEadDef = modalContent.querySelector('#btn-bottom-back-ead-def');
+  if (btnBottomBackEadDef) btnBottomBackEadDef.addEventListener('click', () => controller.openResourceModal('neurodesarrollo-infantil-ead'));
+
+  const btnGotoFinaEval = modalContent.querySelector('#btn-goto-fina-eval');
+  if (btnGotoFinaEval) btnGotoFinaEval.addEventListener('click', () => controller.openResourceModal('evaluacion-motricidad-fino-adaptativa-grafismo'));
+  const btnBottomGotoFinaEval = modalContent.querySelector('#btn-bottom-goto-fina-eval');
+  if (btnBottomGotoFinaEval) btnBottomGotoFinaEval.addEventListener('click', () => controller.openResourceModal('evaluacion-motricidad-fino-adaptativa-grafismo'));
+
+  const btnBackFinaDef = modalContent.querySelector('#btn-back-fina-def');
+  if (btnBackFinaDef) btnBackFinaDef.addEventListener('click', () => controller.openResourceModal('coordinacion-visomotriz-fino-adaptativa'));
+  const btnBottomBackFinaDef = modalContent.querySelector('#btn-bottom-back-fina-def');
+  if (btnBottomBackFinaDef) btnBottomBackFinaDef.addEventListener('click', () => controller.openResourceModal('coordinacion-visomotriz-fino-adaptativa'));
+
+  const btnGotoLatEval = modalContent.querySelector('#btn-goto-lateralidad-eval');
+  if (btnGotoLatEval) btnGotoLatEval.addEventListener('click', () => controller.openResourceModal('evaluacion-lateralidad-dominancia-infantil'));
+  const btnBottomGotoLatEval = modalContent.querySelector('#btn-bottom-goto-lateralidad-eval');
+  if (btnBottomGotoLatEval) btnBottomGotoLatEval.addEventListener('click', () => controller.openResourceModal('evaluacion-lateralidad-dominancia-infantil'));
+
+  const btnBackLatDef = modalContent.querySelector('#btn-back-lateralidad-def');
+  if (btnBackLatDef) btnBackLatDef.addEventListener('click', () => controller.openResourceModal('lateralidad-esquema-corporal-desarrollo'));
+  const btnBottomBackLatDef = modalContent.querySelector('#btn-bottom-back-lateralidad-def');
+  if (btnBottomBackLatDef) btnBottomBackLatDef.addEventListener('click', () => controller.openResourceModal('lateralidad-esquema-corporal-desarrollo'));
+}
+
+
 export function setupAdditionalModalListeners(itemId, modalContent, controller) {
+  setupBlockABModalListeners(itemId, modalContent, controller);
+
   if (!modalContent || !controller) return;
 
   // Jump buttons to exact book pages in Native PDF Reader

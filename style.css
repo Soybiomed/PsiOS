@@ -11417,3 +11417,63 @@ body.in-admin-view .hero-right {
   background: rgba(0, 0, 0, 0.05);
   color: var(--text-primary);
 }
+
+
+/* ==========================================================================
+   INTERACTIVE GAUSS BELL CURVE & EAD-1 WIDGETS STYLES
+   ========================================================================== */
+
+.gauss-preset-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.gauss-preset-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.gauss-preset-btn:active {
+  transform: translateY(0);
+}
+
+.ead-traffic-card {
+  transition: all 0.25s ease;
+}
+
+.ead-traffic-card:hover {
+  transform: translateX(3px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.ead-age-tab-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ead-age-tab-btn:hover:not(.active) {
+  background: rgba(5, 150, 105, 0.08) !important;
+  color: #047857 !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+.dark-theme #gauss-svg-canvas {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-theme #gauss-svg-canvas text {
+  fill: #e2e8f0;
+}
+
+.dark-theme #gauss-svg-canvas line {
+  stroke: #334155;
+}
+
+.dark-theme .ead-traffic-card,
+.dark-theme #sec-gauss-widget,
+.dark-theme #sec-ead-semaforo-widget,
+.dark-theme #sec-ead-navegador {
+  background: rgba(30, 41, 59, 0.8) !important;
+}
