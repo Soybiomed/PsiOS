@@ -1,6 +1,6 @@
 {
   "name": "psios",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,11 @@
     "desktop:dev": "tauri dev",
     "desktop:build": "tauri build --no-bundle",
     "deploy:online": "node scripts/deploy-online.mjs",
-    "upload:books": "node scripts/upload-r2.mjs"
+    "upload:books": "node scripts/upload-r2.mjs",
+    "version:bump": "node scripts/bump-version.mjs patch",
+    "version:minor": "node scripts/bump-version.mjs minor",
+    "version:major": "node scripts/bump-version.mjs major",
+    "version:set": "node scripts/bump-version.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

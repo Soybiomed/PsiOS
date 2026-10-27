@@ -38,7 +38,7 @@
             <span class="brand-symbol">Ψ</span>
             <span class="brand-name">PsiOS</span>
             <span class="brand-separator"></span>
-            <span class="brand-badge">BETA 0.0.3</span>
+            <span class="brand-badge">v1.0.0</span>
           </div>
         </header>
 
@@ -95,7 +95,7 @@
               <!-- PASO 1: ACTIVACIÓN OBLIGATORIA DE CLAVE DE PRODUCTO -->
               <div class="register-step-pane active" id="register-step-license">
                 <div class="register-header">
-                  <span class="form-kicker">ACTIVACIÓN DE PRODUCTO • BETA 0.0.3</span>
+                  <span class="form-kicker">ACTIVACIÓN DE PRODUCTO • v1.0.0</span>
                   <h2 class="register-heading">Clave de Producto</h2>
                   <p class="register-subprompt">Ingresa la clave de licencia asignada para activar esta estación de trabajo.</p>
                 </div>
@@ -752,7 +752,7 @@
                   <div>
                     <div class="admin-badge-row">
                       <span class="admin-badge-kicker">PANEL DE CONTROL MAESTRO</span>
-                      <span class="admin-version-pill">BETA 0.0.3</span>
+                      <span class="admin-version-pill">v1.0.0</span>
                     </div>
                     <h1 class="admin-title">Administración de Licencias y Usuarios</h1>
                     <p class="admin-subtitle">Conectado a Cloudflare KV • Gestión en tiempo real de claves únicas por usuario</p>
@@ -1934,6 +1934,38 @@
           <button type="button" class="primary-gradient-btn" id="btn-save-admin-key-config">
             <span>💾 Guardar Cambios en Cloudflare</span>
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIQUID GLASS SYSTEM ALERT & NOTIFICATION DIALOG -->
+    <div class="psios-modal-backdrop liquid-glass-alert-backdrop" id="modal-liquid-alert-backdrop" aria-hidden="true">
+      <div class="liquid-glass-alert-card" role="dialog" aria-modal="true" aria-labelledby="liquid-alert-title">
+        <div class="liquid-glass-alert-glow"></div>
+        <button type="button" class="liquid-glass-alert-close" id="btn-close-liquid-alert" title="Cerrar aviso">✕</button>
+        <div class="liquid-glass-alert-content">
+          <div class="liquid-glass-alert-icon-box" id="liquid-alert-icon-box">
+            <span class="liquid-glass-alert-icon" id="liquid-alert-icon">🔑</span>
+          </div>
+          <span class="liquid-glass-alert-badge" id="liquid-alert-badge">ESTADO DE LICENCIA</span>
+          <h3 class="liquid-glass-alert-title" id="liquid-alert-title">Clave de Licencia No Encontrada</h3>
+          <p class="liquid-glass-alert-message" id="liquid-alert-message">
+            Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.
+          </p>
+          <div class="liquid-glass-alert-actions" id="liquid-alert-actions">
+            <button type="button" class="liquid-glass-btn btn-liquid-alert-confirm" id="btn-liquid-alert-confirm">
+              <span class="btn-text" id="liquid-alert-btn-text">Ingresar Nueva Clave</span>
+              <span class="btn-icon-wrap">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </button>
+            <button type="button" class="liquid-glass-alert-cancel-btn" id="btn-liquid-alert-cancel" style="display: none;">
+              Cancelar
+            </button>
+          </div>
         </div>
       </div>
     </div>

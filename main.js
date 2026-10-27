@@ -11663,16 +11663,67 @@ class AppNavigationController {
           // Verificar en tiempo real si la licencia fue pausada, expirada o desvinculada por el Administrador Maestro
           if (this.footerStatus) this.footerStatus.textContent = 'Verificando estado de licencia en la nube...';
           const validity = await licenseService.validateLiveLicenseStatus();
-          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v0.0.3 • Modo Clínico Activo';
+          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v1.0.0 • Modo Clínico Activo';
 
           if (!validity.valid) {
-            if (validity.reason === 'device_removed') {
-              alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+            console.warn('[Ingresar] Estado de licencia inválido:', validity);
+
+            if (validity.reason === 'revoked') {
+              await this.showLiquidGlassAlert({
+                icon: '🔑',
+                badge: 'LICENCIA NO ENCONTRADA',
+                title: 'Clave de Licencia Eliminada',
+                message: validity.message || 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro. Ingresa una nueva clave de producto para continuar.',
+                confirmText: 'Ingresar Nueva Clave',
+                badgeColor: 'danger'
+              });
+              this.handleFullReset();
+              return;
+            } else if (validity.reason === 'device_removed') {
+              await this.showLiquidGlassAlert({
+                icon: '💻',
+                badge: 'EQUIPOS REINICIADOS',
+                title: 'Computadora Desvinculada',
+                message: validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.',
+                confirmText: 'Ingresar Nueva Clave',
+                badgeColor: 'warning'
+              });
+              this.handleFullReset();
+              return;
+            } else if (validity.reason === 'paused') {
+              await this.showLiquidGlassAlert({
+                icon: '⏸️',
+                badge: 'LICENCIA PAUSADA',
+                title: 'Licencia Pausada',
+                message: validity.message || 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.',
+                confirmText: 'Aceptar',
+                badgeColor: 'warning'
+              });
+              this.handleLogout();
+              return;
+            } else if (validity.reason === 'expired') {
+              await this.showLiquidGlassAlert({
+                icon: '⏳',
+                badge: 'LICENCIA EXPIRADA',
+                title: 'Licencia Expirada',
+                message: validity.message || 'Tu licencia de PsiOS ha expirado. Por favor ingresa una nueva clave o contacta al Administrador Maestro.',
+                confirmText: 'Ingresar Otra Clave',
+                badgeColor: 'warning'
+              });
+              this.handleFullReset();
+              return;
+            } else {
+              await this.showLiquidGlassAlert({
+                icon: '⚠️',
+                badge: 'AVISO DE LICENCIA',
+                title: 'Licencia Inválida',
+                message: validity.message || 'Tu licencia de PsiOS no es válida o ha sido modificada.',
+                confirmText: 'Ingresar Nueva Clave',
+                badgeColor: 'danger'
+              });
               this.handleFullReset();
               return;
             }
-            alert(validity.message || 'Tu licencia de PsiOS ha expirado o se encuentra pausada. Contacta al Administrador Maestro para renovarla.');
-            return;
           }
           // Si el usuario ya está registrado: saltar clave y "¿Quién eres?", solo pedir contraseña
           this.showLoginView(savedUser);
@@ -12225,16 +12276,64 @@ class AppNavigationController {
       // 1. Verificación autoritativa en vivo antes de autenticar al usuario
       const validity = await licenseService.validateLiveLicenseStatus();
       if (!validity.valid) {
-        if (validity.reason === 'device_removed') {
-          alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+        if (validity.reason === 'revoked') {
+          await this.showLiquidGlassAlert({
+            icon: '🔑',
+            badge: 'LICENCIA NO ENCONTRADA',
+            title: 'Clave de Licencia Eliminada',
+            message: validity.message || 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.',
+            confirmText: 'Ingresar Nueva Clave',
+            badgeColor: 'danger'
+          });
+          this.handleFullReset();
+          return;
+        } else if (validity.reason === 'device_removed') {
+          await this.showLiquidGlassAlert({
+            icon: '💻',
+            badge: 'EQUIPOS REINICIADOS',
+            title: 'Computadora Desvinculada',
+            message: validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.',
+            confirmText: 'Ingresar Nueva Clave',
+            badgeColor: 'warning'
+          });
+          this.handleFullReset();
+          return;
+        } else if (validity.reason === 'paused') {
+          await this.showLiquidGlassAlert({
+            icon: '⏸️',
+            badge: 'LICENCIA PAUSADA',
+            title: 'Licencia Pausada',
+            message: validity.message || 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro.',
+            confirmText: 'Aceptar',
+            badgeColor: 'warning'
+          });
+          this.handleLogout();
+          return;
+        } else if (validity.reason === 'expired') {
+          await this.showLiquidGlassAlert({
+            icon: '⏳',
+            badge: 'LICENCIA EXPIRADA',
+            title: 'Licencia Expirada',
+            message: validity.message || 'Tu licencia de PsiOS ha expirado. Por favor ingresa una nueva clave.',
+            confirmText: 'Ingresar Otra Clave',
+            badgeColor: 'warning'
+          });
           this.handleFullReset();
           return;
         }
+
         if (this.loginPasswordError) {
           this.loginPasswordError.textContent = validity.message || 'Tu licencia de PsiOS no es válida o está pausada.';
           this.loginPasswordError.classList.add('visible');
         } else {
-          alert(validity.message || 'Tu licencia de PsiOS no es válida o está pausada.');
+          await this.showLiquidGlassAlert({
+            icon: '⚠️',
+            badge: 'AVISO DE LICENCIA',
+            title: 'Licencia No Válida',
+            message: validity.message || 'Tu licencia de PsiOS no es válida o está pausada.',
+            confirmText: 'Ingresar Nueva Clave'
+          });
+          this.handleFullReset();
         }
         return;
       }
@@ -12877,6 +12976,128 @@ class AppNavigationController {
     this.switchView('view-splash');
   }
 
+  showLiquidGlassAlert({
+    icon = '🔑',
+    badge = 'ESTADO DE LICENCIA',
+    title = 'Clave de Licencia No Encontrada',
+    message = '',
+    confirmText = 'Ingresar Nueva Clave',
+    cancelText = null,
+    badgeColor = 'danger'
+  } = {}) {
+    return new Promise((resolve) => {
+      const backdrop = document.getElementById('modal-liquid-alert-backdrop');
+      if (!backdrop) {
+        alert(message || title);
+        resolve(true);
+        return;
+      }
+
+      const iconEl = document.getElementById('liquid-alert-icon');
+      const badgeEl = document.getElementById('liquid-alert-badge');
+      const titleEl = document.getElementById('liquid-alert-title');
+      const msgEl = document.getElementById('liquid-alert-message');
+      const btnConfirm = document.getElementById('btn-liquid-alert-confirm');
+      const btnCancel = document.getElementById('btn-liquid-alert-cancel');
+      const btnText = document.getElementById('liquid-alert-btn-text');
+      const btnClose = document.getElementById('btn-close-liquid-alert');
+      const iconBox = document.getElementById('liquid-alert-icon-box');
+
+      if (iconEl) iconEl.textContent = icon;
+      if (badgeEl) badgeEl.textContent = badge;
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.textContent = message;
+      if (btnText) btnText.textContent = confirmText;
+
+      if (badgeColor === 'warning') {
+        if (badgeEl) {
+          badgeEl.style.background = 'rgba(245, 158, 11, 0.12)';
+          badgeEl.style.color = '#d97706';
+          badgeEl.style.borderColor = 'rgba(245, 158, 11, 0.25)';
+        }
+        if (iconBox) {
+          iconBox.style.background = 'linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 179, 8, 0.2))';
+          iconBox.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+        }
+      } else if (badgeColor === 'info') {
+        if (badgeEl) {
+          badgeEl.style.background = 'rgba(59, 130, 246, 0.12)';
+          badgeEl.style.color = '#2563eb';
+          badgeEl.style.borderColor = 'rgba(59, 130, 246, 0.25)';
+        }
+        if (iconBox) {
+          iconBox.style.background = 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.2))';
+          iconBox.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+        }
+      } else {
+        if (badgeEl) {
+          badgeEl.style.background = 'rgba(239, 68, 68, 0.12)';
+          badgeEl.style.color = '#dc2626';
+          badgeEl.style.borderColor = 'rgba(239, 68, 68, 0.25)';
+        }
+        if (iconBox) {
+          iconBox.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(245, 158, 11, 0.16))';
+          iconBox.style.borderColor = 'rgba(239, 68, 68, 0.25)';
+        }
+      }
+
+      if (btnCancel) {
+        if (cancelText) {
+          btnCancel.textContent = cancelText;
+          btnCancel.style.display = 'inline-flex';
+        } else {
+          btnCancel.style.display = 'none';
+        }
+      }
+
+      const closeDialog = (result) => {
+        backdrop.classList.remove('active', 'visible');
+        backdrop.setAttribute('aria-hidden', 'true');
+        setTimeout(() => {
+          backdrop.style.display = 'none';
+        }, 250);
+        resolve(result);
+      };
+
+      const onConfirmClick = () => {
+        cleanup();
+        closeDialog(true);
+      };
+      const onCancelClick = () => {
+        cleanup();
+        closeDialog(false);
+      };
+      const onCloseClick = () => {
+        cleanup();
+        closeDialog(false);
+      };
+      const onKeyDown = (e) => {
+        if (e.key === 'Escape' || e.key === 'Enter') {
+          e.preventDefault();
+          cleanup();
+          closeDialog(e.key === 'Enter');
+        }
+      };
+
+      const cleanup = () => {
+        if (btnConfirm) btnConfirm.removeEventListener('click', onConfirmClick);
+        if (btnCancel) btnCancel.removeEventListener('click', onCancelClick);
+        if (btnClose) btnClose.removeEventListener('click', onCloseClick);
+        window.removeEventListener('keydown', onKeyDown);
+      };
+
+      if (btnConfirm) btnConfirm.addEventListener('click', onConfirmClick, { once: true });
+      if (btnCancel) btnCancel.addEventListener('click', onCancelClick, { once: true });
+      if (btnClose) btnClose.addEventListener('click', onCloseClick, { once: true });
+      window.addEventListener('keydown', onKeyDown);
+
+      backdrop.style.display = 'flex';
+      void backdrop.offsetWidth;
+      backdrop.classList.add('active', 'visible');
+      backdrop.setAttribute('aria-hidden', 'false');
+    });
+  }
+
   handleLogout() {
     // Cerrar sesión activa (bloquear estación)
     authService.logout();
@@ -12958,16 +13179,44 @@ class AppNavigationController {
           });
 
           if (validity.reason === 'device_removed') {
-            alert(validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.');
+            await this.showLiquidGlassAlert({
+              icon: '💻',
+              badge: 'EQUIPOS REINICIADOS',
+              title: 'Computadora Desvinculada',
+              message: validity.message || 'Esta computadora ha sido desvinculada por el Administrador Maestro (se restablecieron los equipos autorizados). Tu sesión se ha cerrado para liberar el cupo del equipo.',
+              confirmText: 'Aceptar',
+              badgeColor: 'warning'
+            });
             this.handleFullReset();
           } else if (validity.reason === 'paused') {
-            alert(validity.message || 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.');
+            await this.showLiquidGlassAlert({
+              icon: '⏸️',
+              badge: 'LICENCIA PAUSADA',
+              title: 'Licencia Pausada',
+              message: validity.message || 'Tu licencia de PsiOS ha sido pausada temporalmente por el Administrador Maestro en el Panel de Control.',
+              confirmText: 'Aceptar',
+              badgeColor: 'warning'
+            });
             this.handleLogout();
           } else if (validity.reason === 'expired') {
-            alert(validity.message || 'Tu licencia de PsiOS ha expirado. Solicita al Administrador Maestro renovar la vigencia.');
+            await this.showLiquidGlassAlert({
+              icon: '⏳',
+              badge: 'LICENCIA EXPIRADA',
+              title: 'Licencia Expirada',
+              message: validity.message || 'Tu licencia de PsiOS ha expirado. Solicita al Administrador Maestro renovar la vigencia.',
+              confirmText: 'Aceptar',
+              badgeColor: 'warning'
+            });
             this.handleLogout();
           } else if (validity.reason === 'revoked') {
-            alert(validity.message || 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro.');
+            await this.showLiquidGlassAlert({
+              icon: '🔑',
+              badge: 'LICENCIA NO ENCONTRADA',
+              title: 'Clave de Licencia Eliminada',
+              message: validity.message || 'Esta clave de licencia ya no existe en el sistema o fue eliminada por el Administrador Maestro. Ingresa una nueva clave de producto para continuar.',
+              confirmText: 'Ingresar Nueva Clave',
+              badgeColor: 'danger'
+            });
             this.handleFullReset();
           }
         }
@@ -13131,7 +13380,7 @@ class AppNavigationController {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
   // Cierre de sesión y purga global para Beta 0.0.3 en app y web
-  const APP_VERSION = '0.0.3';
+  const APP_VERSION = '1.0.0';
   try {
     const previousVersion = localStorage.getItem('psios_app_version');
     if (previousVersion !== APP_VERSION) {
