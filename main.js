@@ -2517,7 +2517,7 @@ function getMemoryDocHtml() {
           <span class="modal-area-pill">🔬 ÁREA: PROCESOS PSICOLÓGICOS</span>
         </div>
         <h2 class="orientation-main-title">La memoria</h2>
-        <p class="orientation-authors-meta">Semiología Psiquiátrica (Ricardo Capponi) • Manual de Psicopatología Belloch (Vol. 1) • APIR</p>
+        <p class="orientation-authors-meta">Semiología Psiquiátrica (Ricardo Capponi) • Manual Belloch (Vol. 1) • APIR • Tests Psicológicos (Anne Anastasi & Susana Urbina) • Escala Abreviada de Desarrollo EAD-1 (Nelson Ortiz)</p>
       </div>
 
       <!-- 1. Definición de memoria -->
@@ -2845,6 +2845,50 @@ function getMemoryDocHtml() {
         </div>
       </section>
 
+
+      <!-- Sección Psicométrica & Neuroevolutiva (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA & NEURODESARROLLO</div>
+        <h3 class="orientation-sec-title">Fundamentos Psicométricos y Neuroevolutivos de la Memoria</h3>
+        <p class="orientation-lead-p">
+          La evaluación rigurosa de la memoria exige trascender la simple indagación clínica subjetiva incorporando los estándares psicométricos de confiabilidad, baremación e intervalos de confianza, así como los hitos del neurodesarrollo evolutivo infantil.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">🔬 Medición Psicométrica y Error Estándar (Anne Anastasi & Susana Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, 7.ª Ed., Cap. 4, Págs. 84-112 y Cap. 9, Págs. 206-250)</span>, el rendimiento mnésico no debe diagnosticarse como patológico a partir de una puntuación aislada:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Baterías Estandarizadas (WMS / WAIS):</strong> El Índice de Memoria de Trabajo (IMT) y las escalas Wechsler evalúan retención inmediata, aprendizaje auditivo-verbal y memoria de trabajo con baremos normalizados de media 100 y desviación típica 15.</li>
+            <li><strong>Error Estándar de Medición (EEM):</strong> Todo puntaje directo está sujeto a error de muestreo. Mediante la fórmula <em>EEM = s · √(1 - r<sub>xx</sub>)</em>, se calculan intervalos de confianza al 95% (puntaje ± 1.96 · EEM), previniendo falsos diagnósticos de amnesia en pacientes que solo presentan fatiga o ansiedad situacional.</li>
+            <li><strong>Curva de Aprendizaje y Retención Diferida (RAVLT):</strong> Permite disociar el déficit de codificación/adquisición (hipocampal) del déficit de recuperación/búsqueda estratégica (frontal).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="210" title="Consultar evaluación de la memoria y escalas Wechsler en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Evaluación Estandarizada de la Memoria y CI (Pág. 210) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Neurodesarrollo y Adquisición Mnésica en la Primera Infancia (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz Pinilla, Área C: Audición y Lenguaje, Págs. 32-37)</span>, la capacidad mnésica infantil madura secuencialmente:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Permanencia del Objeto y Memoria Sensoriomotriz (9 a 12 meses):</strong> Capacidad de buscar activamente un objeto oculto, demostrando la conservación del registro mental sin soporte perceptivo directo.</li>
+            <li><strong>Memoria Operativa y Evocación de Órdenes (24 a 36 meses):</strong> Capacidad para retener y ejecutar comandos simples de dos pasos consecutivos («toma la pelota y dásela a mamá»).</li>
+            <li><strong>Memoria Narrativa y Definición Conceptual (48 a 60 meses):</strong> Evocación diferida de relatos breves y memoria semántica de categorías funcionales. Caer por debajo del percentil 10 (Zona de Alerta del EAD-1) enciende sospecha de rezago global del desarrollo.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="34" title="Consultar Área C (Audición y Lenguaje) de la EAD-1 de Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Hitos de Memoria y Lenguaje EAD-1 (Pág. 34) →
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Botón inferior para evaluación -->
       <div class="orientation-bottom-cta">
         <button type="button" class="btn-orientation-cta" id="btn-goto-memory-eval">
@@ -3128,6 +3172,60 @@ function getMemoryEvaluationDocHtml() {
         <div class="orientation-clinical-note" style="margin-top: 1rem;">
           📋 <strong>Alcance Metodológico:</strong>
           Esta tabla es una guía de organización clínica, no una escala diagnóstica validada. Si se requiere una valoración formal, deben utilizarse instrumentos neuropsicológicos apropiados y considerar la evaluación profesional.
+        </div>
+      </section>
+
+
+      <!-- Sección Psicométrica & Neuroevolutiva (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA, BAREMOS & FARMACOTERAPIA</div>
+        <h3 class="orientation-sec-title">Baremos Psicométricos, Error Estándar (EEM) y Protocolo Terapéutico</h3>
+        <p class="orientation-lead-p">
+          Para garantizar una práctica clínica basada en evidencia, los resultados de la exploración mnésica deben contextualizarse con los baremos normativos estandarizados descritos por Anastasi & Urbina y los hitos del desarrollo de Nelson Ortiz.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">📊 Rúbrica Psicométrica e Intervalos de Confianza (Anastasi & Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, Págs. 84-112)</span>, la confiabilidad de las pruebas de memoria verbal inmediata (Dígitos) oscila entre <em>r = 0.82 y 0.90</em>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Span de Dígitos Directos:</strong> Adultos jóvenes y medios: 6-7 dígitos (P50); Span ≤ 4 dígitos se sitúa bajo el percentil 5 (Pérdida del volumen atencional-mnésico inmediato).</li>
+            <li><strong>Span Inverso (Memoria de Trabajo):</strong> Media esperable: 4-5 dígitos. Span ≤ 2 indica compromiso severo de la memoria operativa frontal.</li>
+            <li><strong>Cálculo del EEM e Intervalo al 95%:</strong> Para una desviación típica <em>s = 15</em> y confiabilidad <em>r = 0.88</em>, el <em>EEM = 15 · √(1 - 0.88) = 5.2</em> puntos. El intervalo de confianza al 95% es de ± 10 puntos (± 1.96 · EEM). Esto impide rotular apresuradamente una disfunción como demencia irreversible.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="88" title="Consultar confiabilidad y cálculo del Error Estándar en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Confiabilidad y Error Estándar EEM (Pág. 88) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Tamizaje de Memoria y Lenguaje en la Infancia (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz Pinilla, Págs. 32-37 y Baremos Págs. 48-62)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>De 12 a 24 meses:</strong> Identificación de objetos familiares nombrados y memoria de localización en el entorno inmediato.</li>
+            <li><strong>De 24 a 36 meses:</strong> Repetición de dos números o palabras sin relación y cumplimiento de órdenes dobles.</li>
+            <li><strong>De 36 a 60 meses:</strong> Memorización y evocación de canciones breves, repetición de frases de 6 a 8 sílabas y relato de sucesos del día previo.</li>
+            <li><strong>Criterio de Alerta:</strong> Un puntaje T < 35 o percentil < 10 en el Área C exige descartar hipoacusia neurosensorial y remitir a estimulación temprana.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="35" title="Consultar Área C (Audición y Lenguaje) en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Protocolo de Lenguaje y Memoria EAD-1 (Pág. 35) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">💊 Tratamientos Posibles y Manejo Terapéutico</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Deterioro Cognitivo Leve y Alzheimer:</strong> Inhibidores de la acetilcolinesterasa (Donepezilo 5-10 mg/día, Rivastigmina 4.6-9.5 mg/24h) y antagonistas NMDA (Memantina 10-20 mg/día en estadios moderados-avanzados).</li>
+            <li><strong>Síndrome Amnésico de Korsakoff / Wernicke:</strong> Tiamina intravenosa urgente (500 mg c/8h por 3 días antes de cualquier perfusión de glucosa) para frenar la destrucción neuronal de los cuerpos mamilares.</li>
+            <li><strong>Intervención Neuropsicológica:</strong> Cuadernos de memoria, adaptación de rutinas, terapia de estimulación cognitiva en grupo y entrenamiento en ayudas externas (alarmas, listas de verificación).</li>
+          </ul>
         </div>
       </section>
 
@@ -3424,6 +3522,49 @@ function getOrientationDocHtml() {
         </div>
       </section>
 
+
+      <!-- Sección Psicométrica & Neuroevolutiva (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA & NEURODESARROLLO</div>
+        <h3 class="orientation-sec-title">Psicometría y Desarrollo Espaciotemporal (Anastasi & Urbina & Ortiz)</h3>
+        <p class="orientation-lead-p">
+          La orientación no es una función estática; su evaluación requiere considerar el nivel sociocultural y la maduración progresiva del esquema corporal y espacial desde la infancia.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">🔬 Medición Psicométrica en Cribados Neuropsicológicos (Anastasi & Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, Págs. 486-515)</span>, los reactivos de orientación presentan una alta validez de contenido para discriminar delirium y demencia:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Sensibilidad Diagnóstica:</strong> La orientación temporal es la más vulnerable y la primera en alterarse ante cualquier descenso del nivel de conciencia o daño cortical temporo-parietal.</li>
+            <li><strong>Control de Sesgo Sociodemográfico:</strong> En sujetos analfabetos o con menos de 4 años de escolaridad, la fecha numérica exacta o el día del mes genera falsos positivos; debe valorarse el reconocimiento de la estación, día de la semana o partes del día (mañana/tarde/noche).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="490" title="Consultar evaluación neuropsicológica clínica en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Evaluación Neuropsicológica Clínica (Pág. 490) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Evolución de la Orientación en la Infancia (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz, Áreas B y D, Págs. 26-42)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Orientación Espacial Primitiva (6 a 12 meses):</strong> Localización auditiva y visual inmediata en el plano horizontal y vertical.</li>
+            <li><strong>Orientación Corporal y Somatopsíquica (24 a 36 meses):</strong> Señalamiento de partes del cuerpo en sí mismo y en una lámina o muñeco.</li>
+            <li><strong>Orientación Espaciotemporal Intuitiva (48 a 60 meses):</strong> Distinción entre mañana y tarde, reconocimiento de su domicilio y orientación en espacios compartidos (casa, escuela).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="39" title="Consultar Área D (Personal-Social) en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Área Personal-Social y Esquema Corporal (Pág. 39) →
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Botón inferior para evaluación -->
       <div class="orientation-bottom-cta">
         <button type="button" class="btn-orientation-cta" id="btn-goto-orientation-eval">
@@ -3582,6 +3723,51 @@ function getOrientationEvaluationDocHtml() {
         <div class="orientation-clinical-note" style="margin-top: 1.25rem;">
           📋 <strong>Criterio Clínico Operativo:</strong>
           Describir con precisión qué dimensión está afectada, el grado de alteración y el contexto en que aparece. No establecer un diagnóstico a partir de una sola respuesta; valorar consistencia con conciencia, atención y memoria.
+        </div>
+      </section>
+
+
+      <!-- Sección Psicométrica & Protocolo Terapéutico (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA & PROTOCOLO TERAPÉUTICO</div>
+        <h3 class="orientation-sec-title">Rúbrica Psicométrica, Baremos y Protocolo Terapéutico</h3>
+        <p class="orientation-lead-p">
+          La desorientación aguda constituye una urgencia médica y psiquiátrica que exige una cuantificación precisa del error y un algoritmo terapéutico inmediato.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">📊 Rúbrica y Puntos de Corte Psicométricos (Anastasi & Urbina)</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Orientación Temporal (0-5 puntos):</strong> 5 pts = Normal; 4 pts = Error leve en fecha del mes (± 2 días tolerable); ≤ 3 pts = Alteración clínicamente significativa.</li>
+            <li><strong>Orientación Espacial (0-5 puntos):</strong> ≤ 3 pts en lugar/ciudad = Fuerte sospecha de síndrome confusional agudo o demencia moderada.</li>
+            <li><strong>Orientación Personal (Autopsíquica):</strong> La pérdida de identidad personal se observa exclusivamente en disociaciones psicógenas (fuga disociativa) o en demencias muy avanzadas (estadio GDS 7).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="115" title="Consultar validez de criterio y baremos en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Validez de Criterio y Baremos de Corte (Pág. 115) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Parámetros Evolutivos en Infancia (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            Según Nelson Ortiz <span class="citation-tag">(EAD-1, Pág. 41)</span>, la incapacidad de un niño de 5 años para ubicarse en su vecindario o identificar si es de día o de noche indica un desarrollo en Zona de Alerta (Puntaje T < 35). Requiere despistaje de discapacidad intelectual o trastorno del espectro autista.
+          </p>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="41" title="Consultar Área D y parámetros evolutivos en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Parámetros del Desarrollo Infantil EAD-1 (Pág. 41) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">💊 Protocolo Terapéutico y Reorientación Multimodal</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Tratamiento Etiológico Subyacente:</strong> Corrección urgente de hipoxemia, infecciones urinarias/respiratorias, alteraciones hidroelectrolíticas o suspensión de fármacos con carga anticolinérgica.</li>
+            <li><strong>Intervención Ambiental de Reorientación:</strong> Habitación con luz natural, reloj de pared grande visible, calendario, presencia continua de familiares conocidos y evitación de aislamiento o sobreestimulación sensorial.</li>
+            <li><strong>Farmacoterapia de Apoyo en Agitación:</strong> Haloperidol 0.5-1 mg oral/IM o Quetiapina 12.5-25 mg vo a dosis bajas si existe agitación con riesgo de auto/heteroagresión.</li>
+          </ul>
         </div>
       </section>
 
@@ -3971,6 +4157,49 @@ function getConsciousnessDocHtml() {
         </div>
       </section>
 
+
+      <!-- Sección Psicométrica & Neuroevolutiva (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA & NEURODESARROLLO</div>
+        <h3 class="orientation-sec-title">Medición Psicométrica de la Reactividad y Neurodesarrollo del Estado de Alerta</h3>
+        <p class="orientation-lead-p">
+          La semiología de la conciencia se complementa con la fiabilidad interjueces de escalas estandarizadas y el seguimiento neuroconductual de la vigilia en la primera infancia.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">🔬 Confiabilidad Inter-Evaluador y Estandarización (Anastasi & Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, Págs. 84-112)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Consistencia Inter-Observador:</strong> En la valoración de la reactividad a estímulos, la concordancia entre diferentes examinadores alcanza un Kappa de Cohen superior a 0.88 cuando se emplean descriptores operacionales estandarizados (Glasgow, RASS, CAM).</li>
+            <li><strong>Objetividad y Reducción del Error:</strong> La delimitación estricta entre respuesta refleja espinal vs. respuesta voluntaria cortical previene diagnósticos erróneos de muerte cerebral o coma profundo.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="95" title="Consultar confiabilidad interjueces en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Confiabilidad Inter-Evaluador y Escalas (Pág. 95) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Maduración de la Vigilia y Alerta en el Lactante (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz, Áreas A y C, Págs. 18-37)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Reactividad Inicial (0 a 3 meses):</strong> Estados de sueño profundo, sueño activo, vigilia tranquila y alerta reactiva con sobresalto ante ruidos intensos (reflejo de Moro y parpadeo).</li>
+            <li><strong>Alerta Social y Conexión (3 a 6 meses):</strong> Sostenimiento de la mirada, sonrisa social en respuesta al rostro humano e interés activo por el ambiente circundante.</li>
+            <li><strong>Signos de Alarma:</strong> Letargia persistente, irritabilidad inconsolable o hipotonía generalizada exigen descartar encefalopatía hipóxico-isquémica o meningitis.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="19" title="Consultar Área A (Motricidad y Reflejos) en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Motricidad Gruesa y Alerta Neonatal (Pág. 19) →
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Botón inferior para evaluación -->
       <div class="orientation-bottom-cta">
         <button type="button" class="btn-orientation-cta" id="btn-goto-conciencia-eval">
@@ -4290,6 +4519,55 @@ function getConsciousnessEvaluationDocHtml() {
           <div class="orientation-clinical-note" style="margin-top: 1rem;">
             📋 También es útil comprobar si comprende la situación actual. La desorientación puede indicar una alteración de conciencia, aunque debe interpretarse junto con la atención, la memoria y las demás funciones cognitivas.
           </div>
+        </div>
+      </section>
+
+
+      <!-- Sección Psicométrica & Protocolo Terapéutico de Emergencia (Anastasi & Urbina & Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA CUANTITATIVA & TRATAMIENTO URGENTE</div>
+        <h3 class="orientation-sec-title">Rúbrica Psicométrica Cuantitativa y Protocolo Terapéutico de Emergencia</h3>
+        <p class="orientation-lead-p">
+          Las fluctuaciones de la conciencia implican una alta gravedad potencial. El rigor psicométrico en la aplicación de la Escala de Glasgow (GCS) y el algoritmo ABCDE salvan vidas.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">📊 Propiedades Psicométricas de la Escala de Glasgow (Anastasi & Urbina)</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Estructura Factorial Tripartita:</strong> Apertura Ocular (1-4), Respuesta Verbal (1-5) y Respuesta Motora (1-6). Puntuación total entre 3 y 15 puntos.</li>
+            <li><strong>Validez Predictiva (Anastasi Págs. 113-145):</strong> Una puntuación GCS ≤ 8 posee una sensibilidad del 92% para predecir mortalidad en traumatismo craneoencefálico si no se asegura la vía aérea con intubación endotraqueal inmediata.</li>
+            <li><strong>Error Estándar de Medición:</strong> El EEM de la escala es de aproximadamente 0.6 puntos; variaciones de 2 o más puntos entre exploraciones consecutivas señalan deterioro neurológico activo (herniación cerebral inminente).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="100" title="Consultar validez predictiva y escalas estandarizadas en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Validez Predictiva y Escalas de Emergencia (Pág. 100) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Escala de Glasgow Pediátrica Adaptada (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En lactantes (< 2 años), se adapta la respuesta verbal y motora según los hitos de Nelson Ortiz <span class="citation-tag">(EAD-1, Pág. 21)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Verbal Pediátrico:</strong> 5 = Balbucea y sonríe; 4 = Llanto consolable; 3 = Llanto persistente e inapropiado; 2 = Quejido o gruñido; 1 = Sin respuesta.</li>
+            <li><strong>Motor Pediátrico:</strong> 6 = Movimientos espontáneos normales; 5 = Retira al tocar; 4 = Retira al dolor; 3 = Flexión anormal (decorticación); 2 = Extensión (descerebración); 1 = Flacidez total.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="21" title="Consultar Escala de Motricidad EAD-1 en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Motricidad y Reactividad Pediátrica EAD-1 (Pág. 21) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">💊 Protocolo Terapéutico de Emergencia (Soporte Vital Avanzado)</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Asegurar Vía Aérea (ABCDE):</strong> Intubación si GCS ≤ 8 o incapacidad de proteger la vía aérea; oxígeno para SpO2 > 94%.</li>
+            <li><strong>Cóctel de Coma Rápido (en coma de causa desconocida):</strong> Glucosa hipertónica al 50% (50 ml) precedida OBLIGATORIAMENTE por Tiamina 100 mg IV; Naloxona 0.4-2 mg IV si sospecha de intoxicación por opiáceos (pupilas mióticas y bradipnea).</li>
+            <li><strong>Neuroimagen Urgente:</strong> TC cerebral simple inmediata si hay focalidad motora, asimetría pupilar o antecedente de trauma.</li>
+          </ul>
         </div>
       </section>
 
@@ -4682,6 +4960,50 @@ function getAttentionDocHtml() {
         </div>
       </section>
 
+
+      <!-- Sección Psicométrica & Neuroevolutiva (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA & NEURODESARROLLO</div>
+        <h3 class="orientation-sec-title">Modelo Psicométrico Multidimensional y Maduración Atencional Infantil</h3>
+        <p class="orientation-lead-p">
+          La atención es un constructo multifactorial que integra redes de orientación, alerta y control ejecutivo prefrontal, con transformaciones evolutivas críticas en los primeros 5 años.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">🔬 Factores Atencionales en Baterías Psicométricas (Anastasi & Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, Págs. 206-250)</span>, las pruebas atencionales saturan en dos factores principales:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Velocidad de Procesamiento (IVP):</strong> Claves y Búsqueda de Símbolos en las escalas Wechsler. Evalúan velocidad grafomotora y atención visual focalizada.</li>
+            <li><strong>Memoria de Trabajo y Control Inhibitorio (IMT / Stroop):</strong> Capacidad de resistir la interferencia semántica automática y manipular datos en línea.</li>
+            <li><strong>Pruebas de Rendimiento Continuo (CPT):</strong> Miden errores de omisión (inatención) y comisión (impulsividad) con índices d' (d-prime) de detectabilidad basados en la Teoría de Detección de Señales.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="215" title="Consultar modelos de aptitudes y velocidad de procesamiento en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Factores Atencionales y Velocidad de Procesamiento (Pág. 215) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Desarrollo Atencional de 0 a 60 Meses (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz, Áreas B y C, Págs. 26-37)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Atención Visual y Coordinación Fino-Adaptativa (0 a 12 meses):</strong> Seguimiento visual de objetos en arco de 180° y búsqueda del sonajero caído.</li>
+            <li><strong>Atención Sostenida en Actividades Lúdicas (24 a 36 meses):</strong> Concentración mantenida durante al menos 5-8 minutos en el encajado de figuras o torre de cubos.</li>
+            <li><strong>Atención Selectiva y Escucha Estructurada (48 a 60 meses):</strong> Escucha atenta de narraciones sin distraerse por estímulos periféricos leves. Menos de 3 minutos de persistencia en una tarea lúdica a esta edad indica riesgo de rezago en la Zona de Alerta.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="29" title="Consultar Área B (Motricidad Fino-Adaptativa y Atención) en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Área B Fino-Adaptativa y Concentración EAD-1 (Pág. 29) →
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Botón inferior para ir a Evaluación de Atención -->
       <div class="orientation-bottom-cta">
         <button type="button" class="btn-orientation-cta" id="btn-goto-attention-eval">
@@ -4882,6 +5204,51 @@ function getAttentionEvaluationDocHtml() {
               <p class="dim-desc">Cómo afectan las dificultades a sus estudios, trabajo, relaciones y actividades diarias.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+
+      <!-- Sección Psicométrica & Tratamientos Multimodales (Anastasi & Urbina & Ortiz) -->
+      <section class="orientation-block-card">
+        <div class="orientation-section-badge">PSICOMETRÍA, BAREMOS & PROTOCOLO TERAPÉUTICO</div>
+        <h3 class="orientation-sec-title">Baremos Psicométricos, Error Estándar y Tratamientos Multimodales</h3>
+        <p class="orientation-lead-p">
+          El diagnóstico diferencial del déficit atencional requiere cuantificar rigurosamente la desviación típica frente a la norma poblacional e implementar un tratamiento multimodal.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">📊 Baremos Psicométricos e Intervalos de Confianza (Anastasi & Urbina)</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Puntuaciones T en Escalas de Conners / SNAP-IV:</strong> Puntuaciones T ≥ 65 (+1.5 DE) sugieren sospecha clínica; T ≥ 70 (+2.0 DE) confirman disfunción severa en inatención o hiperactividad/impulsividad.</li>
+            <li><strong>Test de Rastreo (Trail Making Test):</strong> TMT-A evalúa rastreo visual y velocidad psicomotora (tiempo medio normal 25-35 seg); TMT-B evalúa alternancia y flexibilidad ejecutiva (normal 60-80 seg). Discrepancias TMT-B / TMT-A > 3.0 indican disfunción ejecutiva prefrontal específica.</li>
+            <li><strong>Error Estándar de Medición:</strong> En tareas cronometradas, el EEM puede fluctuar entre 4 y 7 segundos por fatiga; se exige la replicación en días distintos para confirmar cronicidad.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="90" title="Consultar baremos normalizados y puntuaciones T en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Baremos Normalizados y Puntuaciones T (Pág. 90) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Tamizaje Atencional Infantil (Nelson Ortiz - EAD-1)</h4>
+          <p class="orientation-p">
+            Según Nelson Ortiz <span class="citation-tag">(EAD-1, Pág. 31)</span>, la persistencia en tareas grafo-perceptivas (como el dibujo del monigote o copia de figuras) es el marcador psicomotor infantil más sensible para despistar retraso en el control atencional e impulsividad motora.
+          </p>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="31" title="Consultar Área B y criterios atencionales en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Área Fino-Adaptativa y Control Atencional (Pág. 31) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">💊 Tratamientos Posibles y Manejo Multimodal del TDAH</h4>
+          <ul class="orientation-bullet-list">
+            <li><strong>Psicoestimulantes de Primera Línea:</strong> Metilfenidato (liberación inmediata o prolongada OROS 18-54 mg/día) o Lisdexanfetamina (30-70 mg/día). Bloquean la recaptación presináptica de dopamina y noradrenalina en el córtex prefrontal.</li>
+            <li><strong>No Estimulantes:</strong> Atomoxetina (0.5 a 1.4 mg/kg/día, inhibidor selectivo de la recaptación de noradrenalina) de elección ante comorbilidad con tics, ansiedad o abuso de sustancias; Guanfacina de liberación prolongada.</li>
+            <li><strong>Terapia Psicológica y Psicoeducación:</strong> Entrenamiento en autoinstrucciones de Meichenbaum, estructuración de horarios, economía de fichas y adaptaciones escolares/laborales (reducción de distractores).</li>
+          </ul>
         </div>
       </section>
 
@@ -5241,6 +5608,49 @@ function getHarrisTestDocHtml() {
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+
+      <!-- Sección Psicométrica & Neurodesarrollo (Anastasi & Urbina & Nelson Ortiz) -->
+      <section class="orientation-block-card" style="margin-bottom: 1.5rem;">
+        <div class="orientation-section-badge">PSICOMETRÍA & NEURODESARROLLO INFANTIL</div>
+        <h3 class="orientation-sec-title">Fundamentación Psicométrica y Articulación con el Neurodesarrollo</h3>
+        <p class="orientation-lead-p">
+          El Test de Dominancia Lateral de Albert J. Harris se articula estrechamente con la psicometría de la destreza motora descrita por Anastasi & Urbina y con las pautas de maduración visomotriz del EAD-1 de Nelson Ortiz.
+        </p>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">🔬 Confiabilidad de la Medida Motora y Lateralidad (Anastasi & Urbina)</h4>
+          <p class="orientation-p">
+            Según Anastasi & Urbina <span class="citation-tag">(Tests Psicológicos, Págs. 275-310)</span>, las pruebas de dominancia motriz y coordinación bimanual requieren:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Estabilidad Test-Retest:</strong> La dominancia manual y podálica presenta una estabilidad superior a <em>r = 0.92</em> tras los 6 años, mientras que la dominancia ocular y auditiva exhibe mayor variabilidad circunstancial (<em>r = 0.78-0.85</em>).</li>
+            <li><strong>Correlación con Habilidades Visomotoras:</strong> Una lateralidad cruzada no constituye por sí misma una patología, pero en coexistencia con bajos puntajes en el Test de Bender de Lauretta Bender (Anastasi Págs. 440-484) predice dificultades en la orientación espacial y direccionalidad de la lectoescritura (inversiones de grafemas b/d, p/q).</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="285" title="Consultar pruebas motoras y destreza en Anastasi & Urbina">
+              📖 Consultar en Anastasi & Urbina: Evaluación de Destrezas Motoras y Lateralidad (Pág. 285) →
+            </button>
+          </div>
+        </div>
+
+        <div class="orientation-subcard" style="margin-top: 0.85rem;">
+          <h4 class="orientation-subcard-title">👶 Consolidación de la Lateralidad en el EAD-1 (Nelson Ortiz Pinilla)</h4>
+          <p class="orientation-p">
+            En la Escala Abreviada de Desarrollo EAD-1 <span class="citation-tag">(Nelson Ortiz, Áreas A y B, Págs. 18-31)</span>:
+          </p>
+          <ul class="orientation-bullet-list">
+            <li><strong>Motricidad Gruesa Podálica (Área A):</strong> Ítems 21 a 27: Salto en un solo pie, patear una pelota hacia un blanco y equilibrio dinámico. Permite constatar el pie de apoyo vs. el pie de acción motora.</li>
+            <li><strong>Motricidad Fino-Adaptativa Manual (Área B):</strong> Ítems 22 a 30: Agarre del lápiz con pinza trípode madura, corte con tijeras siguiendo una línea y modelado. La afirmación de la mano dominante debe quedar consolidada hacia los 5 años.</li>
+            <li><strong>Intervención Temprana:</strong> Si a los 5 años el niño muestra ambidextrismo indiferenciado por debilidad motriz o retraso en las Áreas A y B (Zona de Alerta T < 35), se recomienda terapia ocupacional para favorecer la especialización hemisférica sin forzar la dextralidad.</li>
+          </ul>
+          <div style="margin-top: 0.65rem;">
+            <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="27" title="Consultar Áreas A y B en Nelson Ortiz">
+              📖 Consultar en Nelson Ortiz: Motricidad Fino-Adaptativa y Gruesa EAD-1 (Pág. 27) →
+            </button>
+          </div>
         </div>
       </section>
 
@@ -6236,6 +6646,23 @@ class LibraryController {
           </div>
         `;
       }
+    }
+
+    // Listener universal para todos los botones de salto a libros con data-book-id
+    if (this.modalContent) {
+      this.modalContent.querySelectorAll('[data-book-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const bookId = btn.getAttribute('data-book-id');
+          const page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+          const catalog = LIBRARY_CATALOG || [];
+          const book = catalog.find(x => x.id === bookId);
+          if (book) {
+            this.closeModal();
+            this.openPdfReader(book, page);
+          }
+        });
+      });
     }
 
     this.modal.classList.add('active');

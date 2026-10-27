@@ -21,7 +21,7 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
     author: 'Semiología Psiquiátrica • Capponi, Belloch & Nancy Andreasen',
     badge: 'Elemento del Vivenciar • Ritmo & Asociación Formal',
     areas: ['ELEMENTOS DEL VIVENCIAR', 'PSICOPATOLOGÍA', 'SEMIOLOGÍA', 'EXAMEN MENTAL', 'PROCESOS PSICOLÓGICOS'],
-    academicAffiliation: 'Ricardo Capponi (Págs. 64-70) • Manual Belloch (Vol. 1, Cap. 8, Págs. 205-224) • APIR (Págs. 44-46)',
+    academicAffiliation: 'Ricardo Capponi (Págs. 64-70) • Manual Belloch (Vol. 1, Cap. 8) • APIR • Tests Psicológicos (Anastasi & Urbina, Pág. 210) • EAD-1 (Nelson Ortiz, Pág. 34)',
     summary: 'Definición: Alteraciones cuantitativas y cualitativas en la velocidad, ritmo, direccionalidad, arquitectura asociativa y fluidez del discurso del pensamiento.\n\nTrastornos de la velocidad: Taquipsiquia (aceleración del pensar), Fuga de ideas (pensamiento ideofugaz con saltos por rima o estímulo ambiental), Bradipsiquia (enlentecimiento del flujo) e Inhibición del pensamiento (vivencia de esfuerzo y parálisis penosa del pensar).\n\nTrastornos de la continuidad y estructura asociativa: Bloqueo o interceptación del pensamiento (detención súbita sin causa externa), Disgregación (quiebre de la idea directriz con sintaxis parcialmente conservada), Incoherencia (ensalada de palabras con anarquía gramatical), Descarrilamiento o pensamiento laxo (derailment), Tangencialidad (respuestas que rozan el tema pero no lo contestan), Circunstancialidad o pensamiento prolijo (incapacidad de sintetizar con abundancia de rodeos superfluos), Perseveración y Pérdida de meta.\n\nCriterio diferencial capital: El curso evalúa CÓMO se elabora y fluye el pensamiento a través del lenguaje, con total independencia de que las ideas sean verdaderas o delirantes.',
     topics: [
       'Diferenciación Fundamental: Curso y Forma vs. Contenido del Pensar',
@@ -73,7 +73,7 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
     author: 'Psicopatología de los Delirios • Jaspers, Schneider, Capponi & Belloch',
     badge: 'Elemento del Vivenciar • Convicción & Juicio de Realidad',
     areas: ['ELEMENTOS DEL VIVENCIAR', 'PSICOPATOLOGÍA', 'SEMIOLOGÍA', 'EXAMEN MENTAL'],
-    academicAffiliation: 'Ricardo Capponi (Págs. 71-85) • Manual Belloch (Vol. 1, Cap. 9, Págs. 225-272) • APIR (Págs. 46-50)',
+    academicAffiliation: 'Ricardo Capponi (Págs. 71-85) • Manual Belloch (Vol. 1, Cap. 9) • APIR • Tests Psicológicos (Anastasi & Urbina, Pág. 355: MMPI-2 y Escalas L, F, K)',
     summary: 'Definición: Juicios de realidad patológicamente falseados, sostenidos con certeza subjetiva inquebrantable, impenetrables a la argumentación lógica o evidencia empírica contradictoria, cuyo contenido es objetivamente inverosímil o imposible (Karl Jaspers, 1913).\n\nClasificación fenomenológica clásica:\n1. Delirios Primarios o Verdaderos (Schneider / Jaspers): Incomprensibles psicológicamente, autónomos de vivencias afectivas previas. Comprenden el Temple delirante (Wahnstimmung), la Percepción delirante (atribución de un significado anormal a una percepción normal) y la Ocurrencia delirante (Wahneinfall).\n2. Delirios Secundarios o Deliroides: Comprensibles a partir del estado afectivo del paciente (delirio de culpa, ruina e hipocondría en la melancolía; delirio de grandeza en la manía; delirio paranoide tras vivencias traumáticas).\n\nDimensiones del delirio (Kendler / Belloch): Convicción, Preocupación / Implicación emocional, Extensión / Sistematización, Implausibilidad y Resonancia conductual.\n\nTemáticas delirantes: Persecución, Referencia / Alusión, Grandeza / Mesiánico, Celotipia (Síndrome de Otelo), Erotomanía (Síndrome de Clérambault), Somático / Hipocondríaco, Negación de órganos (Síndrome de Cotard), Falsos reconocimientos delirantes (Síndromes de Capgras y Frégoli).\n\nFenómenos de influencia y pasividad del Yo (Schneider): Delirio de control, inserción del pensamiento, robo del pensamiento y difusión / irradiación del pensamiento.',
     topics: [
       'Los Tres Criterios Constitutivos de Karl Jaspers (1913)',
@@ -640,7 +640,7 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
     author: 'Marshal F. Folstein et al. (1975) • Puntuación de 30 Puntos',
     badge: 'Instrumento del Vivenciar • Cribado Cognitivo Rápido y Estandarizado',
     areas: ['INSTRUMENTOS DEL VIVENCIAR', 'EVALUACIÓN CLÍNICA', 'PSICOMETRÍA', 'NEUROPSICOLOGÍA'],
-    academicAffiliation: 'Folstein MMSE • Ricardo Capponi (Inteligencia, Págs. 131-145) • APIR',
+    academicAffiliation: 'Folstein MMSE • Tests Psicológicos (Anastasi & Urbina, Pág. 490: Baremos y EEM) • EAD-1 (Nelson Ortiz, Pág. 50: Involución vs. Desarrollo) • Capponi',
     summary: 'Instrumento de cribado neurocognitivo de 30 puntos estructurado en 5 dominios: Orientación témporo-espacial (10 pts), Fijación / Memoria inmediata (3 pts), Atención y Cálculo (5 pts), Memoria diferida a corto plazo (3 pts), Lenguaje y Visoconstrucción (9 pts), con puntos de corte ajustados según escolaridad.',
     topics: [
       '1. Orientación Temporal (Año, Estación, Mes, Fecha, Día) y Espacial (Lugar, Piso, Ciudad, Región, País) [10 pts]',
@@ -804,7 +804,7 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
     author: 'Semiología de la Expresión • Ricardo Capponi (Págs. 101-115)',
     badge: 'Psicomotricidad • Facies, Mímica Emocional & Discordancia',
     areas: ['EVALUACIÓN CLÍNICA', 'PSICOMOTRICIDAD', 'SEMIOLOGÍA', 'EXAMEN MENTAL'],
-    academicAffiliation: 'Psicopatología de la Expresión Facial (Capponi Págs. 101-115)',
+    academicAffiliation: 'Psicopatología de la Expresión Facial (Capponi Págs. 101-115) • EAD-1 (Nelson Ortiz, Pág. 36) • Tests Psicológicos (Anastasi & Urbina, Pág. 460)',
     summary: 'Protocolo de observación clínica directa de la motilidad y expresividad facial: evaluación de la amimia o hipomimia (facies de máscara en Parkinson y depresión melancólica grave con signo de Veraguth), hipermimia (en manía y cuadros de agitación), paramimia y mímica discordante en esquizofrenia, ecomimia y tics.',
     topics: [
       'Observación 1: Tono Mímico en Reposo (Amimia, Facies Inexpresiva de Máscara y Signo Omega Melancólico)',
@@ -827,7 +827,7 @@ export const ADDITIONAL_CLINICAL_CATALOG = [
     author: 'Mary Ainsworth & Mary Main • Procedimiento de la Situación del Extraño',
     badge: 'Desarrollo Infantil • Patrones de Apego & Regulación Afectiva',
     areas: ['DESARROLLO INFANTIL', 'EVALUACIÓN CLÍNICA', 'PSICOLOGÍA DEL DESARROLLO', 'NEURODESARROLLO'],
-    academicAffiliation: 'Teoría del Apego (Bowlby & Ainsworth) • EEDP & Semiología del Vínculo Temprano',
+    academicAffiliation: 'Teoría del Apego (Bowlby & Ainsworth) • Escala Abreviada de Desarrollo EAD-1 (Nelson Ortiz, Págs. 38-42) • Tests Psicológicos (Anastasi & Urbina, Pág. 325)',
     summary: 'Protocolo clínico observacional estandarizado para clasificar los patrones de apego en lactantes y niños pequeños (12 a 24 meses) mediante el análisis de las conductas de exploración, respuesta ante la separación de la figura de referencia y, fundamentalmente, la conducta de reencuentro (Apego Seguro Tipo B, Inseguro-Evitativo Tipo A, Inseguro-Ambivalente/Resistente Tipo C y Desorganizado Tipo D).',
     topics: [
       'Fundamento: La Conducta de Apego como Sistema Biológico de Búsqueda de Seguridad (Bowlby)',
@@ -1007,7 +1007,9 @@ export const ADDITIONAL_DOCS_HTML = {
           { bookId: 'capponi-psicopatologia', page: 64, author: 'Ricardo Capponi', title: 'Psicopatología y Semiología Psiquiátrica • Trastornos del Curso' },
           { bookId: 'capponi-psicopatologia', page: 68, author: 'Ricardo Capponi', title: 'Bloqueo, Disgregación e Incoherencia' },
           { bookId: 'belloch-psicopatologia-vol1', page: 205, author: 'Belloch, Sandín y Ramos', title: 'Cap. 8: Trastornos Formales del Pensamiento y Escala TLC' },
-          { bookId: 'apir-psicopatologia', page: 44, author: 'Manual APIR', title: 'Tema 6: Trastornos Formales vs. Contenido del Pensamiento' }
+          { bookId: 'apir-psicopatologia', page: 44, author: 'Manual APIR', title: 'Tema 6: Trastornos Formales vs. Contenido del Pensamiento' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 210, author: 'Anne Anastasi & Susana Urbina', title: 'Evaluación Psicométrica de la Fluidez Verbal y Velocidad de Procesamiento (Cap. 9)' },
+          { bookId: 'nelson-ortiz-escala-abreviada', page: 34, author: 'Nelson Ortiz Pinilla', title: 'Área C (Audición y Lenguaje): Hitos Evolutivos del Discurso y Gramática EAD-1' }
         ])}
       </section>
 
@@ -1221,7 +1223,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="88" title="Saltar directamente a la página 88 en Cap. 4: Confiabilidad en Pruebas Cronometradas y Débito Verbal (Pág. 88)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Confiabilidad en Pruebas Cronometradas y Débito Verbal (Pág. 88) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="35" title="Saltar directamente a la página 35 en Área C (Audición y Lenguaje): Fluidez y Articulación Infantil EAD-1 (Pág. 35)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área C (Audición y Lenguaje): Fluidez y Articulación Infantil EAD-1 (Pág. 35) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="217" title="Saltar directamente a la página 217 en Criterios de Evaluación Formal y Escala TLC de Andreasen">
           <span>📖</span>
@@ -1445,7 +1456,8 @@ export const ADDITIONAL_DOCS_HTML = {
           { bookId: 'capponi-psicopatologia', page: 71, author: 'Ricardo Capponi', title: 'Definición y Criterios del Delirio según Jaspers' },
           { bookId: 'capponi-psicopatologia', page: 75, author: 'Ricardo Capponi', title: 'Delirios Primarios vs. Deliroides Secundarios' },
           { bookId: 'belloch-psicopatologia-vol1', page: 225, author: 'Belloch, Sandín y Ramos', title: 'Cap. 9: Psicopatología de los Delirios' },
-          { bookId: 'apir-psicopatologia', page: 47, author: 'Manual APIR', title: 'Tabla 4 y 5: Dimensiones y Diagnóstico Diferencial de los Delirios' }
+          { bookId: 'apir-psicopatologia', page: 47, author: 'Manual APIR', title: 'Tabla 4 y 5: Dimensiones y Diagnóstico Diferencial de los Delirios' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 355, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 13: MMPI-2, Escalas de Validez L, F, K y Escala Clínica 6 (Paranoia)' }
         ])}
       </section>
 
@@ -1603,7 +1615,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="115" title="Saltar directamente a la página 115 en Cap. 5: Validez de Criterio y Escalas de Certeza Delirante (Pág. 115)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Validez de Criterio y Escalas de Certeza Delirante (Pág. 115) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="355" title="Saltar directamente a la página 355 en Cap. 13: Perfiles MMPI-2 en Psicosis y Escala 6-Pa (Pág. 355)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 13: Perfiles MMPI-2 en Psicosis y Escala 6-Pa (Pág. 355) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="71" title="Saltar directamente a la página 71 en Psicopatología del Contenido del Pensamiento y Delirios">
           <span>📖</span>
@@ -1749,7 +1770,9 @@ export const ADDITIONAL_DOCS_HTML = {
           { bookId: 'capponi-psicopatologia', page: 32, author: 'Ricardo Capponi', title: 'Psicopatología de la Sensopercepción • Distorsiones e Ilusiones' },
           { bookId: 'belloch-psicopatologia-vol1', page: 150, author: 'Belloch, Sandín y Ramos', title: 'Cap. 6: Clasificación General de las Distorsiones Perceptivas' },
           { bookId: 'belloch-psicopatologia-vol1', page: 153, author: 'Belloch, Sandín y Ramos', title: 'Metamorfopsias, Dismegalopsias y Autometamorfopsias' },
-          { bookId: 'apir-psicopatologia', page: 29, author: 'Manual APIR', title: 'Tema 4: Psicopatología de la Sensopercepción' }
+          { bookId: 'apir-psicopatologia', page: 29, author: 'Manual APIR', title: 'Tema 4: Psicopatología de la Sensopercepción' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 450, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 15: Evaluación Visoperceptiva y Test Gestáltico Visomotor de Bender' },
+          { bookId: 'nelson-ortiz-escala-abreviada', page: 28, author: 'Nelson Ortiz Pinilla', title: 'Área B (Motricidad Fino-Adaptativa): Integración Visomotriz en EAD-1' }
         ])}
       </section>
 
@@ -1905,7 +1928,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="450" title="Saltar directamente a la página 450 en Cap. 15: Test Gestáltico Visomotor de Bender y Maduración Perceptiva (Pág. 450)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 15: Test Gestáltico Visomotor de Bender y Maduración Perceptiva (Pág. 450) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="28" title="Saltar directamente a la página 28 en Área B (Motricidad Fino-Adaptativa): Discriminación Visoespacial EAD-1 (Pág. 28)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área B (Motricidad Fino-Adaptativa): Discriminación Visoespacial EAD-1 (Pág. 28) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="150" title="Saltar directamente a la página 150 en Cap. 6: Distorsiones Perceptivas e Ilusiones">
           <span>📖</span>
@@ -2071,7 +2103,8 @@ export const ADDITIONAL_DOCS_HTML = {
           { bookId: 'capponi-psicopatologia', page: 56, author: 'Ricardo Capponi', title: 'Pseudoalucinaciones de Kandinsky en el Espacio Interior' },
           { bookId: 'capponi-psicopatologia', page: 57, author: 'Ricardo Capponi', title: 'Alucinosis de Wernicke y Conservación de la Crítica' },
           { bookId: 'belloch-psicopatologia-vol1', page: 160, author: 'Belloch, Sandín y Ramos', title: 'Engaños Perceptivos y Criterios de Slade & Bentall' },
-          { bookId: 'apir-psicopatologia', page: 35, author: 'Manual APIR', title: 'Tabla Comparativa: Alucinación vs. Pseudoalucinación vs. Alucinosis' }
+          { bookId: 'apir-psicopatologia', page: 35, author: 'Manual APIR', title: 'Tabla Comparativa: Alucinación vs. Pseudoalucinación vs. Alucinosis' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 92, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 4: Escalas Estandarizadas de Psicosis (PANSS / BPRS) y Confiabilidad' }
         ])}
       </section>
 
@@ -2253,7 +2286,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="94" title="Saltar directamente a la página 94 en Cap. 4: Medición de Síntomas Psicóticos, Escala PANSS y Confiabilidad (Pág. 94)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Medición de Síntomas Psicóticos, Escala PANSS y Confiabilidad (Pág. 94) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="151" title="Saltar directamente a la página 151 en Cap. 6: Slade & Bentall y Engaños Perceptivos">
           <span>📖</span>
@@ -2375,7 +2413,9 @@ export const ADDITIONAL_DOCS_HTML = {
         ${renderCitationsBanner([
           { bookId: 'capponi-psicopatologia', page: 157, author: 'Ricardo Capponi', title: 'Capítulo III: Psicología y Psicopatología del Yo' },
           { bookId: 'capponi-psicopatologia', page: 167, author: 'Ricardo Capponi', title: 'Las Cuatro Cualidades Fundamentales de la Conciencia del Yo' },
-          { bookId: 'apir-psicopatologia', page: 23, author: 'Manual APIR', title: 'Psicopatología del Yo Corporal y de la Mismidad' }
+          { bookId: 'apir-psicopatologia', page: 23, author: 'Manual APIR', title: 'Psicopatología del Yo Corporal y de la Mismidad' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 415, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 14: Evaluación de los Límites del Yo y Autoimagen (Rorschach Exner)' },
+          { bookId: 'nelson-ortiz-escala-abreviada', page: 40, author: 'Nelson Ortiz Pinilla', title: 'Área D (Personal-Social): Autonomía, Autorreconocimiento y Génesis del Yo EAD-1' }
         ])}
       </section>
 
@@ -2523,7 +2563,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="418" title="Saltar directamente a la página 418 en Cap. 14: Indicadores de Límites del Yo y Autoimagen (Pág. 418)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 14: Indicadores de Límites del Yo y Autoimagen (Pág. 418) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="42" title="Saltar directamente a la página 42 en Área D (Personal-Social): Autonomía e Individuación Infantil EAD-1 (Pág. 42)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área D (Personal-Social): Autonomía e Individuación Infantil EAD-1 (Pág. 42) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="157" title="Saltar directamente a la página 157 en Psicopatología del Yo: Las Cuatro Cualidades y Polaridades">
           <span>📖</span>
@@ -2642,7 +2691,8 @@ export const ADDITIONAL_DOCS_HTML = {
         ${renderCitationsBanner([
           { bookId: 'capponi-psicopatologia', page: 178, author: 'Ricardo Capponi', title: 'Psicopatología de la Dimensión Actividad-Pasividad' },
           { bookId: 'capponi-psicopatologia', page: 185, author: 'Ricardo Capponi', title: 'Dimensiones del Yo y Trastornos de la Personalidad' },
-          { bookId: 'apir-psicopatologia', page: 15, author: 'Manual APIR', title: 'Sistemas Clasificatorios y Trastornos de la Personalidad' }
+          { bookId: 'apir-psicopatologia', page: 15, author: 'Manual APIR', title: 'Sistemas Clasificatorios y Trastornos de la Personalidad' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 370, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 13: Evaluación de la Personalidad, MMPI-2, MCMI y NEO-PI-R Big Five' }
         ])}
       </section>
 
@@ -2792,7 +2842,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="375" title="Saltar directamente a la página 375 en Cap. 13: Baremos T >= 65, MMPI-2, MCMI y NEO-PI-R en Personalidad (Pág. 375)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 13: Baremos T >= 65, MMPI-2, MCMI y NEO-PI-R en Personalidad (Pág. 375) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="178" title="Saltar directamente a la página 178 en Psicopatología de la Personalidad: Las 4 Polaridades Yoicas">
           <span>📖</span>
@@ -2911,7 +2966,9 @@ export const ADDITIONAL_DOCS_HTML = {
           { bookId: 'capponi-psicopatologia', page: 201, author: 'Ricardo Capponi', title: 'Capítulo IV: Diagnóstico Psicopatológico, Sindromático y Nosológico' },
           { bookId: 'capponi-psicopatologia', page: 204, author: 'Ricardo Capponi', title: 'Síndrome Confusional y Cuadros Orgánicos' },
           { bookId: 'capponi-psicopatologia', page: 210, author: 'Ricardo Capponi', title: 'Síndrome Catatónico y Trastornos Psicomotores' },
-          { bookId: 'capponi-psicopatologia', page: 219, author: 'Ricardo Capponi', title: 'Síndrome de Korsakoff y Trastornos Amnésicos' }
+          { bookId: 'capponi-psicopatologia', page: 219, author: 'Ricardo Capponi', title: 'Síndrome de Korsakoff y Trastornos Amnésicos' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 130, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 5: Validez Concurrente y Predictiva de las Clasificaciones Diagnósticas' },
+          { bookId: 'nelson-ortiz-escala-abreviada', page: 50, author: 'Nelson Ortiz Pinilla', title: 'Parámetros Normativos y Baremos por Percentiles de la EAD-1' }
         ])}
       </section>
 
@@ -3073,7 +3130,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="135" title="Saltar directamente a la página 135 en Cap. 5: Sensibilidad, Especificidad y Entrevistas Estructuradas (Pág. 135)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Sensibilidad, Especificidad y Entrevistas Estructuradas (Pág. 135) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="52" title="Saltar directamente a la página 52 en Baremos Percentilares y Criterios de Alerta Sindromática EAD-1 (Pág. 52)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Baremos Percentilares y Criterios de Alerta Sindromática EAD-1 (Pág. 52) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="201" title="Saltar directamente a la página 201 en Diagnóstico Sindromático y Grandes Síndromes">
           <span>📖</span>
@@ -3162,7 +3228,8 @@ export const ADDITIONAL_DOCS_HTML = {
         <h3 class="orientation-sec-title">3. Citas Verificadas en los Textos de Estudio</h3>
         ${renderCitationsBanner([
           { bookId: 'capponi-psicopatologia', page: 118, author: 'Ricardo Capponi', title: 'Psicopatología de la Alimentación: Anorexia y Bulimia' },
-          { bookId: 'belloch-psicopatologia-vol1', page: 403, author: 'Belloch, Sandín y Ramos', title: 'Cap. 15: Trastornos de la Conducta Alimentaria (Perpiñá)' }
+          { bookId: 'belloch-psicopatologia-vol1', page: 403, author: 'Belloch, Sandín y Ramos', title: 'Cap. 15: Trastornos de la Conducta Alimentaria (Perpiñá)' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 125, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 5: Inventarios Psicométricos de Trastornos Alimentarios (EDI-3 y EAT-40)' }
         ])}
       </section>
 
@@ -3297,7 +3364,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="128" title="Saltar directamente a la página 128 en Cap. 5: Puntos de Corte Psicométricos y Curvas ROC en TCA (Pág. 128)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Puntos de Corte Psicométricos y Curvas ROC en TCA (Pág. 128) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="403" title="Saltar directamente a la página 403 en Cap. 15: Trastornos de la Conducta Alimentaria">
           <span>📖</span>
@@ -3387,7 +3459,9 @@ export const ADDITIONAL_DOCS_HTML = {
         <h3 class="orientation-sec-title">3. Citas Verificadas en los Textos de Estudio</h3>
         ${renderCitationsBanner([
           { bookId: 'capponi-psicopatologia', page: 128, author: 'Ricardo Capponi', title: 'Psicopatología del Control de Impulsos y Cleptomanía' },
-          { bookId: 'belloch-psicopatologia-vol1', page: 423, author: 'Belloch, Sandín y Ramos', title: 'Cap. 16: Trastornos de Control de Impulsos: El Juego Patológico' }
+          { bookId: 'belloch-psicopatologia-vol1', page: 423, author: 'Belloch, Sandín y Ramos', title: 'Cap. 16: Trastornos de Control de Impulsos: El Juego Patológico' },
+          { bookId: 'tests-psicologicos-anastasi-urbina', page: 495, author: 'Anne Anastasi & Susana Urbina', title: 'Cap. 17: Evaluación de la Impulsividad, BIS-11 y Pruebas Ejecutivas' },
+          { bookId: 'nelson-ortiz-escala-abreviada', page: 29, author: 'Nelson Ortiz Pinilla', title: 'Área B (Motricidad Fino-Adaptativa): Control Inhibitorio Motor en Preescolares' }
         ])}
       </section>
 
@@ -3537,7 +3611,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="498" title="Saltar directamente a la página 498 en Cap. 17: Escala BIS-11, Medición de la Impulsividad y Toma de Decisiones (Pág. 498)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 17: Escala BIS-11, Medición de la Impulsividad y Toma de Decisiones (Pág. 498) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="31" title="Saltar directamente a la página 31 en Área B: Control Inhibitorio Motor y Persistencia en la Tarea EAD-1 (Pág. 31)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área B: Control Inhibitorio Motor y Persistencia en la Tarea EAD-1 (Pág. 31) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="423" title="Saltar directamente a la página 423 en Cap. 16: Trastornos de Control de Impulsos y Juego Patológico">
           <span>📖</span>
@@ -3680,7 +3763,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="220" title="Saltar directamente a la página 220 en Cap. 9: WAIS-IV Índice de Memoria de Trabajo IMT y Cálculo del EEM (Pág. 220)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 9: WAIS-IV Índice de Memoria de Trabajo IMT y Cálculo del EEM (Pág. 220) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="35" title="Saltar directamente a la página 35 en Área C: Retención Inmediata y Órdenes Secuenciales en Niños EAD-1 (Pág. 35)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área C: Retención Inmediata y Órdenes Secuenciales en Niños EAD-1 (Pág. 35) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="149" title="Saltar directamente a la página 149 en Psicología y Psicopatología de la Memoria">
           <span>📖</span>
@@ -3794,7 +3886,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="490" title="Saltar directamente a la página 490 en Cap. 17: Curvas de Aprendizaje Verbal de Rey (RAVLT) y Retención a 30 Min (Pág. 490)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 17: Curvas de Aprendizaje Verbal de Rey (RAVLT) y Retención a 30 Min (Pág. 490) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="36" title="Saltar directamente a la página 36 en Área C: Memoria Semántica y Evocación de Relatos Infantiles EAD-1 (Pág. 36)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área C: Memoria Semántica y Evocación de Relatos Infantiles EAD-1 (Pág. 36) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="151" title="Saltar directamente a la página 151 en Trastornos Cuantitativos de la Memoria y Amnesia de Fijación">
           <span>📖</span>
@@ -3918,7 +4019,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="98" title="Saltar directamente a la página 98 en Cap. 4: Confiabilidad Inter-Evaluador Kappa Ponderado en Urgencias (Pág. 98)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Confiabilidad Inter-Evaluador Kappa Ponderado en Urgencias (Pág. 98) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="20" title="Saltar directamente a la página 20 en Área A (Motricidad): Reactividad Motora y Reflejos en Lactantes EAD-1 (Pág. 20)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área A (Motricidad): Reactividad Motora y Reflejos en Lactantes EAD-1 (Pág. 20) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="146" title="Saltar directamente a la página 146 en Psicopatología de la Conciencia: Niveles Cuantitativos">
           <span>📖</span>
@@ -4038,7 +4148,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="120" title="Saltar directamente a la página 120 en Cap. 5: Sensibilidad (94-100%) y Especificidad (90-95%) del Algoritmo CAM (Pág. 120)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Sensibilidad (94-100%) y Especificidad (90-95%) del Algoritmo CAM (Pág. 120) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="204" title="Saltar directamente a la página 204 en Síndrome Confusional y Delirium">
           <span>📖</span>
@@ -4153,7 +4268,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="102" title="Saltar directamente a la página 102 en Cap. 4: Escalas de Depresión HDRS y BDI-II, Confiabilidad y EEM (Pág. 102)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Escalas de Depresión HDRS y BDI-II, Confiabilidad y EEM (Pág. 102) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="39" title="Saltar directamente a la página 39 en Área D (Personal-Social): Modulación Afectiva y Conexión Social EAD-1 (Pág. 39)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área D (Personal-Social): Modulación Afectiva y Conexión Social EAD-1 (Pág. 39) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="80" title="Saltar directamente a la página 80 en Psicología y Psicopatología de la Afectividad">
           <span>📖</span>
@@ -4286,7 +4410,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="135" title="Saltar directamente a la página 135 en Cap. 5: Validez Predictiva de Escalas Clínicas y Prevención del Error (Pág. 135)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Validez Predictiva de Escalas Clínicas y Prevención del Error (Pág. 135) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="88" title="Saltar directamente a la página 88 en Semiología de la Melancolía, Culpa y Riesgo Suicida">
           <span>📖</span>
@@ -4408,7 +4537,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="105" title="Saltar directamente a la página 105 en Cap. 4: Inventarios de Ansiedad BAI y HARS, Baremos y Puntos de Corte (Pág. 105)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Inventarios de Ansiedad BAI y HARS, Baremos y Puntos de Corte (Pág. 105) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="40" title="Saltar directamente a la página 40 en Área D: Angustia de Separación y Reacciones ante Extraños en Infantes EAD-1 (Pág. 40)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área D: Angustia de Separación y Reacciones ante Extraños en Infantes EAD-1 (Pág. 40) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="82" title="Saltar directamente a la página 82 en Semiología de la Angustia y Ansiedad Somatizada">
           <span>📖</span>
@@ -4550,7 +4688,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="490" title="Saltar directamente a la página 490 en Cap. 17: Ajuste del MMSE por Edad y Escolaridad, Error de Medida (Pág. 490)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 17: Ajuste del MMSE por Edad y Escolaridad, Error de Medida (Pág. 490) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="50" title="Saltar directamente a la página 50 en Baremos EAD-1: Comparativa entre Involución Senil y Neurodesarrollo Infantil (Pág. 50)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Baremos EAD-1: Comparativa entre Involución Senil y Neurodesarrollo Infantil (Pág. 50) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="177" title="Saltar directamente a la página 177 en Cap. 7: Exploración de la Memoria y Demencias">
           <span>📖</span>
@@ -4666,7 +4813,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="118" title="Saltar directamente a la página 118 en Cap. 5: Psicometría de Cuestionarios Dicotómicos de Tamizaje (Pág. 118)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 5: Psicometría de Cuestionarios Dicotómicos de Tamizaje (Pág. 118) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="355" title="Saltar directamente a la página 355 en Cap. 13: Trastornos Relacionados con el Alcohol">
           <span>📖</span>
@@ -4806,7 +4958,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="505" title="Saltar directamente a la página 505 en Cap. 18: Evaluación Psicológica Multimétodo y Directrices Éticas APA (Pág. 505)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 18: Evaluación Psicológica Multimétodo y Directrices Éticas APA (Pág. 505) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="45" title="Saltar directamente a la página 45 en Formulario de Aplicación Integral y Perfil del Desarrollo Infantil EAD-1 (Pág. 45)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Formulario de Aplicación Integral y Perfil del Desarrollo Infantil EAD-1 (Pág. 45) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="201" title="Saltar directamente a la página 201 en Diagnóstico Sindromático y Estructuración del Examen Mental">
           <span>📖</span>
@@ -4925,7 +5086,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="95" title="Saltar directamente a la página 95 en Cap. 4: Estructura Factorial de la Escala SANS y Confiabilidad Interjueces (Pág. 95)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Estructura Factorial de la Escala SANS y Confiabilidad Interjueces (Pág. 95) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="210" title="Saltar directamente a la página 210 en Síndrome Esquizofrénico y Defecto Afectivo">
           <span>📖</span>
@@ -5047,7 +5213,12 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="108" title="Saltar directamente a la página 108 en Cap. 4: Escala Y-BOCS en 10 Ítems, Alfa de Cronbach (0.89) y Baremos (Pág. 108)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Escala Y-BOCS en 10 Ítems, Alfa de Cronbach (0.89) y Baremos (Pág. 108) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="72" title="Saltar directamente a la página 72 en Diagnóstico Diferencial: Delirios vs. Ideas Obsesivas">
           <span>📖</span>
@@ -5159,7 +5330,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="90" title="Saltar directamente a la página 90 en Cap. 4: Confiabilidad Inter-Observador en Escalas de Síntomas Motores (Pág. 90)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Confiabilidad Inter-Observador en Escalas de Síntomas Motores (Pág. 90) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="22" title="Saltar directamente a la página 22 en Área A (Motricidad Gruesa): Evaluación del Tono Muscular y Espasticidad EAD-1 (Pág. 22)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área A (Motricidad Gruesa): Evaluación del Tono Muscular y Espasticidad EAD-1 (Pág. 22) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="101" title="Saltar directamente a la página 101 en Psicología y Psicopatología de la Psicomotricidad (Conación)">
           <span>📖</span>
@@ -5272,6 +5452,24 @@ export const ADDITIONAL_DOCS_HTML = {
             <li><strong>Para Ansiedad de Rendimiento Circunscrita (Uso Puntual):</strong> Betabloqueantes: <strong>Propranolol</strong> (10 a 40 mg) tomado exactamente 30 a 60 minutos antes de la conferencia o presentación pública para bloquear el temblor y la taquicardia periférica.</li>
           </ul>
         </div>
+
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
+          <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
+            📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
+          </div>
+          <button type="button" class="btn-book-citation-jump" data-book-id="belloch-psicopatologia-vol1" data-page="130" title="Saltar a Belloch Vol. 1 Pág. 130">
+            <span>📖</span>
+            <span><strong>Manual Belloch (Vol. 1):</strong> Trastornos de Ansiedad y Fobia Social (Pág. 130) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="100" title="Saltar a Anastasi & Urbina Pág. 100">
+            <span>📖</span>
+            <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 4: Escala de Ansiedad Social de Liebowitz (LSAS), Validez y Consistencia (Pág. 100) →</span>
+          </button>
+          <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="41" title="Saltar a Nelson Ortiz Pág. 41">
+            <span>📖</span>
+            <span><strong>Nelson Ortiz Pinilla:</strong> Área D: Inhibición Conductual Temprana vs. Timidez Normativa en Niños EAD-1 (Pág. 41) →</span>
+          </button>
+        </div>
       </section>
     </div>
   
@@ -5358,7 +5556,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="460" title="Saltar directamente a la página 460 en Cap. 15: Sistemas de Codificación Facial Objetiva (FACS de Ekman) (Pág. 460)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 15: Sistemas de Codificación Facial Objetiva (FACS de Ekman) (Pág. 460) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="36" title="Saltar directamente a la página 36 en Áreas C y D: Sonrisa Social y Maduración de la Expresión Afectiva EAD-1 (Pág. 36)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Áreas C y D: Sonrisa Social y Maduración de la Expresión Afectiva EAD-1 (Pág. 36) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="capponi-psicopatologia" data-page="101" title="Saltar directamente a la página 101 en Psicopatología de la Mímica y Psicomotricidad">
           <span>📖</span>
@@ -5453,7 +5660,16 @@ export const ADDITIONAL_DOCS_HTML = {
     <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px;">
       <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 0.2rem;">
         📖 Citas Verificadas en Libros de la Biblioteca (Clic para abrir en Lector PDF Nativo):
-      </div>
+      
+        <button type="button" class="btn-book-citation-jump" data-book-id="tests-psicologicos-anastasi-urbina" data-page="325" title="Saltar directamente a la página 325 en Cap. 12: Evaluación del Desarrollo Socioemocional Infantil y Factores Protectores (Pág. 325)">
+          <span>📖</span>
+          <span><strong>Anne Anastasi & Susana Urbina:</strong> Cap. 12: Evaluación del Desarrollo Socioemocional Infantil y Factores Protectores (Pág. 325) →</span>
+        </button>
+        <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="39" title="Saltar directamente a la página 39 en Área D (Personal-Social): Criterios de Apego y Semáforo de Alerta EAD-1 (Pág. 39)">
+          <span>📖</span>
+          <span><strong>Nelson Ortiz Pinilla:</strong> Área D (Personal-Social): Criterios de Apego y Semáforo de Alerta EAD-1 (Pág. 39) →</span>
+        </button>
+    </div>
       
         <button type="button" class="btn-book-citation-jump" data-book-id="escala-eedp-0-24-meses" data-page="1" title="Saltar directamente a la página 1 en Evaluación del Desarrollo Psicomotor y Coordinación Temprana">
           <span>📖</span>
