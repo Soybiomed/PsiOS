@@ -1442,6 +1442,826 @@ const LIBRARY_CATALOG = [
     }
   },
   {
+    "id": "nelson-ortiz-escala-abreviada",
+    "title": "Escala Abreviada de Desarrollo (EAD-1)",
+    "category": "books",
+    "categoryLabel": "Manual e Instrumento Estandarizado",
+    "isBook": true,
+    "code": "LIB-ORTIZ-EAD-01",
+    "icon": "👶",
+    "author": "Dr. Nelson Ortiz Pinilla",
+    "badge": "Instrumento Estandarizado • 63 Páginas • 0 a 60 Meses",
+    "cloudHosted": true,
+    "coverImage": "https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/PORTADA_NELSON%20ORTIZ%20escala-abreviada-de-desarrollo.png",
+    "pdfUrl": "https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/NELSON%20ORTIZ%20escala-abreviada-de-desarrollo.pdf",
+    "areas": [
+      "DESARROLLO INFANTIL",
+      "NEURODESARROLLO",
+      "EVALUACIÓN CLÍNICA",
+      "PSICOMETRÍA",
+      "PEDIATRÍA",
+      "ATENCIÓN TEMPRANA"
+    ],
+    "academicAffiliation": "Consultor UNICEF • Ministerio de Salud de Colombia • División de Salud Materno-Infantil",
+    "summary": "La Escala Abreviada de Desarrollo (EAD-1), elaborada por el Dr. Nelson Ortiz Pinilla bajo los auspicios del Ministerio de Salud de Colombia y UNICEF, es uno de los instrumentos de cribado y tamizaje del desarrollo infantil temprano más ampliamente difundidos y validados en América Latina. Diseñada para evaluar de forma ágil y confiable a niños desde el nacimiento hasta los 60 meses (5 años) de edad, la escala explora 4 áreas fundamentales del neurodesarrollo: Motricidad Gruesa (Área A), Motricidad Fino-Adaptativa (Área B), Audición y Lenguaje (Área C) y Personal-Social (Área D). Consta de 120 ítems rigurosamente estandarizados organizados en 8 rangos etarios cronológicos, incluyendo criterios de observación unificados, hoja de registro clínico y tablas de baremos normativos (Puntajes Percentil, T y T normalizado) para clasificar el nivel de desarrollo en cuatro categorías: Alerta (Riesgo), Medio, Medio-Alto y Alto.",
+    "topics": [
+      "Fundamentación conceptual del desarrollo como proceso y sistema biopsicosocial",
+      "Área Motricidad Gruesa (A): control postural, locomoción, tono y equilibrio",
+      "Área Motricidad Fino-Adaptativa (B): coordinación óculo-manual, prensión y grafomotricidad",
+      "Área Audición y Lenguaje (C): comunicación verbal, vocalizaciones y comprensión lingüística",
+      "Área Personal-Social (D): interacción afectiva, apego, autonomía, alimentación y normas",
+      "Condiciones físicas del examen, materiales estandarizados e instrucciones a la madre",
+      "Criterios de administración: punto de inicio por edad cronológica y regla de corte",
+      "Hoja de registro clínico y formulario estandarizado de aplicación de la EAD-1",
+      "Parámetros normativos y tablas de puntuación por grupos etarios (1 a 60 meses)",
+      "Interpretación diagnóstica: Alerta (Sospecha de Rezago/Retraso), Medio, Medio-Alto y Alto",
+      "Detección temprana de alteraciones del neurodesarrollo y pautas de derivación oportuna",
+      "Propiedades psicométricas: confiabilidad test-retest, validez y normas poblacionales"
+    ],
+    "categories": [
+      "Evaluación del Desarrollo Infantil",
+      "Psicometría y Escalas de Tamizaje",
+      "Neurodesarrollo y Atención Temprana",
+      "Pediatría y Salud Infantil",
+      "Semiología del Lactante y Preescolar"
+    ],
+    "prologue": {
+      "author": "Dr. Nelson Ortiz Pinilla (Consultor - UNICEF)",
+      "date": "Santafé de Bogotá, Colombia • Noviembre de 1999",
+      "paragraphs": [
+        "Sin lugar a dudas, el disponer de instrumentos confiables, adaptados y normalizados a la cultura regional, ha sido una de las necesidades más sentidas por los diversos profesionales involucrados en la evaluación y diagnóstico del desarrollo infantil. Esta necesidad inicialmente percibida en la consulta individual, se ha convertido con el surgimiento de numerosos programas de gran cobertura, en una urgencia inaplazable.",
+        "La evaluación del desarrollo del niño es un proceso continuo que no se limita a un examen puntual, sino que busca acompañar la trayectoria evolutiva del menor en su entorno familiar y comunitario. Para poder lograr una conceptualización integral del desarrollo infantil es indispensable concebirlo como proceso y como sistema. La noción de proceso resalta su carácter de cambio, desenvolvimiento y transformación gradual hacia mayores y más complejos niveles de organización; la noción de sistema plantea la existencia de interacciones recíprocas entre las áreas biológicas, cognitivas, lingüísticas y afectivo-sociales.",
+        "Esta Escala por su carácter abreviado es un instrumento diseñado para realizar una valoración global y general de determinadas áreas o procesos de desarrollo. Aunque se han incluido algunos indicadores clave para detectar casos de alto riesgo de detención o retardo, los criterios utilizados para la ubicación de los reactivos en cada rango de edad maximizan la posibilidad de que los niños normales aprueben las pautas correspondientes, permitiendo identificar de forma temprana a aquellos menores que ameritan una evaluación diagnóstica en profundidad.",
+        "El manual incluye instrucciones detalladas para cada ítem, con las condiciones de observación requeridas y los criterios objetivos de respuesta aprobada, facilitando el entrenamiento y garantizando la homogeneidad metodológica en su aplicación por parte de psicólogos, pediatras, enfermeras y profesionales de atención primaria en salud."
+      ]
+    },
+    "indexTree": [
+      {
+        "part": "I. INTRODUCCIÓN Y FUNDAMENTACIÓN TEÓRICA",
+        "page": 3,
+        "items": [
+          {
+            "title": "Presentación Institucional (UNICEF / Ministerio de Salud)",
+            "page": 3
+          },
+          {
+            "title": "1. Consideraciones iniciales sobre el tamizaje del desarrollo",
+            "page": 5
+          },
+          {
+            "title": "2. Fundamentación conceptual de la Escala Abreviada",
+            "page": 5,
+            "subs": [
+              {
+                "title": "2.1. Selección de las cuatro áreas de desarrollo",
+                "page": 9
+              },
+              {
+                "title": "2.2. Criterios para la selección de los indicadores clave",
+                "page": 9
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "II. INSTRUCCIONES GENERALES DE ADMINISTRACIÓN",
+        "page": 11,
+        "items": [
+          {
+            "title": "3.1. Instrucciones y orientación a la madre o acompañante",
+            "page": 11
+          },
+          {
+            "title": "3.2. Condiciones físicas del examen y del entorno clínico",
+            "page": 11
+          },
+          {
+            "title": "3.3. Condiciones del niño (estado de alerta y comodidad)",
+            "page": 11
+          },
+          {
+            "title": "3.4. Tiempo estimado de evaluación y clima afectivo",
+            "page": 12
+          },
+          {
+            "title": "3.5. Criterios de inicio, avance y suspensión de la prueba",
+            "page": 12
+          },
+          {
+            "title": "3.6. Batería de prueba y materiales estandarizados (sonajero, cubos, figuras)",
+            "page": 16
+          }
+        ]
+      },
+      {
+        "part": "III. MANUAL DE ADMINISTRACIÓN DETALLADO POR ÁREAS",
+        "page": 18,
+        "items": [
+          {
+            "title": "4.1. Área: Motricidad Gruesa (Ítems 0 a 30: postura, marcha, salto)",
+            "page": 18,
+            "subs": [
+              {
+                "title": "Rango 1 a 4 (Meses 1 a 12): Sostén cefálico, volteo, gateo y marcha asistida",
+                "page": 18
+              },
+              {
+                "title": "Rango 5 a 8 (Meses 13 a 60): Marcha independiente, carrera, equilibrio y salto",
+                "page": 22
+              }
+            ]
+          },
+          {
+            "title": "4.2. Área: Motricidad Fino-Adaptativa (Ítems 0 a 30: prensión, encaje, trazo)",
+            "page": 26,
+            "subs": [
+              {
+                "title": "Rango 1 a 4 (Meses 1 a 12): Reflejo de prensión, alcance de objetos y pinza",
+                "page": 26
+              },
+              {
+                "title": "Rango 5 a 8 (Meses 13 a 60): Torre de cubos, rasgado, copia de figuras y dibujo",
+                "page": 29
+              }
+            ]
+          },
+          {
+            "title": "4.3. Área: Audición y Lenguaje (Ítems 0 a 30: vocalización, frases, vocabulario)",
+            "page": 32,
+            "subs": [
+              {
+                "title": "Rango 1 a 4 (Meses 1 a 12): Reacción sonora, balbuceo y primeras palabras",
+                "page": 32
+              },
+              {
+                "title": "Rango 5 a 8 (Meses 13 a 60): Nombramiento de objetos, oraciones y definiciones",
+                "page": 35
+              }
+            ]
+          },
+          {
+            "title": "4.4. Área: Personal-Social (Ítems 0 a 30: interacción, autonomía, juego)",
+            "page": 38,
+            "subs": [
+              {
+                "title": "Rango 1 a 4 (Meses 1 a 12): Sonrisa social, apego y respuesta al espejo",
+                "page": 38
+              },
+              {
+                "title": "Rango 5 a 8 (Meses 13 a 60): Autocuidado, control diurno de orina y cooperación",
+                "page": 40
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "IV. FORMULARIO DE APLICACIÓN Y REGISTRO CLÍNICO",
+        "page": 43,
+        "items": [
+          {
+            "title": "Hoja de Registro Clínico y Datos de Identificación de la EAD-1",
+            "page": 43
+          },
+          {
+            "title": "Formulario de Puntuación Acumulativa por Áreas (Ítems 0 a 30)",
+            "page": 44
+          }
+        ]
+      },
+      {
+        "part": "V. PARÁMETROS NORMATIVOS Y BAREMOS DE PUNTUACIÓN",
+        "page": 48,
+        "items": [
+          {
+            "title": "Tabla 1: Resumen de parámetros normativos por grupo de edad (0 a 60 meses)",
+            "page": 50
+          },
+          {
+            "title": "Tablas 2 a 10: Baremos normativos de Percentil, T y T normalizado por edad",
+            "page": 51
+          },
+          {
+            "title": "Tablas 11 a 13: Normas para el Puntaje Total Acumulativo de la Escala",
+            "page": 58
+          },
+          {
+            "title": "Criterios de Clasificación Diagnóstica: Alerta, Medio, Medio-Alto y Alto",
+            "page": 60
+          }
+        ]
+      },
+      {
+        "part": "VI. BIBLIOGRAFÍA ESPECIALIZADA",
+        "page": 63,
+        "items": [
+          {
+            "title": "Referencias bibliográficas sobre neurodesarrollo y psicometría infantil",
+            "page": 63
+          }
+        ]
+      }
+    ],
+    "chapters": [
+      {
+        "title": "Portada Oficial EAD-1 (Pág. 1)",
+        "page": 1
+      },
+      {
+        "title": "Índice de Contenido (Pág. 2)",
+        "page": 2
+      },
+      {
+        "title": "Presentación Institucional UNICEF (Pág. 3)",
+        "page": 3
+      },
+      {
+        "title": "Fundamentación Conceptual del Desarrollo (Pág. 5)",
+        "page": 5
+      },
+      {
+        "title": "Selección de las 4 Áreas de Desarrollo (Pág. 9)",
+        "page": 9
+      },
+      {
+        "title": "Instrucciones Generales de Administración (Pág. 11)",
+        "page": 11
+      },
+      {
+        "title": "Batería de Materiales Requeridos (Pág. 16)",
+        "page": 16
+      },
+      {
+        "title": "Manual de Administración: Motricidad Gruesa (Pág. 18)",
+        "page": 18
+      },
+      {
+        "title": "Manual de Administración: Motricidad Fina (Pág. 26)",
+        "page": 26
+      },
+      {
+        "title": "Manual de Administración: Audición y Lenguaje (Pág. 32)",
+        "page": 32
+      },
+      {
+        "title": "Manual de Administración: Personal-Social (Pág. 38)",
+        "page": 38
+      },
+      {
+        "title": "Formulario de Aplicación EAD-1 (Pág. 43)",
+        "page": 43
+      },
+      {
+        "title": "Parámetros Normativos y Puntos de Corte (Pág. 48)",
+        "page": 48
+      },
+      {
+        "title": "Tablas de Baremos: Percentil y Puntuación T (Pág. 51)",
+        "page": 51
+      },
+      {
+        "title": "Normas del Puntaje Total Acumulativo (Pág. 58)",
+        "page": 58
+      },
+      {
+        "title": "Bibliografía de Referencia (Pág. 63)",
+        "page": 63
+      }
+    ],
+    "details": {
+      "edition": "1.ª Edición Revisada - Ministerio de Salud de Colombia / UNICEF",
+      "pages": "63 páginas completas",
+      "scope": "Manual técnico, protocolo de aplicación y tablas de baremos normativos para la evaluación del desarrollo infantil de 0 a 5 años.",
+      "clinicalGuidance": "Herramienta de cribado mandatoria en el control de salud infantil. Si el menor puntúa en la zona de «Alerta» en cualquiera de las cuatro áreas o en el puntaje total, se debe descartar compromiso sensorial, motor o ambiental e iniciar de inmediato estimulación temprana estructurada con reevaluación a los 30 días."
+    }
+  },
+  {
+    "id": "tests-psicologicos-anastasi-urbina",
+    "title": "Tests Psicológicos (7.ª Edición)",
+    "category": "books",
+    "categoryLabel": "Tratado Clásico de Psicometría",
+    "isBook": true,
+    "code": "LIB-ANASTASI-01",
+    "icon": "📊",
+    "author": "Anne Anastasi y Susana Urbina",
+    "badge": "Obra Cumbre en Psicometría • 581 Páginas",
+    "cloudHosted": true,
+    "coverImage": "https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/PORTADA_Tests-Psicologicos-Anne-Anastasi-Susana-Urbina.png",
+    "pdfUrl": "https://pub-f80b9608d3c840b094f0f3ba5b2599b0.r2.dev/Tests-Psicologicos-Anne-Anastasi-Susana-Urbina.pdf",
+    "areas": [
+      "PSICOMETRÍA",
+      "EVALUACIÓN PSICOLÓGICA",
+      "TESTS DE INTELIGENCIA",
+      "TESTS DE PERSONALIDAD",
+      "VALIDEZ Y CONFIABILIDAD",
+      "EVALUACIÓN CLÍNICA",
+      "NEUROPSICOLOGÍA"
+    ],
+    "academicAffiliation": "Anne Anastasi (Fordham University) • Susana Urbina (University of North Florida) • Prentice Hall / Pearson Educación",
+    "summary": "Considerada universalmente como la obra cumbre y la «biblia» de la psicometría y la evaluación psicológica contemporánea, la 7.ª edición de Tests Psicológicos de Anne Anastasi y Susana Urbina ofrece una cobertura exhaustiva, rigurosa y crítica de los fundamentos teóricos, metodológicos y éticos de las pruebas psicológicas. El texto desglosa minuciosamente las propiedades psicométricas esenciales (baremos, normas, confiabilidad, error estándar de medición, validez de contenido, criterio y constructo, y análisis de reactivos mediante la Teoría Clásica y la Teoría de Respuesta al Ítem - TRI). Asimismo, analiza a fondo los principales instrumentos estandarizados utilizados en la práctica clínica, educativa y neuropsicológica: escalas de inteligencia individual (Stanford-Binet, WAIS, WISC, WPPSI), pruebas colectivas de aptitud, baterías de aptitudes múltiples (DAT, GATB), inventarios autodescriptivos de personalidad (MMPI-2, 16PF, NEO-PI-R / Cinco Grandes Factores, CPI), técnicas proyectivas (Rorschach, TAT, pruebas gráficas) y directrices éticas y legales internacionales sobre el uso equitativo de los tests.",
+    "topics": [
+      "Naturaleza y uso de los tests psicológicos: supuestos psicométricos y controles de aplicación",
+      "Antecedentes históricos de las pruebas: desde Binet, Galton y Spearman hasta la psicometría moderna",
+      "Normas y significado de las puntuaciones: percentiles, puntuaciones estándar z, T, estaninas y CI de desviación",
+      "Confiabilidad: consistencia interna, test-retest, formas paralelas, Alfa de Cronbach y error estándar de medida (EEM)",
+      "Validez de contenido, criterio (predictiva y concurrente) y coeficientes de validez",
+      "Validez de constructo: análisis factorial, matrices multirrasgo-multimétodo y validez ecológica",
+      "Análisis de reactivos: dificultad, índice de discriminación y curvas características del ítem (TRI)",
+      "Evaluación de la inteligencia individual: Escalas Wechsler (WAIS-III, WISC-III, WPPSI) y Stanford-Binet",
+      "Tests colectivos de habilidad mental y pruebas de rendimiento académico",
+      "Baterías de aptitudes múltiples: DAT (Differential Aptitude Tests) y GATB",
+      "Evaluación psicológica en la infancia temprana y en poblaciones con necesidades especiales",
+      "Inventarios autodescriptivos de personalidad: MMPI-2, 16PF de Cattell, NEO-PI-R y CPI",
+      "Técnicas proyectivas: Test de Rorschach (Sistema Comprehensivo de Exner), TAT y técnicas expresivas gráficas",
+      "Evaluación en contextos clínicos, neuropsicológicos, educativos y organizacionales",
+      "Ética profesional, confidencialidad, sesgo cultural y consecuencias sociales y legales de los tests"
+    ],
+    "categories": [
+      "Psicometría y Teoría de los Tests",
+      "Evaluación de la Inteligencia y Aptitudes",
+      "Evaluación de la Personalidad y Proyectivas",
+      "Evaluación Clínica y Neuropsicológica",
+      "Ética y Deontología Profesional"
+    ],
+    "prologue": {
+      "author": "Anne Anastasi & Susana Urbina",
+      "date": "Nueva York • Editorial Prentice Hall",
+      "paragraphs": [
+        "El propósito de este texto es proporcionar una introducción comprensiva a los principios de la evaluación psicológica, así como un análisis crítico de los principales instrumentos utilizados en la actualidad. Durante las décadas transcurridas desde la primera edición, el campo de la psicometría ha experimentado una continua evolución, enriquecida por los avances de la psicología cognitiva, el modelamiento estadístico computarizado y una creciente sensibilidad hacia la diversidad cultural.",
+        "La séptima edición incorpora desarrollos decisivos en la teoría de la medición, dedicando especial atención a la Teoría de Respuesta al Ítem (TRI), la generalizabilidad, el funcionamiento diferencial de los reactivos (DIF) y las revisiones mayores de pruebas fundamentales como las escalas Wechsler y los inventarios de personalidad contemporáneos.",
+        "Más allá de la técnica cuantitativa, enfatizamos el papel del examinador como un profesional reflexivo que debe interpretar los resultados psicométricos dentro del contexto biopsicosocial del individuo. Ningún puntaje tiene significado aislado; su validez depende de la comprensión del error de medición, la estandarización de las condiciones de aplicación y la consideración de factores biográficos, emocionales y culturales.",
+        "Confiamos en que esta obra continúe sirviendo a generaciones de psicólogos como un cimiento sólido para ejercer una práctica evaluativa rigurosa, humana y éticamente responsable."
+      ]
+    },
+    "indexTree": [
+      {
+        "part": "PARTE 1. FUNCIONES Y ORÍGENES DE LOS TESTS PSICOLÓGICOS",
+        "page": 1,
+        "items": [
+          {
+            "title": "Capítulo 1: Naturaleza y uso de los tests psicológicos (usos, abusos y controles)",
+            "page": 2
+          },
+          {
+            "title": "Capítulo 2: Antecedentes históricos de las pruebas actuales (de la antigüedad a Binet)",
+            "page": 26
+          }
+        ]
+      },
+      {
+        "part": "PARTE 2. PRINCIPIOS TÉCNICOS Y METODOLÓGICOS",
+        "page": 47,
+        "items": [
+          {
+            "title": "Capítulo 3: Normas y significado de las puntuaciones de los tests",
+            "page": 48,
+            "subs": [
+              {
+                "title": "Conceptos estadísticos básicos: distribución normal y medidas de dispersión",
+                "page": 50
+              },
+              {
+                "title": "Normas de desarrollo: edad mental y grados escolares",
+                "page": 56
+              },
+              {
+                "title": "Puntuaciones dentro del grupo: percentiles, puntuaciones estándar z y T",
+                "page": 62
+              },
+              {
+                "title": "El CI de desviación en las escalas modernas",
+                "page": 70
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 4: Confiabilidad",
+            "page": 84,
+            "subs": [
+              {
+                "title": "El concepto de confiabilidad y la teoría del error de medición",
+                "page": 86
+              },
+              {
+                "title": "Tipos de confiabilidad: test-retest, formas alternas y consistencia interna",
+                "page": 91
+              },
+              {
+                "title": "Coeficiente Alfa de Cronbach y fórmulas de Kuder-Richardson",
+                "page": 97
+              },
+              {
+                "title": "El Error Estándar de Medición (EEM) y los intervalos de confianza",
+                "page": 105
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 5: Validez: Concepto básico y validez de contenido",
+            "page": 113,
+            "subs": [
+              {
+                "title": "Evolución del concepto de validez en psicometría",
+                "page": 114
+              },
+              {
+                "title": "Validez de contenido: representatividad del dominio y diseño de tablas",
+                "page": 118
+              },
+              {
+                "title": "Validez aparente (Face Validity)",
+                "page": 124
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 6: Validez: Validez de criterio",
+            "page": 126,
+            "subs": [
+              {
+                "title": "Validación concurrente vs. predictiva",
+                "page": 128
+              },
+              {
+                "title": "Contaminación de criterios y coeficientes de validez",
+                "page": 133
+              },
+              {
+                "title": "Validez generalizada y metaanálisis",
+                "page": 138
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 7: Validez: Validez de constructo",
+            "page": 140,
+            "subs": [
+              {
+                "title": "Diferenciación por edades y correlaciones con otros tests",
+                "page": 142
+              },
+              {
+                "title": "Análisis factorial: factores generales y específicos",
+                "page": 148
+              },
+              {
+                "title": "Matrices multirrasgo-multimétodo de Campbell y Fiske",
+                "page": 155
+              },
+              {
+                "title": "Validez convergente y discriminante",
+                "page": 160
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 8: Análisis de reactivos",
+            "page": 172,
+            "subs": [
+              {
+                "title": "Dificultad del reactivo y discriminación del ítem",
+                "page": 174
+              },
+              {
+                "title": "Teoría Clásica de los Tests vs. Teoría de Respuesta al Ítem (TRI)",
+                "page": 182
+              },
+              {
+                "title": "Curvas características del reactivo (CCR) y parámetros a, b, c",
+                "page": 190
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "PARTE 3. TESTS DE CAPACIDAD: INTELIGENCIA Y APTITUDES",
+        "page": 205,
+        "items": [
+          {
+            "title": "Capítulo 9: Pruebas individuales de inteligencia",
+            "page": 206,
+            "subs": [
+              {
+                "title": "Las Escalas de Inteligencia de Stanford-Binet (Cuarta edición)",
+                "page": 208
+              },
+              {
+                "title": "La Escala Wechsler de Inteligencia para Adultos (WAIS)",
+                "page": 216
+              },
+              {
+                "title": "La Escala Wechsler de Inteligencia para Niños (WISC) y WPPSI",
+                "page": 228
+              },
+              {
+                "title": "Baterías de Kaufman (K-ABC)",
+                "page": 238
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 10: Pruebas grupales de habilidad mental",
+            "page": 247,
+            "subs": [
+              {
+                "title": "Tests colectivos vs. individuales: ventajas y limitaciones",
+                "page": 248
+              },
+              {
+                "title": "Tests de Matrices Progresivas de Raven y Dominós",
+                "page": 256
+              },
+              {
+                "title": "Pruebas libres de influencia cultural de Cattell",
+                "page": 264
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 11: Medición de habilidades especiales y aptitudes múltiples",
+            "page": 275,
+            "subs": [
+              {
+                "title": "El Test de Aptitudes Diferenciales (DAT)",
+                "page": 278
+              },
+              {
+                "title": "La Batería de Pruebas de Aptitudes Generales (GATB)",
+                "page": 288
+              },
+              {
+                "title": "Aptitudes mecánicas, espaciales, psicomotrices y artísticas",
+                "page": 298
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 12: Evaluación psicológica infantil y en poblaciones especiales",
+            "page": 312,
+            "subs": [
+              {
+                "title": "Evaluación del desarrollo en infantes y preescolares",
+                "page": 314
+              },
+              {
+                "title": "Evaluación de personas con discapacidades auditivas y visuales",
+                "page": 326
+              },
+              {
+                "title": "Evaluación de personas con parálisis cerebral y daño motor",
+                "page": 334
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "PARTE 4. EVALUACIÓN DE LA PERSONALIDAD",
+        "page": 345,
+        "items": [
+          {
+            "title": "Capítulo 13: Inventarios autodescriptivos de personalidad",
+            "page": 346,
+            "subs": [
+              {
+                "title": "El Inventario Multifásico de Personalidad de Minnesota (MMPI / MMPI-2)",
+                "page": 348
+              },
+              {
+                "title": "Escalas de validez del MMPI-2: L, F, K y escalas clínicas",
+                "page": 356
+              },
+              {
+                "title": "El Cuestionario de 16 Factores de la Personalidad (16PF de Cattell)",
+                "page": 368
+              },
+              {
+                "title": "El Inventario NEO-PI-R y el Modelo de los Cinco Grandes Factores (Big Five)",
+                "page": 376
+              },
+              {
+                "title": "El Inventario Psicológico de California (CPI)",
+                "page": 384
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 14: Medición de intereses, valores y actitudes",
+            "page": 395,
+            "subs": [
+              {
+                "title": "El Inventario de Intereses de Strong-Campbell (SCII)",
+                "page": 398
+              },
+              {
+                "title": "Registro de Preferencias Vocacionales de Kuder",
+                "page": 408
+              },
+              {
+                "title": "Escalas de valores y medición de actitudes sociales",
+                "page": 416
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 15: Técnicas proyectivas",
+            "page": 427,
+            "subs": [
+              {
+                "title": "Fundamentos de la hipótesis proyectiva",
+                "page": 428
+              },
+              {
+                "title": "El Test de Manchas de Tinta de Rorschach (Sistema Comprehensivo de Exner)",
+                "page": 432
+              },
+              {
+                "title": "El Test de Apercepción Temática (TAT de Murray) y CAT infantil",
+                "page": 444
+              },
+              {
+                "title": "Técnicas proyectivas gráficas: HTP, Dibujo de la Figura Humana y Bender",
+                "page": 452
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 16: Otras técnicas de evaluación del comportamiento",
+            "page": 462,
+            "subs": [
+              {
+                "title": "Observación conductual directa y muestreo de tiempo",
+                "page": 464
+              },
+              {
+                "title": "Técnicas de autoregistro y evaluación situacional",
+                "page": 472
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "PARTE 5. APLICACIONES Y CONTEXTOS DE LAS PRUEBAS",
+        "page": 485,
+        "items": [
+          {
+            "title": "Capítulo 17: Principales contextos del uso actual de las pruebas",
+            "page": 486,
+            "subs": [
+              {
+                "title": "Evaluación en el ámbito clínico y psicodiagnóstico",
+                "page": 488
+              },
+              {
+                "title": "Evaluación neuropsicológica: Luria-Nebraska y Halstead-Reitan",
+                "page": 496
+              },
+              {
+                "title": "Evaluación educativa y diagnóstico de problemas de aprendizaje",
+                "page": 506
+              },
+              {
+                "title": "Evaluación laboral, selección de personal y psicología organizacional",
+                "page": 516
+              }
+            ]
+          },
+          {
+            "title": "Capítulo 18: Consideraciones éticas y sociales en la evaluación psicológica",
+            "page": 528,
+            "subs": [
+              {
+                "title": "Confidencialidad, consentimiento informado y custodia de materiales",
+                "page": 530
+              },
+              {
+                "title": "Invasión de la privacidad y derecho a conocer los resultados",
+                "page": 536
+              },
+              {
+                "title": "Sesgo de las pruebas, equidad cultural y minorías",
+                "page": 542
+              },
+              {
+                "title": "Directrices internacionales de la APA y uso responsable de tests",
+                "page": 550
+              }
+            ]
+          },
+          {
+            "title": "Apéndices Estadísticos y Tablas de Áreas Bajo la Curva Normal",
+            "page": 560,
+            "subs": [
+              {
+                "title": "Tabla de ordenadas y áreas de la curva normal estandarizada",
+                "page": 562
+              },
+              {
+                "title": "Directorio de editoriales psicométricas y fuentes de información",
+                "page": 568
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "chapters": [
+      {
+        "title": "Portada (Pág. 1)",
+        "page": 1
+      },
+      {
+        "title": "Prefacio a la 7.ª Edición (Pág. 11)",
+        "page": 11
+      },
+      {
+        "title": "Capítulo 1: Funciones y Orígenes de los Tests (Pág. 18)",
+        "page": 18
+      },
+      {
+        "title": "Capítulo 2: Antecedentes Históricos (Pág. 42)",
+        "page": 42
+      },
+      {
+        "title": "Capítulo 3: Normas y Puntuaciones (Pág. 64)",
+        "page": 64
+      },
+      {
+        "title": "Capítulo 4: Confiabilidad y Error Estándar (Pág. 100)",
+        "page": 100
+      },
+      {
+        "title": "Capítulo 5: Validez de Contenido (Pág. 130)",
+        "page": 130
+      },
+      {
+        "title": "Capítulo 6: Validez de Criterio (Pág. 142)",
+        "page": 142
+      },
+      {
+        "title": "Capítulo 7: Validez de Constructo (Pág. 156)",
+        "page": 156
+      },
+      {
+        "title": "Capítulo 8: Análisis de Reactivos y TRI (Pág. 188)",
+        "page": 188
+      },
+      {
+        "title": "Capítulo 9: Pruebas Individuales: Wechsler y Binet (Pág. 222)",
+        "page": 222
+      },
+      {
+        "title": "Capítulo 10: Pruebas Colectivas de Habilidad (Pág. 264)",
+        "page": 264
+      },
+      {
+        "title": "Capítulo 11: Aptitudes Múltiples y Batería DAT (Pág. 292)",
+        "page": 292
+      },
+      {
+        "title": "Capítulo 12: Poblaciones Especiales e Infancia (Pág. 328)",
+        "page": 328
+      },
+      {
+        "title": "Capítulo 13: Inventarios de Personalidad: MMPI y 16PF (Pág. 362)",
+        "page": 362
+      },
+      {
+        "title": "Capítulo 14: Medición de Intereses y Valores (Pág. 412)",
+        "page": 412
+      },
+      {
+        "title": "Capítulo 15: Técnicas Proyectivas y Rorschach (Pág. 444)",
+        "page": 444
+      },
+      {
+        "title": "Capítulo 16: Otras Técnicas Conductuales (Pág. 478)",
+        "page": 478
+      },
+      {
+        "title": "Capítulo 17: Contextos Clínicos y Neuropsicológicos (Pág. 502)",
+        "page": 502
+      },
+      {
+        "title": "Capítulo 18: Ética y Consecuencias Sociales (Pág. 544)",
+        "page": 544
+      },
+      {
+        "title": "Apéndice: Tablas Estadísticas (Pág. 562)",
+        "page": 562
+      }
+    ],
+    "details": {
+      "edition": "7.ª Edición Oficial en Español - Prentice Hall / Pearson Educación",
+      "pages": "581 páginas completas",
+      "scope": "Tratado integral de referencia obligatoria en psicometría, teoría de la medida y construcción/validación de tests psicológicos.",
+      "clinicalGuidance": "Obra de consulta metodológica indispensable para fundamentar la selección de instrumentos diagnósticos, calcular intervalos de confianza mediante el error estándar de medida e interpretar perfiles psicométricos complejos en informes clínicos, forenses y periciales."
+    }
+  },
+  {
     id: 'la-orientacion',
     title: 'La orientación',
     category: 'psicopatologia',
@@ -4909,7 +5729,7 @@ class LibraryController {
            'evaluacion-examen-estado-mental-global', 'evaluacion-fobias-ansiedad-social'].includes(item.id);
       } else if (this.currentCategory === 'infancia') {
         matchesCat = (item.areas || []).includes('DESARROLLO INFANTIL') || (item.areas || []).includes('NEURODESARROLLO') || 
-          ['eedp-desarrollo-psicomotor', 'el-desarrollo-psicomotor', 'evaluacion-desarrollo-psicomotor', 
+          ['eedp-desarrollo-psicomotor', 'nelson-ortiz-escala-abreviada', 'el-desarrollo-psicomotor', 'evaluacion-desarrollo-psicomotor', 
            'test-harris-lateralidad', 'eedp-motor-coordinacion', 'evaluacion-eedp-motor-coordinacion', 
            'eedp-lenguaje-social', 'evaluacion-eedp-lenguaje-social', 'evaluacion-apego-vinculo-infantil'].includes(item.id);
       } else if (this.currentCategory === 'psicopatologia') {
