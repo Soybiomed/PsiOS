@@ -7510,142 +7510,385 @@ export const ADDITIONAL_DOCS_HTML = {
   // =========================================================================
   'evaluacion-tamizaje-neurodesarrollo-ead1': () => `
     <div class="orientation-doc-container">
+      <!-- ENCABEZADO PRINCIPAL -->
       <div class="orientation-doc-header">
         <div class="modal-areas-row">
-          <span class="modal-type-pill" style="background: rgba(16, 185, 129, 0.15); color: #047857;">🚦 PROTOCOLO DE TAMIZAJE & SEMÁFORO EAD-1</span>
+          <span class="modal-type-pill" style="background: rgba(16, 185, 129, 0.15); color: #047857;">🚦 PROTOCOLO CLÍNICO DE TAMIZAJE • EAD-1</span>
           <span class="modal-area-pill">👶 ÁREA: DESARROLLO INFANTIL</span>
           <span class="modal-area-pill">🧠 ÁREA: NEURODESARROLLO</span>
           <span class="modal-area-pill">🩺 ÁREA: EVALUACIÓN CLÍNICA</span>
         </div>
         <h2 class="orientation-main-title">Protocolo de Tamizaje EAD-1 con Semáforo Neuroevolutivo Interactivo (0-60 Meses)</h2>
-        <p class="orientation-authors-meta">Dr. Nelson Ortiz Pinilla • Protocolo de Evaluación y Baremos Normativos (EAD-1 Págs. 18-62)</p>
+        <p class="orientation-authors-meta">Dr. Nelson Ortiz Pinilla • Escala Abreviada de Desarrollo EAD-1 (Ministerio de Salud / UNICEF, Págs. 14-62)</p>
       </div>
 
+      <!-- BANNER PEDAGÓGICO DE BIENVENIDA -->
       <div class="pedagogical-division-banner" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.25);">
         <div class="pedagogical-banner-text">
-          💡 <strong>Navegador Clínico Interactivo:</strong> Seleccione cualquiera de los 9 rangos de edad en el control inferior para consultar instantáneamente los criterios exactos de evaluación en las 4 áreas (Motricidad Gruesa, Fina, Lenguaje y Personal-Social). Al mismo tiempo, consulte los puntos de corte del Semáforo Normativo de Nelson Ortiz.
+          💡 <strong>Guía Clínica Esencial:</strong> La EAD-1 es un instrumento de tamizaje rápido y acumulativo diseñado para detectar tempranamente desviaciones o retrasos en el neurodesarrollo infantil. Este protocolo estructurado le guía paso a paso desde el cálculo de la edad corregida hasta la obtención de puntuaciones directas y su clasificación inmediata en el Semáforo Oficial de Nelson Ortiz.
         </div>
         <button type="button" class="pedagogical-link-btn" id="btn-back-ead-def" style="background: #059669;">
           <span>← Volver a Fundamentos de Neurodesarrollo</span>
         </button>
       </div>
 
+      <!-- PÍLDORAS DE NAVEGACIÓN RÁPIDA -->
       <div class="orientation-nav-pills-bar">
-        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-semaforo-widget">
-          <span>🚦</span>
-          <span>1. Semáforo & Alertas</span>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-estructura">
+          <span>📖</span>
+          <span>1. Estructura & Ítems</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-edad-prematurez">
+          <span>📅</span>
+          <span>2. Cálculo de Edad & Prematurez</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-reglas-puntuacion">
+          <span>⚖️</span>
+          <span>3. Reglas de Puntuación (Base y Techo)</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-simulador-baremos">
+          <span>🧮</span>
+          <span>4. Simulador Interactivo de Baremos</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-caso-clinico">
+          <span>📝</span>
+          <span>5. Caso Clínico Guiado</span>
         </button>
         <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-tabla-maestra">
           <span>📊</span>
-          <span>2. Tabla 1: Baremos Oficiales</span>
-        </button>
-        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-valija-materiales">
-          <span>🧰</span>
-          <span>3. Valija de Materiales</span>
+          <span>6. Tabla 1: Baremos Oficiales</span>
         </button>
         <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-navegador">
           <span>👶</span>
-          <span>4. Navegador Etario (0-60m)</span>
+          <span>7. Criterios de Ítems (0-60m)</span>
         </button>
-        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-reglas">
-          <span>⚖️</span>
-          <span>5. Reglas de Parada & Edad</span>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-valija-materiales">
+          <span>🧰</span>
+          <span>8. Valija de Materiales</span>
         </button>
       </div>
 
-      <!-- SEMÁFORO EAD-1 INTERACTIVO (PUNTOS DE CORTE) -->
-      <section class="orientation-block-card" id="sec-ead-semaforo-widget" style="border: 2px solid rgba(16, 185, 129, 0.3); background: rgba(255, 255, 255, 0.9);">
-        <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">SEMÁFORO DE ALERTAS DEL DESARROLLO (NELSON ORTIZ)</span>
-        <h3 class="orientation-sec-title">Puntos de Corte Normativos EAD-1</h3>
-        <p class="orientation-p">
-          El baremo oficial de Nelson Ortiz clasifica las puntuaciones estándar normalizadas T (media 50, DT 10) y rangos percentilares en 5 niveles diagnósticos:
+      <!-- SECCIÓN 1: ESTRUCTURA Y CÓMO FUNCIONA LA EAD-1 -->
+      <section class="orientation-block-card" id="sec-ead-estructura">
+        <span class="orientation-section-badge">FUNDAMENTACIÓN DE LA PRUEBA</span>
+        <h3 class="orientation-sec-title">1. ¿Cómo está Estructurada la EAD-1?</h3>
+        <p class="orientation-lead-p">
+          La Escala Abreviada de Desarrollo consta de <strong>120 ítems en total</strong>, organizados simétricamente en 4 áreas funcionales de 30 ítems cada una:
         </p>
 
-        <!-- BARRAS DEL SEMÁFORO -->
-        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin: 1.15rem 0;">
-          <!-- NIVEL 1: ALERTA (ROJO) -->
-          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(239, 68, 68, 0.08); border: 1.5px solid rgba(239, 68, 68, 0.3); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 1.4rem;">🔴</span>
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item" style="border-top: 3px solid #3b82f6;">
+            <div class="dim-item-header">
+              <span class="dim-icon">🏃‍♂️</span>
               <div>
-                <strong style="color: #b91c1c; font-size: 0.95rem;">ALERTA (Sospecha de Retraso Patológico)</strong>
-                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T &lt; 35 • Rango Percentilar &lt; 10</div>
+                <span class="dim-name">Área A: Motricidad Gruesa</span>
+                <div style="font-size: 0.72rem; color: #2563eb; font-weight: 700;">30 Ítems (Del 1 al 30)</div>
               </div>
             </div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #991b1b; background: rgba(239, 68, 68, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
-              ⚠️ Remisión Urgente a Neuropediatría / Terapia Integral
-            </div>
+            <p class="orientation-p">
+              Evalúa la maduración neurológica postural, tono muscular, control cefálico, sedestación, marcha bípeda, equilibrio y carrera.
+            </p>
           </div>
 
-          <!-- NIVEL 2: MEDIO-BAJO (AMARILLO) -->
-          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(245, 158, 11, 0.08); border: 1.5px solid rgba(245, 158, 11, 0.3); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 1.4rem;">🟡</span>
+          <div class="orientation-dim-item" style="border-top: 3px solid #d97706;">
+            <div class="dim-item-header">
+              <span class="dim-icon">✍️</span>
               <div>
-                <strong style="color: #b45309; font-size: 0.95rem;">MEDIO-BAJO (Riesgo Evolutivo / Alerta Preventiva)</strong>
-                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 36 a 45 • Rango Percentilar 11 a 25</div>
+                <span class="dim-name">Área B: Fino-Adaptativa</span>
+                <div style="font-size: 0.72rem; color: #d97706; font-weight: 700;">30 Ítems (Del 1 al 30)</div>
               </div>
             </div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #92400e; background: rgba(245, 158, 11, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
-              ⏱️ Estimulación Activa en Hogar + Reevaluación a los 30 Días
-            </div>
+            <p class="orientation-p">
+              Evalúa la coordinación óculo-manual, prensión voluntaria, pinza digital, manipulación de objetos y grafomotricidad.
+            </p>
           </div>
 
-          <!-- NIVEL 3: MEDIO (GRIS/AZUL) -->
-          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(59, 130, 246, 0.06); border: 1.5px solid rgba(59, 130, 246, 0.25); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 1.4rem;">⚪</span>
+          <div class="orientation-dim-item" style="border-top: 3px solid #059669;">
+            <div class="dim-item-header">
+              <span class="dim-icon">🗣️</span>
               <div>
-                <strong style="color: #1d4ed8; font-size: 0.95rem;">MEDIO (Desarrollo Típico Esperado)</strong>
-                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 46 a 55 • Rango Percentilar 26 a 74</div>
+                <span class="dim-name">Área C: Audición y Lenguaje</span>
+                <div style="font-size: 0.72rem; color: #059669; font-weight: 700;">30 Ítems (Del 1 al 30)</div>
               </div>
             </div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #1e40af; background: rgba(59, 130, 246, 0.12); padding: 0.35rem 0.75rem; border-radius: 8px;">
-              ✅ Control Periódico de Crecimiento y Desarrollo
-            </div>
+            <p class="orientation-p">
+              Evalúa orientación sonora, vocalizaciones, balbuceo, vocabulario comprensivo y expresivo, sintaxis y relato verbal.
+            </p>
           </div>
 
-          <!-- NIVEL 4: MEDIO-ALTO (AZUL CIELO) -->
-          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(14, 165, 233, 0.08); border: 1.5px solid rgba(14, 165, 233, 0.3); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 1.4rem;">🔵</span>
+          <div class="orientation-dim-item" style="border-top: 3px solid #7c3aed;">
+            <div class="dim-item-header">
+              <span class="dim-icon">🤝</span>
               <div>
-                <strong style="color: #0369a1; font-size: 0.95rem;">MEDIO-ALTO (Habilidades Consolidadas)</strong>
-                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T = 56 a 65 • Rango Percentilar 75 a 89</div>
+                <span class="dim-name">Área D: Personal-Social</span>
+                <div style="font-size: 0.72rem; color: #7c3aed; font-weight: 700;">30 Ítems (Del 1 al 30)</div>
               </div>
             </div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #075985; background: rgba(14, 165, 233, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
-              🌟 Fortalecimiento del Entorno Psicoeducativo
-            </div>
+            <p class="orientation-p">
+              Evalúa procesos de apego, sonrisa social, juego interactivo, autonomía en vestido y alimentación, y seguimiento de normas.
+            </p>
           </div>
+        </div>
 
-          <!-- NIVEL 5: ALTO (VERDE) -->
-          <div class="ead-traffic-card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(16, 185, 129, 0.08); border: 1.5px solid rgba(16, 185, 129, 0.3); flex-wrap: wrap; gap: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 1.4rem;">🟢</span>
-              <div>
-                <strong style="color: #047857; font-size: 0.95rem;">ALTO (Maduración Acelerada / Desempeño Sobresaliente)</strong>
-                <div style="font-size: 0.78rem; color: var(--text-secondary);">Puntaje T &gt; 65 • Rango Percentilar &gt; 90</div>
-              </div>
+        <div class="orientation-diff-note" style="margin-top: 1rem;">
+          <strong>💡 ¿Por qué es una Escala "Abreviada"?:</strong> Al niño <em>no se le aplican los 120 ítems</em>. La prueba se divide en <strong>9 rangos etarios</strong>. Cada rango contiene únicamente <strong>3 o 4 ítems por área</strong>. El evaluador sólo administra los ítems pertinentes a la edad del niño, acreditando automáticamente los previos según la regla de la línea base.
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: CÁLCULO DE EDAD CRONOLÓGICA Y EDAD CORREGIDA -->
+      <section class="orientation-block-card" id="sec-ead-edad-prematurez">
+        <span class="orientation-section-badge">PASO 1: DETERMINACIÓN EXACTA DE LA EDAD</span>
+        <h3 class="orientation-sec-title">2. Cálculo de Edad y Regla Obligatoria de Prematurez</h3>
+        <p class="orientation-p">
+          Antes de abrir la escala, es imprescindible determinar la edad exacta del niño en meses y días. Si el infante nació prematuro (antes de las 37 semanas de gestación), su sistema nervioso central aún no ha completado el tiempo de maduración intrauterina.
+        </p>
+
+        <div class="orientation-subcard" style="border-left: 3px solid #059669; background: rgba(16, 185, 129, 0.04);">
+          <div class="orientation-subcard-title" style="color: #065f46;">Regla de Nelson Ortiz para Niños Prematuros (Pág. 18):</div>
+          <p class="orientation-p" style="margin-bottom: 0.5rem;">
+            En todo niño nacido con <strong>menos de 37 semanas de gestación</strong>, se debe calcular la <strong>Edad Corregida</strong> durante sus primeros <strong>24 meses de vida</strong> (2 años). A partir de los 2 años, se utiliza la edad cronológica real.
+          </p>
+          <div style="background: #ffffff; padding: 0.85rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); font-family: monospace; font-size: 0.95rem; font-weight: 700; color: #1e293b; text-align: center;">
+            Semanas de Prematurez = 40 semanas - Semanas Reales de Gestación
+            <br>
+            Edad Corregida = Edad Cronológica - Semanas de Prematurez
+          </div>
+        </div>
+
+        <!-- CALCULADORA RÁPIDA DE EDAD CORREGIDA -->
+        <div style="background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1.1rem; margin-top: 1rem;">
+          <h4 style="font-size: 0.92rem; font-weight: 800; color: #065f46; margin: 0 0 0.75rem 0;">🧮 Calculadora Rápida de Edad Corregida:</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; align-items: flex-end;">
+            <div>
+              <label for="ead-calc-cron-meses" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem;">Edad Cronológica (Meses cumplidos):</label>
+              <input type="number" id="ead-calc-cron-meses" min="0" max="60" value="11" style="width: 100%; padding: 0.45rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); font-weight: 700; text-align: center;">
             </div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #065f46; background: rgba(16, 185, 129, 0.15); padding: 0.35rem 0.75rem; border-radius: 8px;">
-              🚀 Enriquecimiento de Talentos & Potencial Infantil
+
+            <div>
+              <label for="ead-calc-gest-sem" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem;">Semanas de Gestación al Nacer:</label>
+              <input type="number" id="ead-calc-gest-sem" min="24" max="42" value="34" style="width: 100%; padding: 0.45rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); font-weight: 700; text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--text-tertiary); margin-top: 0.2rem;">Término normal: 38 a 40 semanas</div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.1); border-radius: 8px; padding: 0.6rem; text-align: center;">
+              <div style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #047857;">Edad para Evaluación:</div>
+              <div id="ead-calc-result-age" style="font-size: 1.15rem; font-weight: 800; color: #065f46;">9.5 Meses</div>
+              <div id="ead-calc-result-rango" style="font-size: 0.72rem; font-weight: 700; color: #1e40af;">Rango 4 (10 a 12m)</div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- SECCIÓN 3: REGLAS DE PUNTUACIÓN (LÍNEA BASE Y TECHO DE FRACASO) -->
+      <section class="orientation-block-card" id="sec-ead-reglas-puntuacion">
+        <span class="orientation-section-badge">PASO 2: PROCEDIMIENTO PSICOMÉTRICO EXACTO</span>
+        <h3 class="orientation-sec-title">3. ¿Cómo se Obtiene la Puntuación Directa por Área?</h3>
+        <p class="orientation-lead-p">
+          Cada ítem de la escala se califica con criterio dicotómico estricto:
+          <br>• <strong>1 punto:</strong> Si el niño cumple satisfactoriamente el criterio de respuesta.
+          <br>• <strong>0 puntos:</strong> Si el niño no logra realizar el ítem o se rehúsa tras tres ensayos.
+        </p>
 
-      <!-- TABLA NO. 1 OFICIAL: RESUMEN PARÁMETROS NORMATIVOS (NELSON ORTIZ) -->
+        <div class="orientation-dimensions-grid">
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🟢</span>
+              <span class="dim-name">Punto de Inicio & Línea Base</span>
+            </div>
+            <p class="orientation-p">
+              1. Comience la evaluación en el <strong>primer ítem correspondiente al rango de edad</strong> del niño.
+              <br>2. Si el niño aprueba el primer ítem, continúe hacia adelante.
+              <br>3. <strong>Regla de Acreditación Automática:</strong> Cuando el niño aprueba <strong>tres ítems consecutivos</strong>, se consolida la línea base y <em>todos los ítems anteriores de la prueba se califican automáticamente con 1 punto</em> (se asume que las habilidades previas están superadas).
+              <br>4. Si el niño falla el primer ítem de su edad, <strong>retroceda de ítem en ítem</strong> hacia atrás hasta que logre aprobar tres ítems seguidos.
+            </p>
+          </div>
+
+          <div class="orientation-dim-item">
+            <div class="dim-item-header">
+              <span class="dim-icon">🛑</span>
+              <span class="dim-name">Techo de Fracaso & Suspensión</span>
+            </div>
+            <p class="orientation-p">
+              1. Una vez consolidada la línea base, continúe administrando los ítems siguientes de mayor complejidad.
+              <br>2. <strong>Regla de Parada:</strong> La aplicación en esa área se suspende de manera definitiva en el momento exacto en que el niño <strong>falla tres ítems consecutivos</strong>.
+              <br>3. No fatigue al niño administrando ítems superiores si ya se alcanzó el techo de fracaso.
+            </p>
+          </div>
+        </div>
+
+        <!-- DIAGRAMA VISUAL DE CÁLCULO DE PUNTUACIÓN -->
+        <div style="background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 1.1rem; margin-top: 1rem;">
+          <h4 style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.5rem 0;">Fórmula Matemática del Puntaje Directo Acumulado ($PD$):</h4>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #1e40af; text-align: center; padding: 0.6rem; background: #ffffff; border-radius: 8px; border: 1px solid rgba(59,130,246,0.2);">
+            Puntuación Directa por Área ($PD$) = (Último Ítem de la Base Acreditada) + (Ítems Posteriores Aprobados)
+          </div>
+          <p class="orientation-p" style="margin-top: 0.65rem; font-size: 0.82rem; color: var(--text-secondary);">
+            <em>Ejemplo:</em> Si el niño consolida su base en el ítem 9 (se acreditan los 9 puntos anteriores) y luego aprueba los ítems 10 y 11, pero falla consecutivamente los ítems 12, 13 y 14 (techo de suspensión), su Puntuación Directa en esa área es: <code>PD = 9 + 2 = 11 puntos</code>.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 4: SIMULADOR INTERACTIVO DE BAREMOS Y SEMÁFORO EN VIVO -->
+      <section class="orientation-block-card" id="sec-ead-simulador-baremos" style="border: 2px solid rgba(16, 185, 129, 0.35); background: rgba(255, 255, 255, 0.95);">
+        <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.15); color: #047857;">HERRAMIENTA CLÍNICA DINÁMICA</span>
+        <h3 class="orientation-sec-title">4. Simulador Interactivo de Puntuaciones y Semáforo EAD-1 en Tiempo Real</h3>
+        <p class="orientation-lead-p">
+          Seleccione el grupo de edad del niño e introduzca las puntuaciones directas obtenidas en cada área ($0$ a $30$). El sistema calculará instantáneamente el puntaje total, clasificará cada dominio según los cortes de la Tabla 1 de Nelson Ortiz y activará el Semáforo Clínico con su recomendación:
+        </p>
+
+        <!-- SELECTOR DE RANGO ETARIO DEL SIMULADOR -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.08); border-radius: 12px; margin-bottom: 1.25rem; border: 1px solid rgba(16, 185, 129, 0.2);">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.3rem;">👶</span>
+            <label for="ead-sim-age-select" style="font-weight: 800; font-size: 0.9rem; color: #065f46;">Seleccionar Grupo de Edad del Niño:</label>
+          </div>
+          <select id="ead-sim-age-select" style="padding: 0.45rem 0.9rem; border-radius: 8px; border: 1.5px solid #059669; font-weight: 700; font-size: 0.88rem; color: #065f46; background: #ffffff; cursor: pointer;">
+            <option value="0">1. 1 a 3 Meses</option>
+            <option value="1">2. 4 a 6 Meses</option>
+            <option value="2">3. 7 a 9 Meses</option>
+            <option value="3" selected>4. 10 a 12 Meses</option>
+            <option value="4">5. 13 a 18 Meses</option>
+            <option value="5">6. 19 a 24 Meses</option>
+            <option value="6">7. 25 a 36 Meses</option>
+            <option value="7">8. 37 a 48 Meses</option>
+            <option value="8">9. 49 a 60 Meses</option>
+          </select>
+        </div>
+
+        <!-- CONTROLES NUMÉRICOS PARA LAS 4 ÁREAS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+          <!-- ÁREA A -->
+          <div style="background: rgba(59, 130, 246, 0.05); border: 1.5px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #1e40af;">🏃‍♂️ Motricidad Gruesa (A)</span>
+              <span id="ead-sim-badge-a" class="status-badge" style="background: rgba(239,68,68,0.15); color: #b91c1c; font-size: 0.72rem;">ALERTA</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="range" id="ead-sim-slider-a" min="0" max="30" value="11" style="flex: 1; accent-color: #2563eb; cursor: pointer;">
+              <input type="number" id="ead-sim-input-a" min="0" max="30" value="11" style="width: 50px; text-align: center; font-weight: 800; border-radius: 6px; border: 1px solid rgba(0,0,0,0.15); padding: 0.25rem;">
+            </div>
+            <div id="ead-sim-norm-a" style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.35rem;">Cortes: Alerta ≤ 11, Medio 12-13</div>
+          </div>
+
+          <!-- ÁREA B -->
+          <div style="background: rgba(245, 158, 11, 0.05); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 12px; padding: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #b45309;">✍️ Fino-Adaptativa (B)</span>
+              <span id="ead-sim-badge-b" class="status-badge" style="background: rgba(59,130,246,0.15); color: #1d4ed8; font-size: 0.72rem;">MEDIO</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="range" id="ead-sim-slider-b" min="0" max="30" value="12" style="flex: 1; accent-color: #d97706; cursor: pointer;">
+              <input type="number" id="ead-sim-input-b" min="0" max="30" value="12" style="width: 50px; text-align: center; font-weight: 800; border-radius: 6px; border: 1px solid rgba(0,0,0,0.15); padding: 0.25rem;">
+            </div>
+            <div id="ead-sim-norm-b" style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.35rem;">Cortes: Alerta ≤ 9, Medio 10-12</div>
+          </div>
+
+          <!-- ÁREA C -->
+          <div style="background: rgba(16, 185, 129, 0.05); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #047857;">🗣️ Lenguaje (C)</span>
+              <span id="ead-sim-badge-c" class="status-badge" style="background: rgba(59,130,246,0.15); color: #1d4ed8; font-size: 0.72rem;">MEDIO</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="range" id="ead-sim-slider-c" min="0" max="30" value="11" style="flex: 1; accent-color: #059669; cursor: pointer;">
+              <input type="number" id="ead-sim-input-c" min="0" max="30" value="11" style="width: 50px; text-align: center; font-weight: 800; border-radius: 6px; border: 1px solid rgba(0,0,0,0.15); padding: 0.25rem;">
+            </div>
+            <div id="ead-sim-norm-c" style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.35rem;">Cortes: Alerta ≤ 9, Medio 10-12</div>
+          </div>
+
+          <!-- ÁREA D -->
+          <div style="background: rgba(147, 51, 234, 0.05); border: 1.5px solid rgba(147, 51, 234, 0.25); border-radius: 12px; padding: 0.9rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #6b21a8;">🤝 Personal-Social (D)</span>
+              <span id="ead-sim-badge-d" class="status-badge" style="background: rgba(14,165,233,0.15); color: #0369a1; font-size: 0.72rem;">MEDIO-ALTO</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="range" id="ead-sim-slider-d" min="0" max="30" value="13" style="flex: 1; accent-color: #7c3aed; cursor: pointer;">
+              <input type="number" id="ead-sim-input-d" min="0" max="30" value="13" style="width: 50px; text-align: center; font-weight: 800; border-radius: 6px; border: 1px solid rgba(0,0,0,0.15); padding: 0.25rem;">
+            </div>
+            <div id="ead-sim-norm-d" style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 0.35rem;">Cortes: Alerta ≤ 9, M.Alto 13-14</div>
+          </div>
+        </div>
+
+        <!-- RESULTADOS GLOBALES Y SEMÁFORO DEL NIÑO -->
+        <div style="background: #ffffff; border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 1.15rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 0.75rem;">
+            <div>
+              <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: var(--text-tertiary); letter-spacing: 0.05em;">PUNTAJE TOTAL ACUMULADO ($A + B + C + D$):</span>
+              <div style="display: flex; align-items: baseline; gap: 0.6rem; margin-top: 0.2rem;">
+                <span id="ead-sim-total-num" style="font-size: 2rem; font-weight: 900; color: #1e293b;">47</span>
+                <span style="font-size: 0.88rem; color: var(--text-secondary);">/ 120 Puntos Máximos</span>
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: var(--text-tertiary);">CLASIFICACIÓN TOTAL:</span>
+              <div id="ead-sim-total-badge" style="font-size: 1rem; font-weight: 800; padding: 0.35rem 0.9rem; border-radius: 8px; background: rgba(59,130,246,0.15); color: #1d4ed8; margin-top: 0.2rem;">
+                MEDIO (Desarrollo Global Armónico)
+              </div>
+            </div>
+          </div>
+
+          <!-- BANNER DINÁMICO DE RECOMENDACIÓN CLÍNICA -->
+          <div id="ead-sim-verdict-banner" style="margin-top: 0.85rem; padding: 0.85rem 1.1rem; border-radius: 10px; background: rgba(239,68,68,0.08); border-left: 4px solid #ef4444; font-size: 0.85rem; line-height: 1.55; color: var(--text-primary);">
+            <strong style="color: #b91c1c;">⚠️ ALERTA EN MOTRICIDAD GRUESA (Puntaje ≤ 11):</strong> Aunque el puntaje total se ubica en rango medio, la disarmonía en el Área A constituye un signo de sospecha patológica. <em>Conducta indicada por Nelson Ortiz:</em> Remitir a valoración neuropediátrica o fisioterapia para descartar alteración del tono muscular.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 5: CASO CLÍNICO RESUELTO GUIADO PASO A PASO -->
+      <section class="orientation-block-card" id="sec-ead-caso-clinico">
+        <span class="orientation-section-badge">EJEMPLO PRÁCTICO GUIADO</span>
+        <h3 class="orientation-sec-title">5. Caso Clínico Resuelto: "Mateo", 11 Meses de Edad</h3>
+        <p class="orientation-lead-p">
+          Para comprender a la perfección la aplicación de las reglas, examinemos el caso real de Mateo:
+        </p>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 1: Filiación y Corrección por Prematurez</div>
+          <p class="orientation-p">
+            • <strong>Edad Cronológica:</strong> 11 meses (44 semanas de vida posnatal).
+            <br>• <strong>Antecedente Perinatal:</strong> Nació a las 34 semanas de gestación (prematuro moderado).
+            <br>• <strong>Cálculo:</strong> Como es menor de 24 meses, se corrige la edad:
+            <br><code>Semanas a descontar = 40 - 34 = 6 semanas (1.5 meses)</code>
+            <br><code>Edad Corregida = 11 meses - 1.5 meses = 9.5 meses</code>
+            <br>• <strong>Decisión:</strong> Según la tabla de rangos, a los 9.5 meses le corresponde el <strong>Rango 4 (10 a 12 meses)</strong>.
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 2: Aplicación de Ítems en Motricidad Gruesa (Área A)</div>
+          <p class="orientation-p">
+            • El evaluador comienza en el ítem 10 (primer ítem del rango 4): *"Gatea bien"*. Mateo no logra sostenerse en 4 puntos ni gatear (Falla = 0).
+            <br>• Se retrocede al ítem 9: *"Se sienta por sí solo"*. Lo logra con éxito (Pasa = 1).
+            <br>• Se aplican los ítems anteriores 8 y 7, los cuales aprueba con fluidez.
+            <br>• <strong>Línea Base Establecida:</strong> Al tener 3 aprobaciones consecutivas (ítems 7, 8 y 9), se acreditan automáticamente los ítems del 1 al 9 $	o$ <strong>9 puntos base</strong>.
+            <br>• Luego se avanza hacia adelante: Aprueba ítem 11 (*"Se sostiene de pie apoyado"*), pero falla los ítems 12, 13 y 14 consecutivos $	o$ <strong>Techo alcanzado</strong>.
+            <br>• <strong>Puntaje Directo Área A:</strong> $9	ext{ (base)} + 2	ext{ (aprobados)} = mathbf{11	ext{ puntos}}$.
+          </p>
+        </div>
+
+        <div class="orientation-subcard">
+          <div class="orientation-subcard-title">Fase 3: Consulta en la Tabla 1 Oficial y Diagnóstico</div>
+          <p class="orientation-p">
+            Al contrastar los 11 puntos de Mateo en el Rango 10-12 meses de la Tabla 1:
+            <br>• <strong>Motricidad Gruesa:</strong> 11 puntos $	o$ Cae exactamente en el rango <strong>0-11 = ALERTA (Rojo)</strong>.
+            <br>• Las demás áreas puntuaron en rango Medio.
+            <br>• <strong>Informe Clínico:</strong> Lactante con desarrollo global adecuado pero con <em>retraso específico en locomoción gruesa</em> que amerita interconsulta especializada.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 6: TABLA NO. 1 OFICIAL COMPLETA DE BAREMOS NORMATIVOS -->
       <section class="orientation-block-card" id="sec-ead-tabla-maestra" style="border: 2px solid rgba(16, 185, 129, 0.25);">
         <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">TABLA No. 1 OFICIAL (PÁGS. 48 Y 50 DEL MANUAL)</span>
-        <h3 class="orientation-sec-title">Resumen de Parámetros Normativos para la Evaluación del Desarrollo (0 a 60 Meses)</h3>
+        <h3 class="orientation-sec-title">6. Resumen de Parámetros Normativos Oficiales (0 a 60 Meses)</h3>
         <p class="orientation-lead-p">
-          Baremo oficial estandarizado por el Dr. Nelson Ortiz Pinilla (Ministerio de Salud / UNICEF) para la población infantil. Presenta los puntos de corte exactos de puntuación directa acumulada para clasificar el nivel evolutivo en cada una de las 4 áreas y en el puntaje total:
+          Consulte la matriz completa de puntos de corte de Nelson Ortiz. La fila correspondiente al grupo etario seleccionado en el simulador se destaca visualmente:
         </p>
 
         <div class="orientation-table-wrapper" style="overflow-x: auto; margin: 1.25rem 0;">
-          <table class="orientation-data-table" style="font-size: 0.82rem; width: 100%; border-collapse: collapse; min-width: 820px;">
+          <table class="orientation-data-table" id="ead-table-1-dom" style="font-size: 0.82rem; width: 100%; border-collapse: collapse; min-width: 820px;">
             <thead>
               <tr style="background: rgba(16, 185, 129, 0.12); text-align: center;">
                 <th rowspan="2" style="padding: 0.75rem 0.6rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #065f46;">Grupo de Edad (Meses)</th>
@@ -7685,7 +7928,7 @@ export const ADDITIONAL_DOCS_HTML = {
             </thead>
             <tbody>
               <!-- RANGO 1 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+              <tr data-ead-row-idx="0" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">1 a 3 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 1</td>
                 <td>2 - 3</td>
@@ -7709,7 +7952,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">23+</td>
               </tr>
               <!-- RANGO 2 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+              <tr data-ead-row-idx="1" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">4 a 6 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 4</td>
                 <td>5 - 6</td>
@@ -7733,7 +7976,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">35+</td>
               </tr>
               <!-- RANGO 3 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+              <tr data-ead-row-idx="2" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">7 a 9 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 7</td>
                 <td>8 - 10</td>
@@ -7757,8 +8000,8 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">49+</td>
               </tr>
               <!-- RANGO 4 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
-                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">10 a 12 Meses</td>
+              <tr data-ead-row-idx="3" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(16, 185, 129, 0.08); transition: all 0.2s ease;">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left; color: #065f46;">10 a 12 Meses ⭐</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 11</td>
                 <td>12 - 13</td>
                 <td>14 - 16</td>
@@ -7781,7 +8024,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">57+</td>
               </tr>
               <!-- RANGO 5 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+              <tr data-ead-row-idx="4" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">13 a 18 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 13</td>
                 <td>14 - 16</td>
@@ -7805,7 +8048,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">70+</td>
               </tr>
               <!-- RANGO 6 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+              <tr data-ead-row-idx="5" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">19 a 24 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 16</td>
                 <td>17 - 19</td>
@@ -7829,7 +8072,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">84+</td>
               </tr>
               <!-- RANGO 7 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+              <tr data-ead-row-idx="6" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">25 a 36 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 19</td>
                 <td>20 - 23</td>
@@ -7853,7 +8096,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">101+</td>
               </tr>
               <!-- RANGO 8 -->
-              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+              <tr data-ead-row-idx="7" style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01); transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">37 a 48 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 22</td>
                 <td>23 - 26</td>
@@ -7877,7 +8120,7 @@ export const ADDITIONAL_DOCS_HTML = {
                 <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">115+</td>
               </tr>
               <!-- RANGO 9 -->
-              <tr style="text-align: center;">
+              <tr data-ead-row-idx="8" style="text-align: center; transition: all 0.2s ease;">
                 <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">49 a 60 Meses</td>
                 <td style="color: #b91c1c; font-weight: 700;">0 - 26</td>
                 <td>27 - 29</td>
@@ -7904,21 +8147,48 @@ export const ADDITIONAL_DOCS_HTML = {
           </table>
         </div>
 
-        <div class="orientation-diff-note" style="font-size: 0.82rem; line-height: 1.55;">
-          <strong>💡 Criterios Estadísticos de Nelson Ortiz (Pág. 50):</strong>
-          <br>• <strong>Alerta:</strong> Corresponde a puntajes inferiores al percentil más próximo al <strong>5% inferior</strong> del grupo normativo (T &lt; 35). Requiere derivación médica inmediata.
-          <br>• <strong>Medio:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>5% y el 50%</strong> (T = 36 a 50). Desarrollo típico que requiere control periódico.
-          <br>• <strong>Medio-Alto:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>50% y el 95%</strong> (T = 51 a 65).
-          <br>• <strong>Alto:</strong> Corresponde a puntajes superiores al percentil <strong>95%</strong> (T &gt; 65). Rendimiento madurativo superior.
+        <div class="orientation-diff-note">
+          <strong>💡 Fundamentación Psicométrica de Nelson Ortiz (Pág. 50):</strong>
+          <br>• <strong>Alerta:</strong> Corresponde a puntajes inferiores al percentil más próximo al <strong>5% inferior</strong> del grupo normativo ($T < 35$). Requiere derivación médica inmediata.
+          <br>• <strong>Medio:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>5% y el 50%</strong> ($T = 36-50$). Desarrollo típico en curso.
+          <br>• <strong>Medio-Alto:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>50% y el 95%</strong> ($T = 51-65$). Habilidades afianzadas.
+          <br>• <strong>Alto:</strong> Corresponde a puntajes superiores al percentil <strong>95%</strong> ($T > 65$). Maduración acelerada.
         </div>
       </section>
 
-      <!-- TABLA DE VALIJA DE MATERIALES OFICIALES EAD-1 -->
+      <!-- SECCIÓN 7: NAVEGADOR ETARIO DINÁMICO DE LOS 9 RANGOS -->
+      <section class="orientation-block-card" id="sec-ead-navegador" style="border: 2px solid rgba(59, 130, 246, 0.25);">
+        <span class="orientation-section-badge" style="background: rgba(59, 130, 246, 0.12); color: #1d4ed8;">EXPLORADOR DE ÍTEMS Y CONDICIONES DE APLICACIÓN</span>
+        <h3 class="orientation-sec-title">7. Criterios de Evaluación por Rango Etario (0 a 60 Meses)</h3>
+        <p class="orientation-p">
+          Seleccione el rango de edad para consultar los ítems específicos, el material requerido, la consigna exacta y el criterio de aprobación para cada una de las cuatro áreas:
+        </p>
+
+        <!-- BOTONES SELECTORES DE EDAD (TABS) -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;" id="ead-age-tabs-bar">
+          <button type="button" class="ead-age-tab-btn" data-range-idx="0" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">1. 0 a 3 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="1" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">2. 4 a 6 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="2" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">3. 7 a 9 Meses</button>
+          <button type="button" class="ead-age-tab-btn active" data-range-idx="3" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1.5px solid #059669; background: #059669; color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">4. 10 a 12 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="4" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">5. 13 a 18 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="5" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">6. 19 a 24 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="6" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">7. 25 a 36 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="7" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">8. 37 a 48 Meses</button>
+          <button type="button" class="ead-age-tab-btn" data-range-idx="8" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">9. 49 a 60 Meses</button>
+        </div>
+
+        <!-- CONTENEDOR DE DETALLE DEL RANGO SELECCIONADO (DINÁMICO) -->
+        <div id="ead-range-content-box" style="transition: opacity 0.2s ease;">
+          <!-- CONTENIDO INYECTADO DINÁMICAMENTE POR JS -->
+        </div>
+      </section>
+
+      <!-- SECCIÓN 8: TABLA DE VALIJA DE MATERIALES Y CITAS -->
       <section class="orientation-block-card" id="sec-ead-valija-materiales">
         <span class="orientation-section-badge">EQUIPO OFICIAL ESTANDARIZADO</span>
-        <h3 class="orientation-sec-title">Tabla de la Valija de Materiales de Evaluación EAD-1 (Págs. 16-17)</h3>
+        <h3 class="orientation-sec-title">8. Tabla de la Valija de Materiales de Evaluación EAD-1 (Págs. 16-17)</h3>
         <p class="orientation-p">
-          Para garantizar la estandarización psicométrica y la reproducibilidad de los resultados, el evaluador debe utilizar exclusivamente los siguientes 11 materiales reglamentarios:
+          Para garantizar la validez psicométrica, el evaluador debe utilizar exclusivamente los 11 materiales reglamentarios de la batería:
         </p>
 
         <div class="orientation-table-wrapper" style="overflow-x: auto; margin-top: 1rem;">
@@ -8001,78 +8271,11 @@ export const ADDITIONAL_DOCS_HTML = {
             </tbody>
           </table>
         </div>
-      </section>
 
-      <!-- NAVEGADOR INTERACTIVO DE LOS 9 RANGOS DE EDAD -->
-      <section class="orientation-block-card" id="sec-ead-navegador" style="border: 2px solid rgba(59, 130, 246, 0.25);">
-        <span class="orientation-section-badge" style="background: rgba(59, 130, 246, 0.12); color: #1d4ed8;">NAVEGADOR DE RANGOS ETARIOS DINÁMICO</span>
-        <h3 class="orientation-sec-title">Criterios de Evaluación EAD-1 por Grupo Etario (0 a 60 Meses)</h3>
-        <p class="orientation-p">
-          Haga clic en cualquiera de los 9 rangos etarios para cargar inmediatamente las pautas diagnósticas oficiales de Nelson Ortiz para las cuatro áreas:
-        </p>
-
-        <!-- BOTONES SELECTORES DE EDAD (TABS) -->
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;" id="ead-age-tabs-bar">
-          <button type="button" class="ead-age-tab-btn active" data-range-idx="0" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1.5px solid #059669; background: #059669; color: #ffffff; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">1. 0 a 3 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="1" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">2. 4 a 6 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="2" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">3. 7 a 9 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="3" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">4. 10 a 12 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="4" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">5. 13 a 18 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="5" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">6. 19 a 24 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="6" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">7. 25 a 36 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="7" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">8. 37 a 48 Meses</button>
-          <button type="button" class="ead-age-tab-btn" data-range-idx="8" style="padding: 0.5rem 0.9rem; border-radius: 10px; border: 1px solid rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); color: var(--text-primary); font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s ease;">9. 49 a 60 Meses</button>
-        </div>
-
-        <!-- CONTENEDOR DE DETALLE DEL RANGO SELECCIONADO (DINÁMICO) -->
-        <div id="ead-range-content-box" style="transition: opacity 0.2s ease;">
-          <!-- CONTENIDO INYECTADO DINÁMICAMENTE POR JS -->
-        </div>
-      </section>
-
-      <!-- REGLAS DE APLICACIÓN Y PARADA -->
-      <section class="orientation-block-card" id="sec-ead-reglas">
-        <span class="orientation-section-badge">REGLAS OFICIALES DE ADMINISTRACIÓN</span>
-        <h3 class="orientation-sec-title">Reglas de Administración, Calificación y Parada</h3>
-        <p class="orientation-p">
-          El protocolo de Nelson Ortiz (Págs. 18-24) establece pautas estrictas para garantizar la validez del tamizaje:
-        </p>
-
-        <div class="orientation-dimensions-grid">
-          <div class="orientation-dim-item">
-            <div class="dim-item-header">
-              <span class="dim-icon">📅</span>
-              <span class="dim-name">Cálculo de Edad Corregida por Prematuridad</span>
-            </div>
-            <p class="orientation-p">
-              En todo niño nacido antes de las 37 semanas de gestación, se debe calcular la edad corregida hasta que cumpla los 24 meses:
-            </p>
-            <div class="orientation-subcard">
-              <code>Edad Corregida = Edad Cronológica - [40 - Semanas de Gestación al Nacer]</code>
-            </div>
-          </div>
-
-          <div class="orientation-dim-item">
-            <div class="dim-item-header">
-              <span class="dim-icon">🎯</span>
-              <span class="dim-name">Punto de Partida y Techo de Fracaso</span>
-            </div>
-            <p class="orientation-p">
-              <strong>Punto de inicio:</strong> Comience siempre en el primer ítem correspondiente al rango de edad cronológica del niño.
-              <br><strong>Línea base:</strong> Si el niño fracasa en el primer ítem, retroceda al ítem anterior hasta que apruebe tres ítems consecutivos.
-              <br><strong>Criterio de parada (Techo):</strong> La prueba en esa área se suspende cuando el niño fracasa en <strong>tres ítems consecutivos</strong>.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- CITAS -->
-      <section class="orientation-block-card">
-        <span class="orientation-section-badge">BIBLIOGRAFÍA VERIFICADA</span>
-        <h3 class="orientation-sec-title">Citas Textuales en Nelson Ortiz Pinilla (EAD-1)</h3>
-        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px;">
+        <!-- CITAS VERIFICADAS -->
+        <div class="orientation-citations-banner" style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.25rem; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px;">
           <div style="width: 100%; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #047857; margin-bottom: 0.2rem;">
-            📖 Cita Verificada en Nelson Ortiz:
+            📖 Cita Verificada en la Biblioteca de PsiOS (Clic para abrir en Lector PDF Nativo):
           </div>
           <button type="button" class="btn-book-citation-jump" data-book-id="nelson-ortiz-escala-abreviada" data-page="21" title="Consultar administración y baremos en Nelson Ortiz">
             <span>📖</span>
@@ -8081,6 +8284,7 @@ export const ADDITIONAL_DOCS_HTML = {
         </div>
       </section>
 
+      <!-- BOTÓN DE RETORNO AL FINAL -->
       <div style="display: flex; justify-content: flex-start; margin-top: 1rem;">
         <button type="button" class="pedagogical-link-btn" id="btn-bottom-back-ead-def" style="background: #059669; padding: 0.8rem 1.4rem;">
           <span>← Volver a Fundamentos de Neurodesarrollo</span>
@@ -8847,6 +9051,73 @@ const EAD_RANGES_DATA = [
   }
 ];
 
+
+export const EAD1_TABLE_1_DATA = [
+  { age: '1 a 3 Meses', 
+    A: { alerta: 1, medio: 3, medioAlto: 5, alto: 6 },
+    B: { alerta: 1, medio: 3, medioAlto: 5, alto: 6 },
+    C: { alerta: 1, medio: 3, medioAlto: 5, alto: 6 },
+    D: { alerta: 1, medio: 3, medioAlto: 5, alto: 6 },
+    total: { alerta: 6, medio: 13, medioAlto: 22, alto: 23 }
+  },
+  { age: '4 a 6 Meses',
+    A: { alerta: 4, medio: 6, medioAlto: 9, alto: 10 },
+    B: { alerta: 4, medio: 6, medioAlto: 9, alto: 10 },
+    C: { alerta: 4, medio: 6, medioAlto: 9, alto: 10 },
+    D: { alerta: 4, medio: 6, medioAlto: 9, alto: 10 },
+    total: { alerta: 19, medio: 27, medioAlto: 34, alto: 35 }
+  },
+  { age: '7 a 9 Meses',
+    A: { alerta: 7, medio: 10, medioAlto: 13, alto: 14 },
+    B: { alerta: 7, medio: 10, medioAlto: 12, alto: 13 },
+    C: { alerta: 7, medio: 9, medioAlto: 12, alto: 13 },
+    D: { alerta: 7, medio: 9, medioAlto: 12, alto: 13 },
+    total: { alerta: 31, medio: 39, medioAlto: 48, alto: 49 }
+  },
+  { age: '10 a 12 Meses',
+    A: { alerta: 11, medio: 13, medioAlto: 16, alto: 17 },
+    B: { alerta: 9, medio: 12, medioAlto: 14, alto: 15 },
+    C: { alerta: 9, medio: 12, medioAlto: 14, alto: 15 },
+    D: { alerta: 9, medio: 12, medioAlto: 14, alto: 15 },
+    total: { alerta: 42, medio: 49, medioAlto: 56, alto: 57 }
+  },
+  { age: '13 a 18 Meses',
+    A: { alerta: 13, medio: 16, medioAlto: 19, alto: 20 },
+    B: { alerta: 12, medio: 15, medioAlto: 18, alto: 19 },
+    C: { alerta: 12, medio: 14, medioAlto: 17, alto: 18 },
+    D: { alerta: 12, medio: 14, medioAlto: 17, alto: 18 },
+    total: { alerta: 51, medio: 60, medioAlto: 69, alto: 70 }
+  },
+  { age: '19 a 24 Meses',
+    A: { alerta: 16, medio: 19, medioAlto: 23, alto: 24 },
+    B: { alerta: 14, medio: 18, medioAlto: 20, alto: 21 },
+    C: { alerta: 13, medio: 17, medioAlto: 20, alto: 21 },
+    D: { alerta: 14, medio: 17, medioAlto: 22, alto: 23 },
+    total: { alerta: 61, medio: 71, medioAlto: 83, alto: 84 }
+  },
+  { age: '25 a 36 Meses',
+    A: { alerta: 19, medio: 23, medioAlto: 27, alto: 28 },
+    B: { alerta: 18, medio: 21, medioAlto: 24, alto: 25 },
+    C: { alerta: 17, medio: 21, medioAlto: 24, alto: 25 },
+    D: { alerta: 18, medio: 22, medioAlto: 27, alto: 28 },
+    total: { alerta: 74, medio: 86, medioAlto: 100, alto: 101 }
+  },
+  { age: '37 a 48 Meses',
+    A: { alerta: 22, medio: 26, medioAlto: 29, alto: 30 },
+    B: { alerta: 21, medio: 24, medioAlto: 28, alto: 29 },
+    C: { alerta: 21, medio: 25, medioAlto: 29, alto: 30 },
+    D: { alerta: 22, medio: 26, medioAlto: 29, alto: 30 },
+    total: { alerta: 89, medio: 100, medioAlto: 114, alto: 115 }
+  },
+  { age: '49 a 60 Meses',
+    A: { alerta: 26, medio: 29, medioAlto: 30, alto: 30 },
+    B: { alerta: 23, medio: 28, medioAlto: 29, alto: 30 },
+    C: { alerta: 24, medio: 28, medioAlto: 29, alto: 30 },
+    D: { alerta: 25, medio: 28, medioAlto: 29, alto: 30 },
+    total: { alerta: 101, medio: 113, medioAlto: 119, alto: 120 }
+  }
+];
+
 // Functor to wire interactive DOM event listeners
 function setupBlockABModalListeners(itemId, modalContent, controller) {
   if (!modalContent || !controller) return;
@@ -9057,8 +9328,234 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
     updateEEM();
   }
 
-  // 3. EVALUACIÓN Y SEMÁFORO EAD-1 (NAVEGADOR DE LOS 9 RANGOS DE EDAD)
+  // 3. EVALUACIÓN Y SEMÁFORO EAD-1 (SIMULADOR EN TIEMPO REAL, CALCULADORA PREMATUREZ Y NAVEGADOR)
   if (itemId === 'evaluacion-tamizaje-neurodesarrollo-ead1') {
+    // 3.1 Calculadora de Edad Gestacional y Regla de Prematurez
+    const cronInput = modalContent.querySelector('#ead-calc-cron-meses');
+    const gestInput = modalContent.querySelector('#ead-calc-gest-sem');
+    const outAge = modalContent.querySelector('#ead-calc-result-age');
+    const outRango = modalContent.querySelector('#ead-calc-result-rango');
+
+    function updatePrematurityCalc() {
+      if (!cronInput || !gestInput) return;
+      const cronMeses = Math.max(0, Math.min(60, parseFloat(cronInput.value) || 0));
+      const gestSem = Math.max(20, Math.min(42, parseFloat(gestInput.value) || 40));
+
+      let corrMeses = cronMeses;
+      let semPrem = 0;
+      let isPrem = false;
+
+      if (gestSem < 37 && cronMeses <= 24) {
+        semPrem = 40 - gestSem;
+        const mesesRestar = (semPrem * 7) / 30.4375;
+        corrMeses = Math.max(0, cronMeses - mesesRestar);
+        isPrem = true;
+      }
+
+      // Determine starting age range
+      let rangoIdx = 0;
+      if (corrMeses < 3.5) rangoIdx = 0;
+      else if (corrMeses < 6.5) rangoIdx = 1;
+      else if (corrMeses < 9.5) rangoIdx = 2;
+      else if (corrMeses < 12.5) rangoIdx = 3;
+      else if (corrMeses < 18.5) rangoIdx = 4;
+      else if (corrMeses < 24.5) rangoIdx = 5;
+      else if (corrMeses < 36.5) rangoIdx = 6;
+      else if (corrMeses < 48.5) rangoIdx = 7;
+      else rangoIdx = 8;
+
+      if (outAge) {
+        if (isPrem) {
+          outAge.innerHTML = `<span style="color: #d97706; font-weight: 800;">${corrMeses.toFixed(1)} Meses</span> <span style="font-size: 0.75rem; color: #b45309;">(Ajuste: -${semPrem} semanas por prematurez)</span>`;
+        } else {
+          outAge.innerHTML = `<span style="color: #059669; font-weight: 800;">${cronMeses.toFixed(1)} Meses</span> <span style="font-size: 0.75rem; color: #047857;">(Nacido a término / Sin ajuste)</span>`;
+        }
+      }
+
+      if (outRango) {
+        const rName = EAD1_TABLE_1_DATA[rangoIdx] ? EAD1_TABLE_1_DATA[rangoIdx].age : '1 a 3 Meses';
+        outRango.innerHTML = `<span style="color: #2563eb; font-weight: 800;">Rango ${rangoIdx + 1}: ${rName}</span>`;
+      }
+    }
+
+    if (cronInput) cronInput.addEventListener('input', updatePrematurityCalc);
+    if (gestInput) gestInput.addEventListener('input', updatePrematurityCalc);
+    updatePrematurityCalc();
+
+    // 3.2 Simulador Interactivo de Baremos Nelson Ortiz (Tabla 1)
+    const simAgeSelect = modalContent.querySelector('#ead-sim-age-select');
+    const tableDom = modalContent.querySelector('#ead-table-1-dom');
+
+    const areasConfig = [
+      { key: 'A', prefix: 'a', name: 'Motricidad Gruesa' },
+      { key: 'B', prefix: 'b', name: 'Motricidad Fino-Adaptativa' },
+      { key: 'C', prefix: 'c', name: 'Audición y Lenguaje' },
+      { key: 'D', prefix: 'd', name: 'Personal-Social' }
+    ];
+
+    function updateSimulator() {
+      const rangeIdx = parseInt(simAgeSelect ? simAgeSelect.value : 0, 10) || 0;
+      const norm = EAD1_TABLE_1_DATA[rangeIdx] || EAD1_TABLE_1_DATA[0];
+
+      let sumTotal = 0;
+      let hasAlertArea = false;
+
+      areasConfig.forEach(area => {
+        const slider = modalContent.querySelector(`#ead-sim-slider-${area.prefix}`);
+        const input = modalContent.querySelector(`#ead-sim-input-${area.prefix}`);
+        const badge = modalContent.querySelector(`#ead-sim-badge-${area.prefix}`);
+        const normLabel = modalContent.querySelector(`#ead-sim-norm-${area.prefix}`);
+
+        let val = parseInt(input ? input.value : 0, 10);
+        if (isNaN(val)) val = 0;
+        val = Math.max(0, Math.min(30, val));
+        sumTotal += val;
+
+        const cutoffs = norm[area.key];
+        let label = '';
+        let bg = '';
+        let color = '';
+
+        if (val <= cutoffs.alerta) {
+          label = 'Alerta (< P5)';
+          bg = 'rgba(239, 68, 68, 0.18)';
+          color = '#dc2626';
+          hasAlertArea = true;
+        } else if (val <= cutoffs.medio) {
+          label = 'Medio (P5-P50)';
+          bg = 'rgba(100, 116, 139, 0.15)';
+          color = '#475569';
+        } else if (val <= cutoffs.medioAlto) {
+          label = 'Medio-Alto (P50-P95)';
+          bg = 'rgba(37, 99, 235, 0.15)';
+          color = '#1d4ed8';
+        } else {
+          label = 'Alto (> P95)';
+          bg = 'rgba(16, 185, 129, 0.18)';
+          color = '#047857';
+        }
+
+        if (badge) {
+          badge.textContent = label;
+          badge.style.background = bg;
+          badge.style.color = color;
+        }
+
+        if (normLabel) {
+          normLabel.textContent = `Cortes Nelson Ortiz: Alerta ≤ ${cutoffs.alerta} | Medio: ${cutoffs.alerta + 1}-${cutoffs.medio} | M-Alto: ${cutoffs.medio + 1}-${cutoffs.medioAlto} | Alto: ≥ ${cutoffs.alto}`;
+        }
+      });
+
+      // Total Score
+      const totalNum = modalContent.querySelector('#ead-sim-total-num');
+      const totalBadge = modalContent.querySelector('#ead-sim-total-badge');
+      const verdictBanner = modalContent.querySelector('#ead-sim-verdict-banner');
+
+      if (totalNum) totalNum.textContent = sumTotal;
+
+      const totalCutoffs = norm.total;
+      let totalLabel = '';
+      let totalBg = '';
+      let totalColor = '';
+      let totalIsAlert = false;
+
+      if (sumTotal <= totalCutoffs.alerta) {
+        totalLabel = `ALERTA TOTAL (≤ ${totalCutoffs.alerta})`;
+        totalBg = 'rgba(239, 68, 68, 0.2)';
+        totalColor = '#b91c1c';
+        totalIsAlert = true;
+      } else if (sumTotal <= totalCutoffs.medio) {
+        totalLabel = `DESARROLLO MEDIO (${totalCutoffs.alerta + 1} - ${totalCutoffs.medio})`;
+        totalBg = 'rgba(100, 116, 139, 0.18)';
+        totalColor = '#334155';
+      } else if (sumTotal <= totalCutoffs.medioAlto) {
+        totalLabel = `MEDIO-ALTO (${totalCutoffs.medio + 1} - ${totalCutoffs.medioAlto})`;
+        totalBg = 'rgba(37, 99, 235, 0.18)';
+        totalColor = '#1d4ed8';
+      } else {
+        totalLabel = `ALTO (≥ ${totalCutoffs.alto})`;
+        totalBg = 'rgba(16, 185, 129, 0.2)';
+        totalColor = '#047857';
+      }
+
+      if (totalBadge) {
+        totalBadge.textContent = totalLabel;
+        totalBadge.style.background = totalBg;
+        totalBadge.style.color = totalColor;
+      }
+
+      if (verdictBanner) {
+        if (hasAlertArea || totalIsAlert) {
+          verdictBanner.style.background = 'rgba(239, 68, 68, 0.08)';
+          verdictBanner.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+          verdictBanner.innerHTML = `
+            <div style="font-size: 1.1rem; font-weight: 800; color: #dc2626; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+              <span>🚨</span>
+              <span>CRITERIO DE ALERTA OPORTUNA (REMISIÓN INMEDIATA)</span>
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: #991b1b; line-height: 1.55;">
+              <strong>Hallazgo Clínico:</strong> Se evidencia puntuación en zona de riesgo (< P5) en una o más áreas o en la puntuación directa global acumulada (${sumTotal} pts vs punto de corte ≤ ${totalCutoffs.alerta}).<br>
+              <strong>Conducta Nelson Ortiz:</strong> Remitir con prioridad a <em>Neuropediatría / Pediatría del Desarrollo</em> para valoración diagnóstica integral; coordinar intervención con <em>Terapia Ocupacional, Fonoaudiología o Fisioterapia</em> según el área afectada; capacitar a los padres en estimulación neurosensorial en el hogar y reevaluar en <strong>30 días</strong>.
+            </p>
+          `;
+        } else {
+          verdictBanner.style.background = 'rgba(16, 185, 129, 0.08)';
+          verdictBanner.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+          verdictBanner.innerHTML = `
+            <div style="font-size: 1.1rem; font-weight: 800; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+              <span>✅</span>
+              <span>DESARROLLO NEUROEVOLUTIVO DENTRO DE LOS PARÁMETROS ESPERADOS</span>
+            </div>
+            <p style="margin: 0; font-size: 0.88rem; color: #065f46; line-height: 1.55;">
+              <strong>Hallazgo Clínico:</strong> Todas las áreas y la puntuación total (${sumTotal} pts) se ubican en los percentiles normativos adecuados para el grupo etario (${norm.age}).<br>
+              <strong>Conducta Nelson Ortiz:</strong> Reforzar pautas de crianza positiva, fomentar el juego sensorio-motriz y de interacción verbal en el hogar, y citar al próximo control de crecimiento y neurodesarrollo.
+            </p>
+          `;
+        }
+      }
+
+      // Highlight active row in Tabla 1
+      if (tableDom) {
+        const rows = tableDom.querySelectorAll('tbody tr');
+        rows.forEach((r, idx) => {
+          if (idx === rangeIdx) {
+            r.style.background = 'rgba(16, 185, 129, 0.15)';
+            r.style.outline = '2px solid #059669';
+            r.style.fontWeight = '700';
+          } else {
+            r.style.background = idx % 2 === 0 ? 'rgba(0,0,0,0.02)' : 'transparent';
+            r.style.outline = 'none';
+            r.style.fontWeight = 'normal';
+          }
+        });
+      }
+    }
+
+    // Connect sliders and inputs
+    areasConfig.forEach(area => {
+      const slider = modalContent.querySelector(`#ead-sim-slider-${area.prefix}`);
+      const input = modalContent.querySelector(`#ead-sim-input-${area.prefix}`);
+      if (slider && input) {
+        slider.addEventListener('input', () => {
+          input.value = slider.value;
+          updateSimulator();
+        });
+        input.addEventListener('input', () => {
+          slider.value = input.value;
+          updateSimulator();
+        });
+      }
+    });
+
+    if (simAgeSelect) {
+      simAgeSelect.addEventListener('change', () => {
+        updateSimulator();
+        const rangeIdx = parseInt(simAgeSelect.value, 10) || 0;
+        selectAgeTab(rangeIdx);
+      });
+    }
+
+    // 3.3 Navegador de Criterios Etarios (9 Rangos)
     const tabsBar = modalContent.querySelector('#ead-age-tabs-bar');
     const contentBox = modalContent.querySelector('#ead-range-content-box');
 
@@ -9089,6 +9586,8 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
               </div>
               <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.gruesa.item}</p>
               <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Material Requerido:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.gruesa.material}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
                 <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.gruesa.procedimiento}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: #1e40af; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
@@ -9107,6 +9606,8 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
               </div>
               <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.fina.item}</p>
               <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Material Requerido:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.fina.material}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
                 <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.fina.procedimiento}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: #b45309; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
@@ -9125,6 +9626,8 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
               </div>
               <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.lenguaje.item}</p>
               <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Material Requerido:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.lenguaje.material}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
                 <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.lenguaje.procedimiento}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: #047857; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
@@ -9143,6 +9646,8 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
               </div>
               <p class="orientation-p" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.social.item}</p>
               <div class="orientation-subcard" style="margin: 0.35rem 0; padding: 0.75rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Material Requerido:</div>
+                <div style="font-size: 0.82rem; color: var(--text-primary); margin-bottom: 0.35rem;">${data.areas.social.material}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Procedimiento de Aplicación:</div>
                 <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.2rem;">${data.areas.social.procedimiento}</div>
                 <div style="font-size: 0.75rem; font-weight: 700; color: #6b21a8; margin-top: 0.4rem;">Criterio de Aprobación (1 punto):</div>
@@ -9154,28 +9659,53 @@ function setupBlockABModalListeners(itemId, modalContent, controller) {
       `;
     }
 
-    if (tabsBar) {
-      tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(b => {
+    function selectAgeTab(rangeIdx) {
+      if (tabsBar) {
+        tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(b => {
+          const idx = parseInt(b.getAttribute('data-range-idx'), 10);
+          if (idx === rangeIdx) {
+            b.classList.add('active');
+            b.style.background = '#059669';
+            b.style.color = '#ffffff';
+            b.style.borderColor = '#059669';
+          } else {
             b.classList.remove('active');
             b.style.background = 'rgba(0,0,0,0.03)';
             b.style.color = 'var(--text-primary)';
             b.style.borderColor = 'rgba(0,0,0,0.12)';
-          });
-          btn.classList.add('active');
-          btn.style.background = '#059669';
-          btn.style.color = '#ffffff';
-          btn.style.borderColor = '#059669';
+          }
+        });
+      }
+      renderEadRange(rangeIdx);
+    }
 
+    if (tabsBar) {
+      tabsBar.querySelectorAll('.ead-age-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
           const idx = parseInt(btn.getAttribute('data-range-idx'), 10) || 0;
-          renderEadRange(idx);
+          selectAgeTab(idx);
+          if (simAgeSelect) {
+            simAgeSelect.value = idx;
+            updateSimulator();
+          }
         });
       });
     }
 
-    // Initial render
-    renderEadRange(0);
+    // 3.4 Internal anchor navigation buttons
+    modalContent.querySelectorAll('.orientation-nav-pill-btn[data-target-sec]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target-sec');
+        const targetElem = modalContent.querySelector(`#${targetId}`);
+        if (targetElem) {
+          targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Initial renders
+    updateSimulator();
+    selectAgeTab(3); // Start with Rango 4 (10-12m) to match the Mateo clinical case
   }
 
   // Cross-navigation for the 5 new pairs
