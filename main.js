@@ -11670,7 +11670,7 @@ class AppNavigationController {
           // Verificar en tiempo real si la licencia fue pausada, expirada o desvinculada por el Administrador Maestro
           if (this.footerStatus) this.footerStatus.textContent = 'Verificando estado de licencia en la nube...';
           const validity = await licenseService.validateLiveLicenseStatus();
-          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v1.0.1 • Modo Clínico Activo';
+          if (this.footerStatus) this.footerStatus.textContent = 'PsiOS v1.0.2 • Modo Clínico Activo';
 
           if (!validity.valid) {
             console.warn('[Ingresar] Estado de licencia inválido:', validity);
@@ -13387,7 +13387,7 @@ class AppNavigationController {
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
   // Cierre de sesión y purga global para Beta 0.0.3 en app y web
-  const APP_VERSION = '1.0.1';
+  const APP_VERSION = '1.0.2';
   try {
     const previousVersion = localStorage.getItem('psios_app_version');
     if (previousVersion !== APP_VERSION) {

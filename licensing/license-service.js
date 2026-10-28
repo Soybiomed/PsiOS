@@ -1,6 +1,6 @@
 /**
  * PsiOS Licensing & Administration Service
- * Versión: v1.0.1
+ * Versión: v1.0.2
  * 
  * Conexión directa y en tiempo real con Cloudflare KV y Cloudflare Worker:
  * - https://psios-licensing-worker.villalpandojhosuasami.workers.dev
@@ -149,7 +149,7 @@ export class LicenseService {
           headers: {
             'Authorization': 'Bearer PSIOS-ADMIN-MASTER-2026',
             'X-License-Key': 'PSIOS-ADMIN-MASTER-2026',
-            'X-PsiOS-Version': '1.0.1'
+            'X-PsiOS-Version': '1.0.2'
           }
         });
         if (directRes.ok) {
@@ -681,7 +681,7 @@ export class LicenseService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-PsiOS-Version': '1.0.1'
+            'X-PsiOS-Version': '1.0.2'
           },
           body: JSON.stringify({
             licenseKey: normalizedKey,
@@ -689,7 +689,7 @@ export class LicenseService {
             doctorName,
             password,
             userProfile,
-            appVersion: 'v1.0.1'
+            appVersion: 'v1.0.2'
           })
         });
 

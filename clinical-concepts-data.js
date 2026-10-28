@@ -7213,13 +7213,17 @@ export const ADDITIONAL_DOCS_HTML = {
           <span>🧩</span>
           <span>2. Las 4 Áreas Sistémicas</span>
         </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-matriz-hitos">
+          <span>📊</span>
+          <span>3. Matriz Cronológica (0-60m)</span>
+        </button>
         <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-alarmas">
           <span>🚨</span>
-          <span>3. Signos de Alerta Temprana</span>
+          <span>4. Signos de Alerta Temprana</span>
         </button>
         <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-neu-citas">
           <span>📚</span>
-          <span>4. Citas Textuales Verificadas</span>
+          <span>5. Citas Textuales Verificadas</span>
         </button>
       </div>
 
@@ -7355,6 +7359,95 @@ export const ADDITIONAL_DOCS_HTML = {
         </div>
       </section>
 
+
+      <!-- TABLA MATRIZ CRONOLÓGICA DE HITOS DEL NEURODESARROLLO -->
+      <section class="orientation-block-card" id="sec-neu-matriz-hitos">
+        <span class="orientation-section-badge">MATRIZ EVOLUTIVA MAESTRA (EAD-1)</span>
+        <h3 class="orientation-sec-title">Tabla Cronológica Comparativa de Hitos por Rango de Edad (0 a 60 Meses)</h3>
+        <p class="orientation-p">
+          Cuadro sinóptico de la adquisición progresiva de pautas del neurodesarrollo en las 4 esferas del modelo de Nelson Ortiz:
+        </p>
+
+        <div class="orientation-table-wrapper" style="overflow-x: auto; margin-top: 1rem;">
+          <table class="orientation-data-table" style="font-size: 0.83rem; width: 100%; border-collapse: collapse; min-width: 800px;">
+            <thead>
+              <tr style="background: rgba(16, 185, 129, 0.12); text-align: left;">
+                <th style="padding: 0.7rem; color: #065f46; border: 1px solid rgba(0,0,0,0.08);">Edad (Meses)</th>
+                <th style="padding: 0.7rem; color: #1e40af; border: 1px solid rgba(0,0,0,0.08); background: rgba(59, 130, 246, 0.08);">Área A: Motricidad Gruesa</th>
+                <th style="padding: 0.7rem; color: #b45309; border: 1px solid rgba(0,0,0,0.08); background: rgba(245, 158, 11, 0.08);">Área B: Fino-Adaptativa</th>
+                <th style="padding: 0.7rem; color: #047857; border: 1px solid rgba(0,0,0,0.08); background: rgba(16, 185, 129, 0.08);">Área C: Audición y Lenguaje</th>
+                <th style="padding: 0.7rem; color: #6b21a8; border: 1px solid rgba(0,0,0,0.08); background: rgba(147, 51, 234, 0.08);">Área D: Personal-Social</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1 a 3 m</strong></td>
+                <td>Patea vigorosamente; levanta cabeza en decúbito prono; sostén cefálico incipiente.</td>
+                <td>Sigue objetos con la mirada en 180°; abre y mira sus manos; reflejo de prensión palmar.</td>
+                <td>Sobresalto o parpadeo al sonido; vocalizaciones guturales reflejas ("agú"); balbuceo inicial.</td>
+                <td>Sonrisa social al rostro del cuidador; contacto ocular sostenido; fija la mirada.</td>
+              </tr>
+              <tr style="background: rgba(0,0,0,0.015);">
+                <td><strong>4 a 6 m</strong></td>
+                <td>Control cefálico firme al sentarse; rolado supino a prono; apoyo en antebrazos.</td>
+                <td>Agarre cúbito-palmar voluntario; sostiene un objeto en cada mano; se lleva objetos a la boca.</td>
+                <td>Gira la cabeza hacia la fuente sonora; balbuceo polisilábico (ba-ba, ma-ma); ríe a carcajadas.</td>
+                <td>Sonríe a su imagen en el espejo; busca el contacto visual; estira brazos para ser alzado.</td>
+              </tr>
+              <tr>
+                <td><strong>7 a 9 m</strong></td>
+                <td>Sedestación estable sin apoyo; posición de gateo o 4 puntos; se sienta por sí solo.</td>
+                <td>Pasa objetos de una mano a otra; pinza en tijera (radial-palmar); golpea cubos entre sí.</td>
+                <td>Balbuceo reduplicativo canónico; atiende a su nombre; modula tono y entonación vocal.</td>
+                <td>Angustia de separación del 8° mes ante extraños; juego de ocultamiento (cu-cú); busca objeto caído.</td>
+              </tr>
+              <tr style="background: rgba(0,0,0,0.015);">
+                <td><strong>10 a 12 m</strong></td>
+                <td>Bipedestación con sujeción; pasos laterales con apoyo; gateo coordinado alterno.</td>
+                <td>Pinza superior digital fina (índice-pulgar pulpejo a pulpejo); saca objetos de un recipiente.</td>
+                <td>Primera palabra con intención referencial (mamá, papá, agua); comprende el "no"; señala.</td>
+                <td>Juego de dar y recibir objetos; aplaude y dice adiós con la mano; bebe de taza con ayuda.</td>
+              </tr>
+              <tr>
+                <td><strong>13 a 18 m</strong></td>
+                <td>Marcha bípeda independiente autónoma; se agacha a recoger un juguete sin caerse.</td>
+                <td>Torre de 2 y 3 cubos; garabateo espontáneo vigoroso; pasa páginas de libros gruesos.</td>
+                <td>Vocabulario de 3 a 8 palabras funcionales; jerga expresiva abundante; comprende órdenes simples.</td>
+                <td>Uso funcional de la cuchara (derrama poco); ayuda a desvestirse; señala lo que desea.</td>
+              </tr>
+              <tr style="background: rgba(0,0,0,0.015);">
+                <td><strong>19 a 24 m</strong></td>
+                <td>Corre con soltura; patea un balón hacia adelante; sube escaleras tomado de la mano.</td>
+                <td>Torre de 4 a 6 cubos; alinea cubos en tren; introduce bolitas en botella de cuello angosto.</td>
+                <td>Construcción de frases de dos palabras ("mamá agua", "vamos calle"); nombra 4 objetos cotidianos.</td>
+                <td>Control diurno inicial de esfínteres (avisa); juego paralelo junto a otros niños; imita tareas del hogar.</td>
+              </tr>
+              <tr>
+                <td><strong>25 a 36 m</strong></td>
+                <td>Sube escaleras alternando pies; salta con ambos pies juntos; camina en puntas de pie.</td>
+                <td>Torre de 8 cubos; puente con 3 cubos; imita trazo vertical (|); enhebra cuentas grandes.</td>
+                <td>Oraciones de 3 palabras (S-V-O); uso del pronombre "Yo"; comprende nociones espaciales (arriba/abajo).</td>
+                <td>Come de forma autónoma con cuchara; se quita prendas abiertas; inicio del juego simbólico ("hacer como si").</td>
+              </tr>
+              <tr style="background: rgba(0,0,0,0.015);">
+                <td><strong>37 a 48 m</strong></td>
+                <td>Salta a la pata coja (un solo pie); camina hacia atrás; trepa con agilidad en parques.</td>
+                <td>Copia círculo cerrado (○) y cruz (+); corta papel con tijeras; agarre trípode estático del lápiz.</td>
+                <td>Preguntas causales frecuentes ("¿Por qué?"); relatos breves de vivencias; usa plurales y pasados.</td>
+                <td>Juego asociativo con pares estructurado; lavado y secado autónomo de manos; se desabotona ropa.</td>
+              </tr>
+              <tr>
+                <td><strong>49 a 60 m</strong></td>
+                <td>Marcha en tándem talón-punta en línea recta; salto de longitud con pies juntos; rebota pelota.</td>
+                <td>Copia triángulo (△) y cuadrado; dibuja figura humana completa con cabeza, tronco y extremidades.</td>
+                <td>Discurso narrativo fluido complejo; define palabras por su uso; comprende analogías lógicas opuestas.</td>
+                <td>Juego cooperativo reglado; se viste y abotona por completo sin ayuda; autonomía total en aseo personal.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- SECCIÓN 3: SIGNOS DE ALERTA -->
       <section class="orientation-block-card" id="sec-neu-alarmas">
         <span class="orientation-section-badge">CRITERIOS DE DERIVACIÓN URGENTE</span>
@@ -7434,6 +7527,29 @@ export const ADDITIONAL_DOCS_HTML = {
         </div>
         <button type="button" class="pedagogical-link-btn" id="btn-back-ead-def" style="background: #059669;">
           <span>← Volver a Fundamentos de Neurodesarrollo</span>
+        </button>
+      </div>
+
+      <div class="orientation-nav-pills-bar">
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-semaforo-widget">
+          <span>🚦</span>
+          <span>1. Semáforo & Alertas</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-tabla-maestra">
+          <span>📊</span>
+          <span>2. Tabla 1: Baremos Oficiales</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-valija-materiales">
+          <span>🧰</span>
+          <span>3. Valija de Materiales</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-navegador">
+          <span>👶</span>
+          <span>4. Navegador Etario (0-60m)</span>
+        </button>
+        <button type="button" class="orientation-nav-pill-btn" data-target-sec="sec-ead-reglas">
+          <span>⚖️</span>
+          <span>5. Reglas de Parada & Edad</span>
         </button>
       </div>
 
@@ -7519,6 +7635,374 @@ export const ADDITIONAL_DOCS_HTML = {
         </div>
       </section>
 
+
+      <!-- TABLA NO. 1 OFICIAL: RESUMEN PARÁMETROS NORMATIVOS (NELSON ORTIZ) -->
+      <section class="orientation-block-card" id="sec-ead-tabla-maestra" style="border: 2px solid rgba(16, 185, 129, 0.25);">
+        <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.12); color: #047857;">TABLA No. 1 OFICIAL (PÁGS. 48 Y 50 DEL MANUAL)</span>
+        <h3 class="orientation-sec-title">Resumen de Parámetros Normativos para la Evaluación del Desarrollo (0 a 60 Meses)</h3>
+        <p class="orientation-lead-p">
+          Baremo oficial estandarizado por el Dr. Nelson Ortiz Pinilla (Ministerio de Salud / UNICEF) para la población infantil. Presenta los puntos de corte exactos de puntuación directa acumulada para clasificar el nivel evolutivo en cada una de las 4 áreas y en el puntaje total:
+        </p>
+
+        <div class="orientation-table-wrapper" style="overflow-x: auto; margin: 1.25rem 0;">
+          <table class="orientation-data-table" style="font-size: 0.82rem; width: 100%; border-collapse: collapse; min-width: 820px;">
+            <thead>
+              <tr style="background: rgba(16, 185, 129, 0.12); text-align: center;">
+                <th rowspan="2" style="padding: 0.75rem 0.6rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #065f46;">Grupo de Edad (Meses)</th>
+                <th colspan="4" style="padding: 0.5rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #1e40af; background: rgba(59, 130, 246, 0.08);">Motricidad Gruesa (A)</th>
+                <th colspan="4" style="padding: 0.5rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #b45309; background: rgba(245, 158, 11, 0.08);">Motricidad Fina (B) Adaptativa</th>
+                <th colspan="4" style="padding: 0.5rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #047857; background: rgba(16, 185, 129, 0.08);">Audición y Lenguaje (C)</th>
+                <th colspan="4" style="padding: 0.5rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #6b21a8; background: rgba(147, 51, 234, 0.08);">Personal-Social (D)</th>
+                <th colspan="4" style="padding: 0.5rem; border: 1px solid rgba(0,0,0,0.1); font-weight: 800; color: #0f172a; background: rgba(0,0,0,0.06);">Puntaje TOTAL</th>
+              </tr>
+              <tr style="font-size: 0.74rem; font-weight: 700; text-align: center;">
+                <!-- Gruesa -->
+                <th style="padding: 0.4rem 0.3rem; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(0,0,0,0.08);">Alerta</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(0,0,0,0.08);">Medio</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(14, 165, 233, 0.1); color: #0369a1; border: 1px solid rgba(0,0,0,0.08);">M.Alto</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(0,0,0,0.08);">Alto</th>
+                <!-- Fina -->
+                <th style="padding: 0.4rem 0.3rem; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(0,0,0,0.08);">Alerta</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(0,0,0,0.08);">Medio</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(14, 165, 233, 0.1); color: #0369a1; border: 1px solid rgba(0,0,0,0.08);">M.Alto</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(0,0,0,0.08);">Alto</th>
+                <!-- Lenguaje -->
+                <th style="padding: 0.4rem 0.3rem; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(0,0,0,0.08);">Alerta</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(0,0,0,0.08);">Medio</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(14, 165, 233, 0.1); color: #0369a1; border: 1px solid rgba(0,0,0,0.08);">M.Alto</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(0,0,0,0.08);">Alto</th>
+                <!-- Social -->
+                <th style="padding: 0.4rem 0.3rem; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(0,0,0,0.08);">Alerta</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(0,0,0,0.08);">Medio</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(14, 165, 233, 0.1); color: #0369a1; border: 1px solid rgba(0,0,0,0.08);">M.Alto</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(0,0,0,0.08);">Alto</th>
+                <!-- Total -->
+                <th style="padding: 0.4rem 0.3rem; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(0,0,0,0.08);">Alerta</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(0,0,0,0.08);">Medio</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(14, 165, 233, 0.1); color: #0369a1; border: 1px solid rgba(0,0,0,0.08);">M.Alto</th>
+                <th style="padding: 0.4rem 0.3rem; background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(0,0,0,0.08);">Alto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- RANGO 1 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">1 a 3 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 1</td>
+                <td>2 - 3</td>
+                <td>4 - 5</td>
+                <td style="color: #047857; font-weight: 700;">6+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 1</td>
+                <td>2 - 3</td>
+                <td>4 - 5</td>
+                <td style="color: #047857; font-weight: 700;">6+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 1</td>
+                <td>2 - 3</td>
+                <td>4 - 5</td>
+                <td style="color: #047857; font-weight: 700;">6+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 1</td>
+                <td>2 - 3</td>
+                <td>4 - 5</td>
+                <td style="color: #047857; font-weight: 700;">6+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 6</td>
+                <td style="font-weight: 700;">7 - 13</td>
+                <td>14 - 22</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">23+</td>
+              </tr>
+              <!-- RANGO 2 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">4 a 6 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 4</td>
+                <td>5 - 6</td>
+                <td>7 - 9</td>
+                <td style="color: #047857; font-weight: 700;">10+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 4</td>
+                <td>5 - 6</td>
+                <td>7 - 9</td>
+                <td style="color: #047857; font-weight: 700;">10+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 4</td>
+                <td>5 - 6</td>
+                <td>7 - 9</td>
+                <td style="color: #047857; font-weight: 700;">10+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 4</td>
+                <td>5 - 6</td>
+                <td>7 - 9</td>
+                <td style="color: #047857; font-weight: 700;">10+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 19</td>
+                <td style="font-weight: 700;">20 - 27</td>
+                <td>28 - 34</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">35+</td>
+              </tr>
+              <!-- RANGO 3 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">7 a 9 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 7</td>
+                <td>8 - 10</td>
+                <td>11 - 13</td>
+                <td style="color: #047857; font-weight: 700;">14+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 7</td>
+                <td>8 - 10</td>
+                <td>11 - 12</td>
+                <td style="color: #047857; font-weight: 700;">13+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 7</td>
+                <td>8 - 9</td>
+                <td>10 - 12</td>
+                <td style="color: #047857; font-weight: 700;">13+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 7</td>
+                <td>8 - 9</td>
+                <td>10 - 12</td>
+                <td style="color: #047857; font-weight: 700;">13+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 31</td>
+                <td style="font-weight: 700;">32 - 39</td>
+                <td>40 - 48</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">49+</td>
+              </tr>
+              <!-- RANGO 4 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">10 a 12 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 11</td>
+                <td>12 - 13</td>
+                <td>14 - 16</td>
+                <td style="color: #047857; font-weight: 700;">17+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 9</td>
+                <td>10 - 12</td>
+                <td>13 - 14</td>
+                <td style="color: #047857; font-weight: 700;">15+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 9</td>
+                <td>10 - 12</td>
+                <td>13 - 14</td>
+                <td style="color: #047857; font-weight: 700;">15+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 9</td>
+                <td>10 - 12</td>
+                <td>13 - 14</td>
+                <td style="color: #047857; font-weight: 700;">15+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 42</td>
+                <td style="font-weight: 700;">43 - 49</td>
+                <td>50 - 56</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">57+</td>
+              </tr>
+              <!-- RANGO 5 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">13 a 18 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 13</td>
+                <td>14 - 16</td>
+                <td>17 - 19</td>
+                <td style="color: #047857; font-weight: 700;">20+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 12</td>
+                <td>13 - 15</td>
+                <td>16 - 18</td>
+                <td style="color: #047857; font-weight: 700;">19+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 12</td>
+                <td>13 - 14</td>
+                <td>15 - 17</td>
+                <td style="color: #047857; font-weight: 700;">18+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 12</td>
+                <td>13 - 14</td>
+                <td>15 - 17</td>
+                <td style="color: #047857; font-weight: 700;">18+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 51</td>
+                <td style="font-weight: 700;">52 - 60</td>
+                <td>61 - 69</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">70+</td>
+              </tr>
+              <!-- RANGO 6 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">19 a 24 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 16</td>
+                <td>17 - 19</td>
+                <td>20 - 23</td>
+                <td style="color: #047857; font-weight: 700;">24+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 14</td>
+                <td>15 - 18</td>
+                <td>19 - 20</td>
+                <td style="color: #047857; font-weight: 700;">21+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 13</td>
+                <td>14 - 17</td>
+                <td>18 - 20</td>
+                <td style="color: #047857; font-weight: 700;">21+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 14</td>
+                <td>15 - 17</td>
+                <td>18 - 22</td>
+                <td style="color: #047857; font-weight: 700;">23+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 61</td>
+                <td style="font-weight: 700;">62 - 71</td>
+                <td>72 - 83</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">84+</td>
+              </tr>
+              <!-- RANGO 7 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">25 a 36 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 19</td>
+                <td>20 - 23</td>
+                <td>24 - 27</td>
+                <td style="color: #047857; font-weight: 700;">28+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 18</td>
+                <td>19 - 21</td>
+                <td>22 - 24</td>
+                <td style="color: #047857; font-weight: 700;">25+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 17</td>
+                <td>18 - 21</td>
+                <td>22 - 24</td>
+                <td style="color: #047857; font-weight: 700;">25+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 18</td>
+                <td>19 - 22</td>
+                <td>23 - 27</td>
+                <td style="color: #047857; font-weight: 700;">28+</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 74</td>
+                <td style="font-weight: 700;">75 - 86</td>
+                <td>87 - 100</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">101+</td>
+              </tr>
+              <!-- RANGO 8 -->
+              <tr style="text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.01);">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">37 a 48 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 22</td>
+                <td>23 - 26</td>
+                <td>27 - 29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 21</td>
+                <td>22 - 24</td>
+                <td>25 - 28</td>
+                <td style="color: #047857; font-weight: 700;">29+</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 21</td>
+                <td>22 - 25</td>
+                <td>26 - 29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 22</td>
+                <td>23 - 26</td>
+                <td>27 - 29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 89</td>
+                <td style="font-weight: 700;">90 - 100</td>
+                <td>101 - 114</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">115+</td>
+              </tr>
+              <!-- RANGO 9 -->
+              <tr style="text-align: center;">
+                <td style="padding: 0.55rem; font-weight: 800; background: rgba(0,0,0,0.02); text-align: left;">49 a 60 Meses</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 26</td>
+                <td>27 - 29</td>
+                <td>30</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 23</td>
+                <td>24 - 28</td>
+                <td>29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 24</td>
+                <td>25 - 28</td>
+                <td>29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 700;">0 - 25</td>
+                <td>26 - 28</td>
+                <td>29</td>
+                <td style="color: #047857; font-weight: 700;">30</td>
+                <td style="color: #b91c1c; font-weight: 800; background: rgba(239,68,68,0.06);">0 - 101</td>
+                <td style="font-weight: 700;">102 - 113</td>
+                <td>114 - 119</td>
+                <td style="color: #047857; font-weight: 800; background: rgba(16,185,129,0.06);">120</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="orientation-diff-note" style="font-size: 0.82rem; line-height: 1.55;">
+          <strong>💡 Criterios Estadísticos de Nelson Ortiz (Pág. 50):</strong>
+          <br>• <strong>Alerta:</strong> Corresponde a puntajes inferiores al percentil más próximo al <strong>5% inferior</strong> del grupo normativo (T &lt; 35). Requiere derivación médica inmediata.
+          <br>• <strong>Medio:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>5% y el 50%</strong> (T = 36 a 50). Desarrollo típico que requiere control periódico.
+          <br>• <strong>Medio-Alto:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>50% y el 95%</strong> (T = 51 a 65).
+          <br>• <strong>Alto:</strong> Corresponde a puntajes superiores al percentil <strong>95%</strong> (T &gt; 65). Rendimiento madurativo superior.
+        </div>
+      </section>
+
+      <!-- TABLA DE VALIJA DE MATERIALES OFICIALES EAD-1 -->
+      <section class="orientation-block-card" id="sec-ead-valija-materiales">
+        <span class="orientation-section-badge">EQUIPO OFICIAL ESTANDARIZADO</span>
+        <h3 class="orientation-sec-title">Tabla de la Valija de Materiales de Evaluación EAD-1 (Págs. 16-17)</h3>
+        <p class="orientation-p">
+          Para garantizar la estandarización psicométrica y la reproducibilidad de los resultados, el evaluador debe utilizar exclusivamente los siguientes 11 materiales reglamentarios:
+        </p>
+
+        <div class="orientation-table-wrapper" style="overflow-x: auto; margin-top: 1rem;">
+          <table class="orientation-data-table" style="font-size: 0.84rem; width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: rgba(0,0,0,0.04); text-align: left;">
+                <th style="padding: 0.65rem 0.8rem;">Material</th>
+                <th style="padding: 0.65rem 0.8rem;">Especificaciones Técnicas Oficiales</th>
+                <th style="padding: 0.65rem 0.8rem;">Área de Aplicación</th>
+                <th style="padding: 0.65rem 0.8rem;">Uso Clínico Principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Cubos de Madera</strong></td>
+                <td>10 cubos de madera maciza de 2.5 cm de arista (3 rojos, 3 azules y 4 amarillos).</td>
+                <td><span class="status-badge" style="background: rgba(245,158,11,0.12); color: #b45309;">Área B (Fina)</span></td>
+                <td>Torre de 2, 4, 6 y 8 cubos; tren con chimenea, puente de 3 y puerta de 4.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Cuentas y Cordón</strong></td>
+                <td>6 cuentas esféricas de 1.5 cm de diámetro con orificio central y cordón con punta endurecida.</td>
+                <td><span class="status-badge" style="background: rgba(245,158,11,0.12); color: #b45309;">Área B (Fina)</span></td>
+                <td>Enhebrado de cuentas, destreza bimanual asimétrica y coordinación ojo-mano.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Tijeras de Punta Roma</strong></td>
+                <td>Tijeras metálicas pequeñas de 10-12 cm con extremos redondeados de seguridad.</td>
+                <td><span class="status-badge" style="background: rgba(245,158,11,0.12); color: #b45309;">Área B (Fina)</span></td>
+                <td>Corte libre de papel, flecos a los 3 años y corte sobre línea recta a los 4 años.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Pelota de Caucho</strong></td>
+                <td>Pelota de caucho flexible inflable de 15 cm de diámetro, ligera y de color llamativo.</td>
+                <td><span class="status-badge" style="background: rgba(59,130,246,0.12); color: #1d4ed8;">Área A (Gruesa)</span></td>
+                <td>Patear balón a los 2 años, lanzar con una mano y atrapar al rebote a los 4 años.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Espejo Mediano</strong></td>
+                <td>Espejo irrompible de acrílico de 20 x 30 cm con marco protector sin filos.</td>
+                <td><span class="status-badge" style="background: rgba(147,51,234,0.12); color: #7c3aed;">Área D (Social)</span></td>
+                <td>Auto-reconocimiento en el espejo, sonrisa social y respuesta ante la propia imagen.</td>
+              </tr>
+              <tr>
+                <td><strong>6. Campanilla / Sonajero</strong></td>
+                <td>Campanilla pequeña con asa de sonido claro o maraca plástica no estridente.</td>
+                <td><span class="status-badge" style="background: rgba(16,185,129,0.12); color: #047857;">Área C (Lenguaje)</span></td>
+                <td>Localización sonora lateral, reflejo cócleo-palpebral y orientación auditiva.</td>
+              </tr>
+              <tr>
+                <td><strong>7. Figuras Geométricas</strong></td>
+                <td>Círculos, cuadrados y triángulos en madera/plástico en 2 tamaños (8 y 5 cm) y 3 colores.</td>
+                <td><span class="status-badge" style="background: rgba(245,158,11,0.12); color: #b45309;">Áreas B y C</span></td>
+                <td>Discriminación perceptiva de forma, tamaño y color, clasificación por atributos.</td>
+              </tr>
+              <tr>
+                <td><strong>8. 10 Objetos de Reconocimiento</strong></td>
+                <td>Moneda, botón grande, carro, vaca, caballo, muñeca, ping-pong, cuchara, llave, pato.</td>
+                <td><span class="status-badge" style="background: rgba(16,185,129,0.12); color: #047857;">Área C (Lenguaje)</span></td>
+                <td>Nombrar objetos por uso, vocabulario comprensivo y denominación receptiva.</td>
+              </tr>
+              <tr>
+                <td><strong>9. Taza y Plato de Plástico</strong></td>
+                <td>Taza plástica irrompible con asa y plato hondo pequeño de colores vivos.</td>
+                <td><span class="status-badge" style="background: rgba(147,51,234,0.12); color: #7c3aed;">Área D (Social)</span></td>
+                <td>Uso funcional de instrumentos para la alimentación y juego simbólico inicial.</td>
+              </tr>
+              <tr>
+                <td><strong>10. Cuentos Infantiles</strong></td>
+                <td>Libros ilustrados con páginas gruesas plastificadas y escenas cotidianas claras.</td>
+                <td><span class="status-badge" style="background: rgba(16,185,129,0.12); color: #047857;">Áreas C y D</span></td>
+                <td>Paso de hojas individualmente, relato descriptivo y señalar personajes nombrados.</td>
+              </tr>
+              <tr>
+                <td><strong>11. Papel y Lápiz / Crayones</strong></td>
+                <td>Hojas blancas de papel bond tamaño carta y crayones gruesos cilíndricos no tóxicos.</td>
+                <td><span class="status-badge" style="background: rgba(245,158,11,0.12); color: #b45309;">Área B (Fina)</span></td>
+                <td>Garabato espontáneo, copia de línea vertical, círculo, cruz, cuadrado y figura humana.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- NAVEGADOR INTERACTIVO DE LOS 9 RANGOS DE EDAD -->
       <section class="orientation-block-card" id="sec-ead-navegador" style="border: 2px solid rgba(59, 130, 246, 0.25);">
         <span class="orientation-section-badge" style="background: rgba(59, 130, 246, 0.12); color: #1d4ed8;">NAVEGADOR DE RANGOS ETARIOS DINÁMICO</span>
@@ -7547,7 +8031,7 @@ export const ADDITIONAL_DOCS_HTML = {
       </section>
 
       <!-- REGLAS DE APLICACIÓN Y PARADA -->
-      <section class="orientation-block-card">
+      <section class="orientation-block-card" id="sec-ead-reglas">
         <span class="orientation-section-badge">REGLAS OFICIALES DE ADMINISTRACIÓN</span>
         <h3 class="orientation-sec-title">Reglas de Administración, Calificación y Parada</h3>
         <p class="orientation-p">
