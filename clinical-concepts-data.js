@@ -7718,9 +7718,9 @@ export const ADDITIONAL_DOCS_HTML = {
 
         <!-- DIAGRAMA VISUAL DE CÁLCULO DE PUNTUACIÓN -->
         <div style="background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 1.1rem; margin-top: 1rem;">
-          <h4 style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.5rem 0;">Fórmula Matemática del Puntaje Directo Acumulado ($PD$):</h4>
+          <h4 style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.5rem 0;">Fórmula Matemática del Puntaje Directo Acumulado (PD):</h4>
           <div style="font-size: 1.15rem; font-weight: 800; color: #1e40af; text-align: center; padding: 0.6rem; background: #ffffff; border-radius: 8px; border: 1px solid rgba(59,130,246,0.2);">
-            Puntuación Directa por Área ($PD$) = (Último Ítem de la Base Acreditada) + (Ítems Posteriores Aprobados)
+            Puntuación Directa por Área (PD) = (Último Ítem de la Base Acreditada) + (Ítems Posteriores Aprobados)
           </div>
           <p class="orientation-p" style="margin-top: 0.65rem; font-size: 0.82rem; color: var(--text-secondary);">
             <em>Ejemplo:</em> Si el niño consolida su base en el ítem 9 (se acreditan los 9 puntos anteriores) y luego aprueba los ítems 10 y 11, pero falla consecutivamente los ítems 12, 13 y 14 (techo de suspensión), su Puntuación Directa en esa área es: <code>PD = 9 + 2 = 11 puntos</code>.
@@ -7733,7 +7733,7 @@ export const ADDITIONAL_DOCS_HTML = {
         <span class="orientation-section-badge" style="background: rgba(16, 185, 129, 0.15); color: #047857;">HERRAMIENTA CLÍNICA DINÁMICA</span>
         <h3 class="orientation-sec-title">4. Simulador Interactivo de Puntuaciones y Semáforo EAD-1 en Tiempo Real</h3>
         <p class="orientation-lead-p">
-          Seleccione el grupo de edad del niño e introduzca las puntuaciones directas obtenidas en cada área ($0$ a $30$). El sistema calculará instantáneamente el puntaje total, clasificará cada dominio según los cortes de la Tabla 1 de Nelson Ortiz y activará el Semáforo Clínico con su recomendación:
+          Seleccione el grupo de edad del niño e introduzca las puntuaciones directas obtenidas en cada área (0 a 30 puntos). El sistema calculará instantáneamente el puntaje total, clasificará cada dominio según los cortes de la Tabla 1 de Nelson Ortiz y activará el Semáforo Clínico con su recomendación:
         </p>
 
         <!-- SELECTOR DE RANGO ETARIO DEL SIMULADOR -->
@@ -7814,7 +7814,7 @@ export const ADDITIONAL_DOCS_HTML = {
         <div style="background: #ffffff; border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 1.15rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 0.75rem;">
             <div>
-              <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: var(--text-tertiary); letter-spacing: 0.05em;">PUNTAJE TOTAL ACUMULADO ($A + B + C + D$):</span>
+              <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: var(--text-tertiary); letter-spacing: 0.05em;">PUNTAJE TOTAL ACUMULADO (A + B + C + D):</span>
               <div style="display: flex; align-items: baseline; gap: 0.6rem; margin-top: 0.2rem;">
                 <span id="ead-sim-total-num" style="font-size: 2rem; font-weight: 900; color: #1e293b;">47</span>
                 <span style="font-size: 0.88rem; color: var(--text-secondary);">/ 120 Puntos Máximos</span>
@@ -7862,9 +7862,9 @@ export const ADDITIONAL_DOCS_HTML = {
             • El evaluador comienza en el ítem 10 (primer ítem del rango 4): *"Gatea bien"*. Mateo no logra sostenerse en 4 puntos ni gatear (Falla = 0).
             <br>• Se retrocede al ítem 9: *"Se sienta por sí solo"*. Lo logra con éxito (Pasa = 1).
             <br>• Se aplican los ítems anteriores 8 y 7, los cuales aprueba con fluidez.
-            <br>• <strong>Línea Base Establecida:</strong> Al tener 3 aprobaciones consecutivas (ítems 7, 8 y 9), se acreditan automáticamente los ítems del 1 al 9 $	o$ <strong>9 puntos base</strong>.
-            <br>• Luego se avanza hacia adelante: Aprueba ítem 11 (*"Se sostiene de pie apoyado"*), pero falla los ítems 12, 13 y 14 consecutivos $	o$ <strong>Techo alcanzado</strong>.
-            <br>• <strong>Puntaje Directo Área A:</strong> $9	ext{ (base)} + 2	ext{ (aprobados)} = mathbf{11	ext{ puntos}}$.
+            <br>• <strong>Línea Base Establecida:</strong> Al tener 3 aprobaciones consecutivas (ítems 7, 8 y 9), se acreditan automáticamente los ítems del 1 al 9 → <strong>9 puntos base</strong>.
+            <br>• Luego se avanza hacia adelante: Aprueba ítem 11 (*"Se sostiene de pie apoyado"*), pero falla los ítems 12, 13 y 14 consecutivos → <strong>Techo alcanzado</strong>.
+            <br>• <strong>Puntaje Directo Área A:</strong> <code>9 (base) + 2 (aprobados) = <strong>11 puntos</strong></code>.
           </p>
         </div>
 
@@ -7872,7 +7872,7 @@ export const ADDITIONAL_DOCS_HTML = {
           <div class="orientation-subcard-title">Fase 3: Consulta en la Tabla 1 Oficial y Diagnóstico</div>
           <p class="orientation-p">
             Al contrastar los 11 puntos de Mateo en el Rango 10-12 meses de la Tabla 1:
-            <br>• <strong>Motricidad Gruesa:</strong> 11 puntos $	o$ Cae exactamente en el rango <strong>0-11 = ALERTA (Rojo)</strong>.
+            <br>• <strong>Motricidad Gruesa:</strong> 11 puntos → Cae exactamente en el rango <strong>0-11 = ALERTA (Rojo)</strong>.
             <br>• Las demás áreas puntuaron en rango Medio.
             <br>• <strong>Informe Clínico:</strong> Lactante con desarrollo global adecuado pero con <em>retraso específico en locomoción gruesa</em> que amerita interconsulta especializada.
           </p>
@@ -8149,10 +8149,10 @@ export const ADDITIONAL_DOCS_HTML = {
 
         <div class="orientation-diff-note">
           <strong>💡 Fundamentación Psicométrica de Nelson Ortiz (Pág. 50):</strong>
-          <br>• <strong>Alerta:</strong> Corresponde a puntajes inferiores al percentil más próximo al <strong>5% inferior</strong> del grupo normativo ($T < 35$). Requiere derivación médica inmediata.
-          <br>• <strong>Medio:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>5% y el 50%</strong> ($T = 36-50$). Desarrollo típico en curso.
-          <br>• <strong>Medio-Alto:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>50% y el 95%</strong> ($T = 51-65$). Habilidades afianzadas.
-          <br>• <strong>Alto:</strong> Corresponde a puntajes superiores al percentil <strong>95%</strong> ($T > 65$). Maduración acelerada.
+          <br>• <strong>Alerta:</strong> Corresponde a puntajes inferiores al percentil más próximo al <strong>5% inferior</strong> del grupo normativo (T &lt; 35). Requiere derivación médica inmediata.
+          <br>• <strong>Medio:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>5% y el 50%</strong> (T = 36 - 50). Desarrollo típico en curso.
+          <br>• <strong>Medio-Alto:</strong> Corresponde a puntajes comprendidos entre el percentil <strong>50% y el 95%</strong> (T = 51 - 65). Habilidades afianzadas.
+          <br>• <strong>Alto:</strong> Corresponde a puntajes superiores al percentil <strong>95%</strong> (T &gt; 65). Maduración acelerada.
         </div>
       </section>
 
